@@ -3,128 +3,128 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Antigravity Skills](https://img.shields.io/badge/Antigravity-Agent%20Skills-purple.svg)](https://github.com/JAICHANGPARK)
+[![Release](https://img.shields.io/badge/release-v2026.07.30-green.svg)](https://github.com/JAICHANGPARK/workshop-harness/releases)
 
-🌐 **Languages**: [🇰🇷 한국어](./README.md) | [🇺🇸 English](./README_EN.md) | [🇯🇵 日本語](./README_JA.md) | [🇨🇳 中文](./README_ZH.md)
-
-**`workshop-harness`**는 **Build with AI (BWAI)**, DevFest, 커뮤니티 세션, 기술 실습 등의 워크숍을 준비하는 주최자, 발표자, TA를 위한 **AI 에이전트 하네스 & 스킬(Skills) 모음 및 CLI 자동화 툴킷**입니다.
-
-Build with AI Seoul (`2026-bwai-seoul`), Golang Korea (`2026-bwai-golang-korea`), Mongo (`2026-bwai-mongo`), Cloud Pangyo (`2026-bwai-cloud-pangyo`) 프로젝트 등 실제 다수의 현장 워크숍 운영 경험에서 검증된 구조와 노하우를 표준화하였습니다.
+🌐 **Languages**: [🇺🇸 English](./README.md) | [🇰🇷 한국어](./README_KR.md) | [🇯🇵 日本語](./README_JA.md) | [🇨🇳 中文](./README_ZH.md)
 
 ---
 
-## 📖 목차 (Table of Contents)
-1. [개요 및 특징](#-개요-및-특징)
-2. [전체 9개 에이전트 스킬 명세서 (Skill Specification)](#-전체-9개-에이전트-스킬-명세서-skill-specification)
-3. [크로스 아키텍처 호환성 고려사항 (Compatibility Matrix)](#-크로스-아키텍처-호환성-고려사항-compatibility-matrix)
-4. [CLI 사용법 (harness_cli.py)](#-cli-사용법-harness_clipy)
-5. [에이전트 스킬 설치 방법](#-에이전트-스킬-설치-방법)
-6. [표준 워크숍 리포지토리 구조](#-표준-워크숍-리포지토리-구조)
-7. [라이선스](#-라이선스)
+## 📌 Overview
+
+**Workshop Harness** is an AI Agent Harness, Skill Suite, and CLI Automation Toolkit designed for event organizers, speakers, and TAs orchestrating technical workshops, Build with AI (BWAI) events, DevFests, and hands-on coding labs.
+
+It standardizes the proven architecture and operational battle-tested workflows from real-world events including:
+- Build with AI Seoul (`2026-bwai-seoul`)
+- Build with AI Golang Korea (`2026-bwai-golang-korea`)
+- Build with AI Mongo (`2026-bwai-mongo`)
+- Build with AI Cloud Pangyo (`2026-bwai-cloud-pangyo`)
 
 ---
 
-## 💡 개요 및 특징
+## 📖 Table of Contents
 
-워크숍을 준비할 때 발표자와 주최자는 사전 환경 설정, 크로스 아키텍처 지원(Intel Mac, Windows, M-series Mac), 실습 코드 분리(`starter` vs `final`), 진행자용 런북 작성, 출판용 PDF 핸드아웃 제작, 참석자 FAQ 작성 등 엄청난 양의 공수를 들여야 합니다.
-
-`workshop-harness`는 **AI 코딩 에이전트(Google Antigravity, Gemini CLI 등)**가 이 전 과정을 자연어 명령 한 줄로 자동 수행할 수 있도록 9개의 검증된 전용 스킬 패키지를 제공합니다.
+- [Overview](#-overview)
+- [9 Specialized Agent Skills Specification](#-9-specialized-agent-skills-specification)
+- [Cross-Architecture Compatibility Matrix](#-cross-architecture-compatibility-matrix)
+- [CLI Tool Usage (`harness_cli.py`)](#-cli-tool-usage-harness_clipy)
+- [Installing Agent Skills](#-installing-agent-skills)
+- [Standard Workshop Repository Structure](#-standard-workshop-repository-structure)
+- [License](#-license)
 
 ---
 
-## 🛠️ 전체 9개 에이전트 스킬 명세서 (Skill Specification)
+## 💡 9 Specialized Agent Skills Specification
 
-| # | 스킬 이름 | 입력 / 트리거 | 출력 및 생성물 | 상세 설명 |
+| # | Skill Name | Input / Trigger | Output & Artifacts | Primary Role |
 |---|---|---|---|---|
-| 1 | **[`workshop-scaffolder`](skills/workshop-scaffolder/SKILL.md)** | 워크숍 이름 & 주제 | `docs/`, `workshop/`, `prompt-pack/`, `scripts/` | 표준 워크숍 리포지토리 전체 구조 스캐폴딩 |
-| 2 | **[`cross-architecture-checker`](skills/cross-architecture-checker/SKILL.md)** | 사용 기술 스택 | `docs/00-architecture-compatibility-matrix.md`, 감지 스크립트 | Apple Silicon, Intel Mac, Win, Linux 칩셋 호환성 진단 & 우회 가이드 생성 |
-| 3 | **[`prerequisite-checker`](skills/prerequisite-checker/SKILL.md)** | 워크숍 준비물 목록 | `gemma4-local-setup-guide.md`, `check_env.sh/ps1` | OS별 사전 준비 가이드 및 환경 자동 점검 스크립트 생성 |
-| 4 | **[`hands-on-curriculum-builder`](skills/hands-on-curriculum-builder/SKILL.md)** | 실습 목표 & 시간 | `03_labs/README.md`, `prompt-pack/`, `starter`/`final` 코드 | 단계별 실습 커리큘럼, 뼈대/정답 코드 및 프롬프트 팩 작성 |
-| 5 | **[`pdf-handout-generator`](skills/pdf-handout-generator/SKILL.md)** | `docs/` 마크다운 폴더 | `output/pdf/*.pdf`, `tmp/pdfs/contact_sheet.png` | ReportLab + PyMuPDF 기반 PDF 핸드아웃 및 렌더링 미리보기 생성 |
-| 6 | **[`workshop-troubleshooter`](skills/workshop-troubleshooter/SKILL.md)** | 장비 사양 및 OS | `docs/troubleshooting.md`, `docs/20-faq.md` | RAM 사양별(8G/16G/32G+), OS별 트러블슈팅 매트릭스 작성 |
-| 7 | **[`workshop-runbook-generator`](skills/workshop-runbook-generator/SKILL.md)** | 세션 시간 & TA 인원 | `RUNBOOK.md` | 발표자 & TA 전용 분단위 진행 타임라인 런북 & 큐카드 작성 |
-| 8 | **[`live-debug-assistant`](skills/live-debug-assistant/SKILL.md)** | 터미널 에러 로그 | 10초 핫픽스 명령어, `.env.sample` | 현장 터미널 에러 즉시 진단 & API Key 보안 프로토콜 가이드 |
-| 9 | **[`workshop-faq-generator`](skills/workshop-faq-generator/SKILL.md)** | 워크숍 주제 & 난이도 | `docs/20-faq.md` / `FAQ.md` | 참석자들이 행사 전 자주 묻는 질문(하드웨어/네트워크/코드) 자동 생성 |
+| 1 | [`workshop-scaffolder`](skills/workshop-scaffolder/SKILL.md) | Workshop name & topic | `docs/`, `workshop/`, `prompt-pack/`, `scripts/` | Scaffolds standard repository structure |
+| 2 | [`cross-architecture-checker`](skills/cross-architecture-checker/SKILL.md) | Tech stack list | `docs/00-architecture-compatibility-matrix.md` | Audits Apple Silicon, Intel Mac, Win, Linux compatibility & fallbacks |
+| 3 | [`prerequisite-checker`](skills/prerequisite-checker/SKILL.md) | Prerequisites list | `gemma4-local-setup-guide.md`, `check_env.sh/ps1` | Generates OS-specific setup guides & automated verification scripts |
+| 4 | [`hands-on-curriculum-builder`](skills/hands-on-curriculum-builder/SKILL.md) | Session goal & duration | `03_labs/README.md`, `prompt-pack/`, `starter`/`final` code | Builds step-by-step curriculum, starter vs final code, and prompt packs |
+| 5 | [`pdf-handout-generator`](skills/pdf-handout-generator/SKILL.md) | `docs/` markdown directory | `output/pdf/*.pdf`, `tmp/pdfs/contact_sheet.png` | Builds publication-ready PDF handouts & preview contact sheets via ReportLab |
+| 6 | [`workshop-troubleshooter`](skills/workshop-troubleshooter/SKILL.md) | Hardware specs & OS | `docs/troubleshooting.md`, `docs/20-faq.md` | Generates troubleshooting matrix by RAM (8G/16G/32G+) and OS |
+| 7 | [`workshop-runbook-generator`](skills/workshop-runbook-generator/SKILL.md) | Session duration & TAs | `RUNBOOK.md` | Creates minute-by-minute facilitator timeline runbook & cue cards |
+| 8 | [`live-debug-assistant`](skills/live-debug-assistant/SKILL.md) | Terminal error log | 10-second hotfix command, `.env.sample` | Diagnoses live terminal errors & enforces API Key security protocols |
+| 9 | [`workshop-faq-generator`](skills/workshop-faq-generator/SKILL.md) | Workshop topic & level | `docs/20-faq.md` / `FAQ.md` | Automatically generates attendee FAQ (hardware, network, code) |
 
 ---
 
-## 💻 크로스 아키텍처 호환성 고려사항 (Compatibility Matrix)
+## 💻 Cross-Architecture Compatibility Matrix
 
-참석자마다 소지한 노트북 아키텍처가 상이하기 때문에, 도구 선정 시 아래와 같은 알려진 위험(Known Risk) 및 대안(Fallback) 경로를 사전에 준비합니다.
+Participants bring a wide variety of hardware architectures. This matrix identifies known risks and mandatory fallback paths prior to the session.
 
-| 아키텍처 / OS | 추천 메인 도구 | 알려진 위험 & 주의사항 (Known Risk) | 필수 대안 경로 (Fallback) |
+| Architecture / OS | Recommended Tool | Known Risks | Mandatory Fallback Path |
 | --- | --- | --- | --- |
-| **macOS Intel Mac** (`x86_64`) | **Ollama CLI** (`ollama serve`) | 🚨 **LM Studio GPU 가속 미지원 / 멈춤 현상 자주 발생** | **LM Studio 대신 Ollama CLI 우회 가이드 필수 제공** (`docs/18-intel-mac-prep.md`) |
-| **macOS Apple Silicon** (`arm64`) | LM Studio / Ollama / MLX | Metal GPU 최적화 지원 | MLX (`mlx-lm`) 추가 활용 |
-| **Windows x86_64** (Intel/AMD) | LM Studio / Ollama | PowerShell 스크립트 실행 제한, Docker 시 WSL2 필요 | PowerShell Bypass 스크립트 제공 |
-| **Windows ARM64** (Snapdragon) | Ollama CLI (Native build) | x64 에뮬레이션 시 추론 속도 저하 | Ollama Native build 사용 |
-| **Linux / ChromeOS** | Ollama CLI | GUI 미지원 / 가상화 샌드박스 | `ollama serve` 터미널 모드 및 소형 모델(`e2b`) 안내 |
+| macOS Intel Mac (`x86_64`) | Ollama CLI (`ollama serve`) | LM Studio GPU acceleration unavailable / crashes frequently | Must provide Ollama CLI fallback guide (`docs/18-intel-mac-prep.md`) |
+| macOS Apple Silicon (`arm64`) | LM Studio / Ollama / MLX | Full Metal GPU acceleration supported | MLX (`mlx-lm`) optional |
+| Windows x86_64 (Intel/AMD) | LM Studio / Ollama | PowerShell execution policy restriction, WSL2 required for Docker | Provide PowerShell bypass script |
+| Windows ARM64 (Snapdragon) | Ollama CLI (Native) | Performance degradation under x64 emulation | Use Ollama native build |
+| Linux / ChromeOS | Ollama CLI | No GUI support / Sandbox container | Use `ollama serve` terminal mode & small models (`e2b`) |
 
 ---
 
-## 🛠️ CLI 사용법 (`harness_cli.py`)
+## 🛠️ CLI Tool Usage (`harness_cli.py`)
 
-Python 3.9+ 환경에서 `harness_cli.py` 도구를 이용해 손쉽게 워크숍 프로젝트를 구성하고 관리할 수 있습니다.
+Using Python 3.9+, you can manage workshops via the command-line interface:
 
 ```bash
-# 1. 새 워크숍 프로젝트 생성 (기본 구조 및 아키텍처 매트릭스, RUNBOOK 자동 스캐폴딩)
+# 1. Initialize a new workshop project
 python3 harness_cli.py init --name my-bwai-workshop --topic "Local RAG with Gemma 4"
 
-# 2. 기술 스택 크로스 아키텍처 호환성 위험 오디팅
+# 2. Audit tech stack for cross-architecture risks
 python3 harness_cli.py audit-compat --stack "lmstudio,docker,mlx"
 
-# 3. 마크다운 가이드 문서들을 PDF 핸드아웃으로 빌드
+# 3. Build PDF handout from markdown docs
 python3 harness_cli.py build-pdf --target my-bwai-workshop
 ```
 
 ---
 
-## 📦 에이전트 스킬 설치 방법
+## 📦 Installing Agent Skills
 
-Google Antigravity 또는 Gemini CLI 에이전트 환경에서 이 9개 스킬을 상시 활용하려면 아래 명령으로 설치하세요:
+Install all 9 skills into your local agent environment (`~/.gemini/skills`):
 
 ```bash
 chmod +x scripts/install_skills.sh
 ./scripts/install_skills.sh
 ```
 
-설치 후 에이전트에게 다음과 같이 자연어로 요청할 수 있습니다:
-- *"cross-architecture-checker 스킬로 Intel Mac과 Windows 참가자가 겪을 호환성 리스크와 우회 가이드를 만들어줘."*
-- *"workshop-runbook-generator 스킬로 60분 세션 발표자용 RUNBOOK.md를 만들어줘."*
-- *"workshop-faq-generator 스킬로 참석자용 FAQ.md를 작성해줘."*
+Once installed, you can trigger these skills using natural language in Google Antigravity or Gemini CLI:
+- *"Use cross-architecture-checker to audit risks for an Intel Mac and Windows user base."*
+- *"Use workshop-runbook-generator to create a RUNBOOK.md for a 60-minute session."*
+- *"Use workshop-faq-generator to write attendee FAQ.md."*
 
 ---
 
-## 📁 표준 워크숍 리포지토리 구조
-
-`workshop-harness`로 생성되는 워크숍 리포지토리 구조:
+## 📁 Standard Workshop Repository Structure
 
 ```text
 my-workshop-repo/
-├── README.md                           # 워크숍 개요 및 Quick Start
-├── RUNBOOK.md                          # 발표자 및 TA 전용 진행 런북
-├── gemma4-local-setup-guide.md          # 행사 전 통합 사전 준비 가이드
-├── docs/                               # 상세 가이드 문서 (00 ~ 20)
-│   ├── 00-architecture-compatibility-matrix.md # 크로스 아키텍처 대비 가이드
+├── README.md                           # Workshop overview and quick start
+├── RUNBOOK.md                          # Facilitator and TA timeline runbook
+├── gemma4-local-setup-guide.md          # Integrated pre-workshop setup guide
+├── docs/                               # Detailed documentation (00 to 20)
+│   ├── 00-architecture-compatibility-matrix.md # Architecture fallback matrix
 │   ├── 01-hardware-and-env.md
 │   ├── 02-prerequisites.md
-│   └── 20-faq.md                       # 참석자용 FAQ
-├── workshop/                           # 당일 핸즈온 실습
-│   ├── 01_starter/                     # 참가자용 시작 코드
-│   ├── 02_final/                       # 정답 참고 코드
-│   └── 03_labs/                        # Step-by-Step 실습 문서
-├── prompt-pack/                        # 핸즈온 프롬프트 팩
-├── scripts/                            # 아키텍처 점검 및 오프라인 번들링 스크립트
-│   ├── check_architecture_compat.sh    # 아키텍처 감지 (Mac/Linux)
-│   ├── check_architecture_compat.ps1   # 아키텍처 감지 (Windows)
-│   ├── check_env.sh / check_env.ps1    # 환경 점검 스크립트
-│   ├── bundle_offline_assets.sh        # 현장 비상용 오프라인 번들 스크립트
-│   └── generate_prep_pdf.py            # PDF 핸드아웃 빌더
-└── output/                              # 산출물 (PDF 등)
+│   └── 20-faq.md                       # Attendee FAQ
+├── workshop/                           # Hands-on lab code
+│   ├── 01_starter/                     # Starter template for attendees
+│   ├── 02_final/                       # Final reference code
+│   └── 03_labs/                        # Step-by-step lab instructions
+├── prompt-pack/                        # Prompt pack for attendees
+├── scripts/                            # Architecture check & bundling scripts
+│   ├── check_architecture_compat.sh    # Architecture detector (Mac/Linux)
+│   ├── check_architecture_compat.ps1   # Architecture detector (Windows)
+│   ├── check_env.sh / check_env.ps1    # Environment verification scripts
+│   ├── bundle_offline_assets.sh        # Emergency offline asset bundler
+│   └── generate_prep_pdf.py            # PDF handout builder
+└── output/                             # Generated output files
     └── pdf/
 ```
 
 ---
 
-## 📜 라이선스
+## 📜 License
 
 [MIT License](LICENSE)
