@@ -23,7 +23,7 @@ Workshop Harness는 Build with AI (BWAI), DevFest, 커뮤니티 세션, 기술 �
 ## 목차
 
 - [개요](#개요)
-- [전체 10개 에이전트 스킬 명세서](#전체-10개-에이전트-스킬-명세서)
+- [전체 11개 에이전트 스킬 명세서](#전체-11개-에이전트-스킬-명세서)
 - [크로스 아키텍처 호환성 고려사항](#크로스-아키텍처-호환성-고려사항)
 - [CLI 사용법 (harness_cli.py)](#cli-사용법-harness_clipy)
 - [에이전트 스킬 설치 방법](#에이전트-스킬-설치-방법)
@@ -32,7 +32,7 @@ Workshop Harness는 Build with AI (BWAI), DevFest, 커뮤니티 세션, 기술 �
 
 ---
 
-## 전체 10개 에이전트 스킬 명세서
+## 전체 11개 에이전트 스킬 명세서
 
 | # | 스킬 이름 | 입력 / 트리거 | 출력 및 생성물 | 상세 역할 |
 |---|---|---|---|---|
@@ -46,6 +46,7 @@ Workshop Harness는 Build with AI (BWAI), DevFest, 커뮤니티 세션, 기술 �
 | 8 | [`live-debug-assistant`](skills/live-debug-assistant/SKILL.md) | 터미널 에러 로그 | 10초 핫픽스 명령어, `.env.sample` | 현장 터미널 에러 즉시 진단 & API Key 보안 프로토콜 가이드 |
 | 9 | [`workshop-faq-generator`](skills/workshop-faq-generator/SKILL.md) | 워크숍 주제 & 난이도 | `docs/20-faq.md` / `FAQ.md` | 참석자들이 행사 전 자주 묻는 질문(하드웨어/네트워크/코드) 자동 생성 |
 | 10 | [`workshop-tester`](skills/workshop-tester/SKILL.md) | 워크숍 프로젝트 경로 | `verify_workshop.py` 출력 | 코드 실행 스모크 테스트 & 마크다운 상대 경로 깨진 링크(Broken Link) 자동 검증 |
+| 11 | [`workshop-web-researcher`](skills/workshop-web-researcher/SKILL.md) | 도구/모델 키워드 | 최신 릴리스 버전 & 출처 | 웹 검색을 통한 최신 도구/SDK 버전 및 파괴적 변경(Breaking Changes) 실시간 검증 |
 
 ---
 
@@ -85,7 +86,7 @@ python3 harness_cli.py build-pdf --target my-bwai-workshop
 
 ## 에이전트 스킬 설치 방법
 
-Google Antigravity 또는 Gemini CLI 에이전트 환경에서 이 10개 스킬을 상시 활용하려면 아래 명령으로 설치하세요:
+Google Antigravity 또는 Gemini CLI 에이전트 환경에서 이 11개 스킬을 상시 활용하려면 아래 명령으로 설치하세요:
 
 ```bash
 chmod +x scripts/install_skills.sh

@@ -23,7 +23,7 @@ It standardizes the proven architecture and operational battle-tested workflows 
 ## Table of Contents
 
 - [Overview](#overview)
-- [10 Specialized Agent Skills Specification](#10-specialized-agent-skills-specification)
+- [11 Specialized Agent Skills Specification](#11-specialized-agent-skills-specification)
 - [Cross-Architecture Compatibility Matrix](#cross-architecture-compatibility-matrix)
 - [CLI Tool Usage (`harness_cli.py`)](#cli-tool-usage-harness_clipy)
 - [Installing Agent Skills](#installing-agent-skills)
@@ -33,7 +33,7 @@ It standardizes the proven architecture and operational battle-tested workflows 
 
 ---
 
-## 10 Specialized Agent Skills Specification
+## 11 Specialized Agent Skills Specification
 
 | # | Skill Name | Input / Trigger | Output & Artifacts | Primary Role |
 |---|---|---|---|---|
@@ -47,6 +47,7 @@ It standardizes the proven architecture and operational battle-tested workflows 
 | 8 | [`live-debug-assistant`](skills/live-debug-assistant/SKILL.md) | Terminal error log | 10-second hotfix command, `.env.sample` | Diagnoses live terminal errors & enforces API Key security protocols |
 | 9 | [`workshop-faq-generator`](skills/workshop-faq-generator/SKILL.md) | Workshop topic & level | `docs/20-faq.md` / `FAQ.md` | Automatically generates attendee FAQ (hardware, network, code) |
 | 10 | [`workshop-tester`](skills/workshop-tester/SKILL.md) | Workshop project path | `verify_workshop.py` audit output | Audits code execution smoke tests and markdown broken relative links |
+| 11 | [`workshop-web-researcher`](skills/workshop-web-researcher/SKILL.md) | Tool/Model query | Updated release tags & docs | Fetches latest tool/SDK release versions & prevents deprecated flags |
 
 ---
 
@@ -57,7 +58,7 @@ Participants bring a wide variety of hardware architectures. This matrix identif
 | Architecture / OS | Recommended Tool | Known Risks | Mandatory Fallback Path |
 | --- | --- | --- | --- |
 | macOS Intel Mac (`x86_64`) | Ollama CLI (`ollama serve`) | LM Studio GPU acceleration unavailable / crashes frequently | Must provide Ollama CLI fallback guide (`docs/18-intel-mac-prep.md`) |
-| macOS Apple Silicon (`arm64`) | LM Studio / Ollama / MLX | Full Metal GPU acceleration supported | MLX (`mlx-lm`) optional |
+| macOS Apple Silicon (`arm64`) | LM Studio / Ollama / MLX | Full Metal GPU hardware acceleration supported | MLX (`mlx-lm`) optional |
 | Windows x86_64 (Intel/AMD) | LM Studio / Ollama | PowerShell execution policy restriction, WSL2 required for Docker | Provide PowerShell bypass script |
 | Windows ARM64 (Snapdragon) | Ollama CLI (Native) | Performance degradation under x64 emulation | Use Ollama native build |
 | Linux / ChromeOS | Ollama CLI | No GUI support / Sandbox container | Use `ollama serve` terminal mode & small models (`e2b`) |
@@ -86,7 +87,7 @@ python3 harness_cli.py build-pdf --target my-bwai-workshop
 
 ## Installing Agent Skills
 
-Install all 10 skills into your local agent environment (`~/.gemini/skills`):
+Install all 11 skills into your local agent environment (`~/.gemini/skills`):
 
 ```bash
 chmod +x scripts/install_skills.sh
