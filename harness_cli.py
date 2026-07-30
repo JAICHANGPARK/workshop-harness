@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
 harness_cli.py - Workshop Harness Command Line Tool (uv Powered)
-BWAI 및 기술 워크숍 프로젝트 생성을 자동화하고 사전 준비물, 아키텍처 호환성, 루프 엔지니어링 페르소나 리뷰, 커리큘럼, 런북, 하네스 검증, PDF 핸드아웃 생성을 총괄하는 CLI
+CLI that automates BWAI and tech workshop project creation, prerequisites, architecture
+compatibility, Loop Engineering persona review, curriculum, runbooks, harness verification,
+and PDF handout generation.
 """
 
 import os
@@ -95,39 +97,39 @@ def init_workshop(name: str, topic: str, target_dir: str = None):
 
 > Topic: {topic}
 
-이 저장소는 **{topic}** 워크숍을 위한 사전 준비 문서와 핸즈온 실습 코드 저장소입니다.
+This repository contains pre-event preparation documents and hands-on lab code for the **{topic}** workshop.
 
-## 🚀 빠른 시작 (uv 기반)
+## Quick Start (uv Powered)
 
-1. **사전 준비 가이드**: [gemma4-local-setup-guide.md](./gemma4-local-setup-guide.md)
-2. **노트북 아키텍처 호환성 점검**: `./scripts/check_architecture_compat.sh` (Windows: `.\\scripts\\check_architecture_compat.ps1`)
-3. **사전 환경 점검 스크립트 실행**: `./scripts/check_env.sh` (Windows: `.\\scripts\\check_env.ps1`)
-4. **당일 핸즈온**:
-   - 실습 순서: [workshop/03_labs/README.md](./workshop/03_labs/README.md)
-   - 실습 코드: [workshop/01_starter](./workshop/01_starter)
-   - 정답 코드: [workshop/02_final](./workshop/02_final)
-5. **발표자 & TA 진행 런북**: [RUNBOOK.md](./RUNBOOK.md)
+1. **Preparation Guide**: [gemma4-local-setup-guide.md](./gemma4-local-setup-guide.md)
+2. **Architecture Compatibility Check**: `./scripts/check_architecture_compat.sh` (Windows: `.\\scripts\\check_architecture_compat.ps1`)
+3. **Environment Verification Script**: `./scripts/check_env.sh` (Windows: `.\\scripts\\check_env.ps1`)
+4. **Day-of Hands-on Labs**:
+   - Lab Guide: [workshop/03_labs/README.md](./workshop/03_labs/README.md)
+   - Starter Code: [workshop/01_starter](./workshop/01_starter)
+   - Reference Solution: [workshop/02_final](./workshop/02_final)
+5. **Facilitator & TA Runbook**: [RUNBOOK.md](./RUNBOOK.md)
 
-## 📂 저장소 구조
+## Repository Structure
 
 ```text
 .
-├── RUNBOOK.md                    # 발표자 및 TA 전용 진행 런북
-├── gemma4-local-setup-guide.md   # 통합 사전 준비 가이드
-├── pyproject.toml                # Astral uv 기반 의존성 파일
-├── docs/                        # 상세 주제별, 아키텍처 호환성 및 페르소나 리뷰 리포트 문서
+├── RUNBOOK.md                    # Facilitator & TA execution runbook
+├── gemma4-local-setup-guide.md   # Unified preparation guide
+├── pyproject.toml                # Astral uv dependency file
+├── docs/                        # Detailed topic docs, architecture compatibility & persona review reports
 │   ├── 00-architecture-compatibility-matrix.md
 │   └── 00-persona-loop-review-report.md
-├── workshop/                    # 당일 핸즈온 실습
-│   ├── 01_starter/              # 시작 코드
-│   ├── 02_final/                # 최종 참고 코드
-│   └── 03_labs/                 # Step-by-Step 실습 문서
-├── prompt-pack/                 # 핸즈온 프롬프트 팩
-├── scripts/                     # 크로스 아키텍처 점검 및 오프라인 번들링 스크립트
-└── output/                      # 산출물 (PDF 등)
+├── workshop/                    # Day-of hands-on labs
+│   ├── 01_starter/              # Starter code
+│   ├── 02_final/                # Reference solution code
+│   └── 03_labs/                 # Step-by-step lab guides
+├── prompt-pack/                 # Hands-on prompt pack
+├── scripts/                     # Cross-architecture checks & offline bundling scripts
+└── output/                      # Build artifacts (PDF, etc.)
 ```
 
-## 🔗 참고 (References)
+## References
 - [Build with AI Seoul 2026](https://github.com/JAICHANGPARK/2026-bwai-seoul)
 - [Build with AI Golang Korea 2026](https://github.com/JAICHANGPARK/2026-bwai-golang-korea)
 - [Build with AI Mongo 2026](https://github.com/JAICHANGPARK/2026-bwai-mongo)

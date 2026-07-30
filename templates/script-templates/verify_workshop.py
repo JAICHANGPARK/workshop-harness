@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 verify_workshop.py - Workshop Integrity & Link Auditor
-마크다운 상대 경로 링크, 이미지 존재 여부, 코드 실행 상태를 자동으로 점검하는 하네스 검증 도구
+Automatically verifies markdown relative path links, image file existence, and code execution
+status as a comprehensive harness verification tool.
 """
 
 import os

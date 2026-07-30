@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 generate_prep_pdf.py - Workshop Harness PDF Generator
-ReportLab, PyMuPDF(fitz), Pillow를 사용하여 docs/ 디렉토리의 마크다운 가이드 문서들을
-출판용 품질의 단일 PDF 핸드아웃으로 빌드하고, 미리보기 contact sheet 이미지를 생성합니다.
+Uses ReportLab, PyMuPDF (fitz), and Pillow to build markdown guide documents from the docs/
+directory into a single publication-quality PDF handout with a preview contact sheet image.
 """
 
 import os

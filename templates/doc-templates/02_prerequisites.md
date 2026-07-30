@@ -1,62 +1,62 @@
-# 워크숍 사전 준비 및 개발 언어 / SDK / API Key 발급 가이드
+# Workshop Prerequisites & SDK / API Key Setup Guide
 
-현장 와이파이 혼잡으로 인한 다운로드 지연 및 발급 오류를 방지하기 위해 **반드시 행사 참가 전 아래 언어, SDK 및 API Key를 준비**해 주시기 바랍니다.
+To avoid download delays and configuration errors caused by venue WiFi congestion, **please complete all language, SDK, and API Key setup before the event**.
 
 ---
 
-## 🔑 1. Google AI Studio & Gemini API Key 발급 가이드
+## 1. Google AI Studio & Gemini API Key Setup
 
-개인 개발자 및 일반 워크숍 참가자는 **Google AI Studio**를 통해 1분 만에 무료 Gemini API Key를 발급받으실 수 있습니다.
+Individual developers and workshop attendees can obtain a free Gemini API Key in under one minute via **Google AI Studio**.
 
-### 📌 발급 절차
-1. **Google AI Studio 접속**: [https://aistudio.google.com](https://aistudio.google.com) 로그인
-2. **API Key 생성**:
-   - 좌측 메뉴 상단의 **"Get API key"** 버튼 클릭
-   - **"Create API key"** 버튼 선택 (새 프로젝트 또는 기존 GCP 프로젝트 연결)
-3. **API Key 복사**: `AIzaSy...` 형식으로 생성된 키를 복사합니다.
-4. **로컬 환경변수 설정**:
-   - 실습 프로젝트 루트에 `.env` 파일을 생성하고 키를 저장합니다:
+### Issuance Steps
+1. **Visit Google AI Studio**: Sign in at [https://aistudio.google.com](https://aistudio.google.com)
+2. **Create API Key**:
+   - Click the **"Get API key"** button in the left sidebar
+   - Select **"Create API key"** (link to a new or existing GCP project)
+3. **Copy API Key**: Copy the generated key in `AIzaSy...` format.
+4. **Set Local Environment Variable**:
+   - Create a `.env` file in the workshop project root and save the key:
      ```bash
      GEMINI_API_KEY="AIzaSyYourGeneratedApiKeyHere"
      ```
 
-> 🚨 **보안 주의사항 (Critical Security)**:
-> API Key는 개인 비밀번호와 같습니다. **절대로 GitHub 저장소에 커밋하지 마세요.**
-> `.gitignore` 파일에 `.env` 및 `*.json`이 포함되어 있는지 확인하세요.
+> **Critical Security Warning**:
+> Your API Key is equivalent to a personal password. **Never commit it to a GitHub repository.**
+> Verify that `.gitignore` includes `.env` and `*.json` entries.
 
 ---
 
-## ☁️ 2. Google Cloud Platform (GCP) Vertex AI 키 발급 가이드
+## 2. Google Cloud Platform (GCP) Vertex AI Key Setup
 
-엔터프라이즈 및 GCP 기반 워크숍 진행 시 Vertex AI API를 연동합니다.
+For enterprise or GCP-based workshops, connect via the Vertex AI API.
 
-### 📌 GCP 콘솔 설정 절차
-1. **Google Cloud Console 접속**: [https://console.cloud.google.com](https://console.cloud.google.com)
-2. **Vertex AI API 활성화**:
-   - 검색창에 `Vertex AI API` 검색 후 **[활성화 (Enable)]** 클릭
-   - 또는 Google Cloud SDK 터미널 명령:
+### GCP Console Setup Steps
+1. **Visit Google Cloud Console**: [https://console.cloud.google.com](https://console.cloud.google.com)
+2. **Enable Vertex AI API**:
+   - Search for `Vertex AI API` and click **[Enable]**
+   - Or use Google Cloud SDK terminal:
      ```bash
      gcloud services enable aiplatform.googleapis.com
      ```
-3. **서비스 계정(Service Account) 및 JSON 키 발급**:
-   - `IAM & 행정(IAM & Admin)` > `서비스 계정(Service Accounts)` 이동
-   - **[서비스 계정 만들기]** 클릭 (역할: `Vertex AI User`)
-   - 키 탭에서 **[새 키 만들기] > [JSON]** 선택하여 다운로드
-4. **로컬 인증 환경변수 설정**:
+3. **Create Service Account & JSON Key**:
+   - Navigate to `IAM & Admin` > `Service Accounts`
+   - Click **[Create Service Account]** (Role: `Vertex AI User`)
+   - In the Keys tab, select **[Add Key] > [JSON]** to download
+4. **Set Local Authentication Environment Variable**:
    - **macOS / Linux**:
      ```bash
-     export GOOGLE_APPLICATION_CREDENTIALS="/경로/your-gcp-key.json"
+     export GOOGLE_APPLICATION_CREDENTIALS="/path/to/your-gcp-key.json"
      ```
    - **Windows (PowerShell)**:
      ```powershell
-     $env:GOOGLE_APPLICATION_CREDENTIALS="C:\경로\your-gcp-key.json"
+     $env:GOOGLE_APPLICATION_CREDENTIALS="C:\path\to\your-gcp-key.json"
      ```
 
 ---
 
-## 🛠️ 3. 개발 언어 및 SDK OS별 설치 명령어
+## 3. Development Language & SDK Installation by OS
 
-### Python (3.9+) & `uv` 패키지 매니저
+### Python (3.9+) & `uv` Package Manager
 - **macOS**:
   ```bash
   brew install python@3.11
@@ -67,7 +67,7 @@
   winget install Python.Python.3.11
   powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
   ```
-  *(참고: 설치 시 "Add Python to PATH" 체크 필수)*
+  *(Note: Ensure "Add Python to PATH" is checked during installation)*
 - **Linux**:
   ```bash
   sudo apt update && sudo apt install -y python3 python3-pip python3-venv
@@ -90,14 +90,14 @@
 
 ---
 
-## ⚡ 사전 다운로드 요약 체크리스트
+## Pre-Download Checklist
 
-1. **Ollama / LM Studio 다운로드 & 모델 받아두기**:
+1. **Download Ollama / LM Studio & pull models ahead of time**:
    ```bash
    ollama pull gemma4:e4b
    ```
 
-2. **실습 프로젝트 의존성 사전 동기화**:
+2. **Sync project dependencies in advance**:
    ```bash
    cd workshop/01_starter
    uv sync
@@ -105,8 +105,8 @@
 
 ---
 
-## 🔗 참고 (References)
+## References
 
-- **Google AI Studio Key Issue**: [https://aistudio.google.com](https://aistudio.google.com)
+- **Google AI Studio Key Issuance**: [https://aistudio.google.com](https://aistudio.google.com)
 - **GCP Vertex AI Setup**: [https://cloud.google.com/vertex-ai/docs](https://cloud.google.com/vertex-ai/docs)
 - **Astral uv Official Guide**: [https://astral.sh/uv](https://astral.sh/uv)

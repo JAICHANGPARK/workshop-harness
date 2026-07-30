@@ -1,27 +1,27 @@
-# 🎤 세션 진행자 & TA 전용 런북 (Facilitator Runbook)
+# Facilitator & TA Runbook
 
-- **세션명**: Workshop Title
-- **발표자**: Facilitator Name
-- **보조 진행자(TA)**: TA Team
+- **Session Title**: Workshop Title
+- **Facilitator**: Facilitator Name
+- **Teaching Assistants (TA)**: TA Team
 
 ---
 
-## ⏱️ 진행 타임라인
+## Session Timeline
 
-### 00m ~ 10m: 오프닝 & 사전 환경 검증
-- **발표자**: `gemma4-local-setup-guide.md` 안내 및 `./scripts/check_env.sh` 실행 시연
-- **TA**: 환경 체크 에러 참가자 1:1 지원 및 오프라인 USB 안내
+### 00m - 10m: Opening & Environment Verification
+- **Facilitator**: Walk through `gemma4-local-setup-guide.md` and demo `./scripts/check_env.sh` execution
+- **TA**: Provide 1:1 support for attendees with environment check errors; distribute offline USB if needed
 
-### 10m ~ 25m: Lab 01 - Hello World & API 연동
-- **발표자**: `workshop/01_starter` 코드 구조 및 `TODO: [Lab 1]` 시연
-- **TA**: 로컬 LLM 서버 미실행자 `ollama serve` 명령어 조치
+### 10m - 25m: Lab 01 - Hello World & API Integration
+- **Facilitator**: Explain `workshop/01_starter` code structure and demo `TODO: [Lab 1]` completion
+- **TA**: Help attendees who haven't started the local LLM server run `ollama serve`
 
-### 25m ~ 45m: Lab 02 - Structured Output & Tool Call
-- **발표자**: Pydantic / Output Schema 정의 및 System Prompt 적용 시연
-- **TA**: JSON 파싱 에러 가이드
+### 25m - 45m: Lab 02 - Structured Output & Tool Call
+- **Facilitator**: Demo Pydantic / Output Schema definition and System Prompt application
+- **TA**: Guide attendees through JSON parsing errors
 
-### 45m ~ 55m: Lab 03 - 전체 앱 완주
-- **발표자**: `workshop/02_final` 정답 예시 코드 공유 및 시연
+### 45m - 55m: Lab 03 - Full Application Completion
+- **Facilitator**: Share and demo the `workshop/02_final` reference solution code
 
-### 55m ~ 60m: Q&A 및 피드백 설문
-- **발표자**: 세션 회고 및 참가자 설문 링크 안내
+### 55m - 60m: Q&A & Feedback Survey
+- **Facilitator**: Session retrospective and share attendee survey link

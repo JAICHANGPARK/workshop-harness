@@ -1,23 +1,23 @@
-# ❓ [참석자용] 워크숍 자주 묻는 질문 (FAQ)
+# [For Attendees] Workshop Frequently Asked Questions (FAQ)
 
-## 📌 1. 사전 준비 및 하드웨어 관련
+## 1. Prerequisites & Hardware
 
-**Q: 8GB RAM 노트북으로도 핸즈온 참석이 가능한가요?**  
-A: 네, 가능합니다. 8GB RAM 장비는 `gemma4:e2b` (2B~3B 소형 모델)를 사용하시고, 다른 프로그램(Chrome 탭 등)을 종료해 주시면 원활히 동작합니다.
+**Q: Can I attend the hands-on session with an 8GB RAM laptop?**
+A: Yes, you can. For 8GB RAM devices, use `gemma4:e2b` (2B-3B small model) and close other programs (Chrome tabs, etc.) to ensure smooth operation.
 
-**Q: Intel Mac 사용자인데 LM Studio에서 모델이 동작하지 않습니다.**  
-A: Intel Mac에서는 LM Studio GPU 가속 이슈가 있으므로 **LM Studio 대신 Ollama CLI (`ollama serve`)**를 사용해 주세요.
-
----
-
-## 📌 2. 네트워크 및 오프라인 관련
-
-**Q: 행사장 와이파이가 연결되지 않으면 어떡하나요?**  
-A: 사전 가이드에 따라 모델과 Python 패키지(`uv sync`)를 행사 전 다운로드하셨다면, 행사 당일 네트워크 없이 100% 오프라인 실습이 가능합니다. 현장 비상용 오프라인 USB도 준비되어 있습니다.
+**Q: I'm an Intel Mac user and models won't work in LM Studio.**
+A: Intel Macs have known GPU acceleration issues with LM Studio. Please use **Ollama CLI (`ollama serve`) instead of LM Studio**.
 
 ---
 
-## 📌 3. 실습 진행 관련
+## 2. Network & Offline
 
-**Q: 코딩을 놓치거나 막히면 어떻게 하나요?**  
-A: `workshop/02_final` 폴더에 세션 전체 정답 코드가 준비되어 있습니다. 언제든 참고하시거나 복사해 사용하실 수 있으며, 보조 진행자(TA)에게 손을 들어 도움을 요청하세요.
+**Q: What if the venue WiFi is unavailable?**
+A: If you followed the pre-event guide and downloaded models and Python packages (`uv sync`) beforehand, the workshop runs 100% offline without any network connection. Emergency offline USBs are also available on-site.
+
+---
+
+## 3. Lab Progress
+
+**Q: What if I fall behind or get stuck during the coding exercises?**
+A: Complete reference code for all labs is available in the `workshop/02_final` folder. You can refer to or copy from it at any time. You can also raise your hand to request help from a Teaching Assistant (TA).
