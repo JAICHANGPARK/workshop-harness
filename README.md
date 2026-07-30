@@ -14,10 +14,9 @@ Languages: [English](./README.md) | [Korean](./README_KR.md) | [Japanese](./READ
 Workshop Harness is an AI Agent Harness, Skill Suite, and CLI Automation Toolkit designed for event organizers, speakers, and TAs orchestrating technical workshops, Build with AI (BWAI) events, DevFests, and hands-on coding labs.
 
 It standardizes the proven architecture and operational battle-tested workflows from real-world events including:
-- Build with AI Seoul (`2026-bwai-seoul`)
-- Build with AI Golang Korea (`2026-bwai-golang-korea`)
-- Build with AI Mongo (`2026-bwai-mongo`)
-- Build with AI Cloud Pangyo (`2026-bwai-cloud-pangyo`)
+- [Build with AI Seoul 2026](https://github.com/JAICHANGPARK/2026-bwai-seoul)
+- [Build with AI Golang Korea 2026](https://github.com/JAICHANGPARK/2026-bwai-golang-korea)
+- [Build with AI Mongo 2026](https://github.com/JAICHANGPARK/2026-bwai-mongo)
 
 ---
 

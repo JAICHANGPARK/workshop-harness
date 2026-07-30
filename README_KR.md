@@ -13,7 +13,10 @@ Languages: [English](./README.md) | [Korean](./README_KR.md) | [Japanese](./READ
 
 Workshop Harness는 Build with AI (BWAI), DevFest, 커뮤니티 세션, 기술 실습 등의 워크숍을 준비하는 주최자, 발표자, TA를 위한 AI 에이전트 하네스, 스킬(Skills) 모음 및 CLI 자동화 툴킷입니다.
 
-Build with AI Seoul (`2026-bwai-seoul`), Golang Korea (`2026-bwai-golang-korea`), Mongo (`2026-bwai-mongo`), Cloud Pangyo (`2026-bwai-cloud-pangyo`) 프로젝트 등 실제 다수의 현장 워크숍 운영 경험에서 검증된 구조와 노하우를 표준화하였습니다.
+다음과 같은 실제 현장 워크숍 운영 경험에서 검증된 구조와 노하우를 표준화하였습니다:
+- [Build with AI Seoul 2026](https://github.com/JAICHANGPARK/2026-bwai-seoul)
+- [Build with AI Golang Korea 2026](https://github.com/JAICHANGPARK/2026-bwai-golang-korea)
+- [Build with AI Mongo 2026](https://github.com/JAICHANGPARK/2026-bwai-mongo)
 
 ---
 
