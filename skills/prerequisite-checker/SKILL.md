@@ -1,83 +1,79 @@
 ---
 name: prerequisite-checker
-description: OS별(macOS Apple Silicon/Intel, Windows PowerShell/WSL2, Linux, ChromeOS) 사전 준비 가이드 문서 작성 및 자동 점검 스크립트(check_env.sh, check_env.ps1) 생성을 담당하는 스킬
+description: OS별(macOS Apple Silicon/Intel, Windows PowerShell/WSL2, Linux, ChromeOS) 사전 준비 가이드 문서 작성 및 언어/SDK(Python, Node.js, Go, Flutter, Rust, Docker) 설치 가이드와 자동 점검 스크립트(check_env.sh, check_env.ps1) 생성을 담당하는 스킬
 ---
 
-# Prerequisite Checker Skill
+# Prerequisite Checker & SDK Installation Guide Skill
 
 ## 📌 목적
-참가자들이 워크숍 당일 현장에서 네트워크나 환경 문제로 막히지 않도록, 행사 전에 본인의 컴퓨터 사양 및 필수 소프트웨어(Ollama, LM Studio, Docker, Python uv, Go, Dart/Flutter 등)를 사전 설치하고 점검할 수 있는 가이드와 자동화 스크립트를 제공합니다.
+참가자들이 워크숍 당일 현장에서 개발 언어 및 SDK 미설치로 막히지 않도록, **OS별(macOS, Windows, Linux) 주요 언어/SDK(Python, Node.js, Go, Flutter/Dart, Rust, Docker, uv 등)의 공식 설치 명령어와 PATH 환경변수 설정 가이드**를 포함한 사전 준비 문서를 자동 생성합니다.
 
-## 🎯 주요 기능 및 역할
+---
 
-1. **통합 사전 준비 가이드 (`gemma4-local-setup-guide.md` / `prerequisites.md`) 생성**:
-   - 하드웨어 메모리 사양별 모델 선택 기준 제시:
-     - `8GB RAM`: `gemma4:e2b` (경량 모델)
-     - `16GB RAM`: `gemma4:e4b` (기본 모델)
-     - `32GB+ RAM`: `gemma4:26b-a4b` 또는 `31b`
-   - OS별 설치 안내:
-     - **Windows**: PowerShell, WSL2, Docker VMM 설정
-     - **Apple Silicon Mac**: LM Studio / Ollama / MLX
-     - **Intel Mac**: LM Studio 실행 이슈가 있을 시 Ollama 우선 권장
-     - **ChromeOS / Linux**: Ollama CLI 기준 안내
+## 🛠️ 언어 & SDK별 OS 설치 명령어 매트릭스 (SDK Installation Matrix)
 
-2. **현장 네트워크 부하 방지를 위한 사전 다운로드 명령 생성**:
-   - Ollama 모델 다운로드: `ollama pull gemma4:e4b`
-   - Python 패키지 동기화: `uv sync`
-   - HuggingFace 임베딩 캐싱: `python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('voyageai/voyage-4-nano')"`
-   - Local Atlas / Docker 이미지 사전 pull: `atlas local setup local-rag`
+### 1. Python (3.9+) 및 `uv` 매니저
+- **macOS**:
+  ```bash
+  brew install python@3.11
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  ```
+- **Windows (PowerShell)**:
+  ```powershell
+  winget install Python.Python.3.11
+  powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+  ```
+  *(주의: 설치 시 "Add Python to PATH" 체크 필수)*
+- **Linux (Ubuntu/Debian)**:
+  ```bash
+  sudo apt update && sudo apt install -y python3 python3-pip python3-venv
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  ```
 
-3. **자동 검증 스크립트 (`scripts/check_env.sh`, `scripts/check_env.ps1`) 생성**:
-   - Python 버전 (3.9+), `uv` 설치 여부
-   - Docker daemon 동작 여부
-   - Ollama / LM Studio local port (11434, 1234) 리스닝 여부
-   - 사용 가능 RAM 및 디스크 용량 (최소 10GB 이상 여부)
+---
 
-## 📋 검증 스크립트 템플릿 사용법
+### 2. Node.js & npm / pnpm
+- **macOS**: `brew install node`
+- **Windows**: `winget install OpenJS.NodeJS`
+- **Linux**:
+  ```bash
+  curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+  sudo apt install -y nodejs
+  ```
 
-### macOS / Linux (`check_env.sh`)
+---
+
+### 3. Go Language (1.21+)
+- **macOS**: `brew install go`
+- **Windows**: `winget install GoLang.Go`
+- **Linux**: `sudo apt install -y golang-go`
+
+---
+
+### 4. Dart & Flutter SDK
+- **macOS**: `brew install --cask flutter`
+- **Windows**: `winget install Flutter.Flutter`
+- **Linux**: `sudo snap install flutter --classic`
+- **환경변수 점검**: `flutter doctor`
+
+---
+
+### 5. Docker & Docker Desktop
+- **macOS**: `brew install --cask docker`
+- **Windows**: `winget install Docker.DockerDesktop` *(WSL2 백엔드 활성화 필수)*
+- **Linux**: `curl -fsSL https://get.docker.com | sh`
+
+---
+
+## 🔍 자동 환경 검증 스크립트 (`check_env.sh` / `check_env.ps1`)
+
+스킬 실행 시 감지된 워크숍 대상 SDK에 따라 맞춤형 환경 검증 구문을 동적으로 생성합니다.
+
 ```bash
-#!/usr/bin/env bash
-echo "=== 🔍 BWAI Workshop Environment Checker ==="
-# 1. Python & uv check
-if command -v uv &> /dev/null; then
-    echo "[OK] uv is installed: $(uv --version)"
+# Example: SDK Check Snippet
+if command -v flutter &> /dev/null; then
+    echo "[OK] Flutter SDK installed: $(flutter --version | head -n 1)"
 else
-    echo "[WARN] uv is not installed. Please install via: curl -LsSf https://astral.sh/uv/install.sh | sh"
+    echo "[WARN] Flutter SDK not found. Install via: winget install Flutter.Flutter (Win) or brew install --cask flutter (Mac)"
 fi
-
-# 2. Ollama check
-if curl -s http://localhost:11434/api/version &> /dev/null; then
-    echo "[OK] Ollama server is running on localhost:11434"
-else
-    echo "[WARN] Ollama server is not running."
-fi
-
-# 3. Model check
-if command -v ollama &> /dev/null; then
-    models=$(ollama list)
-    echo "[INFO] Installed Ollama models:"
-    echo "$models"
-fi
-```
-
-### Windows (`check_env.ps1`)
-```powershell
-Write-Host "=== 🔍 BWAI Workshop Environment Checker (Windows) ===" -ForegroundColor Cyan
-
-# 1. Python & uv check
-$uv = Get-Command uv -ErrorAction SilentlyContinue
-if ($uv) {
-    Write-Host "[OK] uv is installed: $(uv --version)" -ForegroundColor Green
-} else {
-    Write-Host "[WARN] uv is not installed." -ForegroundColor Yellow
-}
-
-# 2. Ollama port check
-try {
-    $res = Invoke-RestMethod -Uri "http://localhost:11434/api/version" -TimeoutSec 2
-    Write-Host "[OK] Ollama server is running on localhost:11434" -ForegroundColor Green
-} catch {
-    Write-Host "[WARN] Ollama server is not running." -ForegroundColor Yellow
-}
 ```
