@@ -33,15 +33,15 @@ python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG
 
 ---
 
-## 타 AI 도구 연동 (Claude Code, OpenAI Codex, Antigravity, Cursor)
+## 오픈 AI 에이전트 표준 (`AGENTS.md`)
 
-`workshop-harness`는 특정 도구에 종속되지 않는 **100% Multi-Agent 호환 구조**를 제공합니다:
+`workshop-harness`는 오픈 이니셔티브 **[AGENTS.md 표준 명세](https://agents.md/)**를 준수하여 모든 AI 에이전트 환경에서 100% 표준 호환됩니다:
 
-- **Anthropic Claude (Claude Code CLI & Desktop)**: [`CLAUDE.md`](./CLAUDE.md) 참조
-- **OpenAI Codex, ChatGPT & Aider**: [`CODEX.md`](./CODEX.md) 또는 [`AGENTS.md`](./AGENTS.md) 참조
-- **Google Antigravity & Gemini CLI**: `.gemini/skills/` 표준 네이티브 스킬 등록
-- **Cursor & Windsurf IDE**: `.cursorrules` 및 `AGENTS.md` 연동
-- **전체 통합 가이드**: [`docs/ai-agent-interoperability-guide.md`](./docs/ai-agent-interoperability-guide.md) 참조
+- **오픈 에이전트 표준 명세**: [`AGENTS.md`](./AGENTS.md)
+- **Anthropic Claude (Claude Code CLI & Desktop)**: [`CLAUDE.md`](./CLAUDE.md)
+- **Google Antigravity & Gemini CLI**: `.gemini/skills/` 표준 네이티브 스킬 지원
+- **OpenAI Codex, ChatGPT, Aider & Cursor**: [`AGENTS.md`](./AGENTS.md) 지침 지원
+- **전체 통합 가이드**: [`docs/ai-agent-interoperability-guide.md`](./docs/ai-agent-interoperability-guide.md)
 
 ---
 
@@ -49,7 +49,7 @@ python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG
 
 - [개요](#개요)
 - [원클릭 풀 오케스트레이션](#원클릭-풀-오케스트레이션-one-click-full-orchestration)
-- [타 AI 도구 연동](#타-ai-도구-연동-claude-code-openai-codex-antigravity-cursor)
+- [오픈 AI 에이전트 표준 (`AGENTS.md`)](#오픈-ai-에이전트-표준-agentsmd)
 - [전체 12개 에이전트 스킬 명세서](#전체-12개-에이전트-스킬-명세서)
 - [크로스 아키텍처 호환성 고려사항](#크로스-아키텍처-호환성-고려사항)
 - [CLI 사용법 (harness_cli.py)](#cli-사용법-harness_clipy)
@@ -132,8 +132,8 @@ chmod +x scripts/install_skills.sh
 my-workshop-repo/
 ├── README.md                           # 워크숍 개요 및 Quick Start
 ├── RUNBOOK.md                          # 발표자 및 TA 전용 진행 런북
+├── AGENTS.md                           # AGENTS.md 오픈 에이전트 표준 명세
 ├── CLAUDE.md                           # Claude Code CLI 연동 가이드
-├── CODEX.md                            # OpenAI Codex & ChatGPT 연동 가이드
 ├── gemma4-local-setup-guide.md          # 행사 전 통합 사전 준비 가이드
 ├── docs/                               # 상세 가이드 문서 (00 ~ 20)
 │   ├── 00-architecture-compatibility-matrix.md # 크로스 아키텍처 대비 가이드

@@ -26,7 +26,7 @@ It standardizes the proven architecture and operational battle-tested workflows 
 
 - [Overview](#overview)
 - [One-Click Full Orchestration](#one-click-full-orchestration)
-- [AI Agent Interoperability (Claude, Codex, Antigravity, Cursor)](#ai-agent-interoperability-claude-codex-antigravity-cursor)
+- [Open AI Agent Standard (`AGENTS.md`)](#open-ai-agent-standard-agentsmd)
 - [12 Specialized Agent Skills Specification](#12-specialized-agent-skills-specification)
 - [Cross-Architecture Compatibility Matrix](#cross-architecture-compatibility-matrix)
 - [CLI Tool Usage (`harness_cli.py`)](#cli-tool-usage-harness_clipy)
@@ -48,15 +48,15 @@ python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG
 
 ---
 
-## AI Agent Interoperability (Claude, Codex, Antigravity, Cursor)
+## Open AI Agent Standard (`AGENTS.md`)
 
-Workshop Harness is designed to be 100% vendor-agnostic and works seamlessly across all AI coding tools and LLMs:
+Workshop Harness adopts the open **[AGENTS.md specification](https://agents.md/)**, making it 100% vendor-agnostic across all AI coding agents:
 
-- **Anthropic Claude (Claude Code CLI & Desktop)**: See [`CLAUDE.md`](./CLAUDE.md)
-- **OpenAI Codex, ChatGPT & Aider**: See [`CODEX.md`](./CODEX.md) or [`AGENTS.md`](./AGENTS.md)
-- **Google Antigravity & Gemini CLI**: Standard native `.gemini/skills/` integration
-- **Cursor & Windsurf IDE**: Integrated via `.cursorrules` and `AGENTS.md`
-- **Full Guide**: See [`docs/ai-agent-interoperability-guide.md`](./docs/ai-agent-interoperability-guide.md)
+- **Open Agent Standard Specification**: [`AGENTS.md`](./AGENTS.md)
+- **Anthropic Claude (Claude Code CLI & Desktop)**: [`CLAUDE.md`](./CLAUDE.md)
+- **Google Antigravity & Gemini CLI**: Native `.gemini/skills/` integration
+- **OpenAI Codex, ChatGPT, Aider & Cursor**: Supported via [`AGENTS.md`](./AGENTS.md)
+- **Full Guide**: [`docs/ai-agent-interoperability-guide.md`](./docs/ai-agent-interoperability-guide.md)
 
 ---
 
@@ -133,8 +133,8 @@ chmod +x scripts/install_skills.sh
 my-workshop-repo/
 ├── README.md                           # Workshop overview and quick start
 ├── RUNBOOK.md                          # Facilitator and TA timeline runbook
+├── AGENTS.md                           # AGENTS.md open specification standard
 ├── CLAUDE.md                           # Claude Code CLI integration guide
-├── CODEX.md                            # OpenAI Codex & ChatGPT integration guide
 ├── gemma4-local-setup-guide.md          # Integrated pre-workshop setup guide
 ├── docs/                               # Detailed documentation (00 to 20)
 │   ├── 00-architecture-compatibility-matrix.md # Architecture fallback matrix
