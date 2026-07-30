@@ -21,6 +21,7 @@ skills=(
     "cross-architecture-checker"
     "workshop-runbook-generator"
     "live-debug-assistant"
+    "workshop-faq-generator"
 )
 
 for skill in "${skills[@]}"; do
@@ -32,4 +33,4 @@ for skill in "${skills[@]}"; do
     fi
 done
 
-echo "✅ All 8 Workshop Harness skills installed successfully!"
+echo "✅ All 9 Workshop Harness skills installed successfully!"
