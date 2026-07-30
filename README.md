@@ -26,6 +26,7 @@ It standardizes the proven architecture and operational battle-tested workflows 
 
 - [Overview](#overview)
 - [One-Click Full Orchestration](#one-click-full-orchestration)
+- [AI Agent Interoperability (Claude, Codex, Antigravity, Cursor)](#ai-agent-interoperability-claude-codex-antigravity-cursor)
 - [12 Specialized Agent Skills Specification](#12-specialized-agent-skills-specification)
 - [Cross-Architecture Compatibility Matrix](#cross-architecture-compatibility-matrix)
 - [CLI Tool Usage (`harness_cli.py`)](#cli-tool-usage-harness_clipy)
@@ -44,6 +45,18 @@ With a single CLI command or natural language prompt, Workshop Harness triggers 
 # One-Click Full Workshop Generation Across All 12 Skills
 python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 ```
+
+---
+
+## AI Agent Interoperability (Claude, Codex, Antigravity, Cursor)
+
+Workshop Harness is designed to be 100% vendor-agnostic and works seamlessly across all AI coding tools and LLMs:
+
+- **Anthropic Claude (Claude Code CLI & Desktop)**: See [`CLAUDE.md`](./CLAUDE.md)
+- **OpenAI Codex, ChatGPT & Aider**: See [`CODEX.md`](./CODEX.md) or [`AGENTS.md`](./AGENTS.md)
+- **Google Antigravity & Gemini CLI**: Standard native `.gemini/skills/` integration
+- **Cursor & Windsurf IDE**: Integrated via `.cursorrules` and `AGENTS.md`
+- **Full Guide**: See [`docs/ai-agent-interoperability-guide.md`](./docs/ai-agent-interoperability-guide.md)
 
 ---
 
@@ -120,10 +133,13 @@ chmod +x scripts/install_skills.sh
 my-workshop-repo/
 ├── README.md                           # Workshop overview and quick start
 ├── RUNBOOK.md                          # Facilitator and TA timeline runbook
+├── CLAUDE.md                           # Claude Code CLI integration guide
+├── CODEX.md                            # OpenAI Codex & ChatGPT integration guide
 ├── gemma4-local-setup-guide.md          # Integrated pre-workshop setup guide
 ├── docs/                               # Detailed documentation (00 to 20)
 │   ├── 00-architecture-compatibility-matrix.md # Architecture fallback matrix
 │   ├── 00-persona-loop-review-report.md# Multi-persona loop review report
+│   ├── ai-agent-interoperability-guide.md # Multi-AI agent guide
 │   ├── 01-hardware-and-env.md
 │   ├── 02-prerequisites.md
 │   └── 20-faq.md                       # Attendee FAQ
