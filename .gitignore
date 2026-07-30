@@ -1,0 +1,31 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+
+# Output & Build Temporary files
+tmp/
+output/pdf/*.pdf
+!output/pdf/.gitkeep
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+
+# Logs
+*.log
