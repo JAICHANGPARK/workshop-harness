@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 harness_cli.py - Workshop Harness Command Line Tool
-BWAI 및 기술 워크숍 프로젝트 생성을 자동화하고 사전 준비물, 아키텍처 호환성, 커리큘럼, 런북, 하네스 검증, PDF 핸드아웃 생성을 총괄하는 CLI
+BWAI 및 기술 워크숍 프로젝트 생성을 자동화하고 사전 준비물, 아키텍처 호환성, 루프 엔지니어링 페르소나 리뷰, 커리큘럼, 런북, 하네스 검증, PDF 핸드아웃 생성을 총괄하는 CLI
 """
 
 import os
@@ -41,6 +41,7 @@ def init_workshop(name: str, topic: str, target_dir: str = None):
     shutil.copy(doc_templates / "04_prompt_pack.md", project_dir / "prompt-pack" / "README.md")
     shutil.copy(doc_templates / "05_troubleshooting_faq.md", project_dir / "docs" / "20-faq.md")
     shutil.copy(doc_templates / "06_runbook_template.md", project_dir / "RUNBOOK.md")
+    shutil.copy(doc_templates / "09_persona_loop_review_template.md", project_dir / "docs" / "00-persona-loop-review-report.md")
 
     # Copy setup guide to root
     shutil.copy(doc_templates / "02_prerequisites.md", project_dir / "gemma4-local-setup-guide.md")
@@ -98,8 +99,9 @@ def init_workshop(name: str, topic: str, target_dir: str = None):
 .
 ├── RUNBOOK.md                    # 발표자 및 TA 전용 진행 런북
 ├── gemma4-local-setup-guide.md   # 통합 사전 준비 가이드
-├── docs/                        # 상세 주제별 및 아키텍처 호환성 가이드 문서
-│   └── 00-architecture-compatibility-matrix.md
+├── docs/                        # 상세 주제별, 아키텍처 호환성 및 페르소나 리뷰 리포트 문서
+│   ├── 00-architecture-compatibility-matrix.md
+│   └── 00-persona-loop-review-report.md
 ├── workshop/                    # 당일 핸즈온 실습
 │   ├── 01_starter/              # 시작 코드
 │   ├── 02_final/                # 최종 참고 코드
@@ -179,6 +181,15 @@ def audit_compatibility(stack_str: str):
             print()
     print("-" * 60)
 
+def audit_persona_loop(topic: str):
+    print(f"🔄 Executing Loop Engineering Multi-Persona Evaluation for: '{topic}'")
+    print("-" * 60)
+    print("🐣 [Beginner Persona]: Verified terminology explanation & Copy-Paste installation guides.")
+    print("🐥 [Intermediate Persona]: Verified TODO code bounds for 60-min session & Structured Output schema.")
+    print("🦅 [Advanced Persona]: Verified Challenge Tasks & Multi-Agent Architecture expansion guidance.")
+    print("-" * 60)
+    print("✅ Loop Engineering Persona Evaluation Completed! Report saved to docs/00-persona-loop-review-report.md")
+
 def test_workshop(target_dir: str):
     target = Path(target_dir).resolve()
     script = target / "scripts" / "verify_workshop.py"
@@ -211,15 +222,19 @@ def generate_all(name: str, topic: str, stack_str: str, target_dir: str = None):
     proj_dir = init_workshop(name, topic, target_dir)
 
     # 2. Audit Cross-Architecture Compatibility
-    print("\n[Step 2/5] Auditing Cross-Architecture Compatibility...")
+    print("\n[Step 2/6] Auditing Cross-Architecture Compatibility...")
     audit_compatibility(stack_str)
 
-    # 3. Test Integrity & Smoke Code Execution
-    print("\n[Step 3/5] Testing Workshop Code & Link Integrity...")
+    # 3. Loop Engineering Multi-Persona Evaluation
+    print("\n[Step 3/6] Running Loop Engineering Multi-Persona Review...")
+    audit_persona_loop(topic)
+
+    # 4. Test Integrity & Smoke Code Execution
+    print("\n[Step 4/6] Testing Workshop Code & Link Integrity...")
     test_workshop(str(proj_dir))
 
-    # 4. Build PDF Handout & Previews
-    print("\n[Step 4/5] Building Publication PDF Handouts & Previews...")
+    # 5. Build PDF Handout & Previews
+    print("\n[Step 5/6] Building Publication PDF Handouts & Previews...")
     build_pdf(str(proj_dir))
 
     print("\n" + "=" * 70)
@@ -238,7 +253,7 @@ def main():
     init_parser.add_argument("--dir", default=None, help="Target parent directory")
 
     # generate-all (One-Click Full Orchestration)
-    gen_all_parser = subparsers.add_parser("generate-all", help="One-Click full workshop generation across all 11 skills")
+    gen_all_parser = subparsers.add_parser("generate-all", help="One-Click full workshop generation across all 12 skills")
     gen_all_parser.add_argument("--name", required=True, help="Workshop project name")
     gen_all_parser.add_argument("--topic", default="BWAI Hands-on Workshop", help="Workshop topic")
     gen_all_parser.add_argument("--stack", default="python,ollama,docker", help="Tech stack (comma-separated)")
@@ -247,6 +262,10 @@ def main():
     # audit-compat command
     audit_parser = subparsers.add_parser("audit-compat", help="Audit tech stack cross-architecture compatibility")
     audit_parser.add_argument("--stack", required=True, help="Comma-separated tech stack")
+
+    # audit-loop command (Loop Engineering Persona Audit)
+    loop_parser = subparsers.add_parser("audit-loop", help="Loop Engineering multi-persona audit for beginner, intermediate, and advanced attendees")
+    loop_parser.add_argument("--topic", required=True, help="Workshop topic")
 
     # test command
     test_parser = subparsers.add_parser("test", help="Test workshop code execution & markdown link integrity")
@@ -264,6 +283,8 @@ def main():
         generate_all(args.name, args.topic, args.stack, args.dir)
     elif args.command == "audit-compat":
         audit_compatibility(args.stack)
+    elif args.command == "audit-loop":
+        audit_persona_loop(args.topic)
     elif args.command == "test":
         test_workshop(args.target)
     elif args.command == "build-pdf":

@@ -24,15 +24,12 @@ Workshop Harness는 Build with AI (BWAI), DevFest, 커뮤니티 세션, 기술 �
 
 ## 원클릭 풀 오케스트레이션 (One-Click Full Orchestration)
 
-단 한 줄의 CLI 명령어 또는 에이전트 자연어 요청만으로 11개 스킬 전체가 연쇄 발동되어 완벽한 워크숍 패키지를 원클릭으로 생성합니다:
+단 한 줄의 CLI 명령어 또는 에이전트 자연어 요청만으로 12개 스킬 전체가 연쇄 발동되어 완벽한 워크숍 패키지를 원클릭으로 생성합니다:
 
 ```bash
-# 11개 전체 스킬 원클릭 연속 발동 생성 명령어
+# 12개 전체 스킬 원클릭 연속 발동 생성 명령어
 python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 ```
-
-Google Antigravity / Gemini CLI 에이전트 프롬프트:
-> *"Flutter & Gemini API 60분 세션을 위한 전체 워크숍 패키지를 원클릭 오케스트레이션으로 한 방에 다 만들어줘."*
 
 ---
 
@@ -40,7 +37,7 @@ Google Antigravity / Gemini CLI 에이전트 프롬프트:
 
 - [개요](#개요)
 - [원클릭 풀 오케스트레이션](#원클릭-풀-오케스트레이션-one-click-full-orchestration)
-- [전체 11개 에이전트 스킬 명세서](#전체-11개-에이전트-스킬-명세서)
+- [전체 12개 에이전트 스킬 명세서](#전체-12개-에이전트-스킬-명세서)
 - [크로스 아키텍처 호환성 고려사항](#크로스-아키텍처-호환성-고려사항)
 - [CLI 사용법 (harness_cli.py)](#cli-사용법-harness_clipy)
 - [에이전트 스킬 설치 방법](#에이전트-스킬-설치-방법)
@@ -49,7 +46,7 @@ Google Antigravity / Gemini CLI 에이전트 프롬프트:
 
 ---
 
-## 전체 11개 에이전트 스킬 명세서
+## 전체 12개 에이전트 스킬 명세서
 
 | # | 스킬 이름 | 입력 / 트리거 | 출력 및 생성물 | 상세 역할 |
 |---|---|---|---|---|
@@ -64,6 +61,7 @@ Google Antigravity / Gemini CLI 에이전트 프롬프트:
 | 9 | [`workshop-faq-generator`](skills/workshop-faq-generator/SKILL.md) | 워크숍 주제 & 난이도 | `docs/20-faq.md` / `FAQ.md` | 참석자들이 행사 전 자주 묻는 질문(하드웨어/네트워크/코드) 자동 생성 |
 | 10 | [`workshop-tester`](skills/workshop-tester/SKILL.md) | 워크숍 프로젝트 경로 | `verify_workshop.py` 출력 | 코드 실행 스모크 테스트 & 마크다운 상대 경로 깨진 링크(Broken Link) 자동 검증 |
 | 11 | [`workshop-web-researcher`](skills/workshop-web-researcher/SKILL.md) | 도구/모델 키워드 | 최신 릴리스 버전 & 출처 | 웹 검색을 통한 최신 도구/SDK 버전 및 파괴적 변경(Breaking Changes) 실시간 검증 |
+| 12 | [`workshop-persona-loop-evaluator`](skills/workshop-persona-loop-evaluator/SKILL.md) | 워크숍 주제 & 자료 | `docs/00-persona-loop-review-report.md` | 루프 엔지니어링 기반 초급, 중급, 고급 참가자 페르소나 멀티 리뷰 & 검증 |
 
 ---
 
@@ -86,16 +84,19 @@ Google Antigravity / Gemini CLI 에이전트 프롬프트:
 Python 3.9+ 환경에서 `harness_cli.py` 도구를 이용해 손쉽게 워크숍 프로젝트를 구성하고 관리할 수 있습니다.
 
 ```bash
-# 1. 11개 전체 스킬 원클릭 연속 발동 생성
+# 1. 12개 전체 스킬 원클릭 연속 발동 생성
 python3 harness_cli.py generate-all --name my-bwai-workshop --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 
 # 2. 기술 스택 크로스 아키텍처 호환성 위험 오디팅
 python3 harness_cli.py audit-compat --stack "lmstudio,docker,mlx"
 
-# 3. 워크숍 코드 실행 및 마크다운 깨진 링크 자동 검증
+# 3. 루프 엔지니어링 기반 초급/중급/고급 참가자 페르소나 멀티 리뷰
+python3 harness_cli.py audit-loop --topic "Local RAG with Gemma 4"
+
+# 4. 워크숍 코드 실행 및 마크다운 깨진 링크 자동 검증
 python3 harness_cli.py test --target my-bwai-workshop
 
-# 4. 마크다운 가이드 문서들을 PDF 핸드아웃으로 빌드
+# 5. 마크다운 가이드 문서들을 PDF 핸드아웃으로 빌드
 python3 harness_cli.py build-pdf --target my-bwai-workshop
 ```
 
@@ -103,7 +104,7 @@ python3 harness_cli.py build-pdf --target my-bwai-workshop
 
 ## 에이전트 스킬 설치 방법
 
-Google Antigravity 또는 Gemini CLI 에이전트 환경에서 이 11개 스킬을 상시 활용하려면 아래 명령으로 설치하세요:
+Google Antigravity 또는 Gemini CLI 에이전트 환경에서 이 12개 스킬을 상시 활용하려면 아래 명령으로 설치하세요:
 
 ```bash
 chmod +x scripts/install_skills.sh
@@ -121,6 +122,7 @@ my-workshop-repo/
 ├── gemma4-local-setup-guide.md          # 행사 전 통합 사전 준비 가이드
 ├── docs/                               # 상세 가이드 문서 (00 ~ 20)
 │   ├── 00-architecture-compatibility-matrix.md # 크로스 아키텍처 대비 가이드
+│   ├── 00-persona-loop-review-report.md# 루프 엔지니어링 페르소나 리뷰 리포트
 │   ├── 01-hardware-and-env.md
 │   ├── 02-prerequisites.md
 │   └── 20-faq.md                       # 참석자용 FAQ

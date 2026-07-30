@@ -26,7 +26,7 @@ It standardizes the proven architecture and operational battle-tested workflows 
 
 - [Overview](#overview)
 - [One-Click Full Orchestration](#one-click-full-orchestration)
-- [11 Specialized Agent Skills Specification](#11-specialized-agent-skills-specification)
+- [12 Specialized Agent Skills Specification](#12-specialized-agent-skills-specification)
 - [Cross-Architecture Compatibility Matrix](#cross-architecture-compatibility-matrix)
 - [CLI Tool Usage (`harness_cli.py`)](#cli-tool-usage-harness_clipy)
 - [Installing Agent Skills](#installing-agent-skills)
@@ -38,19 +38,16 @@ It standardizes the proven architecture and operational battle-tested workflows 
 
 ## One-Click Full Orchestration
 
-With a single CLI command or natural language prompt, Workshop Harness triggers all 11 skills in sequence:
+With a single CLI command or natural language prompt, Workshop Harness triggers all 12 skills in sequence:
 
 ```bash
-# One-Click Full Workshop Generation Across All 11 Skills
+# One-Click Full Workshop Generation Across All 12 Skills
 python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 ```
 
-Natural Language Prompt in Google Antigravity / Gemini CLI:
-> *"Generate a complete end-to-end workshop package for a 60-minute Flutter & Gemini API session with one-click orchestration."*
-
 ---
 
-## 11 Specialized Agent Skills Specification
+## 12 Specialized Agent Skills Specification
 
 | # | Skill Name | Input / Trigger | Output & Artifacts | Primary Role |
 |---|---|---|---|---|
@@ -65,6 +62,7 @@ Natural Language Prompt in Google Antigravity / Gemini CLI:
 | 9 | [`workshop-faq-generator`](skills/workshop-faq-generator/SKILL.md) | Workshop topic & level | `docs/20-faq.md` / `FAQ.md` | Automatically generates attendee FAQ (hardware, network, code) |
 | 10 | [`workshop-tester`](skills/workshop-tester/SKILL.md) | Workshop project path | `verify_workshop.py` audit output | Audits code execution smoke tests and markdown broken relative links |
 | 11 | [`workshop-web-researcher`](skills/workshop-web-researcher/SKILL.md) | Tool/Model query | Updated release tags & docs | Fetches latest tool/SDK release versions & prevents deprecated flags |
+| 12 | [`workshop-persona-loop-evaluator`](skills/workshop-persona-loop-evaluator/SKILL.md) | Workshop topic & materials | `docs/00-persona-loop-review-report.md` | Multi-persona loop engineering audit for beginner, intermediate, and advanced attendees |
 
 ---
 
@@ -87,16 +85,19 @@ Participants bring a wide variety of hardware architectures. This matrix identif
 Using Python 3.9+, you can manage workshops via the command-line interface:
 
 ```bash
-# 1. One-Click Full Workshop Generation Across All 11 Skills
+# 1. One-Click Full Workshop Generation Across All 12 Skills
 python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 
 # 2. Audit tech stack for cross-architecture risks
 python3 harness_cli.py audit-compat --stack "lmstudio,docker,mlx"
 
-# 3. Test workshop code execution & markdown broken links
+# 3. Loop Engineering multi-persona audit for beginner, intermediate, and advanced attendees
+python3 harness_cli.py audit-loop --topic "Local RAG with Gemma 4"
+
+# 4. Test workshop code execution & markdown broken links
 python3 harness_cli.py test --target my-bwai-workshop
 
-# 4. Build PDF handout from markdown docs
+# 5. Build PDF handout from markdown docs
 python3 harness_cli.py build-pdf --target my-bwai-workshop
 ```
 
@@ -104,7 +105,7 @@ python3 harness_cli.py build-pdf --target my-bwai-workshop
 
 ## Installing Agent Skills
 
-Install all 11 skills into your local agent environment (`~/.gemini/skills`):
+Install all 12 skills into your local agent environment (`~/.gemini/skills`):
 
 ```bash
 chmod +x scripts/install_skills.sh
@@ -122,6 +123,7 @@ my-workshop-repo/
 ├── gemma4-local-setup-guide.md          # Integrated pre-workshop setup guide
 ├── docs/                               # Detailed documentation (00 to 20)
 │   ├── 00-architecture-compatibility-matrix.md # Architecture fallback matrix
+│   ├── 00-persona-loop-review-report.md# Multi-persona loop review report
 │   ├── 01-hardware-and-env.md
 │   ├── 02-prerequisites.md
 │   └── 20-faq.md                       # Attendee FAQ

@@ -24,6 +24,7 @@ skills=(
     "workshop-faq-generator"
     "workshop-tester"
     "workshop-web-researcher"
+    "workshop-persona-loop-evaluator"
 )
 
 for skill in "${skills[@]}"; do
@@ -35,4 +36,4 @@ for skill in "${skills[@]}"; do
     fi
 done
 
-echo "✅ All 11 Workshop Harness skills installed successfully!"
+echo "✅ All 12 Workshop Harness skills installed successfully!"
