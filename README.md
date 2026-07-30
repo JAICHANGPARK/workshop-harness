@@ -1,17 +1,17 @@
-# 🚀 Workshop Harness
+# Workshop Harness
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Antigravity Skills](https://img.shields.io/badge/Antigravity-Agent%20Skills-purple.svg)](https://github.com/JAICHANGPARK)
 [![Release](https://img.shields.io/badge/release-v2026.07.30-green.svg)](https://github.com/JAICHANGPARK/workshop-harness/releases)
 
-🌐 **Languages**: [🇺🇸 English](./README.md) | [🇰🇷 한국어](./README_KR.md) | [🇯🇵 日本語](./README_JA.md) | [🇨🇳 中文](./README_ZH.md)
+Languages: [English](./README.md) | [Korean](./README_KR.md) | [Japanese](./README_JA.md) | [Chinese](./README_ZH.md)
 
 ---
 
-## 📌 Overview
+## Overview
 
-**Workshop Harness** is an AI Agent Harness, Skill Suite, and CLI Automation Toolkit designed for event organizers, speakers, and TAs orchestrating technical workshops, Build with AI (BWAI) events, DevFests, and hands-on coding labs.
+Workshop Harness is an AI Agent Harness, Skill Suite, and CLI Automation Toolkit designed for event organizers, speakers, and TAs orchestrating technical workshops, Build with AI (BWAI) events, DevFests, and hands-on coding labs.
 
 It standardizes the proven architecture and operational battle-tested workflows from real-world events including:
 - Build with AI Seoul (`2026-bwai-seoul`)
@@ -21,19 +21,19 @@ It standardizes the proven architecture and operational battle-tested workflows 
 
 ---
 
-## 📖 Table of Contents
+## Table of Contents
 
-- [Overview](#-overview)
-- [9 Specialized Agent Skills Specification](#-9-specialized-agent-skills-specification)
-- [Cross-Architecture Compatibility Matrix](#-cross-architecture-compatibility-matrix)
-- [CLI Tool Usage (`harness_cli.py`)](#-cli-tool-usage-harness_clipy)
-- [Installing Agent Skills](#-installing-agent-skills)
-- [Standard Workshop Repository Structure](#-standard-workshop-repository-structure)
-- [License](#-license)
+- [Overview](#overview)
+- [9 Specialized Agent Skills Specification](#9-specialized-agent-skills-specification)
+- [Cross-Architecture Compatibility Matrix](#cross-architecture-compatibility-matrix)
+- [CLI Tool Usage (`harness_cli.py`)](#cli-tool-usage-harness_clipy)
+- [Installing Agent Skills](#installing-agent-skills)
+- [Standard Workshop Repository Structure](#standard-workshop-repository-structure)
+- [License](#license)
 
 ---
 
-## 💡 9 Specialized Agent Skills Specification
+## 9 Specialized Agent Skills Specification
 
 | # | Skill Name | Input / Trigger | Output & Artifacts | Primary Role |
 |---|---|---|---|---|
@@ -49,7 +49,7 @@ It standardizes the proven architecture and operational battle-tested workflows 
 
 ---
 
-## 💻 Cross-Architecture Compatibility Matrix
+## Cross-Architecture Compatibility Matrix
 
 Participants bring a wide variety of hardware architectures. This matrix identifies known risks and mandatory fallback paths prior to the session.
 
@@ -63,7 +63,7 @@ Participants bring a wide variety of hardware architectures. This matrix identif
 
 ---
 
-## 🛠️ CLI Tool Usage (`harness_cli.py`)
+## CLI Tool Usage (`harness_cli.py`)
 
 Using Python 3.9+, you can manage workshops via the command-line interface:
 
@@ -80,7 +80,7 @@ python3 harness_cli.py build-pdf --target my-bwai-workshop
 
 ---
 
-## 📦 Installing Agent Skills
+## Installing Agent Skills
 
 Install all 9 skills into your local agent environment (`~/.gemini/skills`):
 
@@ -89,14 +89,9 @@ chmod +x scripts/install_skills.sh
 ./scripts/install_skills.sh
 ```
 
-Once installed, you can trigger these skills using natural language in Google Antigravity or Gemini CLI:
-- *"Use cross-architecture-checker to audit risks for an Intel Mac and Windows user base."*
-- *"Use workshop-runbook-generator to create a RUNBOOK.md for a 60-minute session."*
-- *"Use workshop-faq-generator to write attendee FAQ.md."*
-
 ---
 
-## 📁 Standard Workshop Repository Structure
+## Standard Workshop Repository Structure
 
 ```text
 my-workshop-repo/
@@ -125,6 +120,6 @@ my-workshop-repo/
 
 ---
 
-## 📜 License
+## License
 
 [MIT License](LICENSE)

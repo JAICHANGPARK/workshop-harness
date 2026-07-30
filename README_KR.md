@@ -1,35 +1,35 @@
-# 🚀 Workshop Harness
+# Workshop Harness
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Antigravity Skills](https://img.shields.io/badge/Antigravity-Agent%20Skills-purple.svg)](https://github.com/JAICHANGPARK)
 [![Release](https://img.shields.io/badge/release-v2026.07.30-green.svg)](https://github.com/JAICHANGPARK/workshop-harness/releases)
 
-🌐 **Languages**: [🇺🇸 English](./README.md) | [🇰🇷 한국어](./README_KR.md) | [🇯🇵 日本語](./README_JA.md) | [🇨🇳 中文](./README_ZH.md)
+Languages: [English](./README.md) | [Korean](./README_KR.md) | [Japanese](./README_JA.md) | [Chinese](./README_ZH.md)
 
 ---
 
-## 📌 개요
+## 개요
 
-**Workshop Harness**는 Build with AI (BWAI), DevFest, 커뮤니티 세션, 기술 실습 등의 워크숍을 준비하는 주최자, 발표자, TA를 위한 **AI 에이전트 하네스, 스킬(Skills) 모음 및 CLI 자동화 툴킷**입니다.
+Workshop Harness는 Build with AI (BWAI), DevFest, 커뮤니티 세션, 기술 실습 등의 워크숍을 준비하는 주최자, 발표자, TA를 위한 AI 에이전트 하네스, 스킬(Skills) 모음 및 CLI 자동화 툴킷입니다.
 
 Build with AI Seoul (`2026-bwai-seoul`), Golang Korea (`2026-bwai-golang-korea`), Mongo (`2026-bwai-mongo`), Cloud Pangyo (`2026-bwai-cloud-pangyo`) 프로젝트 등 실제 다수의 현장 워크숍 운영 경험에서 검증된 구조와 노하우를 표준화하였습니다.
 
 ---
 
-## 📖 목차
+## 목차
 
-- [개요](#-개요)
-- [전체 9개 에이전트 스킬 명세서](#-전체-9개-에이전트-스킬-명세서)
-- [크로스 아키텍처 호환성 고려사항](#-크로스-아키텍처-호환성-고려사항)
-- [CLI 사용법 (harness_cli.py)](#-cli-사용법-harness_clipy)
-- [에이전트 스킬 설치 방법](#-에이전트-스킬-설치-방법)
-- [표준 워크숍 리포지토리 구조](#-표준-워크숍-리포지토리-구조)
-- [라이선스](#-라이선스)
+- [개요](#개요)
+- [전체 9개 에이전트 스킬 명세서](#전체-9개-에이전트-스킬-명세서)
+- [크로스 아키텍처 호환성 고려사항](#크로스-아키텍처-호환성-고려사항)
+- [CLI 사용법 (harness_cli.py)](#cli-사용법-harness_clipy)
+- [에이전트 스킬 설치 방법](#에이전트-스킬-설치-방법)
+- [표준 워크숍 리포지토리 구조](#표준-워크숍-리포지토리-구조)
+- [라이선스](#라이선스)
 
 ---
 
-## 💡 전체 9개 에이전트 스킬 명세서
+## 전체 9개 에이전트 스킬 명세서
 
 | # | 스킬 이름 | 입력 / 트리거 | 출력 및 생성물 | 상세 역할 |
 |---|---|---|---|---|
@@ -45,7 +45,7 @@ Build with AI Seoul (`2026-bwai-seoul`), Golang Korea (`2026-bwai-golang-korea`)
 
 ---
 
-## 💻 크로스 아키텍처 호환성 고려사항
+## 크로스 아키텍처 호환성 고려사항
 
 참석자마다 소지한 노트북 아키텍처가 상이하기 때문에, 도구 선정 시 아래와 같은 알려진 위험(Known Risk) 및 대안(Fallback) 경로를 사전에 준비합니다.
 
@@ -59,7 +59,7 @@ Build with AI Seoul (`2026-bwai-seoul`), Golang Korea (`2026-bwai-golang-korea`)
 
 ---
 
-## 🛠️ CLI 사용법 (`harness_cli.py`)
+## CLI 사용법 (`harness_cli.py`)
 
 Python 3.9+ 환경에서 `harness_cli.py` 도구를 이용해 손쉽게 워크숍 프로젝트를 구성하고 관리할 수 있습니다.
 
@@ -76,7 +76,7 @@ python3 harness_cli.py build-pdf --target my-bwai-workshop
 
 ---
 
-## 📦 에이전트 스킬 설치 방법
+## 에이전트 스킬 설치 방법
 
 Google Antigravity 또는 Gemini CLI 에이전트 환경에서 이 9개 스킬을 상시 활용하려면 아래 명령으로 설치하세요:
 
@@ -87,6 +87,35 @@ chmod +x scripts/install_skills.sh
 
 ---
 
-## 📜 라이선스
+## 표준 워크숍 리포지토리 구조
+
+```text
+my-workshop-repo/
+├── README.md                           # 워크숍 개요 및 Quick Start
+├── RUNBOOK.md                          # 발표자 및 TA 전용 진행 런북
+├── gemma4-local-setup-guide.md          # 행사 전 통합 사전 준비 가이드
+├── docs/                               # 상세 가이드 문서 (00 ~ 20)
+│   ├── 00-architecture-compatibility-matrix.md # 크로스 아키텍처 대비 가이드
+│   ├── 01-hardware-and-env.md
+│   ├── 02-prerequisites.md
+│   └── 20-faq.md                       # 참석자용 FAQ
+├── workshop/                           # 당일 핸즈온 실습
+│   ├── 01_starter/                     # 참가자용 시작 코드
+│   ├── 02_final/                       # 정답 참고 코드
+│   └── 03_labs/                        # Step-by-Step 실습 문서
+├── prompt-pack/                        # 핸즈온 프롬프트 팩
+├── scripts/                            # 아키텍처 점검 및 오프라인 번들링 스크립트
+│   ├── check_architecture_compat.sh    # 아키텍처 감지 (Mac/Linux)
+│   ├── check_architecture_compat.ps1   # 아키텍처 감지 (Windows)
+│   ├── check_env.sh / check_env.ps1    # 환경 점검 스크립트
+│   ├── bundle_offline_assets.sh        # 현장 비상용 오프라인 번들 스크립트
+│   └── generate_prep_pdf.py            # PDF 핸드아웃 빌더
+└── output/                              # 산출물 (PDF 등)
+    └── pdf/
+```
+
+---
+
+## 라이선스
 
 [MIT License](LICENSE)
