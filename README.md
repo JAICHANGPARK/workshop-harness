@@ -29,6 +29,7 @@ It standardizes the proven architecture and operational battle-tested workflows 
 - [CLI Tool Usage (`harness_cli.py`)](#cli-tool-usage-harness_clipy)
 - [Installing Agent Skills](#installing-agent-skills)
 - [Standard Workshop Repository Structure](#standard-workshop-repository-structure)
+- [Changelog](#changelog)
 - [License](#license)
 
 ---
@@ -117,6 +118,12 @@ my-workshop-repo/
 └── output/                             # Generated output files
     └── pdf/
 ```
+
+---
+
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for full release history.
 
 ---
 
