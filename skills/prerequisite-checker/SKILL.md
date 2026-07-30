@@ -1,12 +1,19 @@
 ---
 name: prerequisite-checker
-description: OS별(macOS Apple Silicon/Intel, Windows PowerShell/WSL2, Linux, ChromeOS) 사전 준비 가이드 문서 작성 및 언어/SDK(Python, Node.js, Go, Flutter, Rust, Docker) 설치 가이드와 자동 점검 스크립트(check_env.sh, check_env.ps1) 생성을 담당하는 스킬
+description: OS별(macOS Apple Silicon/Intel, Windows PowerShell/WSL2, Linux, ChromeOS) 사전 준비 가이드 문서 작성 및 언어/SDK(Python, Node.js, Go, Flutter, Rust, Docker)와 최신 AI 모델 설치 가이드 및 자동 점검 스크립트(check_env.sh, check_env.ps1) 생성을 담당하는 스킬
 ---
 
-# Prerequisite Checker & SDK Installation Guide Skill
+# Prerequisite Checker & SDK/Model Installation Guide Skill
 
 ## 📌 목적
-참가자들이 워크숍 당일 현장에서 개발 언어 및 SDK 미설치로 막히지 않도록, **OS별(macOS, Windows, Linux) 주요 언어/SDK(Python, Node.js, Go, Flutter/Dart, Rust, Docker, uv 등)의 공식 설치 명령어와 PATH 환경변수 설정 가이드**를 포함한 사전 준비 문서를 자동 생성합니다.
+참가자들이 워크숍 당일 현장에서 개발 언어 및 SDK/AI 모델 미설치로 막히지 않도록, **OS별(macOS, Windows, Linux) 주요 언어/SDK의 공식 설치 명령어와 현 시점 최신 AI 모델(Gemini, Gemma 4, Llama 등) 다운로드 안내**를 포함한 사전 준비 문서를 자동 생성합니다.
+
+---
+
+## 🤖 최신 AI 모델 파인딩 원칙 (Latest AI Model Currency Protocol)
+- 에이전트는 지식 컷오프에 기반한 오래된 모델명(`gpt-3.5`, `llama-2`, `gemma-1`)을 절대 추천하지 않습니다.
+- `workshop-web-researcher` 스킬을 통해 현 시점 최신 릴리스 모델 태그(예: `gemma4:e4b`, `gemini-2.0-flash`)를 동적으로 조회한 후 설치 가이드에 수록합니다.
+- 사전 준비 문서 상단에 **`> 💡 최신 모델 기준 확인일: YYYY-MM-DD`**를 반드시 명시합니다.
 
 ---
 
@@ -32,48 +39,23 @@ description: OS별(macOS Apple Silicon/Intel, Windows PowerShell/WSL2, Linux, Ch
 
 ---
 
-### 2. Node.js & npm / pnpm
-- **macOS**: `brew install node`
-- **Windows**: `winget install OpenJS.NodeJS`
-- **Linux**:
+### 2. 최신 로컬 LLM AI 모델 다운로드 (Ollama)
+- **추천 최신 모델 받기**:
   ```bash
-  curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-  sudo apt install -y nodejs
+  ollama pull gemma4:e4b   # 기본 4-bit 양자화 모델
+  ollama pull gemma4:e2b   # 8GB RAM 이하 경량화 모델
   ```
-
----
-
-### 3. Go Language (1.21+)
-- **macOS**: `brew install go`
-- **Windows**: `winget install GoLang.Go`
-- **Linux**: `sudo apt install -y golang-go`
-
----
-
-### 4. Dart & Flutter SDK
-- **macOS**: `brew install --cask flutter`
-- **Windows**: `winget install Flutter.Flutter`
-- **Linux**: `sudo snap install flutter --classic`
-- **환경변수 점검**: `flutter doctor`
-
----
-
-### 5. Docker & Docker Desktop
-- **macOS**: `brew install --cask docker`
-- **Windows**: `winget install Docker.DockerDesktop` *(WSL2 백엔드 활성화 필수)*
-- **Linux**: `curl -fsSL https://get.docker.com | sh`
 
 ---
 
 ## 🔍 자동 환경 검증 스크립트 (`check_env.sh` / `check_env.ps1`)
 
-스킬 실행 시 감지된 워크숍 대상 SDK에 따라 맞춤형 환경 검증 구문을 동적으로 생성합니다.
+스킬 실행 시 감지된 워크숍 대상 SDK 및 최신 AI 모델 유무를 동적으로 검증하는 구문을 생성합니다.
 
 ```bash
-# Example: SDK Check Snippet
-if command -v flutter &> /dev/null; then
-    echo "[OK] Flutter SDK installed: $(flutter --version | head -n 1)"
-else
-    echo "[WARN] Flutter SDK not found. Install via: winget install Flutter.Flutter (Win) or brew install --cask flutter (Mac)"
+# Example: SDK & Model Check Snippet
+if command -v ollama &> /dev/null; then
+    echo "[OK] Ollama installed."
+    ollama list | grep -q "gemma4" && echo "[OK] Latest Gemma 4 model present." || echo "[WARN] Gemma 4 model missing. Run: ollama pull gemma4:e4b"
 fi
 ```
