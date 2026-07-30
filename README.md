@@ -4,15 +4,15 @@
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Antigravity Skills](https://img.shields.io/badge/Antigravity-Agent%20Skills-purple.svg)](https://github.com/JAICHANGPARK)
 
-**`workshop-harness`**는 **Build with AI (BWAI)**, DevFest, 커뮤니티 세션, 기술 실습 등의 워크숍을 준비하는 주최자와 발표자를 위한 **AI 에이전트 하네스 & 스킬(Skills) 모음 및 CLI 자동화 툴킷**입니다.
+**`workshop-harness`**는 **Build with AI (BWAI)**, DevFest, 커뮤니티 세션, 기술 실습 등의 워크숍을 준비하는 주최자, 발표자, TA를 위한 **AI 에이전트 하네스 & 스킬(Skills) 모음 및 CLI 자동화 툴킷**입니다.
 
 Build with AI Seoul (`2026-bwai-seoul`), Golang Korea (`2026-bwai-golang-korea`), Mongo (`2026-bwai-mongo`), Cloud Pangyo (`2026-bwai-cloud-pangyo`) 프로젝트 등 실제 다수의 현장 워크숍 운영 경험에서 검증된 구조와 노하우를 표준화하였습니다.
 
 ---
 
-## 💡 주요 기능 & 포함된 6개 에이전트 스킬 (Agent Skills)
+## 💡 주요 기능 & 포함된 8개 에이전트 스킬 (Agent Skills)
 
-AI 코딩 에이전트(Google Antigravity, Gemini CLI 등)가 사전 준비 자료, 크로스 아키텍처 점검, 실습 코드, 프롬프트 팩, PDF 핸드아웃 생성을 자동 수행할 수 있도록 6개의 전용 스킬을 제공합니다.
+AI 코딩 에이전트(Google Antigravity, Gemini CLI 등)가 사전 준비 자료, 크로스 아키텍처 점검, 실습 코드, 프롬프트 팩, 진행자 런북, 현장 디버깅, PDF 핸드아웃 생성을 자동 수행할 수 있도록 8개의 전용 스킬을 제공합니다.
 
 | 스킬 이름 | 역할 & 설명 | 주요 산출물 |
 | --- | --- | --- |
@@ -22,6 +22,8 @@ AI 코딩 에이전트(Google Antigravity, Gemini CLI 등)가 사전 준비 자�
 | **[`hands-on-curriculum-builder`](skills/hands-on-curriculum-builder/SKILL.md)** | 단계별 실습 가이드, `starter` vs `final` 코드, 프롬프트 팩 구성 | `03_labs/README.md`, `prompt-pack/`, starter & final 프로젝트 |
 | **[`pdf-handout-generator`](skills/pdf-handout-generator/SKILL.md)** | 마크다운 가이드를 출판 품질의 PDF 핸드아웃 및 미리보기(Contact Sheet)로 변환 | `scripts/generate_prep_pdf.py`, `output/pdf/*.pdf`, 미리보기 이미지 |
 | **[`workshop-troubleshooter`](skills/workshop-troubleshooter/SKILL.md)** | 사양별(8G/16G/32G RAM), OS별 트러블슈팅 매트릭스 & FAQ 작성 | `docs/troubleshooting.md`, `docs/20-faq.md` |
+| **[`workshop-runbook-generator`](skills/workshop-runbook-generator/SKILL.md)** | **발표자 & TA 전용 분단위 진행 타임라인 런북 & 큐카드 작성** | `RUNBOOK.md` |
+| **[`live-debug-assistant`](skills/live-debug-assistant/SKILL.md)** | **현장 터미널 에러 10초 긴급 진단 핫픽스 & API Key 보안 프로토콜** | `docs/live-troubleshooting-cheatsheet.md`, `.env.sample` |
 
 ---
 
@@ -44,7 +46,7 @@ AI 코딩 에이전트(Google Antigravity, Gemini CLI 등)가 사전 준비 자�
 Python 3.9+ 환경에서 `harness_cli.py` 도구를 이용해 손쉽게 워크숍 프로젝트를 구성하고 관리할 수 있습니다.
 
 ```bash
-# 1. 새 워크숍 프로젝트 생성 (기본 구조 및 아키텍처 매트릭스 자동 스캐폴딩)
+# 1. 새 워크숍 프로젝트 생성 (기본 구조 및 아키텍처 매트릭스, RUNBOOK 자동 스캐폴딩)
 python3 harness_cli.py init --name my-bwai-workshop --topic "Local RAG with Gemma 4"
 
 # 2. 기술 스택 크로스 아키텍처 호환성 위험 오디팅
@@ -58,7 +60,7 @@ python3 harness_cli.py build-pdf --target my-bwai-workshop
 
 ## 📦 에이전트 스킬 설치 (`install_skills.sh`)
 
-Google Antigravity 또는 Gemini CLI 에이전트 환경에서 이 6개 스킬을 상시 활용하려면 아래 명령으로 설치하세요:
+Google Antigravity 또는 Gemini CLI 에이전트 환경에서 이 8개 스킬을 상시 활용하려면 아래 명령으로 설치하세요:
 
 ```bash
 chmod +x scripts/install_skills.sh
@@ -67,8 +69,8 @@ chmod +x scripts/install_skills.sh
 
 설치 후 에이전트에게 다음과 같이 자연어로 요청할 수 있습니다:
 - *"cross-architecture-checker 스킬로 Intel Mac과 Windows 참가자가 겪을 호환성 리스크와 우회 가이드를 만들어줘."*
-- *"workshop-scaffolder 스킬로 Gemma 4 핸즈온 워크숍 저장소 구조를 만들어줘."*
-- *"pdf-handout-generator 스킬로 docs 문서들을 PDF 핸드아웃으로 만들어줘."*
+- *"workshop-runbook-generator 스킬로 60분 세션 발표자용 RUNBOOK.md를 만들어줘."*
+- *"live-debug-assistant 스킬로 현장 에러 긴급 대처 핫픽스 문서를 만들어줘."*
 
 ---
 
@@ -79,6 +81,7 @@ chmod +x scripts/install_skills.sh
 ```text
 my-workshop-repo/
 ├── README.md                           # 워크숍 개요 및 Quick Start
+├── RUNBOOK.md                          # 발표자 및 TA 전용 진행 런북
 ├── gemma4-local-setup-guide.md          # 행사 전 통합 사전 준비 가이드
 ├── docs/                               # 상세 가이드 문서 (00 ~ 20)
 │   ├── 00-architecture-compatibility-matrix.md # 크로스 아키텍처 대비 가이드
@@ -90,10 +93,11 @@ my-workshop-repo/
 │   ├── 02_final/                       # 정답 참고 코드
 │   └── 03_labs/                        # Step-by-Step 실습 문서
 ├── prompt-pack/                        # 핸즈온 프롬프트 팩
-├── scripts/                            # 아키텍처 점검 및 빌드 스크립트
+├── scripts/                            # 아키텍처 점검 및 오프라인 번들링 스크립트
 │   ├── check_architecture_compat.sh    # 아키텍처 감지 (Mac/Linux)
 │   ├── check_architecture_compat.ps1   # 아키텍처 감지 (Windows)
 │   ├── check_env.sh / check_env.ps1    # 환경 점검 스크립트
+│   ├── bundle_offline_assets.sh        # 현장 비상용 오프라인 번들 스크립트
 │   └── generate_prep_pdf.py            # PDF 핸드아웃 빌더
 └── output/                              # 산출물 (PDF 등)
     └── pdf/

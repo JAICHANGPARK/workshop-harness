@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 harness_cli.py - Workshop Harness Command Line Tool
-BWAI 및 기술 워크숍 프로젝트 생성을 자동화하고 사전 준비물, 아키텍처 호환성, 커리큘럼, PDF 핸드아웃 생성을 총괄하는 하네스 CLI
+BWAI 및 기술 워크숍 프로젝트 생성을 자동화하고 사전 준비물, 아키텍처 호환성, 커리큘럼, 런북, PDF 핸드아웃 생성을 총괄하는 하네스 CLI
 """
 
 import os
@@ -40,6 +40,7 @@ def init_workshop(name: str, topic: str, target_dir: str = None):
     shutil.copy(doc_templates / "03_session_guide.md", project_dir / "workshop" / "03_labs" / "README.md")
     shutil.copy(doc_templates / "04_prompt_pack.md", project_dir / "prompt-pack" / "README.md")
     shutil.copy(doc_templates / "05_troubleshooting_faq.md", project_dir / "docs" / "20-faq.md")
+    shutil.copy(doc_templates / "06_runbook_template.md", project_dir / "RUNBOOK.md")
 
     # Copy setup guide to root
     shutil.copy(doc_templates / "02_prerequisites.md", project_dir / "gemma4-local-setup-guide.md")
@@ -50,6 +51,7 @@ def init_workshop(name: str, topic: str, target_dir: str = None):
     shutil.copy(script_templates / "check_env.ps1", project_dir / "scripts" / "check_env.ps1")
     shutil.copy(script_templates / "check_architecture_compat.sh", project_dir / "scripts" / "check_architecture_compat.sh")
     shutil.copy(script_templates / "check_architecture_compat.ps1", project_dir / "scripts" / "check_architecture_compat.ps1")
+    shutil.copy(script_templates / "bundle_offline_assets.sh", project_dir / "scripts" / "bundle_offline_assets.sh")
     shutil.copy(script_templates / "run_starter.sh", project_dir / "workshop" / "01_starter" / "run.sh")
     shutil.copy(script_templates / "run_starter.ps1", project_dir / "workshop" / "01_starter" / "run.ps1")
     shutil.copy(script_templates / "run_starter.sh", project_dir / "workshop" / "02_final" / "run.sh")
@@ -58,6 +60,7 @@ def init_workshop(name: str, topic: str, target_dir: str = None):
     # Make shell scripts executable
     os.chmod(project_dir / "scripts" / "check_env.sh", 0o755)
     os.chmod(project_dir / "scripts" / "check_architecture_compat.sh", 0o755)
+    os.chmod(project_dir / "scripts" / "bundle_offline_assets.sh", 0o755)
     os.chmod(project_dir / "workshop" / "01_starter" / "run.sh", 0o755)
     os.chmod(project_dir / "workshop" / "02_final" / "run.sh", 0o755)
 
@@ -65,7 +68,11 @@ def init_workshop(name: str, topic: str, target_dir: str = None):
     pdf_templates = TEMPLATES_DIR / "pdf-templates"
     shutil.copy(pdf_templates / "generate_prep_pdf.py", project_dir / "scripts" / "generate_prep_pdf.py")
 
-    # 4. Create README.md
+    # 4. Create .env.sample & .gitignore
+    with open(project_dir / ".env.sample", "w", encoding="utf-8") as f:
+        f.write("# Sample Environment Variables\nGEMINI_API_KEY=YOUR_GEMINI_API_KEY_HERE\n")
+
+    # 5. Create README.md
     readme_content = f"""# {name}
 
 > Topic: {topic}
@@ -81,11 +88,13 @@ def init_workshop(name: str, topic: str, target_dir: str = None):
    - 실습 순서: [workshop/03_labs/README.md](./workshop/03_labs/README.md)
    - 실습 코드: [workshop/01_starter](./workshop/01_starter)
    - 정답 코드: [workshop/02_final](./workshop/02_final)
+5. **발표자 & TA 진행 런북**: [RUNBOOK.md](./RUNBOOK.md)
 
 ## 📂 저장소 구조
 
 ```text
 .
+├── RUNBOOK.md                    # 발표자 및 TA 전용 진행 런북
 ├── gemma4-local-setup-guide.md   # 통합 사전 준비 가이드
 ├── docs/                        # 상세 주제별 및 아키텍처 호환성 가이드 문서
 │   └── 00-architecture-compatibility-matrix.md
@@ -94,14 +103,14 @@ def init_workshop(name: str, topic: str, target_dir: str = None):
 │   ├── 02_final/                # 최종 참고 코드
 │   └── 03_labs/                 # Step-by-Step 실습 문서
 ├── prompt-pack/                 # 핸즈온 프롬프트 팩
-├── scripts/                     # 크로스 아키텍처 점검 및 빌드 스크립트
+├── scripts/                     # 크로스 아키텍처 점검 및 오프라인 번들링 스크립트
 └── output/                      # 산출물 (PDF 등)
 ```
 """
     with open(project_dir / "README.md", "w", encoding="utf-8") as f:
         f.write(readme_content)
 
-    # 5. Starter main.py
+    # 6. Starter main.py
     starter_main = """# Starter Code for Workshop
 def main():
     print("Welcome to the Workshop! Open workshop/03_labs/README.md to begin.")
