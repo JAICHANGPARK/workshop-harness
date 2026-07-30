@@ -3,6 +3,7 @@
 # Workshop Harness
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![uv Powered](https://img.shields.io/badge/python%20package%20manager-uv-de1f88.svg)](https://astral.sh/uv)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Antigravity Skills](https://img.shields.io/badge/Antigravity-Agent%20Skills-purple.svg)](https://github.com/JAICHANGPARK)
 [![Release](https://img.shields.io/badge/release-v2026.07.30-green.svg)](https://github.com/JAICHANGPARK/workshop-harness/releases)
@@ -13,7 +14,7 @@ Languages: [English](./README.md) | [Korean](./README_KR.md) | [Japanese](./READ
 
 ## Overview
 
-Workshop Harness is an AI Agent Harness, Skill Suite, and CLI Automation Toolkit designed for event organizers, speakers, and TAs orchestrating technical workshops, Build with AI (BWAI) events, DevFests, and hands-on coding labs.
+Workshop Harness is an AI Agent Harness, Skill Suite, and CLI Automation Toolkit powered by **Astral uv**. It is designed for event organizers, speakers, and TAs orchestrating technical workshops, Build with AI (BWAI) events, DevFests, and hands-on coding labs.
 
 It standardizes the proven architecture and operational battle-tested workflows from real-world events including:
 - [Build with AI Seoul 2026](https://github.com/JAICHANGPARK/2026-bwai-seoul)
@@ -22,24 +23,21 @@ It standardizes the proven architecture and operational battle-tested workflows 
 
 ---
 
-## ⚡ Quick Start
+## ⚡ Quick Start (uv Powered)
 
-Build a complete end-to-end workshop repository in under **1 minute** using the One-Click Full Orchestrator:
+Build a complete end-to-end workshop repository in under **1 minute** with 100% automated dependency management using `uv`:
 
 ```bash
 # 1. Clone the repository
 git clone https://github.com/JAICHANGPARK/workshop-harness.git
 cd workshop-harness
 
-# 2. Install optional PDF build dependencies
-pip install reportlab pymupdf pillow
-
-# 3. Install 12 Agent Skills into your local environment (~/.gemini/skills)
+# 2. Install 12 Agent Skills & auto-sync dependencies via uv
 chmod +x scripts/install_skills.sh
 ./scripts/install_skills.sh
 
-# 4. Generate a complete workshop package with ONE CLICK
-python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
+# 3. Generate a complete workshop package with ONE CLICK (All dependencies auto-installed)
+uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 ```
 
 ---
@@ -48,21 +46,22 @@ python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG
 
 ### Prerequisites
 - **Python**: Version 3.9 or higher
+- **Astral uv**: Fast Python package manager (`curl -LsSf https://astral.sh/uv/install.sh | sh`)
 - **Git**: Installed and configured
 - **AI Coding Agent (Optional)**: Google Antigravity, Gemini CLI, Anthropic Claude Code, OpenAI Codex, Cursor, or Aider
 
 ### Installing CLI & Agent Skills
 
-1. **Local Skill Installation**:
-   Install all 12 specialized agent skills into your agent environment (`~/.gemini/skills`):
+1. **Automatic Skill & Dependency Installation**:
+   Run the installation script to automatically set up `reportlab`, `pymupdf`, `pillow` via `uv` and copy 12 skills to `~/.gemini/skills`:
    ```bash
    ./scripts/install_skills.sh
    ```
 
 2. **Verifying Installation**:
-   Ensure the CLI is working properly:
+   Ensure the CLI works smoothly with `uv`:
    ```bash
-   python3 harness_cli.py --help
+   uv run harness_cli.py --help
    ```
 
 ---
@@ -70,7 +69,7 @@ python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG
 ## Table of Contents
 
 - [Overview](#overview)
-- [Quick Start](#-quick-start)
+- [Quick Start](#-quick-start-uv-powered)
 - [Installation](#-installation)
 - [One-Click Full Orchestration](#one-click-full-orchestration)
 - [Open AI Agent Standard (`AGENTS.md`)](#open-ai-agent-standard-agentsmd)
@@ -90,7 +89,7 @@ With a single CLI command or natural language prompt, Workshop Harness triggers 
 
 ```bash
 # One-Click Full Workshop Generation Across All 12 Skills
-python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
+uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 ```
 
 ---
@@ -142,23 +141,23 @@ Participants bring a wide variety of hardware architectures. This matrix identif
 
 ## CLI Tool Usage (`harness_cli.py`)
 
-Using Python 3.9+, you can manage workshops via the command-line interface:
+Using Python 3.9+ and `uv`, you can manage workshops via the command-line interface:
 
 ```bash
 # 1. One-Click Full Workshop Generation Across All 12 Skills
-python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
+uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 
 # 2. Audit tech stack for cross-architecture risks
-python3 harness_cli.py audit-compat --stack "lmstudio,docker,mlx"
+uv run harness_cli.py audit-compat --stack "lmstudio,docker,mlx"
 
 # 3. Loop Engineering multi-persona audit for beginner, intermediate, and advanced attendees
-python3 harness_cli.py audit-loop --topic "Local RAG with Gemma 4"
+uv run harness_cli.py audit-loop --topic "Local RAG with Gemma 4"
 
 # 4. Test workshop code execution & markdown broken links
-python3 harness_cli.py test --target my-bwai-workshop
+uv run harness_cli.py test --target my-bwai-workshop
 
 # 5. Build PDF handout from markdown docs
-python3 harness_cli.py build-pdf --target my-bwai-workshop
+uv run harness_cli.py build-pdf --target my-bwai-workshop
 ```
 
 ---
@@ -171,6 +170,7 @@ my-workshop-repo/
 ├── RUNBOOK.md                          # Facilitator and TA timeline runbook
 ├── AGENTS.md                           # AGENTS.md open specification standard
 ├── CLAUDE.md                           # Claude Code CLI integration guide
+├── pyproject.toml                      # Astral uv project dependency specification
 ├── gemma4-local-setup-guide.md          # Integrated pre-workshop setup guide
 ├── docs/                               # Detailed documentation (00 to 20)
 │   ├── 00-architecture-compatibility-matrix.md # Architecture fallback matrix

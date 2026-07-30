@@ -3,6 +3,7 @@
 # Workshop Harness
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![uv Powered](https://img.shields.io/badge/python%20package%20manager-uv-de1f88.svg)](https://astral.sh/uv)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Antigravity Skills](https://img.shields.io/badge/Antigravity-Agent%20Skills-purple.svg)](https://github.com/JAICHANGPARK)
 [![Release](https://img.shields.io/badge/release-v2026.07.30-green.svg)](https://github.com/JAICHANGPARK/workshop-harness/releases)
@@ -13,7 +14,7 @@ Languages: [English](./README.md) | [Korean](./README_KR.md) | [Japanese](./READ
 
 ## 개요
 
-Workshop Harness는 Build with AI (BWAI), DevFest, 커뮤니티 세션, 기술 실습 등의 워크숍을 준비하는 주최자, 발표자, TA를 위한 AI 에이전트 하네스, 스킬(Skills) 모음 및 CLI 자동화 툴킷입니다.
+Workshop Harness는 **Astral uv** 패키지 매니저로 구동되는 AI 에이전트 하네스, 스킬(Skills) 모음 및 CLI 자동화 툴킷입니다. Build with AI (BWAI), DevFest, 커뮤니티 세션, 기술 실습 등의 워크숍을 준비하는 주최자, 발표자, TA를 위해 설계되었습니다.
 
 다음과 같은 실제 현장 워크숍 운영 경험에서 검증된 구조와 노하우를 표준화하였습니다:
 - [Build with AI Seoul 2026](https://github.com/JAICHANGPARK/2026-bwai-seoul)
@@ -22,24 +23,21 @@ Workshop Harness는 Build with AI (BWAI), DevFest, 커뮤니티 세션, 기술 �
 
 ---
 
-## ⚡ 빠른 시작 (Quick Start)
+## ⚡ 빠른 시작 (uv 기반 100% 자동화)
 
-**1분 만에** 완벽한 워크숍 전체 저장소 패키지를 원클릭으로 구축합니다:
+의존성 패키지 수동 설치 없이 `uv` 패키지 매니저 기반으로 **1분 만에** 완벽한 워크숍 전체 저장소 패키지를 원클릭으로 구축합니다:
 
 ```bash
 # 1. 저장소 클론
 git clone https://github.com/JAICHANGPARK/workshop-harness.git
 cd workshop-harness
 
-# 2. PDF 생성 의존성 패키지 설치 (선택 사항)
-pip install reportlab pymupdf pillow
-
-# 3. 로컬 에이전트 환경(~/.gemini/skills)에 12개 스킬 자동 설치
+# 2. 로컬 에이전트 환경(~/.gemini/skills)에 12개 스킬 자동 설치 및 uv 의존성 자동 동기화
 chmod +x scripts/install_skills.sh
 ./scripts/install_skills.sh
 
-# 4. 원클릭 종합 생성 명령어로 완벽한 워크숍 패키지 구축
-python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
+# 3. 원클릭 종합 생성 명령어로 완벽한 워크숍 패키지 구축 (필요 라이브러리 자동 설치됨)
+uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 ```
 
 ---
@@ -48,22 +46,23 @@ python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG
 
 ### 사전 준비물
 - **Python**: 버전 3.9 이상
+- **Astral uv**: 초고속 Python 패키지 매니저 (`curl -LsSf https://astral.sh/uv/install.sh | sh`)
 - **Git**: 설치 및 설정 완료 상태
 - **AI 코딩 에이전트 (선택)**: Google Antigravity, Gemini CLI, Anthropic Claude Code, OpenAI Codex, Cursor, Aider 중 선택
 
 ### CLI 및 에이전트 스킬 설치
 
-1. **스킬 모음 로컬 환경 설치**:
-   `./scripts/install_skills.sh` 스크립트를 실행하여 12개 전용 에이전트 스킬을 설치합니다.
+1. **자동 의존성 & 스킬 로컬 환경 설치**:
+   `./scripts/install_skills.sh` 스크립트를 실행하면 `reportlab`, `pymupdf`, `pillow` 패키지가 `uv`로 자동 설치되고 12개 전용 에이전트 스킬이 `~/.gemini/skills`로 설치됩니다.
 2. **설치 상태 검증**:
-   `python3 harness_cli.py --help` 명령어로 CLI 도구 정상 작동 여부를 확인합니다.
+   `uv run harness_cli.py --help` 명령어로 CLI 도구 정상 작동 여부를 확인합니다.
 
 ---
 
 ## 목차
 
 - [개요](#개요)
-- [빠른 시작](#-빠른-시작-quick-start)
+- [빠른 시작](#-빠른-시작-uv-기반-100-자동화)
 - [설치 안내](#-설치-안내-installation)
 - [원클릭 풀 오케스트레이션](#원클릭-풀-오케스트레이션-one-click-full-orchestration)
 - [오픈 AI 에이전트 표준 (`AGENTS.md`)](#오픈-ai-에이전트-표준-agentsmd)
@@ -81,8 +80,8 @@ python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG
 단 한 줄의 CLI 명령어 또는 에이전트 자연어 요청만으로 12개 스킬 전체가 연쇄 발동되어 완벽한 워크숍 패키지를 원클릭으로 생성합니다:
 
 ```bash
-# 12개 전체 스킬 원클릭 연속 발동 생성 명령어
-python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
+# 12개 전체 스킬 원클릭 연속 발동 생성 명령어 (uv 지원)
+uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 ```
 
 ---
@@ -134,23 +133,23 @@ python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG
 
 ## CLI 사용법 (`harness_cli.py`)
 
-Python 3.9+ 환경에서 `harness_cli.py` 도구를 이용해 손쉽게 워크숍 프로젝트를 구성하고 관리할 수 있습니다.
+Python 3.9+ 및 `uv` 환경에서 `harness_cli.py` 도구를 이용해 손쉽게 워크숍 프로젝트를 구성하고 관리할 수 있습니다.
 
 ```bash
-# 1. 12개 전체 스킬 원클릭 연속 발동 생성
-python3 harness_cli.py generate-all --name my-bwai-workshop --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
+# 1. 12개 전체 스킬 원클릭 연속 발동 생성 (의존성 라이브러리 자동 설치됨)
+uv run harness_cli.py generate-all --name my-bwai-workshop --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 
 # 2. 기술 스택 크로스 아키텍처 호환성 위험 오디팅
-python3 harness_cli.py audit-compat --stack "lmstudio,docker,mlx"
+uv run harness_cli.py audit-compat --stack "lmstudio,docker,mlx"
 
 # 3. 루프 엔지니어링 기반 초급/중급/고급 참가자 페르소나 멀티 리뷰
-python3 harness_cli.py audit-loop --topic "Local RAG with Gemma 4"
+uv run harness_cli.py audit-loop --topic "Local RAG with Gemma 4"
 
 # 4. 워크숍 코드 실행 및 마크다운 깨진 링크 자동 검증
-python3 harness_cli.py test --target my-bwai-workshop
+uv run harness_cli.py test --target my-bwai-workshop
 
 # 5. 마크다운 가이드 문서들을 PDF 핸드아웃으로 빌드
-python3 harness_cli.py build-pdf --target my-bwai-workshop
+uv run harness_cli.py build-pdf --target my-bwai-workshop
 ```
 
 ---
@@ -174,6 +173,7 @@ my-workshop-repo/
 ├── RUNBOOK.md                          # 발표자 및 TA 전용 진행 런북
 ├── AGENTS.md                           # AGENTS.md 오픈 에이전트 표준 명세
 ├── CLAUDE.md                           # Claude Code CLI 연동 가이드
+├── pyproject.toml                      # Astral uv 의존성 명세 파일
 ├── gemma4-local-setup-guide.md          # 행사 전 통합 사전 준비 가이드
 ├── docs/                               # 상세 가이드 문서 (00 ~ 20)
 │   ├── 00-architecture-compatibility-matrix.md # 크로스 아키텍처 대비 가이드

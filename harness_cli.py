@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-harness_cli.py - Workshop Harness Command Line Tool
+harness_cli.py - Workshop Harness Command Line Tool (uv Powered)
 BWAI 및 기술 워크숍 프로젝트 생성을 자동화하고 사전 준비물, 아키텍처 호환성, 루프 엔지니어링 페르소나 리뷰, 커리큘럼, 런북, 하네스 검증, PDF 핸드아웃 생성을 총괄하는 CLI
 """
 
@@ -8,10 +8,24 @@ import os
 import sys
 import argparse
 import shutil
+import subprocess
 from pathlib import Path
 
 HARNESS_ROOT = Path(__file__).parent.resolve()
 TEMPLATES_DIR = HARNESS_ROOT / "templates"
+
+def ensure_uv_dependencies():
+    """Ensure reportlab, pymupdf, pillow are installed automatically via uv or pip."""
+    try:
+        import reportlab
+        import fitz  # PyMuPDF
+        import PIL  # Pillow
+    except ImportError:
+        print("📦 Installing required dependencies automatically via uv/pip...")
+        if shutil.which("uv"):
+            subprocess.run(["uv", "pip", "install", "reportlab", "pymupdf", "pillow"], check=False)
+        else:
+            subprocess.run([sys.executable, "-m", "pip", "install", "reportlab", "pymupdf", "pillow"], check=False)
 
 def init_workshop(name: str, topic: str, target_dir: str = None):
     project_dir = Path(target_dir) / name if target_dir else Path.cwd() / name
@@ -67,9 +81,10 @@ def init_workshop(name: str, topic: str, target_dir: str = None):
     os.chmod(project_dir / "workshop" / "01_starter" / "run.sh", 0o755)
     os.chmod(project_dir / "workshop" / "02_final" / "run.sh", 0o755)
 
-    # 3. Copy PDF Generator
+    # 3. Copy PDF Generator & pyproject.toml
     pdf_templates = TEMPLATES_DIR / "pdf-templates"
     shutil.copy(pdf_templates / "generate_prep_pdf.py", project_dir / "scripts" / "generate_prep_pdf.py")
+    shutil.copy(HARNESS_ROOT / "pyproject.toml", project_dir / "pyproject.toml")
 
     # 4. Create .env.sample & .gitignore
     with open(project_dir / ".env.sample", "w", encoding="utf-8") as f:
@@ -82,7 +97,7 @@ def init_workshop(name: str, topic: str, target_dir: str = None):
 
 이 저장소는 **{topic}** 워크숍을 위한 사전 준비 문서와 핸즈온 실습 코드 저장소입니다.
 
-## 🚀 빠른 시작
+## 🚀 빠른 시작 (uv 기반)
 
 1. **사전 준비 가이드**: [gemma4-local-setup-guide.md](./gemma4-local-setup-guide.md)
 2. **노트북 아키텍처 호환성 점검**: `./scripts/check_architecture_compat.sh` (Windows: `.\\scripts\\check_architecture_compat.ps1`)
@@ -99,6 +114,7 @@ def init_workshop(name: str, topic: str, target_dir: str = None):
 .
 ├── RUNBOOK.md                    # 발표자 및 TA 전용 진행 런북
 ├── gemma4-local-setup-guide.md   # 통합 사전 준비 가이드
+├── pyproject.toml                # Astral uv 기반 의존성 파일
 ├── docs/                        # 상세 주제별, 아키텍처 호환성 및 페르소나 리뷰 리포트 문서
 │   ├── 00-architecture-compatibility-matrix.md
 │   └── 00-persona-loop-review-report.md
@@ -197,9 +213,13 @@ def test_workshop(target_dir: str):
         script = TEMPLATES_DIR / "script-templates" / "verify_workshop.py"
 
     print(f"🔍 Running Workshop Integrity Audit on '{target}'...")
-    os.system(f"python3 '{script}' '{target}'")
+    if shutil.which("uv"):
+        subprocess.run(["uv", "run", "python3", str(script), str(target)], check=False)
+    else:
+        subprocess.run([sys.executable, str(script), str(target)], check=False)
 
 def build_pdf(target_dir: str):
+    ensure_uv_dependencies()
     target = Path(target_dir).resolve()
     docs_dir = target / "docs"
     script = target / "scripts" / "generate_prep_pdf.py"
@@ -211,12 +231,18 @@ def build_pdf(target_dir: str):
         return
 
     print(f"📄 Building PDF for {target.name}...")
-    os.system(f"python3 '{script}' '{docs_dir}' '{output_pdf}' '{preview_dir}'")
+    if shutil.which("uv"):
+        subprocess.run(["uv", "run", "python3", str(script), str(docs_dir), str(output_pdf), str(preview_dir)], check=False)
+    else:
+        subprocess.run([sys.executable, str(script), str(docs_dir), str(output_pdf), str(preview_dir)], check=False)
 
 def generate_all(name: str, topic: str, stack_str: str, target_dir: str = None):
     print("=" * 70)
-    print(f"⚡ [ONE-CLICK FULL ORCHESTRATOR] Building Complete Workshop: '{name}'")
+    print(f"⚡ [ONE-CLICK FULL ORCHESTRATOR - uv Powered] Building Workshop: '{name}'")
     print("=" * 70)
+
+    # 0. Ensure uv Dependencies Automatically
+    ensure_uv_dependencies()
 
     # 1. Scaffolding Structure
     proj_dir = init_workshop(name, topic, target_dir)
@@ -238,12 +264,12 @@ def generate_all(name: str, topic: str, stack_str: str, target_dir: str = None):
     build_pdf(str(proj_dir))
 
     print("\n" + "=" * 70)
-    print(f"🎉 SUCCESS! Complete Workshop Package '{name}' generated in ONE-CLICK!")
+    print(f"🎉 SUCCESS! Complete Workshop Package '{name}' generated in ONE-CLICK via uv!")
     print(f"📁 Path: {proj_dir}")
     print("=" * 70)
 
 def main():
-    parser = argparse.ArgumentParser(description="Workshop Harness CLI")
+    parser = argparse.ArgumentParser(description="Workshop Harness CLI (uv Powered)")
     subparsers = parser.add_subparsers(dest="command")
 
     # init command
