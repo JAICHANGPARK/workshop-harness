@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 harness_cli.py - Workshop Harness Command Line Tool
-BWAI 및 기술 워크숍 프로젝트 생성을 자동화하고 사전 준비물, 아키텍처 호환성, 커리큘럼, 런북, PDF 핸드아웃 생성을 총괄하는 하네스 CLI
+BWAI 및 기술 워크숍 프로젝트 생성을 자동화하고 사전 준비물, 아키텍처 호환성, 커리큘럼, 런북, 하네스 검증, PDF 핸드아웃 생성을 총괄하는 CLI
 """
 
 import os
@@ -52,6 +52,7 @@ def init_workshop(name: str, topic: str, target_dir: str = None):
     shutil.copy(script_templates / "check_architecture_compat.sh", project_dir / "scripts" / "check_architecture_compat.sh")
     shutil.copy(script_templates / "check_architecture_compat.ps1", project_dir / "scripts" / "check_architecture_compat.ps1")
     shutil.copy(script_templates / "bundle_offline_assets.sh", project_dir / "scripts" / "bundle_offline_assets.sh")
+    shutil.copy(script_templates / "verify_workshop.py", project_dir / "scripts" / "verify_workshop.py")
     shutil.copy(script_templates / "run_starter.sh", project_dir / "workshop" / "01_starter" / "run.sh")
     shutil.copy(script_templates / "run_starter.ps1", project_dir / "workshop" / "01_starter" / "run.ps1")
     shutil.copy(script_templates / "run_starter.sh", project_dir / "workshop" / "02_final" / "run.sh")
@@ -61,6 +62,7 @@ def init_workshop(name: str, topic: str, target_dir: str = None):
     os.chmod(project_dir / "scripts" / "check_env.sh", 0o755)
     os.chmod(project_dir / "scripts" / "check_architecture_compat.sh", 0o755)
     os.chmod(project_dir / "scripts" / "bundle_offline_assets.sh", 0o755)
+    os.chmod(project_dir / "scripts" / "verify_workshop.py", 0o755)
     os.chmod(project_dir / "workshop" / "01_starter" / "run.sh", 0o755)
     os.chmod(project_dir / "workshop" / "02_final" / "run.sh", 0o755)
 
@@ -171,6 +173,16 @@ def audit_compatibility(stack_str: str):
             print()
     print("-" * 60)
 
+def test_workshop(target_dir: str):
+    target = Path(target_dir).resolve()
+    script = target / "scripts" / "verify_workshop.py"
+    if not script.exists():
+        # Fallback to templates/script-templates/verify_workshop.py
+        script = TEMPLATES_DIR / "script-templates" / "verify_workshop.py"
+
+    print(f"🔍 Running Workshop Integrity Audit on '{target}'...")
+    os.system(f"python3 '{script}' '{target}'")
+
 def build_pdf(target_dir: str):
     target = Path(target_dir).resolve()
     docs_dir = target / "docs"
@@ -199,6 +211,10 @@ def main():
     audit_parser = subparsers.add_parser("audit-compat", help="Audit tech stack cross-architecture compatibility")
     audit_parser.add_argument("--stack", required=True, help="Comma-separated tech stack (e.g. lmstudio,docker,python,mlx)")
 
+    # test command
+    test_parser = subparsers.add_parser("test", help="Test workshop code execution & markdown link integrity")
+    test_parser.add_argument("--target", required=True, help="Path to workshop project directory")
+
     # pdf command
     pdf_parser = subparsers.add_parser("build-pdf", help="Build PDF handout from docs")
     pdf_parser.add_argument("--target", required=True, help="Path to workshop project directory")
@@ -209,6 +225,8 @@ def main():
         init_workshop(args.name, args.topic, args.dir)
     elif args.command == "audit-compat":
         audit_compatibility(args.stack)
+    elif args.command == "test":
+        test_workshop(args.target)
     elif args.command == "build-pdf":
         build_pdf(args.target)
     else:

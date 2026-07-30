@@ -23,7 +23,7 @@ It standardizes the proven architecture and operational battle-tested workflows 
 ## Table of Contents
 
 - [Overview](#overview)
-- [9 Specialized Agent Skills Specification](#9-specialized-agent-skills-specification)
+- [10 Specialized Agent Skills Specification](#10-specialized-agent-skills-specification)
 - [Cross-Architecture Compatibility Matrix](#cross-architecture-compatibility-matrix)
 - [CLI Tool Usage (`harness_cli.py`)](#cli-tool-usage-harness_clipy)
 - [Installing Agent Skills](#installing-agent-skills)
@@ -33,7 +33,7 @@ It standardizes the proven architecture and operational battle-tested workflows 
 
 ---
 
-## 9 Specialized Agent Skills Specification
+## 10 Specialized Agent Skills Specification
 
 | # | Skill Name | Input / Trigger | Output & Artifacts | Primary Role |
 |---|---|---|---|---|
@@ -46,6 +46,7 @@ It standardizes the proven architecture and operational battle-tested workflows 
 | 7 | [`workshop-runbook-generator`](skills/workshop-runbook-generator/SKILL.md) | Session duration & TAs | `RUNBOOK.md` | Creates minute-by-minute facilitator timeline runbook & cue cards |
 | 8 | [`live-debug-assistant`](skills/live-debug-assistant/SKILL.md) | Terminal error log | 10-second hotfix command, `.env.sample` | Diagnoses live terminal errors & enforces API Key security protocols |
 | 9 | [`workshop-faq-generator`](skills/workshop-faq-generator/SKILL.md) | Workshop topic & level | `docs/20-faq.md` / `FAQ.md` | Automatically generates attendee FAQ (hardware, network, code) |
+| 10 | [`workshop-tester`](skills/workshop-tester/SKILL.md) | Workshop project path | `verify_workshop.py` audit output | Audits code execution smoke tests and markdown broken relative links |
 
 ---
 
@@ -74,7 +75,10 @@ python3 harness_cli.py init --name my-bwai-workshop --topic "Local RAG with Gemm
 # 2. Audit tech stack for cross-architecture risks
 python3 harness_cli.py audit-compat --stack "lmstudio,docker,mlx"
 
-# 3. Build PDF handout from markdown docs
+# 3. Test workshop code execution & markdown broken links
+python3 harness_cli.py test --target my-bwai-workshop
+
+# 4. Build PDF handout from markdown docs
 python3 harness_cli.py build-pdf --target my-bwai-workshop
 ```
 
@@ -82,7 +86,7 @@ python3 harness_cli.py build-pdf --target my-bwai-workshop
 
 ## Installing Agent Skills
 
-Install all 9 skills into your local agent environment (`~/.gemini/skills`):
+Install all 10 skills into your local agent environment (`~/.gemini/skills`):
 
 ```bash
 chmod +x scripts/install_skills.sh
@@ -113,6 +117,7 @@ my-workshop-repo/
 │   ├── check_architecture_compat.ps1   # Architecture detector (Windows)
 │   ├── check_env.sh / check_env.ps1    # Environment verification scripts
 │   ├── bundle_offline_assets.sh        # Emergency offline asset bundler
+│   ├── verify_workshop.py              # Automated integrity auditor
 │   └── generate_prep_pdf.py            # PDF handout builder
 └── output/                             # Generated output files
     └── pdf/
