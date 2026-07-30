@@ -25,6 +25,7 @@ It standardizes the proven architecture and operational battle-tested workflows 
 ## Table of Contents
 
 - [Overview](#overview)
+- [One-Click Full Orchestration](#one-click-full-orchestration)
 - [11 Specialized Agent Skills Specification](#11-specialized-agent-skills-specification)
 - [Cross-Architecture Compatibility Matrix](#cross-architecture-compatibility-matrix)
 - [CLI Tool Usage (`harness_cli.py`)](#cli-tool-usage-harness_clipy)
@@ -32,6 +33,20 @@ It standardizes the proven architecture and operational battle-tested workflows 
 - [Standard Workshop Repository Structure](#standard-workshop-repository-structure)
 - [Changelog](#changelog)
 - [License](#license)
+
+---
+
+## One-Click Full Orchestration
+
+With a single CLI command or natural language prompt, Workshop Harness triggers all 11 skills in sequence:
+
+```bash
+# One-Click Full Workshop Generation Across All 11 Skills
+python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
+```
+
+Natural Language Prompt in Google Antigravity / Gemini CLI:
+> *"Generate a complete end-to-end workshop package for a 60-minute Flutter & Gemini API session with one-click orchestration."*
 
 ---
 
@@ -72,8 +87,8 @@ Participants bring a wide variety of hardware architectures. This matrix identif
 Using Python 3.9+, you can manage workshops via the command-line interface:
 
 ```bash
-# 1. Initialize a new workshop project
-python3 harness_cli.py init --name my-bwai-workshop --topic "Local RAG with Gemma 4"
+# 1. One-Click Full Workshop Generation Across All 11 Skills
+python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 
 # 2. Audit tech stack for cross-architecture risks
 python3 harness_cli.py audit-compat --stack "lmstudio,docker,mlx"

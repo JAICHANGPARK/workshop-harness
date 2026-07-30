@@ -108,6 +108,11 @@ def init_workshop(name: str, topic: str, target_dir: str = None):
 ├── scripts/                     # 크로스 아키텍처 점검 및 오프라인 번들링 스크립트
 └── output/                      # 산출물 (PDF 등)
 ```
+
+## 🔗 참고 (References)
+- [Build with AI Seoul 2026](https://github.com/JAICHANGPARK/2026-bwai-seoul)
+- [Build with AI Golang Korea 2026](https://github.com/JAICHANGPARK/2026-bwai-golang-korea)
+- [Build with AI Mongo 2026](https://github.com/JAICHANGPARK/2026-bwai-mongo)
 """
     with open(project_dir / "README.md", "w", encoding="utf-8") as f:
         f.write(readme_content)
@@ -134,6 +139,7 @@ if __name__ == "__main__":
         f.write(final_main)
 
     print(f"✨ Workshop '{name}' initialized successfully at {project_dir}!")
+    return project_dir
 
 def audit_compatibility(stack_str: str):
     stack = [s.strip().lower() for s in stack_str.split(",")]
@@ -177,7 +183,6 @@ def test_workshop(target_dir: str):
     target = Path(target_dir).resolve()
     script = target / "scripts" / "verify_workshop.py"
     if not script.exists():
-        # Fallback to templates/script-templates/verify_workshop.py
         script = TEMPLATES_DIR / "script-templates" / "verify_workshop.py"
 
     print(f"🔍 Running Workshop Integrity Audit on '{target}'...")
@@ -197,19 +202,51 @@ def build_pdf(target_dir: str):
     print(f"📄 Building PDF for {target.name}...")
     os.system(f"python3 '{script}' '{docs_dir}' '{output_pdf}' '{preview_dir}'")
 
+def generate_all(name: str, topic: str, stack_str: str, target_dir: str = None):
+    print("=" * 70)
+    print(f"⚡ [ONE-CLICK FULL ORCHESTRATOR] Building Complete Workshop: '{name}'")
+    print("=" * 70)
+
+    # 1. Scaffolding Structure
+    proj_dir = init_workshop(name, topic, target_dir)
+
+    # 2. Audit Cross-Architecture Compatibility
+    print("\n[Step 2/5] Auditing Cross-Architecture Compatibility...")
+    audit_compatibility(stack_str)
+
+    # 3. Test Integrity & Smoke Code Execution
+    print("\n[Step 3/5] Testing Workshop Code & Link Integrity...")
+    test_workshop(str(proj_dir))
+
+    # 4. Build PDF Handout & Previews
+    print("\n[Step 4/5] Building Publication PDF Handouts & Previews...")
+    build_pdf(str(proj_dir))
+
+    print("\n" + "=" * 70)
+    print(f"🎉 SUCCESS! Complete Workshop Package '{name}' generated in ONE-CLICK!")
+    print(f"📁 Path: {proj_dir}")
+    print("=" * 70)
+
 def main():
     parser = argparse.ArgumentParser(description="Workshop Harness CLI")
     subparsers = parser.add_subparsers(dest="command")
 
     # init command
     init_parser = subparsers.add_parser("init", help="Initialize a new workshop project")
-    init_parser.add_argument("--name", required=True, help="Workshop project name (e.g. 2026-bwai-demo)")
+    init_parser.add_argument("--name", required=True, help="Workshop project name")
     init_parser.add_argument("--topic", default="BWAI Hands-on Workshop", help="Workshop topic")
     init_parser.add_argument("--dir", default=None, help="Target parent directory")
 
+    # generate-all (One-Click Full Orchestration)
+    gen_all_parser = subparsers.add_parser("generate-all", help="One-Click full workshop generation across all 11 skills")
+    gen_all_parser.add_argument("--name", required=True, help="Workshop project name")
+    gen_all_parser.add_argument("--topic", default="BWAI Hands-on Workshop", help="Workshop topic")
+    gen_all_parser.add_argument("--stack", default="python,ollama,docker", help="Tech stack (comma-separated)")
+    gen_all_parser.add_argument("--dir", default=None, help="Target parent directory")
+
     # audit-compat command
     audit_parser = subparsers.add_parser("audit-compat", help="Audit tech stack cross-architecture compatibility")
-    audit_parser.add_argument("--stack", required=True, help="Comma-separated tech stack (e.g. lmstudio,docker,python,mlx)")
+    audit_parser.add_argument("--stack", required=True, help="Comma-separated tech stack")
 
     # test command
     test_parser = subparsers.add_parser("test", help="Test workshop code execution & markdown link integrity")
@@ -223,6 +260,8 @@ def main():
 
     if args.command == "init":
         init_workshop(args.name, args.topic, args.dir)
+    elif args.command == "generate-all":
+        generate_all(args.name, args.topic, args.stack, args.dir)
     elif args.command == "audit-compat":
         audit_compatibility(args.stack)
     elif args.command == "test":

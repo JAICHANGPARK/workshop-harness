@@ -22,9 +22,24 @@ Workshop Harness는 Build with AI (BWAI), DevFest, 커뮤니티 세션, 기술 �
 
 ---
 
+## 원클릭 풀 오케스트레이션 (One-Click Full Orchestration)
+
+단 한 줄의 CLI 명령어 또는 에이전트 자연어 요청만으로 11개 스킬 전체가 연쇄 발동되어 완벽한 워크숍 패키지를 원클릭으로 생성합니다:
+
+```bash
+# 11개 전체 스킬 원클릭 연속 발동 생성 명령어
+python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
+```
+
+Google Antigravity / Gemini CLI 에이전트 프롬프트:
+> *"Flutter & Gemini API 60분 세션을 위한 전체 워크숍 패키지를 원클릭 오케스트레이션으로 한 방에 다 만들어줘."*
+
+---
+
 ## 목차
 
 - [개요](#개요)
+- [원클릭 풀 오케스트레이션](#원클릭-풀-오케스트레이션-one-click-full-orchestration)
 - [전체 11개 에이전트 스킬 명세서](#전체-11개-에이전트-스킬-명세서)
 - [크로스 아키텍처 호환성 고려사항](#크로스-아키텍처-호환성-고려사항)
 - [CLI 사용법 (harness_cli.py)](#cli-사용법-harness_clipy)
@@ -71,8 +86,8 @@ Workshop Harness는 Build with AI (BWAI), DevFest, 커뮤니티 세션, 기술 �
 Python 3.9+ 환경에서 `harness_cli.py` 도구를 이용해 손쉽게 워크숍 프로젝트를 구성하고 관리할 수 있습니다.
 
 ```bash
-# 1. 새 워크숍 프로젝트 생성 (기본 구조 및 아키텍처 매트릭스, RUNBOOK 자동 스캐폴딩)
-python3 harness_cli.py init --name my-bwai-workshop --topic "Local RAG with Gemma 4"
+# 1. 11개 전체 스킬 원클릭 연속 발동 생성
+python3 harness_cli.py generate-all --name my-bwai-workshop --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 
 # 2. 기술 스택 크로스 아키텍처 호환성 위험 오디팅
 python3 harness_cli.py audit-compat --stack "lmstudio,docker,mlx"
