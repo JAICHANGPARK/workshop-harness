@@ -22,6 +22,60 @@ Workshop Harness는 Build with AI (BWAI), DevFest, 커뮤니티 세션, 기술 �
 
 ---
 
+## ⚡ 빠른 시작 (Quick Start)
+
+**1분 만에** 완벽한 워크숍 전체 저장소 패키지를 원클릭으로 구축합니다:
+
+```bash
+# 1. 저장소 클론
+git clone https://github.com/JAICHANGPARK/workshop-harness.git
+cd workshop-harness
+
+# 2. PDF 생성 의존성 패키지 설치 (선택 사항)
+pip install reportlab pymupdf pillow
+
+# 3. 로컬 에이전트 환경(~/.gemini/skills)에 12개 스킬 자동 설치
+chmod +x scripts/install_skills.sh
+./scripts/install_skills.sh
+
+# 4. 원클릭 종합 생성 명령어로 완벽한 워크숍 패키지 구축
+python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
+```
+
+---
+
+## 📦 설치 안내 (Installation)
+
+### 사전 준비물
+- **Python**: 버전 3.9 이상
+- **Git**: 설치 및 설정 완료 상태
+- **AI 코딩 에이전트 (선택)**: Google Antigravity, Gemini CLI, Anthropic Claude Code, OpenAI Codex, Cursor, Aider 중 선택
+
+### CLI 및 에이전트 스킬 설치
+
+1. **스킬 모음 로컬 환경 설치**:
+   `./scripts/install_skills.sh` 스크립트를 실행하여 12개 전용 에이전트 스킬을 설치합니다.
+2. **설치 상태 검증**:
+   `python3 harness_cli.py --help` 명령어로 CLI 도구 정상 작동 여부를 확인합니다.
+
+---
+
+## 목차
+
+- [개요](#개요)
+- [빠른 시작](#-빠른-시작-quick-start)
+- [설치 안내](#-설치-안내-installation)
+- [원클릭 풀 오케스트레이션](#원클릭-풀-오케스트레이션-one-click-full-orchestration)
+- [오픈 AI 에이전트 표준 (`AGENTS.md`)](#오픈-ai-에이전트-표준-agentsmd)
+- [전체 12개 에이전트 스킬 명세서](#전체-12개-에이전트-스킬-명세서)
+- [크로스 아키텍처 호환성 고려사항](#크로스-아키텍처-호환성-고려사항)
+- [CLI 사용법 (harness_cli.py)](#cli-사용법-harness_clipy)
+- [에이전트 스킬 설치 방법](#에이전트-스킬-설치-방법)
+- [표준 워크숍 리포지토리 구조](#표준-워크숍-리포지토리-구조)
+- [라이선스](#라이선스)
+
+---
+
 ## 원클릭 풀 오케스트레이션 (One-Click Full Orchestration)
 
 단 한 줄의 CLI 명령어 또는 에이전트 자연어 요청만으로 12개 스킬 전체가 연쇄 발동되어 완벽한 워크숍 패키지를 원클릭으로 생성합니다:
@@ -42,20 +96,6 @@ python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG
 - **Google Antigravity & Gemini CLI**: `.gemini/skills/` 표준 네이티브 스킬 지원
 - **OpenAI Codex, ChatGPT, Aider & Cursor**: [`AGENTS.md`](./AGENTS.md) 지침 지원
 - **전체 통합 가이드**: [`docs/ai-agent-interoperability-guide.md`](./docs/ai-agent-interoperability-guide.md)
-
----
-
-## 목차
-
-- [개요](#개요)
-- [원클릭 풀 오케스트레이션](#원클릭-풀-오케스트레이션-one-click-full-orchestration)
-- [오픈 AI 에이전트 표준 (`AGENTS.md`)](#오픈-ai-에이전트-표준-agentsmd)
-- [전체 12개 에이전트 스킬 명세서](#전체-12개-에이전트-스킬-명세서)
-- [크로스 아키텍처 호환성 고려사항](#크로스-아키텍처-호환성-고려사항)
-- [CLI 사용법 (harness_cli.py)](#cli-사용법-harness_clipy)
-- [에이전트 스킬 설치 방법](#에이전트-스킬-설치-방법)
-- [표준 워크숍 리포지토리 구조](#표준-워크숍-리포지토리-구조)
-- [라이선스](#라이선스)
 
 ---
 

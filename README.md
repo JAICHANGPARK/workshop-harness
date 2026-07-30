@@ -22,9 +22,56 @@ It standardizes the proven architecture and operational battle-tested workflows 
 
 ---
 
+## ⚡ Quick Start
+
+Build a complete end-to-end workshop repository in under **1 minute** using the One-Click Full Orchestrator:
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/JAICHANGPARK/workshop-harness.git
+cd workshop-harness
+
+# 2. Install optional PDF build dependencies
+pip install reportlab pymupdf pillow
+
+# 3. Install 12 Agent Skills into your local environment (~/.gemini/skills)
+chmod +x scripts/install_skills.sh
+./scripts/install_skills.sh
+
+# 4. Generate a complete workshop package with ONE CLICK
+python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
+```
+
+---
+
+## 📦 Installation
+
+### Prerequisites
+- **Python**: Version 3.9 or higher
+- **Git**: Installed and configured
+- **AI Coding Agent (Optional)**: Google Antigravity, Gemini CLI, Anthropic Claude Code, OpenAI Codex, Cursor, or Aider
+
+### Installing CLI & Agent Skills
+
+1. **Local Skill Installation**:
+   Install all 12 specialized agent skills into your agent environment (`~/.gemini/skills`):
+   ```bash
+   ./scripts/install_skills.sh
+   ```
+
+2. **Verifying Installation**:
+   Ensure the CLI is working properly:
+   ```bash
+   python3 harness_cli.py --help
+   ```
+
+---
+
 ## Table of Contents
 
 - [Overview](#overview)
+- [Quick Start](#-quick-start)
+- [Installation](#-installation)
 - [One-Click Full Orchestration](#one-click-full-orchestration)
 - [Open AI Agent Standard (`AGENTS.md`)](#open-ai-agent-standard-agentsmd)
 - [12 Specialized Agent Skills Specification](#12-specialized-agent-skills-specification)
@@ -112,17 +159,6 @@ python3 harness_cli.py test --target my-bwai-workshop
 
 # 5. Build PDF handout from markdown docs
 python3 harness_cli.py build-pdf --target my-bwai-workshop
-```
-
----
-
-## Installing Agent Skills
-
-Install all 12 skills into your local agent environment (`~/.gemini/skills`):
-
-```bash
-chmod +x scripts/install_skills.sh
-./scripts/install_skills.sh
 ```
 
 ---
