@@ -8,6 +8,8 @@ description: 핸즈온 실습 단계별 커리큘럼(Step-by-Step Labs), starter
 ## 📌 목적
 참가자가 실습 시간 내(예: 60분~120분)에 명확한 목표를 달성할 수 있도록, 커리큘럼을 단계별(Lab 1, Lab 2, Lab 3)로 모듈화하고, 시작점(`01_starter`)과 정답 완성본(`02_final`) 및 복사 가능한 프롬프트 팩(`prompt-pack/`)을 구성합니다.
 
+---
+
 ## 🧱 구조 설계 패턴
 
 ### 1. `starter` vs `final` 코드 분리 원칙
@@ -26,18 +28,16 @@ description: 핸즈온 실습 단계별 커리큘럼(Step-by-Step Labs), starter
 - **Lab 03: 에이전트 / RAG 파이프라인 완성**:
   - Vector Search 또는 Tool Call 연동 후 최종 애플리케이션 완성
 
-### 3. 프롬프트 팩 (`prompt-pack/`) 구성
-- 참가자가 복잡한 시스템 프롬프트를 일일이 타이핑하지 않고 바로 복사-붙여넣기(`Copy-Paste`) 할 수 있는 Markdown 모음집.
-  - `01-system-prompts.md`: 역할 정의, 규칙, 예시 (Few-shot)
-  - `02-output-schema.md`: JSON Schema / Pydantic 모델 명세
-  - `03-failure-handling.md`: 에러 예외 처리 및 재시도 프롬프트
+---
 
-## 🛠️ 실습 커리큘럼 빌드 워크플로우
+## 🔗 출처 및 참고 문헌 필수 규약 (Mandatory References Protocol)
 
-1. **실습 시간(Duration) 산정**:
-   - 60분 세션: Lab 1 (15분) + Lab 2 (20분) + Lab 3 (20분) + Q&A (5분)
-2. **코드 템플릿 검증**:
-   - `01_starter`에서 `run.sh` / `run.ps1` 실행 시 에러 없이 시작 가이드가 출력되는지 확인
-   - `02_final`에서 `run.sh` / `run.ps1` 실행 시 성공 결과가 출력되는지 테스트
-3. **프롬프트 테스트**:
-   - 제시된 system prompt 및 output schema가 대상 모델(예: Gemma 4)에서 환각 없이 정상 동작하는지 사전 검증
+모든 실습 가이드 문서(`03_labs/README.md` 등) 및 외부 데이터/공식 API를 참고한 문서의 최하단에는 **반드시 `## 🔗 참고 (References)` 섹션을 포함**시켜 공식 문서 및 인용 출처를 명시해야 합니다.
+
+```markdown
+## 🔗 참고 (References)
+
+- **Official API Documentation**: [Google Gemini API Docs](https://ai.google.dev/docs)
+- **Framework Guide**: [Flutter Developer Docs](https://docs.flutter.dev)
+- **Base Workshop Repository**: [Build with AI Seoul 2026](https://github.com/JAICHANGPARK/2026-bwai-seoul)
+```

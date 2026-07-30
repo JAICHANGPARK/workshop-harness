@@ -37,3 +37,11 @@
   ```bash
   curl -fsSL https://ollama.com/install.sh | sh
   ```
+
+---
+
+## 🔗 참고 (References)
+
+- **Ollama Documentation**: [https://ollama.com](https://ollama.com)
+- **LM Studio Developer Portal**: [https://lmstudio.ai](https://lmstudio.ai)
+- **Build with AI Seoul Reference**: [https://github.com/JAICHANGPARK/2026-bwai-seoul](https://github.com/JAICHANGPARK/2026-bwai-seoul)

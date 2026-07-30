@@ -81,3 +81,12 @@
   ```powershell
   .\scripts\check_env.ps1
   ```
+
+---
+
+## 🔗 참고 (References)
+
+- **Astral uv Official Guide**: [https://astral.sh/uv](https://astral.sh/uv)
+- **Flutter Official Installation Guide**: [https://docs.flutter.dev/get-started/install](https://docs.flutter.dev/get-started/install)
+- **Docker Desktop Documentation**: [https://docs.docker.com/desktop](https://docs.docker.com/desktop)
+- **Google Gemma Model Library**: [https://ollama.com/library/gemma4](https://ollama.com/library/gemma4)
