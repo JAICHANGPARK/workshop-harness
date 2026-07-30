@@ -1,3 +1,5 @@
+![Workshop Harness Banner](./assets/workshop_harness_banner.jpg)
+
 # Workshop Harness
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
