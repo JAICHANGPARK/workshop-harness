@@ -1,4 +1,4 @@
-# ⚡ Workshop Harness (한국어)
+# Workshop Harness (한국어)
 
 > **AI 에이전트 하네스, 13개 스킬 모음 및 CLI 자동화 툴킷**
 
@@ -8,7 +8,7 @@
 
 ---
 
-## 🎯 개요
+## 개요
 
 **Workshop Harness**는 기술 워크숍(Build with AI, DevFest, 커뮤니티 개발자 랩)을 주최하는 오거나이저, 발표자, 퍼실리테이터, 그리고 기술 조교(TA)를 위한 **원클릭 AI 에이전트 오케스트레이션 툴킷**입니다.
 
@@ -16,7 +16,7 @@
 
 ---
 
-## ⚡ 10초 퀵스타트
+## Quickstart Guide
 
 ```bash
 # 1. 저장소 복제
@@ -33,7 +33,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 
 ---
 
-## 📁 13개 에이전트 스킬 목록
+## 13개 에이전트 스킬 목록
 
 - `workshop-scaffolder`: 표준 리포지토리 스캐폴딩
 - `cross-architecture-checker`: 칩셋/OS 호환성 진단 & Fallback

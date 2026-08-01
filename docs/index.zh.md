@@ -1,4 +1,4 @@
-# ⚡ Workshop Harness (中文)
+# Workshop Harness (中文)
 
 > **AI Agent 编排框架、13 项技能套件与 CLI 自动化工具包**
 
@@ -8,7 +8,7 @@
 
 ---
 
-## 🎯 项目概述
+## 项目概述
 
 **Workshop Harness** 是专为技术工作坊（Build with AI、DevFest、社区开发者实验室）组织者、讲师和助教（TA）打造的一键式 AI Agent 编排工具包。
 
@@ -16,7 +16,7 @@
 
 ---
 
-## ⚡ 快速开始
+## Quickstart Guide
 
 ```bash
 # 1. 克隆仓库
@@ -33,7 +33,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 
 ---
 
-## 📁 13 项 Agent 技能索引
+## 13 项 Agent 技能索引
 
 - `workshop-scaffolder`: 自动化标准仓库结构脚手架
 - `cross-architecture-checker`: 芯片与 OS 兼容性诊断及替代方案 (Fallback)

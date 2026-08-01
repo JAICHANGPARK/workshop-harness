@@ -1,4 +1,4 @@
-# ⚡ Workshop Harness (日本語)
+# Workshop Harness (日本語)
 
 > **AIエージェントハーネス、13スキルスイート & CLI自動化ツールキット**
 
@@ -8,7 +8,7 @@
 
 ---
 
-## 🎯 概要
+## 概要
 
 **Workshop Harness**は、ハンズオンワークショップ（Build with AI、DevFest、コミュニティハンズオン）を開催する主催者、スピーカー、ファシリテーター、TAのためのワンクリックAIエージェントオーケストレーションツールキットです。
 
@@ -16,7 +16,7 @@
 
 ---
 
-## ⚡ クイックスタート
+## Quickstart Guide
 
 ```bash
 # 1. リポジトリをクローン
@@ -33,7 +33,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 
 ---
 
-## 📁 13のエージェントスキル
+## 13のエージェントスキル
 
 - `workshop-scaffolder`: リポジトリの標準構造スキャフォールディング
 - `cross-architecture-checker`: チップセット・OS互換性診断およびFallback作成

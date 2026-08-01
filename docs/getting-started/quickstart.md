@@ -1,10 +1,10 @@
-# ⚡ Quickstart Guide
+# Quickstart Guide
 
 Workshop Harness is powered by **Astral uv**. It resolves dependencies and generates full workshop packages in seconds.
 
 ---
 
-## 🛠️ Step 1: Requirements
+## Step 1: Requirements
 
 Ensure the following tools are installed:
 
@@ -18,7 +18,7 @@ Ensure the following tools are installed:
 
 ---
 
-## 🚀 Step 2: Clone & Install Agent Skills
+## Step 2: Clone & Install Agent Skills
 
 ```bash
 # 1. Clone repository
@@ -34,7 +34,7 @@ The `install_skills.sh` script copies all 13 agent skill directories to `~/.gemi
 
 ---
 
-## 📦 Step 3: One-Click Full Workshop Generation
+## Step 3: One-Click Full Workshop Generation
 
 ```bash
 uv run harness_cli.py generate-all \
@@ -54,7 +54,7 @@ uv run harness_cli.py generate-all \
 
 ---
 
-## 🎉 Step 4: Verify Output
+## Step 4: Verify Output
 
 Inspect your newly created workshop repository:
 

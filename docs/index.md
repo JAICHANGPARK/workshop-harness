@@ -1,4 +1,4 @@
-# ⚡ Workshop Harness
+# Workshop Harness
 
 > **AI Agent Harness, 13 Skill Suite & CLI Automation Toolkit** for Technical Workshops (Build with AI, DevFest, Hands-on Labs)
 
@@ -9,7 +9,7 @@
 
 ---
 
-## 🎯 Overview
+## Overview
 
 **Workshop Harness** is a one-click AI agent orchestration toolkit designed for organizers, speakers, facilitators, and teaching assistants (TAs) hosting technical workshops (Build with AI, DevFest, community developer labs).
 
@@ -17,17 +17,17 @@ Adhering to the [AGENTS.md open specification](https://agents.md/), this harness
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
-- **⚡ One-Click Full Generation (`generate-all`)**: Runs a 6-step automated pipeline across all 13 agent skills to generate repo scaffolds, guides, architecture compatibility audits, persona loop evaluations, smoke tests, PDF handouts, and Open Codelabs bundles in under 60 seconds.
-- **📁 13 Agent Skills (`skills/*`)**: Packed with 13 specialized agent skills capturing real-world workshop facilitation expertise.
-- **🖥️ Cross-Architecture Audit**: Automatically diagnoses hardware & GPU compatibility risks across Apple Silicon (M1~M4), Intel Mac (x86_64), Windows (x64/Snapdragon ARM64), and Linux/ChromeOS environments with mandatory fallback guidance.
-- **🌐 Open Codelabs Platform Integration**: Exports standard Open Codelabs bundles (`codelab.yaml`) and pushes directly via `oc` CLI & stdio MCP server (`oc mcp serve`).
-- **📄 Publication-Ready PDF Handouts**: Generates printable PDF preparation guides and thumbnail contact sheets via ReportLab and PyMuPDF engines.
+- **One-Click Full Generation (`generate-all`)**: Runs a 6-step automated pipeline across all 13 agent skills to generate repo scaffolds, guides, architecture compatibility audits, persona loop evaluations, smoke tests, PDF handouts, and Open Codelabs bundles in under 60 seconds.
+- **13 Agent Skills (`skills/*`)**: Packed with 13 specialized agent skills capturing real-world workshop facilitation expertise.
+- **Cross-Architecture Audit**: Automatically diagnoses hardware & GPU compatibility risks across Apple Silicon (M1~M4), Intel Mac (x86_64), Windows (x64/Snapdragon ARM64), and Linux/ChromeOS environments with mandatory fallback guidance.
+- **Open Codelabs Platform Integration**: Exports standard Open Codelabs bundles (`codelab.yaml`) and pushes directly via `oc` CLI & stdio MCP server (`oc mcp serve`).
+- **Publication-Ready PDF Handouts**: Generates printable PDF preparation guides and thumbnail contact sheets via ReportLab and PyMuPDF engines.
 
 ---
 
-## ⚡ 10-Second Quickstart
+## Quickstart Guide
 
 ```bash
 # 1. Clone repository
@@ -44,7 +44,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 
 ---
 
-## 📚 Production Proven
+## Production Proven
 
 Workshop Harness has been battle-tested across major community technical workshops:
 

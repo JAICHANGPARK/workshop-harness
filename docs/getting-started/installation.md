@@ -1,10 +1,10 @@
-# 📦 Installation & Agent Setup
+# Installation & Agent Setup
 
 This guide explains how to install **Workshop Harness** and connect it with various AI Coding Agents (Google Antigravity, Gemini CLI, Claude Code, OpenAI Codex, Cursor, etc.).
 
 ---
 
-## 🛠️ Environment Setup
+## Environment Setup
 
 ### 1. Astral uv Installation
 `uv` is an extremely fast Python package manager written in Rust.
@@ -32,7 +32,7 @@ This installs all 13 skill directories into `~/.gemini/skills/` so **Google Anti
 
 ---
 
-## 🤖 AI Agent Integration Guide
+## AI Agent Integration Guide
 
 ### 1. Google Antigravity & Gemini CLI
 - **Native Skill Discovery**: All 13 skills in `~/.gemini/skills/` are automatically available.
@@ -52,7 +52,7 @@ This installs all 13 skill directories into `~/.gemini/skills/` so **Google Anti
 
 ---
 
-## 🔍 Verification
+## Verification
 
 Verify that the CLI runs cleanly:
 

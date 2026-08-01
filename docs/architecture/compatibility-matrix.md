@@ -1,10 +1,10 @@
-# 🖥️ Cross-Architecture Compatibility Matrix
+# Cross-Architecture Compatibility Matrix
 
 Participants bring a wide variety of hardware architectures to workshops. Workshop Harness audits technology stack risks prior to the session and provides mandatory fallback paths.
 
 ---
 
-## 📊 Hardware Chipset & OS Matrix
+## Hardware Chipset & OS Matrix
 
 | Architecture / OS | Recommended Tool | Known Risks | Mandatory Fallback Path |
 | --- | --- | --- | --- |
@@ -16,7 +16,7 @@ Participants bring a wide variety of hardware architectures to workshops. Worksh
 
 ---
 
-## 🔍 Automated Architecture Detection (`check_architecture_compat`)
+## Automated Architecture Detection (`check_architecture_compat`)
 
 Workshop Harness embeds architecture detection scripts inside every generated workshop project:
 

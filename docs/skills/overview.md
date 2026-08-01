@@ -1,10 +1,10 @@
-# 📁 13 Agent Skill Suite Catalog
+# 13 Agent Skill Suite Catalog
 
 `workshop-harness` features **13 specialized agent skills** distilled from real-world workshop facilitation. Each skill is defined with YAML frontmatter and markdown instructions in `skills/*/SKILL.md`.
 
 ---
 
-## 📊 Skill Suite Catalog
+## Skill Suite Catalog
 
 | # | Skill Name | Input / Trigger | Primary Role & Artifacts | SKILL.md Path |
 |:---:|---|---|---|---|

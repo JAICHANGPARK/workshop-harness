@@ -1,10 +1,10 @@
-# 🌐 Open Codelabs Integrator Skill
+# Open Codelabs Integrator Skill
 
 The **Open Codelabs Integrator** skill ([`skills/open-codelabs-integrator/SKILL.md`](file:///Users/jaichang/Documents/GitHub/workshop-harness/skills/open-codelabs-integrator/SKILL.md)) bridges `workshop-harness` generated content with **[Open Codelabs](https://github.com/JAICHANGPARK/open-codelabs)**—a Google Codelab-style interactive hands-on platform.
 
 ---
 
-## 🎯 Key Capabilities
+## Key Capabilities
 
 1. **Automatic Bundle Export (`output/open-codelabs/`)**:
    - Parses `workshop/03_labs/README.md` and `gemma4-local-setup-guide.md` into `codelab.yaml`, `guide.md`, and individual step markdown files (`steps/step_01.md`, `steps/step_02.md`).
@@ -15,7 +15,7 @@ The **Open Codelabs Integrator** skill ([`skills/open-codelabs-integrator/SKILL.
 
 ---
 
-## 💻 CLI Usage Example
+## CLI Usage Example
 
 ```bash
 # Export bundle only
@@ -27,7 +27,7 @@ uv run harness_cli.py export-codelab --target my-bwai-workshop --push
 
 ---
 
-## 📄 Sample `codelab.yaml` Manifest
+## Sample `codelab.yaml` Manifest
 
 ```yaml
 version: 1

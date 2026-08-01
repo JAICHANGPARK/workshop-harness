@@ -1,10 +1,10 @@
-# 💻 CLI Reference (`harness_cli.py`)
+# CLI Reference (`harness_cli.py`)
 
 `harness_cli.py` is the primary entrypoint CLI tool for **Workshop Harness** powered by **Astral uv**.
 
 ---
 
-## 🛠️ Command Summary Table
+## Command Summary Table
 
 | Subcommand | Primary Flags | Description |
 |---|---|---|
@@ -18,7 +18,7 @@
 
 ---
 
-## 📖 Usage Examples
+## Usage Examples
 
 ### 1. `generate-all` (One-Click Full Orchestration)
 
