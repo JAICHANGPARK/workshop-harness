@@ -1,4 +1,5 @@
 // Workshop Harness Landing Page Script with Multi-Language (i18n) Support
+// & Apple-Style Dynamic Scroll Animations
 
 const I18N_DICT = {
   en: {
@@ -334,7 +335,84 @@ document.addEventListener("DOMContentLoaded", () => {
   setupCommandGenerator();
   setupCopyButtons();
   setupLanguageSelector();
+  setupAppleScrollAnimations();
 });
+
+// Apple-style Scroll Animations & Interactions
+function setupAppleScrollAnimations() {
+  // 1. Scroll Progress Bar
+  const progressBar = document.getElementById("scrollProgress");
+  window.addEventListener("scroll", () => {
+    const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+    if (totalHeight > 0 && progressBar) {
+      const progress = (window.scrollY / totalHeight) * 100;
+      progressBar.style.width = `${progress}%`;
+    }
+  });
+
+  // 2. IntersectionObserver Scroll Reveal
+  const reveals = document.querySelectorAll(".reveal");
+  const observerOptions = {
+    threshold: 0.15,
+    rootMargin: "0px 0px -50px 0px"
+  };
+
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("active");
+        
+        // Trigger stat counters if stats-bar is revealed
+        if (entry.target.classList.contains("stats-bar")) {
+          animateStatCounters();
+        }
+      }
+    });
+  }, observerOptions);
+
+  reveals.forEach(el => revealObserver.observe(el));
+
+  // 3. Perspective Tilt on Terminal Showcase
+  const terminal = document.getElementById("terminalShowcase");
+  if (terminal) {
+    window.addEventListener("scroll", () => {
+      const rect = terminal.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        const factor = Math.max(0, (rect.top / window.innerHeight));
+        if (factor < 0.4) {
+          terminal.classList.add("flatten");
+        } else {
+          terminal.classList.remove("flatten");
+        }
+      }
+    });
+  }
+}
+
+// Animate Stat Counters Smoothly
+function animateStatCounters() {
+  const statNumbers = document.querySelectorAll(".stat-number");
+  statNumbers.forEach(numEl => {
+    if (numEl.getAttribute("data-animated")) return;
+    numEl.setAttribute("data-animated", "true");
+
+    const target = parseInt(numEl.getAttribute("data-target"), 10);
+    const suffix = numEl.getAttribute("data-suffix") || "";
+    let current = 0;
+    const duration = 1200; // ms
+    const increment = target / (duration / 16);
+
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        numEl.textContent = `${target}${suffix}`;
+        clearInterval(timer);
+      } else {
+        numEl.textContent = `${Math.floor(current)}${suffix}`;
+      }
+    }, 16);
+  });
+}
 
 // Setup Language Selector (en, ko, ja, zh)
 function setupLanguageSelector() {
@@ -383,7 +461,7 @@ function renderSkills(filterCat = "all", searchQuery = "") {
   }
 
   container.innerHTML = filtered.map(skill => `
-    <div class="skill-card">
+    <div class="skill-card spot-card">
       <div>
         <div class="skill-header">
           <span class="skill-num">Skill #${skill.num}</span>

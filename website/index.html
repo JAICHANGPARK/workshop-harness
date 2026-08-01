@@ -9,7 +9,7 @@
   <!-- Typography Fonts (Inter Display + Geist Mono) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -17,6 +17,9 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+  <!-- Scroll Progress Indicator Bar -->
+  <div class="scroll-progress" id="scrollProgress"></div>
 
   <!-- Navigation Bar -->
   <nav class="navbar">
@@ -56,19 +59,19 @@
   <!-- Hero Section -->
   <header class="hero-section">
     <div class="container hero-content">
-      <div class="hero-tag">
+      <div class="hero-tag reveal">
         POWERED BY ASTRAL UV &amp; AGENTS.MD OPEN SPECIFICATION
       </div>
       
-      <h1 class="hero-title" data-i18n="hero_title">
+      <h1 class="hero-title reveal" data-i18n="hero_title">
         One-Click AI Agent Harness &amp; 13 Skill Suite
       </h1>
       
-      <p class="hero-subtitle" data-i18n="hero_subtitle">
+      <p class="hero-subtitle reveal" data-i18n="hero_subtitle">
         Technical workshop orchestration and CLI automation toolkit designed for Google Antigravity, Gemini CLI, Claude Code, OpenAI Codex, Cursor, and all AI coding agents.
       </p>
 
-      <div class="hero-cta-group">
+      <div class="hero-cta-group reveal">
         <a href="#generator" class="btn btn-primary" data-i18n="btn_gen">
           One-Click Generation
         </a>
@@ -80,8 +83,31 @@
         </a>
       </div>
 
-      <!-- Terminal Showcase -->
-      <div class="terminal-showcase">
+      <!-- Apple-style Animated Key Metrics Bar -->
+      <div class="stats-bar reveal">
+        <div class="stat-item">
+          <div class="stat-number" data-target="13">0</div>
+          <div class="stat-label">Agent Skills</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="60" data-suffix="s">0</div>
+          <div class="stat-label">Full Generation</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="90" data-suffix="%+">0</div>
+          <div class="stat-label">Setup Time Saved</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="10" data-suffix="s">0</div>
+          <div class="stat-label">Hotfix Diagnostics</div>
+        </div>
+      </div>
+
+      <!-- Terminal Showcase with Perspective Scroll Tilt -->
+      <div class="terminal-showcase reveal tilt-on-scroll" id="terminalShowcase">
         <div class="terminal-header">
           <div class="terminal-dots">
             <span class="dot red"></span>
@@ -141,8 +167,8 @@
   <!-- Agent Interoperability Banner -->
   <section class="agents-banner">
     <div class="container">
-      <div class="banner-label" data-i18n="supported_agents">SUPPORTED AI CODING AGENTS &amp; LLM PLATFORMS</div>
-      <div class="agent-badges">
+      <div class="banner-label reveal" data-i18n="supported_agents">SUPPORTED AI CODING AGENTS &amp; LLM PLATFORMS</div>
+      <div class="agent-badges reveal">
         <div class="agent-chip">Google Antigravity</div>
         <div class="agent-chip">Gemini CLI</div>
         <div class="agent-chip">Anthropic Claude Code</div>
@@ -156,26 +182,26 @@
   <!-- Key Features Section -->
   <section id="features" class="section">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header reveal">
         <div class="eyebrow-mono">CORE FEATURES</div>
         <h2 class="section-title" data-i18n="feat_title">Why Workshop Harness?</h2>
         <p class="section-desc" data-i18n="feat_desc">Automates workshop facilitation workflows and reduces organizer setup time by over 90%.</p>
       </div>
 
       <div class="grid-3">
-        <div class="feature-card">
+        <div class="feature-card reveal spot-card">
           <div class="card-icon"><i class="fa-solid fa-bolt"></i></div>
           <h3 data-i18n="f1_title">One-Click Full Pipeline</h3>
           <p data-i18n="f1_desc">Executes repository scaffolding, smoke testing, PDF handouts, and Open Codelabs bundles in a single shell command.</p>
         </div>
 
-        <div class="feature-card">
+        <div class="feature-card reveal spot-card">
           <div class="card-icon"><i class="fa-solid fa-cubes"></i></div>
           <h3 data-i18n="f2_title">13 Agent Skills Suite</h3>
           <p data-i18n="f2_desc">Includes cross-architecture auditing, runbook generation, live hotfixes, persona loops, and Open Codelabs integration.</p>
         </div>
 
-        <div class="feature-card">
+        <div class="feature-card reveal spot-card">
           <div class="card-icon"><i class="fa-solid fa-layer-group"></i></div>
           <h3 data-i18n="f3_title">Cross-Architecture Engine</h3>
           <p data-i18n="f3_desc">Audits hardware risks across Apple Silicon, Intel Mac, Windows x64/ARM64, and Linux, providing mandatory fallback paths.</p>
@@ -187,14 +213,14 @@
   <!-- Interactive 13 Skills Section -->
   <section id="skills" class="section">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header reveal">
         <div class="eyebrow-mono">AGENT SKILL SUITE</div>
         <h2 class="section-title" data-i18n="skills_title">13 Agent Skills Explorer</h2>
         <p class="section-desc" data-i18n="skills_desc">Explore specifications and artifacts for all 13 native AI agent skills.</p>
       </div>
 
       <!-- Search & Filter Controls -->
-      <div class="skills-filter-bar">
+      <div class="skills-filter-bar reveal">
         <div class="search-box">
           <i class="fa-solid fa-magnifying-glass"></i>
           <input type="text" id="skillSearchInput" placeholder="Search skill name, role, or keywords...">
@@ -208,7 +234,7 @@
       </div>
 
       <!-- Skills Grid Container -->
-      <div class="skills-grid" id="skillsGridContainer">
+      <div class="skills-grid reveal" id="skillsGridContainer">
         <!-- Rendered dynamically by app.js -->
       </div>
     </div>
@@ -217,7 +243,7 @@
   <!-- Open Codelabs Integration Spotlight Section -->
   <section id="codelabs" class="section">
     <div class="container">
-      <div class="spotlight-card">
+      <div class="spotlight-card reveal spot-card">
         <div class="spotlight-content">
           <div class="eyebrow-mono">FEATURED INTEGRATION</div>
           <h2 class="spotlight-title" data-i18n="cl_title">Open Codelabs Integration</h2>
@@ -283,13 +309,13 @@
   <!-- Architecture Compatibility Visualizer -->
   <section id="architecture" class="section">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header reveal">
         <div class="eyebrow-mono">CROSS-ARCHITECTURE ENGINE</div>
         <h2 class="section-title" data-i18n="matrix_title">Cross-Architecture Matrix</h2>
         <p class="section-desc" data-i18n="matrix_desc">Diagnoses chipset &amp; OS risks across participant laptops prior to the session.</p>
       </div>
 
-      <div class="compat-table-wrapper">
+      <div class="compat-table-wrapper reveal">
         <table class="compat-table">
           <thead>
             <tr>
@@ -339,7 +365,7 @@
   <!-- Command Generator Tool -->
   <section id="generator" class="section">
     <div class="container">
-      <div class="generator-card">
+      <div class="generator-card reveal spot-card">
         <div class="section-header">
           <div class="eyebrow-mono">INTERACTIVE CLI GENERATOR</div>
           <h2 class="section-title" data-i18n="gen_title">CLI Command Generator</h2>
@@ -380,7 +406,7 @@
   <footer class="footer">
     <div class="container footer-content">
       <div class="footer-brand">
-        <h3><i class="fa-solid fa-bolt"></i> WORKSHOP HARNESS</h3>
+        <h3>WORKSHOP HARNESS</h3>
         <p>AI Agent Harness, 13 Skill Suite &amp; CLI Automation Toolkit for Technical Workshops.</p>
       </div>
 

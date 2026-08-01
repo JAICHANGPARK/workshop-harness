@@ -1,11 +1,12 @@
 /* ==========================================================================
    Workshop Harness Landing Page Stylesheet
-   xAI Engine Design System Specification
+   xAI Engine Design System + Apple-Style Dynamic Scroll Interactions
    - Near-black Canvas (#0a0a0a)
    - Universal Sans / Inter Weight 400 + Tight Negative Letter-Spacing
    - Geist Mono Uppercase Eyebrows & Code Comments
    - Translucent White Outline Pills (border-radius: 9999px)
    - Flat Cards (#191919) with Hairline Borders (#212327), 8px radius, no shadows
+   - Apple-style Scroll Progress, Intersection Reveal, 3D Perspective Tilt, Spotlight Focus
    ========================================================================== */
 
 :root {
@@ -63,6 +64,18 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Top Scroll Progress Line */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--colors-ink);
+  width: 0%;
+  z-index: 1001;
+  transition: width 0.1s ease-out;
+}
+
 /* Container */
 .container {
   max-width: 1200px;
@@ -71,12 +84,25 @@ body {
 }
 
 .section {
-  padding: 80px 0;
+  padding: 100px 0;
   border-bottom: 1px solid var(--colors-hairline);
 }
 
 .section-header {
   margin-bottom: 48px;
+}
+
+/* Apple-style Intersection Scroll Reveal Animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px) scale(0.97);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 /* Typography Scale */
@@ -146,10 +172,11 @@ body {
   right: 0;
   height: 64px;
   z-index: 1000;
-  background: rgba(10, 10, 10, 0.9);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--colors-hairline);
+  transition: background-color 0.3s ease;
 }
 
 .nav-container {
@@ -165,7 +192,7 @@ body {
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   text-decoration: none;
   color: var(--colors-ink);
   font-family: var(--font-mono);
@@ -174,24 +201,12 @@ body {
   letter-spacing: 0.5px;
 }
 
-.brand-logo {
-  width: 28px;
-  height: 28px;
-  border-radius: var(--rounded-pill);
-  border: 1px solid var(--colors-hairline-light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--colors-ink);
-  font-size: 0.8rem;
-}
-
 .badge-v {
   font-family: var(--font-mono);
-  font-size: 0.725rem;
+  font-size: 0.7rem;
   color: var(--colors-body-mid);
   border: 1px solid var(--colors-hairline);
-  padding: 2px 8px;
+  padding: 1px 6px;
   border-radius: var(--rounded-pill);
   font-weight: 400;
 }
@@ -261,9 +276,13 @@ body {
   font-size: 0.9rem;
   font-weight: 400;
   text-decoration: none;
-  transition: all 0.15s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
   white-space: nowrap;
+}
+
+.btn:active {
+  transform: scale(0.97);
 }
 
 /* Primary CTA: White-filled pill */
@@ -276,9 +295,10 @@ body {
 .btn-primary:hover {
   background-color: #e6e6e6;
   border-color: #e6e6e6;
+  transform: translateY(-1px);
 }
 
-/* Canonical Outline Pill: 1px translucent white border */
+/* Canonical Outline Pill */
 .btn-outline,
 .btn-glass,
 .btn-github {
@@ -292,11 +312,12 @@ body {
 .btn-github:hover {
   border-color: var(--colors-hairline-hover);
   background-color: rgba(255, 255, 255, 0.05);
+  transform: translateY(-1px);
 }
 
 /* Hero Section */
 .hero-section {
-  padding: 140px 0 80px 0;
+  padding: 150px 0 90px 0;
   border-bottom: 1px solid var(--colors-hairline);
 }
 
@@ -314,23 +335,81 @@ body {
   align-items: center;
   gap: 14px;
   flex-wrap: wrap;
-  margin-bottom: 48px;
+  margin-bottom: 56px;
 }
 
-/* Terminal Showcase (xAI Dark Code Surface) */
+/* Apple-style Animated Key Metrics Bar */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  background-color: var(--colors-canvas-card);
+  border: 1px solid var(--colors-hairline);
+  border-radius: var(--rounded-sm);
+  padding: 28px 32px;
+  margin-bottom: 48px;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .stats-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .stat-divider {
+    display: none;
+  }
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  font-family: var(--font-display);
+  font-size: 2.75rem;
+  font-weight: 500;
+  letter-spacing: -1.5px;
+  color: var(--colors-ink);
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.775rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--colors-body-mid);
+}
+
+/* Terminal Showcase (3D Perspective Tilt on Scroll) */
 .terminal-showcase {
   background-color: var(--colors-canvas-card);
   border: 1px solid var(--colors-hairline);
   border-radius: var(--rounded-sm);
   overflow: hidden;
   margin-top: 32px;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+
+.terminal-showcase.tilt-on-scroll {
+  transform: perspective(1000px) rotateX(4deg);
+}
+
+.terminal-showcase.tilt-on-scroll.flatten {
+  transform: perspective(1000px) rotateX(0deg);
+}
+
+.terminal-showcase:hover {
+  border-color: var(--colors-hairline-light);
 }
 
 .terminal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 18px;
+  padding: 14px 20px;
   background-color: var(--colors-canvas-soft);
   border-bottom: 1px solid var(--colors-hairline);
 }
@@ -381,7 +460,7 @@ body {
 
 .terminal-body {
   position: relative;
-  padding: 24px;
+  padding: 28px;
 }
 
 .terminal-body pre {
@@ -427,7 +506,7 @@ body {
 
 /* Agent Banner */
 .agents-banner {
-  padding: 32px 0;
+  padding: 40px 0;
   border-bottom: 1px solid var(--colors-hairline);
   background-color: var(--colors-canvas);
 }
@@ -438,45 +517,58 @@ body {
   text-transform: uppercase;
   letter-spacing: 1.4px;
   color: var(--colors-body-mid);
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .agent-badges {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
 }
 
 .agent-chip {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.825rem;
   color: var(--colors-body);
   background: var(--colors-canvas-card);
   border: 1px solid var(--colors-hairline);
-  padding: 6px 16px;
+  padding: 8px 18px;
   border-radius: var(--rounded-pill);
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  transition: all 0.2s ease;
 }
 
-/* Cards & Grid System (8px radius, flat #191919, no shadow) */
+.agent-chip:hover {
+  border-color: var(--colors-hairline-light);
+  color: var(--colors-ink);
+  transform: translateY(-2px);
+}
+
+/* Cards & Grid System */
 .grid-3 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 20px;
+  gap: 24px;
 }
 
-.feature-card {
+/* Mouse-follow spotlight glow cards */
+.spot-card {
+  position: relative;
   background-color: var(--colors-canvas-card);
   border: 1px solid var(--colors-hairline);
   border-radius: var(--rounded-sm);
-  padding: 32px 28px;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
-.feature-card:hover {
+.spot-card:hover {
   border-color: var(--colors-hairline-light);
+  transform: translateY(-3px);
+}
+
+.feature-card {
+  padding: 36px 30px;
 }
 
 .card-icon {
@@ -538,7 +630,7 @@ body {
   background-color: var(--colors-canvas-card);
   border: 1px solid var(--colors-hairline);
   border-radius: var(--rounded-pill);
-  padding: 10px 16px 10px 42px;
+  padding: 12px 18px 12px 44px;
   color: var(--colors-ink);
   font-family: var(--font-display);
   font-size: 0.9rem;
@@ -579,22 +671,24 @@ body {
 .skills-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 20px;
+  gap: 24px;
 }
 
 .skill-card {
   background-color: var(--colors-canvas-card);
   border: 1px solid var(--colors-hairline);
   border-radius: var(--rounded-sm);
-  padding: 24px;
+  padding: 28px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: border-color 0.15s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
 }
 
 .skill-card:hover {
   border-color: var(--colors-hairline-light);
+  transform: translateY(-4px);
 }
 
 .skill-header {
@@ -622,7 +716,7 @@ body {
   font-size: 0.9rem;
   color: var(--colors-body);
   margin-bottom: 16px;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 .skill-meta {
@@ -645,17 +739,17 @@ body {
   background-color: var(--colors-canvas-card);
   border: 1px solid var(--colors-hairline);
   border-radius: var(--rounded-sm);
-  padding: 48px;
+  padding: 56px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 40px;
+  gap: 48px;
   align-items: center;
 }
 
 @media (max-width: 900px) {
   .spotlight-card {
     grid-template-columns: 1fr;
-    padding: 28px;
+    padding: 32px;
   }
 }
 
@@ -716,7 +810,7 @@ body {
   background-color: var(--colors-canvas-mid);
   border: 1px solid var(--colors-hairline);
   border-radius: var(--rounded-sm);
-  padding: 20px;
+  padding: 24px;
 }
 
 .codelab-card-header {
@@ -755,7 +849,7 @@ body {
 
 .compat-table th,
 .compat-table td {
-  padding: 16px 20px;
+  padding: 18px 24px;
   border-bottom: 1px solid var(--colors-hairline);
 }
 
@@ -786,13 +880,13 @@ body {
   background-color: var(--colors-canvas-card);
   border: 1px solid var(--colors-hairline);
   border-radius: var(--rounded-sm);
-  padding: 48px;
+  padding: 56px;
 }
 
 .generator-form {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
+  gap: 24px;
   margin-bottom: 32px;
 }
 
@@ -814,7 +908,7 @@ body {
   background-color: var(--colors-canvas-soft);
   border: 1px solid var(--colors-hairline);
   border-radius: var(--rounded-sm);
-  padding: 12px 16px;
+  padding: 12px 18px;
   color: var(--colors-ink);
   font-family: var(--font-display);
   font-size: 0.95rem;
@@ -830,7 +924,7 @@ body {
   background-color: var(--colors-canvas-mid);
   border: 1px solid var(--colors-hairline);
   border-radius: var(--rounded-sm);
-  padding: 20px;
+  padding: 24px;
 }
 
 .output-header {
@@ -871,7 +965,7 @@ body {
 
 /* Footer */
 .footer {
-  padding: 64px 0 32px 0;
+  padding: 80px 0 40px 0;
   border-top: 1px solid var(--colors-hairline);
   background-color: var(--colors-canvas);
 }
