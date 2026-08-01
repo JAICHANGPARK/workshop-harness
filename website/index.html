@@ -6,10 +6,10 @@
   <title>Workshop Harness — AI Agent Harness & 13 Skill Suite</title>
   <meta name="description" content="AI Agent Harness, 13 Skill Suite & CLI Automation Toolkit for Technical Workshops powered by Astral uv and AGENTS.md standard.">
   
-  <!-- Fonts -->
+  <!-- Typography Fonts (Inter Display + Geist Mono) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -18,19 +18,14 @@
 </head>
 <body>
 
-  <!-- Background Decorative Ambient Orbs -->
-  <div class="ambient-blur orb-1"></div>
-  <div class="ambient-blur orb-2"></div>
-  <div class="ambient-blur orb-3"></div>
-
   <!-- Navigation Bar -->
   <nav class="navbar">
     <div class="nav-container">
       <a href="#" class="brand">
         <div class="brand-logo">
-          <i class="fa-solid fa-bolt-lightning"></i>
+          <i class="fa-solid fa-bolt"></i>
         </div>
-        <span class="brand-name">Workshop Harness</span>
+        <span class="brand-name">WORKSHOP HARNESS</span>
         <span class="badge-v">v2026.08</span>
       </a>
       
@@ -40,7 +35,7 @@
         <a href="#codelabs" data-i18n="nav_codelabs"><i class="fa-solid fa-cubes"></i> Open Codelabs</a>
         <a href="#architecture" data-i18n="nav_arch"><i class="fa-solid fa-microchip"></i> Arch Matrix</a>
         <a href="#generator" data-i18n="nav_gen"><i class="fa-solid fa-terminal"></i> CLI Generator</a>
-        <a href="../site/index.html" class="nav-doc-link" target="_blank" data-i18n="nav_docs"><i class="fa-solid fa-book"></i> Docs (MkDocs)</a>
+        <a href="../site/index.html" class="nav-doc-link" target="_blank" data-i18n="nav_docs"><i class="fa-solid fa-book"></i> Docs</a>
       </div>
 
       <div class="nav-actions">
@@ -55,7 +50,7 @@
           </select>
         </div>
 
-        <a href="https://github.com/JAICHANGPARK/workshop-harness" target="_blank" class="btn-github">
+        <a href="https://github.com/JAICHANGPARK/workshop-harness" target="_blank" class="btn btn-github">
           <i class="fa-brands fa-github"></i> GitHub
         </a>
       </div>
@@ -66,11 +61,11 @@
   <header class="hero-section">
     <div class="container hero-content">
       <div class="hero-tag">
-        <span class="pulse-dot"></span> Powered by Astral uv &amp; AGENTS.md Standard
+        POWERED BY ASTRAL UV &amp; AGENTS.MD OPEN SPECIFICATION
       </div>
       
       <h1 class="hero-title" data-i18n="hero_title">
-        One-Click <span class="gradient-text">AI Agent Harness</span> &amp; 13 Skill Suite
+        One-Click AI Agent Harness &amp; 13 Skill Suite
       </h1>
       
       <p class="hero-subtitle" data-i18n="hero_subtitle">
@@ -78,10 +73,10 @@
       </p>
 
       <div class="hero-cta-group">
-        <a href="#generator" class="btn btn-primary btn-glow" data-i18n="btn_gen">
+        <a href="#generator" class="btn btn-primary" data-i18n="btn_gen">
           <i class="fa-solid fa-rocket"></i> One-Click Generation
         </a>
-        <a href="#skills" class="btn btn-glass" data-i18n="btn_skills">
+        <a href="#skills" class="btn btn-outline" data-i18n="btn_skills">
           <i class="fa-solid fa-list-check"></i> 13 Skills Catalog
         </a>
         <a href="../site/index.html" target="_blank" class="btn btn-outline" data-i18n="btn_docs">
@@ -89,7 +84,7 @@
         </a>
       </div>
 
-      <!-- Live Code Demo Widget -->
+      <!-- Terminal Showcase -->
       <div class="terminal-showcase">
         <div class="terminal-header">
           <div class="terminal-dots">
@@ -110,34 +105,34 @@
     --topic <span class="str">"Local RAG with Gemma 4"</span> \
     --stack <span class="str">"python,ollama,docker"</span>
 
-<span class="out-accent">[Step 1/6]</span> 🚀 Scaffolding workshop repo &amp; templates...
-<span class="out-accent">[Step 2/6]</span> 🔍 Auditing Cross-Architecture Compatibility...
-<span class="out-accent">[Step 3/6]</span> 🔄 Running Multi-Persona Loop Engineering Review...
-<span class="out-accent">[Step 4/6]</span> 🧪 Testing Code Smoke Test &amp; Broken Links...
-<span class="out-accent">[Step 5/6]</span> 📄 Building Publication PDF Handouts...
-<span class="out-accent">[Step 6/6]</span> 🌐 Exporting Open Codelabs Bundle &amp; Manifest...
-<span class="out-success">🎉 SUCCESS! Complete Workshop Package generated in 1-CLICK!</span></code></pre>
+<span class="out-accent">[Step 1/6]</span> Scaffolding workshop repo &amp; templates...
+<span class="out-accent">[Step 2/6]</span> Auditing Cross-Architecture Compatibility...
+<span class="out-accent">[Step 3/6]</span> Running Multi-Persona Loop Engineering Review...
+<span class="out-accent">[Step 4/6]</span> Testing Code Smoke Test &amp; Broken Links...
+<span class="out-accent">[Step 5/6]</span> Building Publication PDF Handouts...
+<span class="out-accent">[Step 6/6]</span> Exporting Open Codelabs Bundle &amp; Manifest...
+<span class="out-success">SUCCESS: Complete Workshop Package generated in 1-CLICK!</span></code></pre>
           
           <pre id="tab-codelab" class="tab-content"><code><span class="prompt">$</span> uv run harness_cli.py export-codelab \
     --target <span class="str">"my-bwai-workshop"</span> \
     --push
 
-<span class="out-accent">📦 Exporting Open Codelabs Bundle...</span>
-<span class="out-info">   📄 Manifest: output/open-codelabs/codelab.yaml</span>
-<span class="out-info">   📑 Guide: output/open-codelabs/guide.md</span>
-<span class="out-info">   🚀 Steps: 3 step markdown files created</span>
-<span class="out-accent">🚀 Pushing manifest bundle to Open Codelabs via `oc codelab push`...</span>
-<span class="out-success">🎉 Open Codelabs push completed successfully!</span></code></pre>
+<span class="out-accent">Exporting Open Codelabs Bundle...</span>
+<span class="out-info">   Manifest: output/open-codelabs/codelab.yaml</span>
+<span class="out-info">   Guide: output/open-codelabs/guide.md</span>
+<span class="out-info">   Steps: 3 step markdown files created</span>
+<span class="out-accent">Pushing manifest bundle to Open Codelabs via `oc codelab push`...</span>
+<span class="out-success">SUCCESS: Open Codelabs push completed successfully!</span></code></pre>
 
           <pre id="tab-compat" class="tab-content"><code><span class="prompt">$</span> uv run harness_cli.py audit-compat --stack <span class="str">"lmstudio,docker,mlx"</span>
 
-<span class="out-accent">🔍 Auditing Cross-Architecture Compatibility...</span>
+<span class="out-accent">Auditing Cross-Architecture Compatibility...</span>
 <span class="out-warn">[1] Tool: LM Studio | Target: Intel Mac (x86_64)</span>
-<span class="out-warn">    🚨 Risk: GPU acceleration missing &amp; crash risk.</span>
-<span class="out-info">    💡 Action: Provide Ollama CLI fallback in docs/18-intel-mac-prep.md</span>
+<span class="out-warn">    Risk: GPU acceleration missing &amp; crash risk.</span>
+<span class="out-info">    Action: Provide Ollama CLI fallback in docs/18-intel-mac-prep.md</span>
 <span class="out-warn">[2] Tool: MLX Framework | Target: Intel / Windows / Linux</span>
-<span class="out-warn">    🚨 Risk: Strictly Apple Silicon (arm64) only.</span>
-<span class="out-info">    💡 Action: Provide HuggingFace / Ollama alternative.</span></code></pre>
+<span class="out-warn">    Risk: Strictly Apple Silicon (arm64) only.</span>
+<span class="out-info">    Action: Provide HuggingFace / Ollama alternative.</span></code></pre>
 
           <button class="btn-copy-code" id="copyTabCodeBtn" title="Copy Command">
             <i class="fa-regular fa-copy"></i> <span data-i18n="copy">Copy</span>
@@ -150,7 +145,7 @@
   <!-- Agent Interoperability Banner -->
   <section class="agents-banner">
     <div class="container">
-      <p class="banner-label" data-i18n="supported_agents"><i class="fa-solid fa-handshake"></i> Supported AI Coding Agents &amp; LLM Platforms</p>
+      <div class="banner-label" data-i18n="supported_agents">SUPPORTED AI CODING AGENTS &amp; LLM PLATFORMS</div>
       <div class="agent-badges">
         <div class="agent-chip"><i class="fa-solid fa-brain"></i> Google Antigravity</div>
         <div class="agent-chip"><i class="fa-solid fa-terminal"></i> Gemini CLI</div>
@@ -166,26 +161,26 @@
   <section id="features" class="section">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Core Features</span>
+        <div class="eyebrow-mono">CORE FEATURES</div>
         <h2 class="section-title" data-i18n="feat_title">Why Workshop Harness?</h2>
         <p class="section-desc" data-i18n="feat_desc">Automates workshop facilitation workflows and reduces organizer setup time by over 90%.</p>
       </div>
 
       <div class="grid-3">
         <div class="feature-card">
-          <div class="card-icon gradient-1"><i class="fa-solid fa-bolt"></i></div>
+          <div class="card-icon"><i class="fa-solid fa-bolt"></i></div>
           <h3 data-i18n="f1_title">One-Click Full Pipeline</h3>
           <p data-i18n="f1_desc">Executes repository scaffolding, smoke testing, PDF handouts, and Open Codelabs bundles in a single shell command.</p>
         </div>
 
         <div class="feature-card">
-          <div class="card-icon gradient-2"><i class="fa-solid fa-cubes"></i></div>
+          <div class="card-icon"><i class="fa-solid fa-cubes"></i></div>
           <h3 data-i18n="f2_title">13 Agent Skills Suite</h3>
           <p data-i18n="f2_desc">Includes cross-architecture auditing, runbook generation, live hotfixes, persona loops, and Open Codelabs integration.</p>
         </div>
 
         <div class="feature-card">
-          <div class="card-icon gradient-3"><i class="fa-solid fa-layer-group"></i></div>
+          <div class="card-icon"><i class="fa-solid fa-layer-group"></i></div>
           <h3 data-i18n="f3_title">Cross-Architecture Engine</h3>
           <p data-i18n="f3_desc">Audits hardware risks across Apple Silicon, Intel Mac, Windows x64/ARM64, and Linux, providing mandatory fallback paths.</p>
         </div>
@@ -194,10 +189,10 @@
   </section>
 
   <!-- Interactive 13 Skills Section -->
-  <section id="skills" class="section bg-darker">
+  <section id="skills" class="section">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Agent Skill Suite</span>
+        <div class="eyebrow-mono">AGENT SKILL SUITE</div>
         <h2 class="section-title" data-i18n="skills_title">13 Agent Skills Explorer</h2>
         <p class="section-desc" data-i18n="skills_desc">Explore specifications and artifacts for all 13 native AI agent skills.</p>
       </div>
@@ -228,7 +223,7 @@
     <div class="container">
       <div class="spotlight-card">
         <div class="spotlight-content">
-          <span class="section-tag">Featured Integration</span>
+          <div class="eyebrow-mono">FEATURED INTEGRATION</div>
           <h2 class="spotlight-title" data-i18n="cl_title">Open Codelabs Integration</h2>
           <p class="spotlight-desc" data-i18n="cl_desc">
             Seamlessly export workshop materials into <strong>Open Codelabs</strong> bundles (`codelab.yaml`) and publish via `oc` CLI &amp; stdio MCP server (`oc mcp serve`).
@@ -259,7 +254,7 @@
           </div>
 
           <div class="spotlight-actions">
-            <a href="../site/skills/open-codelabs/index.html" target="_blank" class="btn btn-primary" data-i18n="btn_cl_guide">
+            <a href="../site/skills/open-codelabs/index.html" target="_blank" class="btn btn-outline" data-i18n="btn_cl_guide">
               <i class="fa-solid fa-book-bookmark"></i> View Integration Guide
             </a>
           </div>
@@ -290,10 +285,10 @@
   </section>
 
   <!-- Architecture Compatibility Visualizer -->
-  <section id="architecture" class="section bg-darker">
+  <section id="architecture" class="section">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Cross-Architecture Engine</span>
+        <div class="eyebrow-mono">CROSS-ARCHITECTURE ENGINE</div>
         <h2 class="section-title" data-i18n="matrix_title">Cross-Architecture Matrix</h2>
         <p class="section-desc" data-i18n="matrix_desc">Diagnoses chipset &amp; OS risks across participant laptops prior to the session.</p>
       </div>
@@ -310,31 +305,31 @@
           </thead>
           <tbody>
             <tr>
-              <td><span class="arch-badge mac"><i class="fa-brands fa-apple"></i> macOS Intel Mac</span></td>
+              <td><span class="arch-badge"><i class="fa-brands fa-apple"></i> macOS Intel Mac</span></td>
               <td>Ollama CLI (`ollama serve`)</td>
               <td><span class="status-warn">LM Studio GPU acceleration missing / freeze risk</span></td>
               <td>Provide Ollama CLI fallback guide (`docs/18-intel-mac-prep.md`)</td>
             </tr>
             <tr>
-              <td><span class="arch-badge mac"><i class="fa-brands fa-apple"></i> Apple Silicon (M1~M4)</span></td>
+              <td><span class="arch-badge"><i class="fa-brands fa-apple"></i> Apple Silicon (M1~M4)</span></td>
               <td>LM Studio / Ollama / MLX</td>
               <td><span class="status-ok">Full Metal GPU acceleration supported</span></td>
               <td>MLX (`mlx-lm`) optional recommendation</td>
             </tr>
             <tr>
-              <td><span class="arch-badge win"><i class="fa-brands fa-windows"></i> Windows x86_64</span></td>
+              <td><span class="arch-badge"><i class="fa-brands fa-windows"></i> Windows x86_64</span></td>
               <td>LM Studio / Ollama</td>
               <td><span class="status-warn">PowerShell execution policy / Docker WSL2 required</span></td>
               <td>Provide PowerShell bypass script (`check_env.ps1`)</td>
             </tr>
             <tr>
-              <td><span class="arch-badge win"><i class="fa-brands fa-windows"></i> Windows Snapdragon ARM</span></td>
+              <td><span class="arch-badge"><i class="fa-brands fa-windows"></i> Windows Snapdragon ARM</span></td>
               <td>Ollama CLI (Native)</td>
               <td><span class="status-warn">Performance degradation under x64 emulation</span></td>
               <td>Use Ollama Native build</td>
             </tr>
             <tr>
-              <td><span class="arch-badge linux"><i class="fa-brands fa-linux"></i> Linux / ChromeOS</span></td>
+              <td><span class="arch-badge"><i class="fa-brands fa-linux"></i> Linux / ChromeOS</span></td>
               <td>Ollama CLI</td>
               <td><span class="status-info">No GUI / Sandbox container</span></td>
               <td>Use `ollama serve` terminal mode &amp; small models</td>
@@ -349,8 +344,8 @@
   <section id="generator" class="section">
     <div class="container">
       <div class="generator-card">
-        <div class="section-header text-center">
-          <span class="section-tag">Interactive CLI Generator</span>
+        <div class="section-header">
+          <div class="eyebrow-mono">INTERACTIVE CLI GENERATOR</div>
           <h2 class="section-title" data-i18n="gen_title">CLI Command Generator</h2>
           <p class="section-desc" data-i18n="gen_desc">Customize parameters and copy your instant command.</p>
         </div>
@@ -374,7 +369,7 @@
 
         <div class="generator-output">
           <div class="output-header">
-            <span data-i18n="lbl_generated">Generated CLI Command</span>
+            <span data-i18n="lbl_generated">GENERATED CLI COMMAND</span>
             <button class="btn-copy-gen" id="btnCopyGenerated">
               <i class="fa-regular fa-copy"></i> <span data-i18n="copy_cmd">Copy Command</span>
             </button>
@@ -389,7 +384,7 @@
   <footer class="footer">
     <div class="container footer-content">
       <div class="footer-brand">
-        <h3><i class="fa-solid fa-bolt-lightning"></i> Workshop Harness</h3>
+        <h3><i class="fa-solid fa-bolt"></i> WORKSHOP HARNESS</h3>
         <p>AI Agent Harness, 13 Skill Suite &amp; CLI Automation Toolkit for Technical Workshops.</p>
       </div>
 
@@ -400,7 +395,7 @@
         <a href="../site/index.html" target="_blank"><i class="fa-solid fa-book"></i> MkDocs Official Docs</a>
       </div>
     </div>
-    <div class="footer-bottom text-center">
+    <div class="footer-bottom">
       <p>&copy; 2026 JAICHANG PARK. Released under the MIT License.</p>
     </div>
   </footer>
