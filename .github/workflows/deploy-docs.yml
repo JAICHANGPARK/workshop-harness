@@ -39,7 +39,7 @@ jobs:
 
       - name: Install MkDocs & Dependencies
         run: |
-          uv pip install --system mkdocs mkdocs-material reportlab pymupdf pillow
+          uv pip install --system mkdocs mkdocs-material mkdocs-static-i18n reportlab pymupdf pillow
 
       - name: Build MkDocs Documentation Site
         run: |

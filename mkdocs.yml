@@ -36,6 +36,20 @@ theme:
     logo: material/robot
     repo: fontawesome/brands/github
 
+plugins:
+  - search
+  - i18n:
+      languages:
+        - locale: en
+          name: English
+          default: true
+        - locale: ko
+          name: 한국어
+        - locale: ja
+          name: 日本語
+        - locale: zh
+          name: 中文
+
 markdown_extensions:
   - admonition
   - pymdownx.details
@@ -65,7 +79,3 @@ nav:
   - AI Agent Standards:
       - AGENTS.md Specification: agents-spec/agents-md.md
       - Agent Interoperability Guide: ai-agent-interoperability-guide.md
-  - Languages (i18n):
-      - 🇰🇷 한국어 (Korean): ko/index.md
-      - 🇯🇵 日本語 (Japanese): ja/index.md
-      - 🇨🇳 中文 (Chinese): zh/index.md
