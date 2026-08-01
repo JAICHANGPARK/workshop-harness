@@ -199,18 +199,16 @@ body {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 24px;
 }
 
 .nav-links a {
-  color: var(--colors-body);
+  color: var(--colors-body-mid);
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 400;
+  white-space: nowrap;
   transition: color 0.15s ease;
-  display: flex;
-  align-items: center;
-  gap: 6px;
 }
 
 .nav-links a:hover {

@@ -2,19 +2,19 @@
 
 const I18N_DICT = {
   en: {
-    nav_features: '<i class="fa-solid fa-star"></i> Features',
-    nav_skills: '<i class="fa-solid fa-wand-magic-sparkles"></i> 13 Agent Skills',
-    nav_codelabs: '<i class="fa-solid fa-cubes"></i> Open Codelabs',
-    nav_arch: '<i class="fa-solid fa-microchip"></i> Arch Matrix',
-    nav_gen: '<i class="fa-solid fa-terminal"></i> CLI Generator',
-    nav_docs: '<i class="fa-solid fa-book"></i> Docs (MkDocs)',
+    nav_features: 'Features',
+    nav_skills: '13 Skills',
+    nav_codelabs: 'Open Codelabs',
+    nav_arch: 'Arch Matrix',
+    nav_gen: 'CLI Generator',
+    nav_docs: 'Docs',
     hero_title: 'One-Click AI Agent Harness &amp; 13 Skill Suite',
     hero_subtitle: 'Technical workshop orchestration and CLI automation toolkit designed for Google Antigravity, Gemini CLI, Claude Code, OpenAI Codex, Cursor, and all AI coding agents.',
-    btn_gen: '<i class="fa-solid fa-rocket"></i> One-Click Generation',
-    btn_skills: '<i class="fa-solid fa-list-check"></i> 13 Skills Catalog',
-    btn_docs: '<i class="fa-solid fa-book-open"></i> MkDocs Official Docs',
+    btn_gen: 'One-Click Generation',
+    btn_skills: '13 Skills Catalog',
+    btn_docs: 'MkDocs Official Docs',
     copy: 'Copy',
-    supported_agents: '<i class="fa-solid fa-handshake"></i> Supported AI Coding Agents &amp; LLM Platforms',
+    supported_agents: 'SUPPORTED AI CODING AGENTS &amp; LLM PLATFORMS',
     feat_title: 'Why Workshop Harness?',
     feat_desc: 'Automates workshop facilitation workflows and reduces organizer setup time by over 90%.',
     f1_title: 'One-Click Full Pipeline',
@@ -37,7 +37,7 @@ const I18N_DICT = {
     s2_desc: 'Syncs directly via oc codelab push --manifest output/open-codelabs/codelab.yaml.',
     s3_title: 'Agentic MCP Integration',
     s3_desc: 'AI Agents interactively manage codelabs, workspaces, and help queues via oc mcp serve.',
-    btn_cl_guide: '<i class="fa-solid fa-book-bookmark"></i> View Integration Guide',
+    btn_cl_guide: 'View Integration Guide',
     matrix_title: 'Cross-Architecture Matrix',
     matrix_desc: 'Diagnoses chipset & OS risks across participant laptops prior to the session.',
     th_arch: 'Architecture / OS',
@@ -49,23 +49,23 @@ const I18N_DICT = {
     lbl_name: 'Workshop Project Name',
     lbl_topic: 'Workshop Topic',
     lbl_stack: 'Tech Stack (Comma separated)',
-    lbl_generated: 'Generated CLI Command',
+    lbl_generated: 'GENERATED CLI COMMAND',
     copy_cmd: 'Copy Command'
   },
   ko: {
-    nav_features: '<i class="fa-solid fa-star"></i> 주요 특징',
-    nav_skills: '<i class="fa-solid fa-wand-magic-sparkles"></i> 13개 에이전트 스킬',
-    nav_codelabs: '<i class="fa-solid fa-cubes"></i> Open Codelabs 연동',
-    nav_arch: '<i class="fa-solid fa-microchip"></i> 호환성 매트릭스',
-    nav_gen: '<i class="fa-solid fa-terminal"></i> 커맨드 생성기',
-    nav_docs: '<i class="fa-solid fa-book"></i> 공식 문서 (MkDocs)',
+    nav_features: '주요 특징',
+    nav_skills: '13개 스킬',
+    nav_codelabs: 'Open Codelabs',
+    nav_arch: '호환성 매트릭스',
+    nav_gen: 'CLI 생성기',
+    nav_docs: '공식 문서',
     hero_title: '원클릭 AI Agent Harness &amp; 13 Skill Suite',
     hero_subtitle: 'Google Antigravity, Gemini CLI, Claude Code, OpenAI Codex, Cursor 등 모든 AI 코딩 에이전트를 위한 기술 워크숍 오케스트레이션 및 CLI 자동화 툴킷',
-    btn_gen: '<i class="fa-solid fa-rocket"></i> 원클릭 워크숍 생성하기',
-    btn_skills: '<i class="fa-solid fa-list-check"></i> 13개 스킬 카탈로그',
-    btn_docs: '<i class="fa-solid fa-book-open"></i> MkDocs 문서 보기',
+    btn_gen: '원클릭 워크숍 생성하기',
+    btn_skills: '13개 스킬 카탈로그',
+    btn_docs: 'MkDocs 문서 보기',
     copy: '복사',
-    supported_agents: '<i class="fa-solid fa-handshake"></i> 지원하는 AI 코딩 에이전트 &amp; LLM 플랫폼',
+    supported_agents: '지원하는 AI 코딩 에이전트 &amp; LLM 플랫폼',
     feat_title: '왜 Workshop Harness 인가요?',
     feat_desc: '현장 워크숍 운영 노하우를 자동화하여 오거나이저와 발표자의 준비 시간을 90% 이상 단축합니다.',
     f1_title: '원클릭 종합 파이프라인',
@@ -88,7 +88,7 @@ const I18N_DICT = {
     s2_desc: 'oc codelab push --manifest output/open-codelabs/codelab.yaml 서버 자동 동기화',
     s3_title: 'Agentic MCP 연동',
     s3_desc: 'oc mcp serve로 AI 에이전트가 실시간 대화식으로 코드랩 및 질문 큐 조율',
-    btn_cl_guide: '<i class="fa-solid fa-book-bookmark"></i> 연동 가이드 문서 보기',
+    btn_cl_guide: '연동 가이드 문서 보기',
     matrix_title: '크로스 아키텍처 호환성 진단기',
     matrix_desc: '참석자 노트북 칩셋별 리스크를 사전에 감지하고 필수 우회 경로(Fallback)를 제안합니다.',
     th_arch: '아키텍처 / OS',
@@ -104,19 +104,19 @@ const I18N_DICT = {
     copy_cmd: '명령어 복사'
   },
   ja: {
-    nav_features: '<i class="fa-solid fa-star"></i> 特徴',
-    nav_skills: '<i class="fa-solid fa-wand-magic-sparkles"></i> 13のスキル',
-    nav_codelabs: '<i class="fa-solid fa-cubes"></i> Open Codelabs',
-    nav_arch: '<i class="fa-solid fa-microchip"></i> 互換性マトリクス',
-    nav_gen: '<i class="fa-solid fa-terminal"></i> CLI生成ツール',
-    nav_docs: '<i class="fa-solid fa-book"></i> 公式ドキュメント (MkDocs)',
+    nav_features: '特徴',
+    nav_skills: '13のスキル',
+    nav_codelabs: 'Open Codelabs',
+    nav_arch: '互換性',
+    nav_gen: 'CLI生成',
+    nav_docs: 'ドキュメント',
     hero_title: 'ワンクリック AI Agent Harness &amp; 13 Skill Suite',
     hero_subtitle: 'Google Antigravity、Gemini CLI、Claude Code、OpenAI Codex、CursorなどすべてのAIコーディングエージェントのためのワークショップ自動化ツールキット。',
-    btn_gen: '<i class="fa-solid fa-rocket"></i> ワンクリック生成',
-    btn_skills: '<i class="fa-solid fa-list-check"></i> 13スキルカタログ',
-    btn_docs: '<i class="fa-solid fa-book-open"></i> MkDocs公式ドキュメント',
+    btn_gen: 'ワンクリック生成',
+    btn_skills: '13スキルカタログ',
+    btn_docs: 'MkDocs公式ドキュメント',
     copy: 'コピー',
-    supported_agents: '<i class="fa-solid fa-handshake"></i> 対応AIエージェント &amp; LLMプラットフォーム',
+    supported_agents: '対応AIエージェント &amp; LLMプラットフォーム',
     feat_title: 'Workshop Harnessを選ぶ理由',
     feat_desc: 'ワークショップの準備と運用を自動化し、主催者の準備時間を90%以上削減します。',
     f1_title: 'ワンクリック・パイプライン',
@@ -139,7 +139,7 @@ const I18N_DICT = {
     s2_desc: 'oc codelab push --manifest output/open-codelabs/codelab.yamlで自動同期',
     s3_title: 'Agentic MCP 連携',
     s3_desc: 'oc mcp serveによりAIエージェントがリアルタイムでコードラボや質問キューを管理',
-    btn_cl_guide: '<i class="fa-solid fa-book-bookmark"></i> 連携ガイドを見る',
+    btn_cl_guide: '連携ガイドを見る',
     matrix_title: 'クロスアーキテクチャ互換性マトリクス',
     matrix_desc: '参加者PCのチップセットリスクを事前診断し、必要なFallback手順を提案します。',
     th_arch: 'アーキテクチャ / OS',
@@ -155,19 +155,19 @@ const I18N_DICT = {
     copy_cmd: 'コマンドをコピー'
   },
   zh: {
-    nav_features: '<i class="fa-solid fa-star"></i> 核心特性',
-    nav_skills: '<i class="fa-solid fa-wand-magic-sparkles"></i> 13项Agent技能',
-    nav_codelabs: '<i class="fa-solid fa-cubes"></i> Open Codelabs',
-    nav_arch: '<i class="fa-solid fa-microchip"></i> 架构矩阵',
-    nav_gen: '<i class="fa-solid fa-terminal"></i> CLI生成器',
-    nav_docs: '<i class="fa-solid fa-book"></i> 官方文档 (MkDocs)',
+    nav_features: '核心特性',
+    nav_skills: '13项技能',
+    nav_codelabs: 'Open Codelabs',
+    nav_arch: '架构矩阵',
+    nav_gen: 'CLI生成器',
+    nav_docs: '官方文档',
     hero_title: '一键式 AI Agent Harness &amp; 13项技能套件',
     hero_subtitle: '专为 Google Antigravity、Gemini CLI、Claude Code、OpenAI Codex、Cursor 等所有 AI 编程 Agent 打造的技术工作坊自动化工具包。',
-    btn_gen: '<i class="fa-solid fa-rocket"></i> 一键生成',
-    btn_skills: '<i class="fa-solid fa-list-check"></i> 13项技能目录',
-    btn_docs: '<i class="fa-solid fa-book-open"></i> MkDocs 官方文档',
+    btn_gen: '一键生成',
+    btn_skills: '13项技能目录',
+    btn_docs: 'MkDocs 官方文档',
     copy: '复制',
-    supported_agents: '<i class="fa-solid fa-handshake"></i> 支持的 AI 编程 Agent 及 LLM 平台',
+    supported_agents: '支持的 AI 编程 Agent 及 LLM 平台',
     feat_title: '为什么选择 Workshop Harness？',
     feat_desc: '自动化技术工作坊筹备流程，将组织者的准备时间缩短 90% 以上。',
     f1_title: '一键式完整流水线',
@@ -190,7 +190,7 @@ const I18N_DICT = {
     s2_desc: '通过 oc codelab push --manifest output/open-codelabs/codelab.yaml 直接同步。',
     s3_title: 'Agentic MCP 集成',
     s3_desc: 'AI Agent 通过 oc mcp serve 交互式管理 Codelab、工作区及提问队列。',
-    btn_cl_guide: '<i class="fa-solid fa-book-bookmark"></i> 查看集成指南',
+    btn_cl_guide: '查看集成指南',
     matrix_title: '跨架构兼容性矩阵',
     matrix_desc: '在活动开始前诊断参会者笔记本电脑的芯片及 OS 风险。',
     th_arch: '架构 / OS',
@@ -375,8 +375,7 @@ function renderSkills(filterCat = "all", searchQuery = "") {
 
   if (filtered.length === 0) {
     container.innerHTML = `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-dim);">
-        <i class="fa-solid fa-ghost" style="font-size: 2rem; margin-bottom: 12px;"></i>
+      <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--colors-body-mid);">
         <p>No matching agent skills found.</p>
       </div>
     `;
@@ -470,9 +469,9 @@ function setupCopyButtons() {
       const activeContent = document.querySelector(".terminal-body .tab-content.active");
       if (activeContent) {
         navigator.clipboard.writeText(activeContent.innerText);
-        copyTabBtn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+        copyTabBtn.innerHTML = 'Copied!';
         setTimeout(() => {
-          copyTabBtn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy';
+          copyTabBtn.innerHTML = 'Copy';
         }, 2000);
       }
     });
@@ -483,9 +482,9 @@ function setupCopyButtons() {
   if (copyGenBtn && genCode) {
     copyGenBtn.addEventListener("click", () => {
       navigator.clipboard.writeText(genCode.innerText);
-      copyGenBtn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+      copyGenBtn.innerHTML = 'Copied!';
       setTimeout(() => {
-        copyGenBtn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy Command';
+        copyGenBtn.innerHTML = 'Copy Command';
       }, 2000);
     });
   }
