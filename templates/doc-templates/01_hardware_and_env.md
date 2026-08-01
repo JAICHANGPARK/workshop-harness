@@ -1,6 +1,19 @@
 # Hardware & Operating System Environment Setup Guide
 
-This document provides guidance on selecting the appropriate runtime environment based on each attendee's hardware specifications (RAM, CPU/GPU, OS) for workshop sessions.
+This document provides guidance on selecting the appropriate runtime environment based on each attendee's hardware specifications (RAM, CPU/GPU, OS) and API port configurations for workshop sessions.
+
+## Local LLM Server API & Port Specification
+
+When integrating local LLMs into Python, Node.js, or Go applications, verify the correct API endpoint and port number for your runtime tool:
+
+| Runtime Tool | Default Port | Base API URL | OpenAI Compatible Endpoint | Default API Key |
+| --- | --- | --- | --- | --- |
+| **Ollama** | `11434` | `http://localhost:11434` | `http://localhost:11434/v1` | `ollama` (or any string) |
+| **LM Studio** | `1234` | `http://localhost:1234` | `http://localhost:1234/v1` | `lm-studio` (or any string) |
+
+> 💡 **Port Tip**: If `http://localhost:11434/v1` throws `Connection Refused`, check if `ollama serve` is running. If `http://localhost:1234/v1` fails, ensure the "Local Inference Server" is started inside LM Studio's Developer tab.
+
+---
 
 ## Recommended Models & Settings by Hardware Tier
 
@@ -22,7 +35,7 @@ This document provides guidance on selecting the appropriate runtime environment
 
 ### 2. Intel Mac
 - **Recommended Tools**: Ollama CLI
-- If LM Studio freezes or hangs, use the terminal-based Ollama CLI for CPU/GPU inference as a fallback.
+- If LM Studio freezes or hangs, use the terminal-based Ollama CLI for CPU/GPU inference as a fallback (`http://localhost:11434`).
 
 ### 3. Windows (Windows 10/11)
 - **Recommended Tools**: LM Studio (GUI) or Ollama for Windows
@@ -44,4 +57,4 @@ This document provides guidance on selecting the appropriate runtime environment
 
 - **Ollama Documentation**: [https://ollama.com](https://ollama.com)
 - **LM Studio Developer Portal**: [https://lmstudio.ai](https://lmstudio.ai)
-- **Build with AI Seoul Reference**: [https://github.com/JAICHANGPARK/2026-bwai-seoul](https://github.com/JAICHANGPARK/2026-bwai-seoul)
+- **Build with AI Seoul Reference**: [https://github.com/JAICHANGPARK/2026-bwai-seoul](https://github.com/JAICHANGPARK/2026-bwai-golang-seoul)
