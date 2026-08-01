@@ -70,6 +70,9 @@ def init_workshop(name: str, topic: str, target_dir: str = None):
     shutil.copy(script_templates / "check_architecture_compat.ps1", project_dir / "scripts" / "check_architecture_compat.ps1")
     shutil.copy(script_templates / "bundle_offline_assets.sh", project_dir / "scripts" / "bundle_offline_assets.sh")
     shutil.copy(script_templates / "verify_workshop.py", project_dir / "scripts" / "verify_workshop.py")
+    if (script_templates / "export_open_codelabs.py").exists():
+        shutil.copy(script_templates / "export_open_codelabs.py", project_dir / "scripts" / "export_open_codelabs.py")
+        os.chmod(project_dir / "scripts" / "export_open_codelabs.py", 0o755)
     shutil.copy(script_templates / "run_starter.sh", project_dir / "workshop" / "01_starter" / "run.sh")
     shutil.copy(script_templates / "run_starter.ps1", project_dir / "workshop" / "01_starter" / "run.ps1")
     shutil.copy(script_templates / "run_starter.sh", project_dir / "workshop" / "02_final" / "run.sh")
@@ -238,6 +241,24 @@ def build_pdf(target_dir: str):
     else:
         subprocess.run([sys.executable, str(script), str(docs_dir), str(output_pdf), str(preview_dir)], check=False)
 
+def export_codelab(target_dir: str, output_dir: str = None, push: bool = False):
+    target = Path(target_dir).resolve()
+    script = target / "scripts" / "export_open_codelabs.py"
+    if not script.exists():
+        script = HARNESS_ROOT / "scripts" / "export_open_codelabs.py"
+
+    print(f"📦 Exporting Open Codelabs Bundle for '{target.name}'...")
+    cmd = [sys.executable, str(script), "--target", str(target)]
+    if output_dir:
+        cmd.extend(["--output", str(output_dir)])
+    if push:
+        cmd.append("--push")
+
+    if shutil.which("uv"):
+        subprocess.run(["uv", "run"] + cmd, check=False)
+    else:
+        subprocess.run(cmd, check=False)
+
 def generate_all(name: str, topic: str, stack_str: str, target_dir: str = None):
     print("=" * 70)
     print(f"⚡ [ONE-CLICK FULL ORCHESTRATOR - uv Powered] Building Workshop: '{name}'")
@@ -265,6 +286,10 @@ def generate_all(name: str, topic: str, stack_str: str, target_dir: str = None):
     print("\n[Step 5/6] Building Publication PDF Handouts & Previews...")
     build_pdf(str(proj_dir))
 
+    # 6. Export Open Codelabs Bundle & Manifest
+    print("\n[Step 6/6] Exporting Open Codelabs Interactive Bundle & Manifest...")
+    export_codelab(str(proj_dir))
+
     print("\n" + "=" * 70)
     print(f"🎉 SUCCESS! Complete Workshop Package '{name}' generated in ONE-CLICK via uv!")
     print(f"📁 Path: {proj_dir}")
@@ -281,7 +306,7 @@ def main():
     init_parser.add_argument("--dir", default=None, help="Target parent directory")
 
     # generate-all (One-Click Full Orchestration)
-    gen_all_parser = subparsers.add_parser("generate-all", help="One-Click full workshop generation across all 12 skills")
+    gen_all_parser = subparsers.add_parser("generate-all", help="One-Click full workshop generation across all skills")
     gen_all_parser.add_argument("--name", required=True, help="Workshop project name")
     gen_all_parser.add_argument("--topic", default="BWAI Hands-on Workshop", help="Workshop topic")
     gen_all_parser.add_argument("--stack", default="python,ollama,docker", help="Tech stack (comma-separated)")
@@ -303,6 +328,12 @@ def main():
     pdf_parser = subparsers.add_parser("build-pdf", help="Build PDF handout from docs")
     pdf_parser.add_argument("--target", required=True, help="Path to workshop project directory")
 
+    # export-codelab command
+    export_parser = subparsers.add_parser("export-codelab", help="Export Open Codelabs bundle (codelab.yaml & steps) and optional push")
+    export_parser.add_argument("--target", required=True, help="Path to workshop project directory")
+    export_parser.add_argument("--output", default=None, help="Target output directory for Open Codelabs bundle")
+    export_parser.add_argument("--push", action="store_true", help="Push exported bundle via `oc codelab push`")
+
     args = parser.parse_args()
 
     if args.command == "init":
@@ -317,6 +348,8 @@ def main():
         test_workshop(args.target)
     elif args.command == "build-pdf":
         build_pdf(args.target)
+    elif args.command == "export-codelab":
+        export_codelab(args.target, args.output, args.push)
     else:
         parser.print_help()
 

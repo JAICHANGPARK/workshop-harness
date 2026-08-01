@@ -18,6 +18,9 @@ When working with Claude Code CLI, you can directly instruct Claude using the 12
 4. **PDF Handout Build**:
    > *"Run `python3 harness_cli.py build-pdf --target my-bwai-workshop` to generate publication-ready PDF handouts."*
 
+5. **Open Codelabs Export & Push**:
+   > *"Read `skills/open-codelabs-integrator/SKILL.md` and export the workshop into Open Codelabs manifest format via `python3 harness_cli.py export-codelab --target my-bwai-workshop --push`."*
+
 ## 📁 Key Skill Locations
 - `skills/workshop-scaffolder/SKILL.md`
 - `skills/cross-architecture-checker/SKILL.md`
@@ -31,6 +34,7 @@ When working with Claude Code CLI, you can directly instruct Claude using the 12
 - `skills/workshop-tester/SKILL.md`
 - `skills/workshop-web-researcher/SKILL.md`
 - `skills/workshop-persona-loop-evaluator/SKILL.md`
+- `skills/open-codelabs-integrator/SKILL.md`
 
 ## 🔗 References
 - [AI Agent Interoperability Guide](./docs/ai-agent-interoperability-guide.md)

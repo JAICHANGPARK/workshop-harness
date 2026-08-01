@@ -1,0 +1,54 @@
+name: CI & Workshop Harness Quality Audit
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test-harness:
+    name: Test Workshop Harness & Skill Suite
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Astral uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Dependencies
+        run: |
+          uv pip install --system reportlab pymupdf pillow mkdocs mkdocs-material
+
+      - name: Test Agent Skills Installation Script
+        run: |
+          chmod +x scripts/install_skills.sh
+          ./scripts/install_skills.sh
+
+      - name: Test One-Click Full Workshop Generation (generate-all)
+        run: |
+          python3 harness_cli.py generate-all \
+            --name "ci-demo-workshop" \
+            --topic "CI Automated Verification Workshop" \
+            --stack "python,ollama,docker"
+
+      - name: Verify Exported Open Codelabs Bundle Structure
+        run: |
+          test -f ci-demo-workshop/output/open-codelabs/codelab.yaml
+          test -f ci-demo-workshop/output/open-codelabs/guide.md
+          test -d ci-demo-workshop/output/open-codelabs/steps
+
+      - name: Build MkDocs Documentation Site Check
+        run: |
+          python3 -m mkdocs build --clean

@@ -122,6 +122,7 @@ Workshop Harness adopts the open **[AGENTS.md specification](https://agents.md/)
 | 10 | [`workshop-tester`](skills/workshop-tester/SKILL.md) | Workshop project path | `verify_workshop.py` audit output | Audits code execution smoke tests and markdown broken relative links |
 | 11 | [`workshop-web-researcher`](skills/workshop-web-researcher/SKILL.md) | Tool/Model query | Updated release tags & docs | Fetches latest tool/SDK release versions & prevents deprecated flags |
 | 12 | [`workshop-persona-loop-evaluator`](skills/workshop-persona-loop-evaluator/SKILL.md) | Workshop topic & materials | `docs/00-persona-loop-review-report.md` | Multi-persona loop engineering audit for beginner, intermediate, and advanced attendees |
+| 13 | [`open-codelabs-integrator`](skills/open-codelabs-integrator/SKILL.md) | Workshop project path | `output/open-codelabs/` (`codelab.yaml`, `steps/`), `oc` push | Converts workshop artifacts to Open Codelabs platform manifests and publishes via `oc` CLI/MCP |
 
 ---
 
@@ -144,7 +145,7 @@ Participants bring a wide variety of hardware architectures. This matrix identif
 Using Python 3.9+ and `uv`, you can manage workshops via the command-line interface:
 
 ```bash
-# 1. One-Click Full Workshop Generation Across All 12 Skills
+# 1. One-Click Full Workshop Generation Across All 13 Skills
 uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 
 # 2. Audit tech stack for cross-architecture risks
@@ -158,6 +159,9 @@ uv run harness_cli.py test --target my-bwai-workshop
 
 # 5. Build PDF handout from markdown docs
 uv run harness_cli.py build-pdf --target my-bwai-workshop
+
+# 6. Export Open Codelabs bundle & manifest and push via oc CLI
+uv run harness_cli.py export-codelab --target my-bwai-workshop --push
 ```
 
 ---

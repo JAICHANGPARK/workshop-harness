@@ -11,14 +11,15 @@ This repository provides seamless integration for all AI Coding Agents including
 `workshop-harness` is an AI Agent Harness, Skill Suite, and CLI Automation Toolkit for technical workshops (Build with AI, DevFest, community coding labs).
 
 - **CLI Automation**: `python3 harness_cli.py`
-- **12 Agent Skills**: Located under `skills/*/SKILL.md`
+- **CLI Automation**: `python3 harness_cli.py`
+- **13 Agent Skills**: Located under `skills/*/SKILL.md`
 - **Document Templates**: Located under `templates/doc-templates/`
 
 ---
 
 ## ⚡ Quick Agent Commands & Workflows
 
-### 1. One-Click Full Workshop Generation Across All 12 Skills
+### 1. One-Click Full Workshop Generation Across All 13 Skills
 Execute the full orchestration pipeline:
 ```bash
 python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
@@ -48,9 +49,15 @@ Generate PDF handouts from markdown documentation:
 python3 harness_cli.py build-pdf --target my-bwai-workshop
 ```
 
+### 6. Export & Push to Open Codelabs Platform
+Convert workshop to Open Codelabs bundle (`codelab.yaml`) and push via `oc` CLI:
+```bash
+python3 harness_cli.py export-codelab --target my-bwai-workshop --push
+```
+
 ---
 
-## 📁 12 Agent Skills Index
+## 📁 13 Agent Skills Index
 
 When handling user requests, reference the specific skill instructions in `skills/`:
 
@@ -66,6 +73,7 @@ When handling user requests, reference the specific skill instructions in `skill
 10. [`skills/workshop-tester/SKILL.md`](skills/workshop-tester/SKILL.md)
 11. [`skills/workshop-web-researcher/SKILL.md`](skills/workshop-web-researcher/SKILL.md)
 12. [`skills/workshop-persona-loop-evaluator/SKILL.md`](skills/workshop-persona-loop-evaluator/SKILL.md)
+13. [`skills/open-codelabs-integrator/SKILL.md`](skills/open-codelabs-integrator/SKILL.md)
 
 ---
 
@@ -73,3 +81,4 @@ When handling user requests, reference the specific skill instructions in `skill
 
 - **AGENTS.md Open Specification**: [https://agents.md/](https://agents.md/)
 - **Official Repository**: [https://github.com/JAICHANGPARK/workshop-harness](https://github.com/JAICHANGPARK/workshop-harness)
+- **Open Codelabs Platform**: [https://github.com/JAICHANGPARK/open-codelabs](https://github.com/JAICHANGPARK/open-codelabs)

@@ -1,0 +1,71 @@
+site_name: Workshop Harness
+site_description: AI Agent Harness, 13 Skill Suite & CLI Automation Toolkit for Technical Workshops
+site_author: JAICHANG PARK
+site_url: https://JAICHANGPARK.github.io/workshop-harness/
+
+repo_name: JAICHANGPARK/workshop-harness
+repo_url: https://github.com/JAICHANGPARK/workshop-harness
+
+theme:
+  name: material
+  language: en
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+  palette:
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: cyan
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: cyan
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+  icon:
+    logo: material/robot
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - tables
+  - attr_list
+
+nav:
+  - Overview: index.md
+  - Getting Started:
+      - Quickstart: getting-started/quickstart.md
+      - Installation & Setup: getting-started/installation.md
+  - 13 Agent Skills:
+      - Skill Catalog: skills/overview.md
+      - Open Codelabs Integration: skills/open-codelabs.md
+      - Cross-Architecture Checker: skills/architecture-checker.md
+  - CLI Reference: cli/harness-cli.md
+  - Architecture Matrix: architecture/compatibility-matrix.md
+  - AI Agent Standards:
+      - AGENTS.md Specification: agents-spec/agents-md.md
+      - Agent Interoperability Guide: ai-agent-interoperability-guide.md
+  - Languages (i18n):
+      - 🇰🇷 한국어 (Korean): ko/index.md
+      - 🇯🇵 日本語 (Japanese): ja/index.md
+      - 🇨🇳 中文 (Chinese): zh/index.md

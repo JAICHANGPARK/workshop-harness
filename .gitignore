@@ -19,6 +19,7 @@ ENV/
 
 # Output & Build Temporary files
 tmp/
+site/
 output/pdf/*.pdf
 !output/pdf/.gitkeep
 

@@ -38,6 +38,7 @@ skills=(
     "workshop-tester"
     "workshop-web-researcher"
     "workshop-persona-loop-evaluator"
+    "open-codelabs-integrator"
 )
 
 for skill in "${skills[@]}"; do
@@ -49,4 +50,4 @@ for skill in "${skills[@]}"; do
     fi
 done
 
-echo "✅ All 12 Workshop Harness skills & dependencies installed successfully via uv!"
+echo "✅ All 13 Workshop Harness skills & dependencies installed successfully via uv!"
