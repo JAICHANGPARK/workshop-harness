@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [v2026.08.01] - 2026-08-01
+
+### Changed
+
+- **Full English Localization**:
+  - Fully translated all 12 `SKILL.md` instruction files to English to ensure global AI agent compatibility across Claude Code, Aider, Cursor, Codex, and Antigravity.
+  - Translated all core document templates in `templates/doc-templates/` (Hardware & Env, Prerequisites, Session Guide, Prompt Pack, Troubleshooting FAQ, Facilitator Runbook, FAQ Generator, Persona Loop Review) to English.
+  - Updated python scripts (`generate_prep_pdf.py`, `verify_workshop.py`) and `harness_cli.py` docstrings and generated template strings to English.
+
+---
+
 ## [v2026.07.30] - 2026-07-30
 
 ### Added
