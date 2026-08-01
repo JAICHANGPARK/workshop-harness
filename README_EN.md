@@ -6,6 +6,9 @@
 
 Languages: [English](./README.md) | [Korean](./README_KR.md) | [Japanese](./README_JA.md) | [Chinese](./README_ZH.md)
 
+**Official Documentation**: [https://JAICHANGPARK.github.io/workshop-harness/](https://JAICHANGPARK.github.io/workshop-harness/)
+**Landing Page**: [https://JAICHANGPARK.github.io/workshop-harness/website/](https://JAICHANGPARK.github.io/workshop-harness/website/)
+
 Workshop Harness is an AI Agent Harness, Skill Suite, and CLI Automation Toolkit designed for event organizers, speakers, and TAs orchestrating technical workshops (Build with AI, DevFest, community hands-on labs).
 
 It standardizes the structure and battle-tested workflows from real-world events like Build with AI Seoul (`2026-bwai-seoul`), Golang Korea (`2026-bwai-golang-korea`), Mongo (`2026-bwai-mongo`), and Cloud Pangyo (`2026-bwai-cloud-pangyo`).

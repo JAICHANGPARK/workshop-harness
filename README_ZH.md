@@ -6,6 +6,9 @@
 
 Languages: [English](./README.md) | [Korean](./README_KR.md) | [Japanese](./README_JA.md) | [Chinese](./README_ZH.md)
 
+**官方文档**: [https://JAICHANGPARK.github.io/workshop-harness/](https://JAICHANGPARK.github.io/workshop-harness/)
+**介绍主页**: [https://JAICHANGPARK.github.io/workshop-harness/website/](https://JAICHANGPARK.github.io/workshop-harness/website/)
+
 `workshop-harness` 是一个专为 Build with AI (BWAI)、DevFest 和社区 Hands-on 工作坊的组织者、讲师和 TA 打造的 AI Agent 工具链与技能（Skills）集合。
 
 ---
