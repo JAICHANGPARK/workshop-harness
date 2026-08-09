@@ -6,27 +6,42 @@ description: Generates OS-specific and RAM-tier-specific (8GB, 16GB, 32GB+) trou
 # Workshop Troubleshooter Skill
 
 ## Purpose
-Attendees encounter predictable failure patterns based on their hardware tier, local LLM port configurations, and operating system. This skill pre-generates troubleshooting matrices so facilitators can resolve issues in under 30 seconds during the live session.
+Hardware variations, operating system firewall policies, and local LLM server port mismatches cause predictable attendee failures during live workshops. This skill pre-generates complete troubleshooting matrices (`docs/20-faq.md` and troubleshooting guides) so facilitators and TAs can resolve issues in under 30 seconds.
 
-## RAM-Tier Troubleshooting Matrix
+---
 
-| RAM Tier | Max Model Size | Recommended Configuration |
-|---|---|---|
-| 8GB | 2B parameters max | `gemma4:e2b` or `phi-4-mini` with `num_ctx=2048` |
-| 16GB | 4B parameters comfortable | `gemma4:e4b` with `num_ctx=4096` |
-| 32GB+ | 12B+ parameters | `gemma4:e12b` or `qwen3:14b` with `num_ctx=8192` |
+## RAM-Tier Sizing & Model Selection Matrix
 
-## Local LLM Server Port & Error Resolution Table
+| Hardware RAM Tier | Maximum Parameter Size | Recommended Ollama Model Tag | Context Window Limit (`num_ctx`) |
+|---|---|---|---|
+| **8GB RAM** | 2B parameters max | `gemma4:e2b` or `phi-4-mini` | `2048` |
+| **16GB RAM** | 4B parameters comfortable | `gemma4:e4b` | `4096` |
+| **32GB+ RAM** | 12B - 14B parameters | `gemma4:e12b` or `qwen3:14b` | `8192` |
 
-| Error Message / Symptom | Root Cause | Port / Tool | Fix Action |
+---
+
+## Local LLM Server Port & Network Error Resolution
+
+| Symptom / Error Message | Root Cause | Port / Tool | Immediate Fix Action |
 |---|---|---|---|
 | `connection refused :11434` | Ollama server process not running | Port 11434 (Ollama) | Run `ollama serve &` in terminal |
 | `connection refused :1234` | LM Studio server not started | Port 1234 (LM Studio) | Go to LM Studio `Developer` tab -> Click `Start Server` |
 | `404 Not Found` on `/v1/chat/completions` | Port mismatch (pointing to Ollama 11434 instead of LM Studio 1234, or vice versa) | Port 11434 / 1234 | Update client `base_url`: `http://localhost:11434/v1` for Ollama, `http://localhost:1234/v1` for LM Studio |
-| `Error: model not found` | Model not downloaded into local runtime | Ollama / LM Studio | Run `ollama pull gemma4:e4b` or search & download in LM Studio GUI |
-| `Error: insufficient memory` | Model exceeds available RAM | Hardware limit | Switch to smaller quantization: `gemma4:e2b` |
-| `CUDA out of memory` | GPU VRAM exhausted | GPU limit | Force CPU mode: `CUDA_VISIBLE_DEVICES="" ollama serve` |
-| `API key invalid` | Expired or misconfigured Gemini/GCP key | Cloud API | Re-issue at [aistudio.google.com](https://aistudio.google.com) |
+| `Error: model not found` | Model tag not pulled into local server runtime | Ollama / LM Studio | Run `ollama pull gemma4:e4b` or search in LM Studio UI |
+| `CUDA out of memory` / `VRAM exhausted` | GPU memory exceeded by large context or model size | VRAM limit | Force CPU mode: `CUDA_VISIBLE_DEVICES="" ollama serve` |
+| `Windows Firewall blocking port` | Local firewall blocking incoming loopback connections | Windows Security | Run PowerShell: `New-NetFirewallRule -DisplayName "Ollama Port" -Direction Inbound -LocalPort 11434 -Protocol TCP -Action Allow` |
 
-## Output Artifacts
-- `docs/troubleshooting.md` - Complete troubleshooting guide by OS, port, and RAM tier
+---
+
+## Network Offline & Venue WiFi Fallback Protocol
+
+If the venue network becomes unavailable:
+1. Run `./scripts/bundle_offline_assets.sh` prior to the event to pre-download model weights and pip packages.
+2. Direct attendees to load pre-cached GGUF model binaries locally via `ollama create my-local-model -f Modelfile`.
+3. Provide local fallback scripts running without external internet access.
+
+---
+
+## Output Artifact Specifications
+
+- **File Path**: `docs/20-faq.md` and `docs/01-hardware-and-env.md`

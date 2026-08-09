@@ -6,39 +6,62 @@ description: Analyzes terminal error logs in under 10 seconds and outputs action
 # Live Debug Assistant Skill
 
 ## Purpose
-During live workshop sessions, attendees frequently paste terminal error logs into chat or show them on screen. This skill enables facilitators and TAs to diagnose errors within 10 seconds and provide a copy-paste-ready fix command.
+During live workshop sessions, attendees frequently hit unexpected errors and paste unformatted error logs into chat or terminal windows. This skill enables TAs and facilitators to rapidly analyze error tracebacks, redact exposed API keys, identify the root cause, and provide a single copy-paste hotfix command within 10 seconds.
 
-## Diagnosis Protocol
+---
 
-### Step 1: Error Pattern Matching
+## 10-Second Diagnostic Triage Workflow
+
+```text
+[Raw Stderr Log] -> [Scan & Redact Secrets] -> [Pattern Match Root Cause] -> [Generate Copy-Paste Fix Command]
 ```
-Input:  Raw terminal error log (stderr output)
-Output: { "error_type": "...", "root_cause": "...", "fix_command": "..." }
-```
 
-### Step 2: Common Error Patterns
+### Common Error Pattern & Resolution Matrix
 
-| Error Pattern | Diagnosis | Fix Command |
+| Error Pattern / Traceback | Root Cause | Instant Fix Command |
 |---|---|---|
-| `ConnectionRefusedError: [Errno 61]` | Ollama server not running | `ollama serve &` |
-| `ModuleNotFoundError: No module named 'xxx'` | Missing Python package | `uv pip install xxx` |
-| `Error: model 'xxx' not found` | Model not pulled | `ollama pull xxx` |
-| `PermissionError: [Errno 13]` | Insufficient file permissions | `chmod +x script.sh` |
-| `ENOSPC: no space left on device` | Disk full | `ollama rm <unused-model>` |
+| `ConnectionRefusedError: [Errno 61]` | Ollama server process not running on port 11434 | `ollama serve &` |
+| `ModuleNotFoundError: No module named 'xxx'` | Missing dependency in active virtualenv | `uv pip install xxx` |
+| `Error: model 'gemma4:e4b' not found` | Model tag not pulled into local runtime | `ollama pull gemma4:e4b` |
+| `PermissionError: [Errno 13] Permission denied` | Script lacks execution bit | `chmod +x scripts/*.sh` |
+| `ENOSPC: no space left on device` | Local disk full from cached models | `ollama rm <unused-model>` |
+| `google.api_core.exceptions.InvalidArgument: 400 API key not valid` | Missing or corrupted `GEMINI_API_KEY` | `export GEMINI_API_KEY="AIzaSy..."` |
+| `docker: Cannot connect to the Docker daemon` | Docker service stopped or missing socket permissions | `sudo systemctl start docker` or `sudo usermod -aG docker $USER` |
+| `Address already in use: 8080` | Port collision on local web server | `lsof -i :8080 | awk 'NR>1 {print $2}' | xargs kill -9` |
 
-## API Key Security Protocol
+---
 
-### Credential Leak Prevention
-When processing error logs, the agent **must** scan for and redact any exposed credentials:
+## API Key & Credential Security Protocol
 
+Before displaying or processing any raw log output, the agent **must** run automated security regex pattern scans and redact exposed secrets:
+
+```regex
+- Google AI Studio Key:  AIzaSy[A-Za-z0-9_-]{33}      -> [REDACTED_GEMINI_API_KEY]
+- OpenAI API Key:       sk-[A-Za-z0-9]{48}           -> [REDACTED_OPENAI_KEY]
+- Anthropic API Key:    sk-ant-[A-Za-z0-9_-]{48}     -> [REDACTED_ANTHROPIC_KEY]
+- GitHub Token:         ghp_[A-Za-z0-9]{36}          -> [REDACTED_GITHUB_TOKEN]
+- AWS Access Key:       AKIA[0-9A-Z]{16}             -> [REDACTED_AWS_KEY]
 ```
-Detected patterns to redact:
-- AIzaSy[A-Za-z0-9_-]{33}     -> [REDACTED_GEMINI_KEY]
-- sk-[A-Za-z0-9]{48}          -> [REDACTED_OPENAI_KEY]
-- ghp_[A-Za-z0-9]{36}         -> [REDACTED_GITHUB_TOKEN]
-```
 
-### Security Enforcement
-- If a credential is detected in a public channel (chat, screen share), immediately warn the attendee
-- Guide them to revoke and re-issue the compromised key
-- Verify `.gitignore` includes `.env` and `*.json` patterns
+### Security Alert & Revocation Trigger
+If an un-redacted API key is detected in attendee input:
+1. Immediately issue a warning: `🚨 SECURITY ALERT: Exposed API key detected and redacted!`
+2. Instruct the attendee to immediately revoke the exposed key in their Google AI Studio / Cloud console.
+3. Remind the attendee to store credentials in `.env` and verify `.env` is listed in `.gitignore`.
+
+---
+
+## Structured Agent Response Schema
+
+When providing assistance, output a concise 3-part diagnostic response:
+
+```markdown
+### 🔍 Diagnostic Result
+- **Error Type**: `ConnectionRefusedError`
+- **Root Cause**: Local Ollama server is not running on port 11434.
+
+### ⚡ 10-Second Hotfix
+Execute this command in your terminal:
+```bash
+ollama serve &
+```

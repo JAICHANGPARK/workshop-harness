@@ -6,30 +6,40 @@ description: Performs live web searches to verify the latest release versions an
 # Workshop Web Researcher Skill
 
 ## Purpose
-AI model knowledge has a training cutoff date, meaning generated code and documentation may reference outdated model names or versions. This skill enforces a **dynamic verification protocol** that queries live sources before generating any model-dependent content.
+AI model knowledge cutoffs can cause agents to reference obsolete tool versions, retired API model tags, or outdated SDK method signatures. This skill enforces a **dynamic verification protocol** that queries live web sources before generating any technical documentation or code.
 
-## Dynamic Model Discovery Protocol
+---
+
+## Dynamic Discovery Protocol
 
 ### Mandatory Verification Before Generation
-Before writing any code or documentation that references an AI model or tool version, the agent **must**:
+Before writing any code, README, setup guide, or prompt pack that references software tools or AI models, the agent **must**:
 
-1. **Search** the official source (GitHub releases, PyPI, npm, Ollama model library) for the latest stable version
-2. **Compare** against the version in the agent's training data
-3. **Use** the verified latest version in all generated output
-4. **Stamp** the document with a currency label: `> Latest versions verified on: YYYY-MM-DD`
+1. **Query Official Release Sources**: Search official GitHub release notes, PyPI, npm, or vendor documentation.
+2. **Compare Against Training Data**: Check if the agent's internal default matches the latest live release tag.
+3. **Apply Verified Versions**: Write the verified latest release version in all code imports and setup guides.
+4. **Stamp Currency Label**: Add a dynamic timestamp label at the top of generated markdown files:
+   ```markdown
+   > Latest tool and model release versions verified on: YYYY-MM-DD
+   ```
 
-### Verification Sources
+---
 
-| Tool / Model | Primary Source |
-|---|---|
-| Ollama | `https://github.com/ollama/ollama/releases` |
-| LM Studio | `https://github.com/lmstudio-ai/lms/releases` |
-| Gemma models | `https://ollama.com/library/gemma4` |
-| Gemini API | `https://ai.google.dev/gemini-api/docs` |
-| Python / uv | `https://github.com/astral-sh/uv/releases` |
-| Docker | `https://docs.docker.com/engine/release-notes/` |
+## Primary Verification Lookup Table
 
-### Anti-Patterns (Prohibited)
-- Hardcoding `gemma-1`, `gpt-3.5-turbo`, `llama-2` without live verification
-- Using `latest` tag without confirming what version it resolves to
-- Omitting the currency timestamp from generated documentation
+| Target Tool / Model | Primary Official Source URL | Example Query |
+|---|---|---|
+| **Ollama** | `https://github.com/ollama/ollama/releases` | `site:github.com/ollama/ollama releases latest` |
+| **Gemma Models** | `https://ollama.com/library/gemma4` | `site:ollama.com/library gemma release` |
+| **Google Gemini API** | `https://ai.google.dev/gemini-api/docs/models/gemini` | `site:ai.google.dev gemini model versions` |
+| **LM Studio** | `https://github.com/lmstudio-ai/lms/releases` | `site:github.com/lmstudio-ai/lms releases` |
+| **Astral uv** | `https://github.com/astral-sh/uv/releases` | `site:github.com/astral-sh/uv releases` |
+| **Docker Engine** | `https://docs.docker.com/engine/release-notes/` | `docker engine release notes latest` |
+
+---
+
+## Anti-Pattern Rules (Prohibited Actions)
+
+- ❌ **Prohibited**: Hardcoding legacy models like `gpt-3.5-turbo`, `llama-2`, or `gemma-1` without live verification.
+- ❌ **Prohibited**: Relying on unpinned `latest` tags without confirming what exact model version tag it resolves to.
+- ❌ **Prohibited**: Omitting currency timestamp labels from generated preparation guides.

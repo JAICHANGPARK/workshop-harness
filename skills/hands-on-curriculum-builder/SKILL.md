@@ -6,27 +6,76 @@ description: Builds step-by-step hands-on lab curriculum (Lab 1, Lab 2, Lab 3), 
 # Hands-on Curriculum Builder Skill
 
 ## Purpose
-Ensures attendees can achieve clear learning objectives within the allocated session time (e.g., 60-120 minutes) by modularizing the curriculum into sequential labs and providing both starter (`01_starter`) and completed reference (`02_final`) code.
+Modularizes workshop content into sequential, timed hands-on labs (60 to 120 minutes total). Enforces a clean separation between starter scaffolding (`01_starter`), reference solutions (`02_final`), step-by-step lab guides (`03_labs/README.md`), and structured prompt engineering packs (`prompt-pack/README.md`).
 
-## Design Patterns
+---
 
-### 1. Starter vs Final Code Separation
-- **`01_starter/`**: Project scaffold with dependency files (`pyproject.toml`, `pubspec.yaml`, `go.mod`), CLI/UI entry point, and `TODO: [Lab N] ...` comment markers for attendees to fill in.
-- **`02_final/`**: Fully working reference solution with all TODOs completed.
+## Lab Architecture & Timing Rules
 
-### 2. Step-by-Step Lab Guide (`03_labs/README.md`)
-- **Lab 01: Basic Integration & Hello World** - Verify LLM API / local Ollama connectivity
-- **Lab 02: Structured Output (Output Schema)** - Apply Pydantic / JSON Schema for type-safe parsing
-- **Lab 03: Agent / RAG Pipeline Completion** - Wire up Vector Search or Tool Calls for the final application
+A standard technical workshop curriculum is divided into 3 progressive lab phases:
+
+```text
++-------------------------------------------------------------------+
+| Lab 01: Setup & API Sanity Check (15-20 min)                       |
+| -> Verify environment, connect to local Ollama / Cloud Gemini API |
++-------------------------------------------------------------------+
+                                 |
+                                 v
++-------------------------------------------------------------------+
+| Lab 02: Structured Output & Schema Parsing (25-30 min)            |
+| -> Implement Pydantic / JSON Schema type-safe model responses     |
++-------------------------------------------------------------------+
+                                 |
+                                 v
++-------------------------------------------------------------------+
+| Lab 03: RAG / Agent Multi-step Pipeline (35-40 min)               |
+| -> Connect Vector Search or Tool Calling for end-to-end output    |
++-------------------------------------------------------------------+
+```
+
+---
+
+## Starter vs Final Code Separation Guidelines
+
+### 1. `workshop/01_starter/`
+- Contains complete project configuration files (`pyproject.toml`, `requirements.txt`, `.env.sample`).
+- Contains functional entry points (`main.py` / `index.js` / `main.go`) with clearly marked exercise blocks.
+- **Exercise Marker Protocol**:
+  ```python
+  # =========================================================================
+  # TODO: [Lab 02 - Exercise] Implement Structured Output Parser
+  # Hint: Use Pydantic BaseModel or Gemini response_schema parameter
+  # =========================================================================
+  def parse_response(raw_text: str):
+      # Pass or placeholder implementation for attendees to complete
+      raise NotImplementedError("Lab 02 exercise not yet completed!")
+  ```
+
+### 2. `workshop/02_final/`
+- Contains 100% completed, verified reference implementation.
+- All `TODO:` blocks are fully solved, formatted, and tested.
+- Must execute cleanly out-of-the-box via `uv run python main.py` or `./run.sh`.
+
+---
+
+## Prompt Pack & Schema Specifications (`prompt-pack/README.md`)
+
+When generating prompt packs for LLM/RAG workshops:
+1. Include explicit System Prompts with role definitions and output formatting rules.
+2. Provide JSON Schema / Pydantic models for structured output testing.
+3. Provide example inputs and expected model output pairs for attendee verification.
+
+---
 
 ## Mandatory References Protocol
 
-All lab guides and documents referencing external APIs or official documentation **must include a `## References` section** at the bottom:
+Every generated lab document, guide, or README **must include a `## References` section** at the bottom listing authoritative sources:
 
 ```markdown
 ## References
 
 - **Official API Documentation**: [Google Gemini API Docs](https://ai.google.dev/docs)
-- **Framework Guide**: [Flutter Developer Docs](https://docs.flutter.dev)
-- **Base Workshop Repository**: [Build with AI Seoul 2026](https://github.com/JAICHANGPARK/2026-bwai-seoul)
+- **Ollama API Specification**: [Ollama GitHub Documentation](https://github.com/ollama/ollama/tree/main/docs)
+- **Astral uv Package Manager**: [Astral uv Docs](https://docs.astral.sh/uv/)
+- **Workshop Repository**: [Build with AI Harness](https://github.com/JAICHANGPARK/workshop-harness)
 ```
