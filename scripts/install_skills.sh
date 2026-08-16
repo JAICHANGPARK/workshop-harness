@@ -1,29 +1,32 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# Install Workshop Harness Skills to Antigravity / Gemini Agent Skills Directory
+# Multi-Agent Skill Suite Installer for Workshop Harness
+# Supports: Google Antigravity / Gemini CLI, Claude Code, OpenAI Codex, Cursor, Aider
 # Powered by Astral uv
 # ==============================================================================
 
 set -e
 
-TARGET_DIR="$HOME/.gemini/skills"
 SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../skills" && pwd)"
 
-echo "⚡ [uv Engine] Setting up Python dependencies & installing Workshop Harness Skills..."
+echo "⚡ [uv Engine] Setting up Python dependencies & installing Workshop Harness Skills across all AI Coding Agents..."
 
-# Check if uv is installed, if not auto-install or use pip fallback
+# 1. Dependency Auto-Installation
 if command -v uv &> /dev/null; then
     echo "✅ Astral uv detected. Syncing project environment..."
-    uv pip install reportlab pymupdf pillow --quiet || true
+    uv pip install reportlab pymupdf pillow python-pptx --quiet || true
 else
-    echo "💡 uv not found. Installing Astral uv package manager..."
-    curl -LsSf https://astral.sh/uv/install.sh | sh || true
-    pip install reportlab pymupdf pillow --quiet || true
+    echo "💡 uv not found. Installing dependencies via pip..."
+    pip install reportlab pymupdf pillow python-pptx --quiet || true
 fi
 
-echo "📦 Installing Workshop Harness Skills to $TARGET_DIR..."
-
-mkdir -p "$TARGET_DIR"
+# 2. Target Skill Directories for Different AI Agents
+TARGET_DIRS=(
+    "$HOME/.gemini/skills"
+    "$HOME/.claude/skills"
+    "$HOME/.agents/skills"
+    "$HOME/.codex/skills"
+)
 
 skills=(
     "workshop-scaffolder"
@@ -43,13 +46,16 @@ skills=(
     "workshop-slide-generator"
 )
 
-for skill in "${skills[@]}"; do
-    if [ -d "$SOURCE_DIR/$skill" ]; then
-        dest="$TARGET_DIR/$skill"
-        rm -rf "$dest"
-        cp -r "$SOURCE_DIR/$skill" "$dest"
-        echo "  - Installed skill: $skill -> $dest"
-    fi
+for target_dir in "${TARGET_DIRS[@]}"; do
+    mkdir -p "$target_dir"
+    echo "📦 Installing 15 Workshop Harness Skills to $target_dir..."
+    for skill in "${skills[@]}"; do
+        if [ -d "$SOURCE_DIR/$skill" ]; then
+            dest="$target_dir/$skill"
+            rm -rf "$dest"
+            cp -r "$SOURCE_DIR/$skill" "$dest"
+        fi
+    done
 done
 
-echo "✅ All 15 Workshop Harness skills & dependencies installed successfully via uv!"
+echo "✅ All 15 Workshop Harness skills & dependencies installed successfully across Gemini, Claude Code, and Codex agent environments!"

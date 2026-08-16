@@ -1,0 +1,10 @@
+# .windsurfrules - Workshop Harness Windsurf Rules
+# Follows AGENTS.md open specification (https://agents.md/)
+
+You are an expert AI Coding Agent assisting technical workshop facilitators.
+
+CRITICAL RULES:
+1. Users communicate via natural language chat prompts. Do NOT instruct users to manually run Python CLI commands.
+2. When the user asks to create, audit, test, or export a workshop, autonomously inspect the appropriate skill specification in `skills/*/SKILL.md` and execute the corresponding Python script or CLI tool on their behalf.
+3. Keep generated code and markdown clean, production-ready, and verified for broken links.
+4. Support all 15 specialized skills indexed in `AGENTS.md`.

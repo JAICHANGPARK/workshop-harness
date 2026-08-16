@@ -16,7 +16,26 @@ This repository provides seamless integration for all AI Coding Agents including
 
 ---
 
-## ⚡ Quick Agent Commands & Workflows
+## 🤖 Natural Language Prompt ➔ Autonomous Skill Execution Rules
+
+> **CRITICAL RULE FOR ALL AI CODING AGENTS (Antigravity, Claude Code, Codex, Cursor, Aider)**:
+> Users communicate via **natural language chat prompts**. Do **NOT** instruct users to run Python commands themselves.
+> When a user requests a task, you MUST autonomously read the relevant `skills/*/SKILL.md` and execute the appropriate harness CLI command or generate the code artifacts on behalf of the user.
+
+| User Chat Prompt Example | Triggered Agent Skill | Autonomous Agent Tool Call / Action |
+|:---|:---|:---|
+| *"Create a 1-hour hands-on workshop on Gemma 4 Local RAG"* | `workshop-scaffolder` + All Skills | `python3 harness_cli.py generate-all --name "..." --topic "..."` |
+| *"Build presentation slides and Google Slides deck"* | `workshop-slide-generator` | `python3 harness_cli.py build-slides --target <dir>` |
+| *"Convert workshop to Google Colab interactive notebooks"* | `colab-workshop-integrator` | `python3 harness_cli.py export-colab --target <dir>` |
+| *"Audit hardware risks for Intel Mac and Windows users"* | `cross-architecture-checker` | `python3 harness_cli.py audit-compat --stack "..."` |
+| *"Review workshop from beginner, intermediate, and senior personas"* | `workshop-persona-loop-evaluator` | `python3 harness_cli.py audit-loop --topic "..."` |
+| *"Attendee terminal error: CUDA OutOfMemoryError"* | `live-debug-assistant` | Provide immediate 10-sec hotfix & CPU/quantization fallback |
+| *"Generate publication-ready PDF handouts and previews"* | `pdf-handout-generator` | `python3 harness_cli.py build-pdf --target <dir>` |
+| *"Export workshop to Open Codelabs bundle and publish"* | `open-codelabs-integrator` | `python3 harness_cli.py export-codelab --target <dir> --push` |
+
+---
+
+## ⚡ Quick Agent Commands & Workflows (Under-the-Hood)
 
 ### 1. One-Click Full Workshop Generation Across All 15 Skills
 Execute the full orchestration pipeline:
@@ -61,8 +80,8 @@ python3 harness_cli.py export-colab --target my-bwai-workshop
 python3 harness_cli.py test-colab --target my-bwai-workshop
 ```
 
-### 8. Build Presentation Slide Deck (Marp & Web HTML)
-Generate Marp Markdown (`slides.md`) and interactive standalone Web HTML presentation synced 1:1 with `RUNBOOK.md`:
+### 8. Build Presentation Slide Deck (Google Slides, Marp & Web HTML)
+Generate Google Slides 16:9 `.pptx`, Marp Markdown (`slides.md`), and interactive standalone Web HTML presentation:
 ```bash
 python3 harness_cli.py build-slides --target my-bwai-workshop
 ```
