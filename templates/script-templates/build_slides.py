@@ -623,7 +623,7 @@ python3 workshop/01_starter/main.py
         tf = tb.text_frame
         tf.word_wrap = True
         p = tf.paragraphs[0]
-        p.text = "Congratulations! Lab Completed! 🎉"
+        p.text = "Congratulations! Lab Completed!"
         p.font.size = Pt(38)
         p.font.bold = True
         p.font.color.rgb = TITLE_COLOR

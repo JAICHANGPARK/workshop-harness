@@ -22,7 +22,10 @@ This repository provides native compatibility with **Anthropic Claude Code CLI**
      - **Chinese (ZH)**: 「实战工作坊」, 「脚手架」, 「提示词工程」, 「微调」, 「演练手册」.
 3. **🚫 Typography Rule (No Em Dash)**:
    - **NEVER generate em dash characters (`—` or `\u2014`)** anywhere in slides, docs, code, or markdown. Always use standard hyphens (`-`), colons (`:`), or parentheses.
-4. **Natural Language Autonomy**:
+4. **🚫 No Emojis in Documentation (Default: Clean Professional Text)**:
+   - **Do NOT use emojis in generated documentation, slide decks, setup guides, code comments, or runbooks by default.**
+   - Emojis may only be used if the user explicitly requests them in their prompt.
+5. **Natural Language Autonomy**:
    - **Users communicate using natural language prompts. Do NOT ask users to execute Python CLI commands directly.**
    - When a user asks a question or makes a request, **Claude Code must autonomously read the corresponding skill file (`skills/*/SKILL.md`) and execute the required Python tool or generate the artifacts on behalf of the user.**
 

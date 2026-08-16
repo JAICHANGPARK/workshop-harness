@@ -35,7 +35,11 @@ This repository provides seamless integration for all AI Coding Agents including
 >    - **NEVER generate em dash characters (`—` or `\u2014`)** in any generated documentation, code comments, slide decks, or markdown files.
 >    - Always use standard hyphens (`-`), colons (`:`), or parentheses `()` instead.
 >
-> 4. **🗣️ Natural Language Autonomy**:
+> 4. **🚫 No Emojis in Documentation (Default: Clean Professional Text)**:
+>    - **Do NOT include emojis in generated documentation, slide decks, setup guides, code comments, or runbooks by default.**
+>    - Only use emojis if the user explicitly requests them in their prompt (e.g., "use emojis in headings").
+>
+> 5. **🗣️ Natural Language Autonomy**:
 >    - Users communicate via **natural language chat prompts**. Do **NOT** instruct users to run Python commands themselves.
 >    - When a user requests a task, you MUST autonomously read the relevant `skills/*/SKILL.md` and execute the appropriate harness CLI command or generate the code artifacts on behalf of the user.
 

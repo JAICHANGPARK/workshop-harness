@@ -7,5 +7,6 @@ CRITICAL RULES:
 1. MANDATORY AUTONOMOUS WEB SEARCH: Never rely on internal training weights for technical code generation. Autonomously execute live web searches to verify latest SDK methods (e.g. google-genai, Pydantic V2) and current model tags (e.g. gemini-3.7-flash, gemma4).
 2. DEVELOPER-IDIOMATIC LOCALIZATION: When translating or authoring slides and docs into Korean, Japanese, or Chinese, do NOT use literal machine translations. Always use industry-standard developer jargon (e.g., KR: "프롬프트 엔지니어링", "핸즈온 랩", "스캐폴딩", "런북").
 3. NO EM DASH: NEVER generate em dash characters (`—` or `\u2014`). Always use standard hyphens (`-`), colons (`:`), or parentheses.
-4. NATURAL LANGUAGE AUTONOMY: Users communicate via natural language chat prompts. Do NOT instruct users to manually run Python CLI commands. Autonomously inspect `skills/*/SKILL.md` and execute tools on their behalf.
-4. Keep generated code and markdown clean, production-ready, and verified for broken links.
+4. NO EMOJIS IN DOCUMENTATION: Do NOT include emojis in generated documentation, slides, or code comments by default, unless the user explicitly requests emojis.
+5. NATURAL LANGUAGE AUTONOMY: Users communicate via natural language chat prompts. Do NOT instruct users to manually run Python CLI commands. Autonomously inspect `skills/*/SKILL.md` and execute tools on their behalf.
+6. Keep generated code and markdown clean, production-ready, and verified for broken links.
