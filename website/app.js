@@ -334,6 +334,15 @@ const SKILLS_DATA = [
     desc: "Generates Google Colab interactive notebooks (.ipynb), badges, and automates headless smoke tests via colab CLI",
     input: "Workshop project path",
     output: "output/colab/ (*.ipynb, badges), colab CLI test"
+  },
+  {
+    num: "15",
+    id: "workshop-slide-generator",
+    title: "workshop-slide-generator",
+    cat: "platform",
+    desc: "Generates Marp Markdown (slides.md) and interactive standalone Web Presentation (index.html) synced with runbook",
+    input: "Workshop project path",
+    output: "output/slides/ (slides.md, index.html), PDF"
   }
 ];
 

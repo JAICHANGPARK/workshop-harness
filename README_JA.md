@@ -42,7 +42,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 
 ---
 
-## 🧩 14種類のエージェントスキル仕様
+## 🧩 15種類のエージェントスキル仕様
 
 | # | スキル名 | トリガー / 入力 | 生成物・成果物 | 主な役割 |
 |---|---|---|---|---|
@@ -60,6 +60,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 | 12 | [`workshop-persona-loop-evaluator`](skills/workshop-persona-loop-evaluator/SKILL.md) | テーマ・カリキュラム | `docs/00-persona-loop-review-report.md` | 初級・中級・上級ペルソナによるループエンジニアリング多角レビュー |
 | 13 | [`open-codelabs-integrator`](skills/open-codelabs-integrator/SKILL.md) | プロジェクトパス | `output/open-codelabs/` (`codelab.yaml`), `oc` push | Open Codelabsマニフェスト出力と `oc` CLI/MCP連携発行 |
 | 14 | [`colab-workshop-integrator`](skills/colab-workshop-integrator/SKILL.md) | プロジェクトパス | `output/colab/` (`*.ipynb`, バッジ), `colab` CLIテスト | Google Colabノートブック(`.ipynb`)変換、バッジ挿入およびColab CLIテスト |
+| 15 | [`workshop-slide-generator`](skills/workshop-slide-generator/SKILL.md) | プロジェクトパス | `output/slides/` (`slides.md`, `index.html`), PDF | Marp Markdownおよびランブックと同期したWebスライドの自動生成 |
 
 ---
 

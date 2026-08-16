@@ -15,12 +15,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - Injects zero-setup cells: automated `%pip install`, GPU accelerator verification (`!nvidia-smi`), and Colab Secrets credential handling (`google.colab.userdata`).
   - Generates 'Open in Colab' SVG badges and Colab README documentation.
   - Integrates with official [Google Colab CLI (`colab-cli`)](https://github.com/googlecolab/google-colab-cli) for automated headless cloud execution and smoke testing.
+- **15th Agent Skill: `workshop-slide-generator`**:
+  - Generates publication-ready presentation slide decks in Marp Markdown (`output/slides/slides.md`) and standalone zero-dependency interactive Web Presentations (`output/slides/index.html`).
+  - Syncs 1:1 with facilitator timeline markers in `RUNBOOK.md`.
+  - Supports instant PDF/PPTX compilation via Marp CLI.
 - **CLI Commands (`harness_cli.py`)**:
+  - Added `build-slides` command with `--target`, `--output`, and `--export-pdf` flags.
   - Added `export-colab` command with `--target`, `--output`, `--repo`, and `--test` flags.
   - Added `test-colab` command for one-click Colab CLI verification.
-  - Updated `generate-all` pipeline to step 7/7 including Colab export.
+  - Updated `generate-all` pipeline to full 8-step orchestrator across all 15 skills.
 - **Documentation & Agent Standards**:
-  - Expanded `AGENTS.md` and MkDocs documentation to include 14 skills and Google Colab integration guides.
+  - Expanded `AGENTS.md`, multi-language READMEs (EN, KR, JA, ZH), and MkDocs documentation to 15 specialized skills.
 
 ---
 

@@ -42,7 +42,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 
 ---
 
-## 🧩 14 Specialized Agent Skills Specification
+## 🧩 15 Specialized Agent Skills Specification
 
 | # | Skill Name | Input / Trigger | Output & Artifacts | Primary Role |
 |---|---|---|---|---|
@@ -60,6 +60,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 | 12 | [`workshop-persona-loop-evaluator`](skills/workshop-persona-loop-evaluator/SKILL.md) | Workshop topic & materials | `docs/00-persona-loop-review-report.md` | Multi-persona loop engineering audit for beginner, intermediate, and advanced attendees |
 | 13 | [`open-codelabs-integrator`](skills/open-codelabs-integrator/SKILL.md) | Workshop project path | `output/open-codelabs/` (`codelab.yaml`), `oc` push | Converts workshop artifacts to Open Codelabs platform manifests and publishes via `oc` CLI/MCP |
 | 14 | [`colab-workshop-integrator`](skills/colab-workshop-integrator/SKILL.md) | Workshop project path | `output/colab/` (`*.ipynb`, badges), `colab` CLI test | Converts workshop to Google Colab interactive notebooks (.ipynb), adds badges, and runs headless tests via Google Colab CLI |
+| 15 | [`workshop-slide-generator`](skills/workshop-slide-generator/SKILL.md) | Workshop project path | `output/slides/` (`slides.md`, `index.html`), PDF export | Generates Marp Markdown (`slides.md`) and interactive standalone Web Presentation (`index.html`) synced with runbook |
 
 ---
 

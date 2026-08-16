@@ -1,6 +1,6 @@
 # Workshop Harness (日本語)
 
-> **AIエージェントハーネス、14スキルスイート & CLI自動化ツールキット**
+> **AIエージェントハーネス、15スキルスイート & CLI自動化ツールキット**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![uv Powered](https://img.shields.io/badge/python%20package%20manager-uv-de1f88.svg)](https://astral.sh/uv)
@@ -24,7 +24,7 @@
 git clone https://github.com/JAICHANGPARK/workshop-harness.git
 cd workshop-harness
 
-# 2. 14スキルを自動インストール (~/.gemini/skills/)
+# 2. 15スキルを自動インストール (~/.gemini/skills/)
 chmod +x scripts/install_skills.sh
 ./scripts/install_skills.sh
 
@@ -34,7 +34,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 
 ---
 
-## 14のエージェントスキル一覧
+## 15のエージェントスキル一覧
 
 - `workshop-scaffolder`: リポジトリの標準構造スキャフォールディング
 - `cross-architecture-checker`: チップセット・OS互換性診断およびFallback作成
@@ -50,3 +50,4 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 - `workshop-persona-loop-evaluator`: 初級・中級・上級ペルソナレビュー
 - `open-codelabs-integrator`: Open Codelabsマニフェスト出力 & `oc` push
 - `colab-workshop-integrator`: Google Colabノートブック(`.ipynb`)変換、バッジ挿入およびColab CLIテスト
+- `workshop-slide-generator`: Marp MarkdownおよびWeb発表スライド自動生成

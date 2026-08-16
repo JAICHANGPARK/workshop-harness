@@ -42,7 +42,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 
 ---
 
-## 🧩 全套 14 项 Agent 技能规范
+## 🧩 全套 15 项 Agent 技能规范
 
 | # | 技能名称 | 触发 / 输入 | 产出与制品 | 主要职责 |
 |---|---|---|---|---|
@@ -60,6 +60,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 | 12 | [`workshop-persona-loop-evaluator`](skills/workshop-persona-loop-evaluator/SKILL.md) | 主题与材料 | `docs/00-persona-loop-review-report.md` | 基于循环工程从初级/中级/高级多角色画像进行审查 |
 | 13 | [`open-codelabs-integrator`](skills/open-codelabs-integrator/SKILL.md) | 项目路径 | `output/open-codelabs/` (`codelab.yaml`), `oc` push | 转换为 Open Codelabs 平台格式并通过 `oc` CLI/MCP 发布 |
 | 14 | [`colab-workshop-integrator`](skills/colab-workshop-integrator/SKILL.md) | 项目路径 | `output/colab/` (`*.ipynb`, 徽章), `colab` CLI 验证 | 转换生成 Google Colab 交互式笔记本、徽章并自动化 CLI 烟雾测试 |
+| 15 | [`workshop-slide-generator`](skills/workshop-slide-generator/SKILL.md) | 项目路径 | `output/slides/` (`slides.md`, `index.html`), PDF | 自动生成 Marp Markdown 幻灯片与同演练手册同步的交互式网页演示 |
 
 ---
 

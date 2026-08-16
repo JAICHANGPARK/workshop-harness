@@ -76,6 +76,9 @@ def init_workshop(name: str, topic: str, target_dir: str = None):
     if (script_templates / "export_colab.py").exists():
         shutil.copy(script_templates / "export_colab.py", project_dir / "scripts" / "export_colab.py")
         os.chmod(project_dir / "scripts" / "export_colab.py", 0o755)
+    if (script_templates / "build_slides.py").exists():
+        shutil.copy(script_templates / "build_slides.py", project_dir / "scripts" / "build_slides.py")
+        os.chmod(project_dir / "scripts" / "build_slides.py", 0o755)
     shutil.copy(script_templates / "run_starter.sh", project_dir / "workshop" / "01_starter" / "run.sh")
     shutil.copy(script_templates / "run_starter.ps1", project_dir / "workshop" / "01_starter" / "run.ps1")
     shutil.copy(script_templates / "run_starter.sh", project_dir / "workshop" / "02_final" / "run.sh")
@@ -295,6 +298,24 @@ def test_colab(target_dir: str):
     else:
         subprocess.run(cmd, check=False)
 
+def build_slides(target_dir: str, output_dir: str = None, export_pdf: bool = False):
+    target = Path(target_dir).resolve()
+    script = target / "scripts" / "build_slides.py"
+    if not script.exists():
+        script = HARNESS_ROOT / "scripts" / "build_slides.py"
+
+    print(f"🎨 Building Presentation Slides for '{target.name}'...")
+    cmd = [sys.executable, str(script), "--target", str(target)]
+    if output_dir:
+        cmd.extend(["--output", str(output_dir)])
+    if export_pdf:
+        cmd.append("--export-pdf")
+
+    if shutil.which("uv"):
+        subprocess.run(["uv", "run"] + cmd, check=False)
+    else:
+        subprocess.run(cmd, check=False)
+
 def generate_all(name: str, topic: str, stack_str: str, target_dir: str = None):
     print("=" * 70)
     print(f"⚡ [ONE-CLICK FULL ORCHESTRATOR - uv Powered] Building Workshop: '{name}'")
@@ -307,28 +328,32 @@ def generate_all(name: str, topic: str, stack_str: str, target_dir: str = None):
     proj_dir = init_workshop(name, topic, target_dir)
 
     # 2. Audit Cross-Architecture Compatibility
-    print("\n[Step 2/7] Auditing Cross-Architecture Compatibility...")
+    print("\n[Step 2/8] Auditing Cross-Architecture Compatibility...")
     audit_compatibility(stack_str)
 
     # 3. Loop Engineering Multi-Persona Evaluation
-    print("\n[Step 3/7] Running Loop Engineering Multi-Persona Review...")
+    print("\n[Step 3/8] Running Loop Engineering Multi-Persona Review...")
     audit_persona_loop(topic)
 
     # 4. Test Integrity & Smoke Code Execution
-    print("\n[Step 4/7] Testing Workshop Code & Link Integrity...")
+    print("\n[Step 4/8] Testing Workshop Code & Link Integrity...")
     test_workshop(str(proj_dir))
 
     # 5. Build PDF Handout & Previews
-    print("\n[Step 5/7] Building Publication PDF Handouts & Previews...")
+    print("\n[Step 5/8] Building Publication PDF Handouts & Previews...")
     build_pdf(str(proj_dir))
 
     # 6. Export Open Codelabs Bundle & Manifest
-    print("\n[Step 6/7] Exporting Open Codelabs Interactive Bundle & Manifest...")
+    print("\n[Step 6/8] Exporting Open Codelabs Interactive Bundle & Manifest...")
     export_codelab(str(proj_dir))
 
     # 7. Export Google Colab Notebooks (.ipynb) & Badges
-    print("\n[Step 7/7] Exporting Google Colab Interactive Notebooks & Badges...")
+    print("\n[Step 7/8] Exporting Google Colab Interactive Notebooks & Badges...")
     export_colab(str(proj_dir))
+
+    # 8. Build Presentation Slide Deck (Marp & Web HTML)
+    print("\n[Step 8/8] Building Presentation Slide Decks (Marp & Web HTML)...")
+    build_slides(str(proj_dir))
 
     print("\n" + "=" * 70)
     print(f"🎉 SUCCESS! Complete Workshop Package '{name}' generated in ONE-CLICK via uv!")
@@ -385,6 +410,12 @@ def main():
     test_colab_parser = subparsers.add_parser("test-colab", help="Run smoke test on Colab notebooks using Google Colab CLI")
     test_colab_parser.add_argument("--target", required=True, help="Path to workshop project directory")
 
+    # build-slides command
+    slides_parser = subparsers.add_parser("build-slides", help="Build presentation slide decks in Marp Markdown and standalone Web HTML")
+    slides_parser.add_argument("--target", required=True, help="Path to workshop project directory")
+    slides_parser.add_argument("--output", default=None, help="Target output directory for slide deck")
+    slides_parser.add_argument("--export-pdf", action="store_true", help="Export slides to PDF using Marp CLI")
+
     args = parser.parse_args()
 
     if args.command == "init":
@@ -405,6 +436,8 @@ def main():
         export_colab(args.target, args.output, args.repo, args.test)
     elif args.command == "test-colab":
         test_colab(args.target)
+    elif args.command == "build-slides":
+        build_slides(args.target, args.output, args.export_pdf)
     else:
         parser.print_help()
 

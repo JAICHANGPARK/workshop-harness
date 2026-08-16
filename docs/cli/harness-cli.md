@@ -8,7 +8,7 @@
 
 | Subcommand | Primary Flags | Description |
 |---|---|---|
-| `generate-all` | `--name`, `--topic`, `--stack`, `--dir` | One-click full workshop generation across all 14 skills |
+| `generate-all` | `--name`, `--topic`, `--stack`, `--dir` | One-click full workshop generation across all 15 skills |
 | `init` | `--name`, `--topic`, `--dir` | Scaffolds basic repository structure & script templates |
 | `audit-compat` | `--stack` | Audits tech stack cross-architecture risks across hardware chipsets |
 | `audit-loop` | `--topic` | Loop engineering multi-persona review for beginner, intermediate, & advanced attendees |
@@ -17,6 +17,7 @@
 | `export-codelab` | `--target`, `--output`, `--push` | Exports Open Codelabs manifest bundle (`codelab.yaml`) & pushes via `oc` CLI |
 | `export-colab` | `--target`, `--output`, `--repo`, `--test` | Exports Google Colab interactive notebooks (`.ipynb`) & 'Open in Colab' badges |
 | `test-colab` | `--target` | Runs headless smoke test on Colab notebooks using Google Colab CLI (`colab`) |
+| `build-slides` | `--target`, `--output`, `--export-pdf` | Generates Marp Markdown (`slides.md`) and interactive Web Presentation (`index.html`) |
 
 ---
 
@@ -31,7 +32,14 @@ uv run harness_cli.py generate-all \
   --stack "python,ollama,docker"
 ```
 
-### 2. `export-colab` (Google Colab Export & Badges)
+### 2. `build-slides` (Presentation Slide Generation)
+
+```bash
+uv run harness_cli.py build-slides \
+  --target my-bwai-workshop
+```
+
+### 3. `export-colab` (Google Colab Export & Badges)
 
 ```bash
 uv run harness_cli.py export-colab \
@@ -39,14 +47,14 @@ uv run harness_cli.py export-colab \
   --repo "JAICHANGPARK/my-bwai-workshop"
 ```
 
-### 3. `test-colab` (Google Colab CLI Smoke Test)
+### 4. `test-colab` (Google Colab CLI Smoke Test)
 
 ```bash
 uv run harness_cli.py test-colab \
   --target my-bwai-workshop
 ```
 
-### 4. `export-codelab` (Open Codelabs Export & Push)
+### 5. `export-codelab` (Open Codelabs Export & Push)
 
 ```bash
 uv run harness_cli.py export-codelab \

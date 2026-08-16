@@ -11,14 +11,14 @@ This repository provides seamless integration for all AI Coding Agents including
 `workshop-harness` is an AI Agent Harness, Skill Suite, and CLI Automation Toolkit for technical workshops (Build with AI, DevFest, community coding labs).
 
 - **CLI Automation**: `python3 harness_cli.py`
-- **14 Agent Skills**: Located under `skills/*/SKILL.md`
+- **15 Agent Skills**: Located under `skills/*/SKILL.md`
 - **Document Templates**: Located under `templates/doc-templates/`
 
 ---
 
 ## ⚡ Quick Agent Commands & Workflows
 
-### 1. One-Click Full Workshop Generation Across All 14 Skills
+### 1. One-Click Full Workshop Generation Across All 15 Skills
 Execute the full orchestration pipeline:
 ```bash
 python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
@@ -61,9 +61,15 @@ python3 harness_cli.py export-colab --target my-bwai-workshop
 python3 harness_cli.py test-colab --target my-bwai-workshop
 ```
 
+### 8. Build Presentation Slide Deck (Marp & Web HTML)
+Generate Marp Markdown (`slides.md`) and interactive standalone Web HTML presentation synced 1:1 with `RUNBOOK.md`:
+```bash
+python3 harness_cli.py build-slides --target my-bwai-workshop
+```
+
 ---
 
-## 📁 14 Agent Skills Index
+## 📁 15 Agent Skills Index
 
 When handling user requests, reference the specific skill instructions in `skills/`:
 
@@ -81,6 +87,7 @@ When handling user requests, reference the specific skill instructions in `skill
 12. [`skills/workshop-persona-loop-evaluator/SKILL.md`](skills/workshop-persona-loop-evaluator/SKILL.md)
 13. [`skills/open-codelabs-integrator/SKILL.md`](skills/open-codelabs-integrator/SKILL.md)
 14. [`skills/colab-workshop-integrator/SKILL.md`](skills/colab-workshop-integrator/SKILL.md)
+15. [`skills/workshop-slide-generator/SKILL.md`](skills/workshop-slide-generator/SKILL.md)
 
 ---
 

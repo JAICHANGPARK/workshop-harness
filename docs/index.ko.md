@@ -1,6 +1,6 @@
 # Workshop Harness (한국어)
 
-> **AI 에이전트 하네스, 14개 스킬 모음 및 CLI 자동화 툴킷**
+> **AI 에이전트 하네스, 15개 스킬 모음 및 CLI 자동화 툴킷**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![uv Powered](https://img.shields.io/badge/python%20package%20manager-uv-de1f88.svg)](https://astral.sh/uv)
@@ -23,7 +23,7 @@
 git clone https://github.com/JAICHANGPARK/workshop-harness.git
 cd workshop-harness
 
-# 2. 14개 스킬 자동 설치 (~/.gemini/skills/)
+# 2. 15개 스킬 자동 설치 (~/.gemini/skills/)
 chmod +x scripts/install_skills.sh
 ./scripts/install_skills.sh
 
@@ -33,7 +33,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 
 ---
 
-## 14개 에이전트 스킬 목록
+## 15개 에이전트 스킬 목록
 
 - `workshop-scaffolder`: 표준 리포지토리 스캐폴딩
 - `cross-architecture-checker`: 칩셋/OS 호환성 진단 & Fallback
@@ -49,3 +49,4 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 - `workshop-persona-loop-evaluator`: 초/중/고급 페르소나 멀티 리뷰
 - `open-codelabs-integrator`: Open Codelabs 매니페스트 내보내기 & `oc` push
 - `colab-workshop-integrator`: Google Colab 노트북(`.ipynb`) 변환, 뱃지 삽입 및 Colab CLI 테스트
+- `workshop-slide-generator`: Marp 마크다운 및 인터랙티브 웹 발표 슬라이드 자동 생성
