@@ -1,6 +1,6 @@
 # Open Codelabs Integrator Skill
 
-The **Open Codelabs Integrator** skill ([`skills/open-codelabs-integrator/SKILL.md`](file:///Users/jaichang/Documents/GitHub/workshop-harness/skills/open-codelabs-integrator/SKILL.md)) bridges `workshop-harness` generated content with **[Open Codelabs](https://github.com/JAICHANGPARK/open-codelabs)**—a Google Codelab-style interactive hands-on platform.
+The **Open Codelabs Integrator** skill ([`skills/open-codelabs-integrator/SKILL.md`](file:///Users/jaichang/Documents/GitHub/workshop-harness/skills/open-codelabs-integrator/SKILL.md)) bridges `workshop-harness` generated content with **[Open Codelabs](https://github.com/JAICHANGPARK/open-codelabs)**, a Google Codelab-style interactive hands-on platform.
 
 ---
 

@@ -6,7 +6,7 @@ description: Generates a minute-by-minute facilitator and TA timeline runbook (R
 # Workshop Runbook Generator Skill
 
 ## Purpose
-Generates `RUNBOOK.md` at the repository root—a minute-by-minute execution playbook for workshop facilitators and Teaching Assistants (TAs). Ensures the live session runs smoothly, stays on schedule, and provides explicit troubleshooting escalation protocols when attendees hit roadblocks.
+Generates `RUNBOOK.md` at the repository root, a minute-by-minute execution playbook for workshop facilitators and Teaching Assistants (TAs). Ensures the live session runs smoothly, stays on schedule, and provides explicit troubleshooting escalation protocols when attendees hit roadblocks.
 
 ---
 

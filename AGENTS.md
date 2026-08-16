@@ -31,7 +31,11 @@ This repository provides seamless integration for all AI Coding Agents including
 >      - **Japanese (JA)**: Use standard developer Katakana / technical terms (e.g., 「ハンズオン」, 「デプロイ」, 「スキャフォールディング」, 「トークン」, 「ファインチューニング」, 「ランブック」).
 >      - **Chinese (ZH)**: Use Chinese tech community terminology (e.g., 「实战工作坊/动手实验」, 「脚手架」, 「提示词工程」, 「微调」, 「演练手册/Runbook」).
 >
-> 3. **🗣️ Natural Language Autonomy**:
+> 3. **🚫 Typography Rule (No Em Dash)**:
+>    - **NEVER generate em dash characters (`—` or `\u2014`)** in any generated documentation, code comments, slide decks, or markdown files.
+>    - Always use standard hyphens (`-`), colons (`:`), or parentheses `()` instead.
+>
+> 4. **🗣️ Natural Language Autonomy**:
 >    - Users communicate via **natural language chat prompts**. Do **NOT** instruct users to run Python commands themselves.
 >    - When a user requests a task, you MUST autonomously read the relevant `skills/*/SKILL.md` and execute the appropriate harness CLI command or generate the code artifacts on behalf of the user.
 
