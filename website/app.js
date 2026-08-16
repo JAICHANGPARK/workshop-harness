@@ -325,6 +325,15 @@ const SKILLS_DATA = [
     desc: "Converts workshop artifacts to Open Codelabs manifests (codelab.yaml) & pushes via oc CLI/MCP",
     input: "Workshop project path",
     output: "output/open-codelabs/ (codelab.yaml, steps/)"
+  },
+  {
+    num: "14",
+    id: "colab-workshop-integrator",
+    title: "colab-workshop-integrator",
+    cat: "platform",
+    desc: "Generates Google Colab interactive notebooks (.ipynb), badges, and automates headless smoke tests via colab CLI",
+    input: "Workshop project path",
+    output: "output/colab/ (*.ipynb, badges), colab CLI test"
   }
 ];
 

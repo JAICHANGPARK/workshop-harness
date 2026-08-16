@@ -73,6 +73,9 @@ def init_workshop(name: str, topic: str, target_dir: str = None):
     if (script_templates / "export_open_codelabs.py").exists():
         shutil.copy(script_templates / "export_open_codelabs.py", project_dir / "scripts" / "export_open_codelabs.py")
         os.chmod(project_dir / "scripts" / "export_open_codelabs.py", 0o755)
+    if (script_templates / "export_colab.py").exists():
+        shutil.copy(script_templates / "export_colab.py", project_dir / "scripts" / "export_colab.py")
+        os.chmod(project_dir / "scripts" / "export_colab.py", 0o755)
     shutil.copy(script_templates / "run_starter.sh", project_dir / "workshop" / "01_starter" / "run.sh")
     shutil.copy(script_templates / "run_starter.ps1", project_dir / "workshop" / "01_starter" / "run.ps1")
     shutil.copy(script_templates / "run_starter.sh", project_dir / "workshop" / "02_final" / "run.sh")
@@ -259,6 +262,39 @@ def export_codelab(target_dir: str, output_dir: str = None, push: bool = False):
     else:
         subprocess.run(cmd, check=False)
 
+def export_colab(target_dir: str, output_dir: str = None, repo: str = None, test: bool = False):
+    target = Path(target_dir).resolve()
+    script = target / "scripts" / "export_colab.py"
+    if not script.exists():
+        script = HARNESS_ROOT / "scripts" / "export_colab.py"
+
+    print(f"📦 Exporting Google Colab Notebooks for '{target.name}'...")
+    cmd = [sys.executable, str(script), "--target", str(target)]
+    if output_dir:
+        cmd.extend(["--output", str(output_dir)])
+    if repo:
+        cmd.extend(["--repo", str(repo)])
+    if test:
+        cmd.append("--test")
+
+    if shutil.which("uv"):
+        subprocess.run(["uv", "run"] + cmd, check=False)
+    else:
+        subprocess.run(cmd, check=False)
+
+def test_colab(target_dir: str):
+    target = Path(target_dir).resolve()
+    script = target / "scripts" / "export_colab.py"
+    if not script.exists():
+        script = HARNESS_ROOT / "scripts" / "export_colab.py"
+
+    print(f"🧪 Testing Google Colab Notebooks via Colab CLI for '{target.name}'...")
+    cmd = [sys.executable, str(script), "--target", str(target), "--test"]
+    if shutil.which("uv"):
+        subprocess.run(["uv", "run"] + cmd, check=False)
+    else:
+        subprocess.run(cmd, check=False)
+
 def generate_all(name: str, topic: str, stack_str: str, target_dir: str = None):
     print("=" * 70)
     print(f"⚡ [ONE-CLICK FULL ORCHESTRATOR - uv Powered] Building Workshop: '{name}'")
@@ -271,24 +307,28 @@ def generate_all(name: str, topic: str, stack_str: str, target_dir: str = None):
     proj_dir = init_workshop(name, topic, target_dir)
 
     # 2. Audit Cross-Architecture Compatibility
-    print("\n[Step 2/6] Auditing Cross-Architecture Compatibility...")
+    print("\n[Step 2/7] Auditing Cross-Architecture Compatibility...")
     audit_compatibility(stack_str)
 
     # 3. Loop Engineering Multi-Persona Evaluation
-    print("\n[Step 3/6] Running Loop Engineering Multi-Persona Review...")
+    print("\n[Step 3/7] Running Loop Engineering Multi-Persona Review...")
     audit_persona_loop(topic)
 
     # 4. Test Integrity & Smoke Code Execution
-    print("\n[Step 4/6] Testing Workshop Code & Link Integrity...")
+    print("\n[Step 4/7] Testing Workshop Code & Link Integrity...")
     test_workshop(str(proj_dir))
 
     # 5. Build PDF Handout & Previews
-    print("\n[Step 5/6] Building Publication PDF Handouts & Previews...")
+    print("\n[Step 5/7] Building Publication PDF Handouts & Previews...")
     build_pdf(str(proj_dir))
 
     # 6. Export Open Codelabs Bundle & Manifest
-    print("\n[Step 6/6] Exporting Open Codelabs Interactive Bundle & Manifest...")
+    print("\n[Step 6/7] Exporting Open Codelabs Interactive Bundle & Manifest...")
     export_codelab(str(proj_dir))
+
+    # 7. Export Google Colab Notebooks (.ipynb) & Badges
+    print("\n[Step 7/7] Exporting Google Colab Interactive Notebooks & Badges...")
+    export_colab(str(proj_dir))
 
     print("\n" + "=" * 70)
     print(f"🎉 SUCCESS! Complete Workshop Package '{name}' generated in ONE-CLICK via uv!")
@@ -334,6 +374,17 @@ def main():
     export_parser.add_argument("--output", default=None, help="Target output directory for Open Codelabs bundle")
     export_parser.add_argument("--push", action="store_true", help="Push exported bundle via `oc codelab push`")
 
+    # export-colab command
+    colab_parser = subparsers.add_parser("export-colab", help="Export Google Colab interactive notebooks (.ipynb) & badges")
+    colab_parser.add_argument("--target", required=True, help="Path to workshop project directory")
+    colab_parser.add_argument("--output", default=None, help="Target output directory for Colab notebooks")
+    colab_parser.add_argument("--repo", default=None, help="GitHub repository (e.g. USER/REPO) for Colab badges")
+    colab_parser.add_argument("--test", action="store_true", help="Run smoke test via Google Colab CLI")
+
+    # test-colab command
+    test_colab_parser = subparsers.add_parser("test-colab", help="Run smoke test on Colab notebooks using Google Colab CLI")
+    test_colab_parser.add_argument("--target", required=True, help="Path to workshop project directory")
+
     args = parser.parse_args()
 
     if args.command == "init":
@@ -350,6 +401,10 @@ def main():
         build_pdf(args.target)
     elif args.command == "export-codelab":
         export_codelab(args.target, args.output, args.push)
+    elif args.command == "export-colab":
+        export_colab(args.target, args.output, args.repo, args.test)
+    elif args.command == "test-colab":
+        test_colab(args.target)
     else:
         parser.print_help()
 

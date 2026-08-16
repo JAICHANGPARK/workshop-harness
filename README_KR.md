@@ -138,6 +138,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 | 11 | [`workshop-web-researcher`](skills/workshop-web-researcher/SKILL.md) | 도구/모델 키워드 | 최신 릴리스 버전 & 출처 | 웹 검색을 통한 최신 도구/SDK 버전 및 파괴적 변경(Breaking Changes) 실시간 검증 |
 | 12 | [`workshop-persona-loop-evaluator`](skills/workshop-persona-loop-evaluator/SKILL.md) | 워크숍 주제 & 자료 | `docs/00-persona-loop-review-report.md` | 루프 엔지니어링 기반 초급, 중급, 고급 참가자 페르소나 멀티 리뷰 & 검증 |
 | 13 | [`open-codelabs-integrator`](skills/open-codelabs-integrator/SKILL.md) | 워크숍 프로젝트 경로 | `output/open-codelabs/` (`codelab.yaml`, `steps/`), `oc` push | workshop-harness 산출물을 Open Codelabs 플랫폼 매니페스트로 변환 및 `oc` CLI/MCP 연동 발행 |
+| 14 | [`colab-workshop-integrator`](skills/colab-workshop-integrator/SKILL.md) | 워크숍 프로젝트 경로 | `output/colab/` (`*.ipynb`, 뱃지), `colab` CLI 테스트 | 워크숍 코드를 Google Colab 노트북(`.ipynb`)으로 변환, 'Open in Colab' 뱃지 삽입 및 Google Colab CLI 원격 테스트 |
 
 ---
 
@@ -160,7 +161,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 Python 3.9+ 및 `uv` 환경에서 `harness_cli.py` 도구를 이용해 손쉽게 워크숍 프로젝트를 구성하고 관리할 수 있습니다.
 
 ```bash
-# 1. 13개 전체 스킬 원클릭 연속 발동 생성 (의존성 라이브러리 자동 설치됨)
+# 1. 14개 전체 스킬 원클릭 연속 발동 생성 (의존성 라이브러리 자동 설치됨)
 uv run harness_cli.py generate-all --name my-bwai-workshop --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 
 # 2. 기술 스택 크로스 아키텍처 호환성 위험 오디팅

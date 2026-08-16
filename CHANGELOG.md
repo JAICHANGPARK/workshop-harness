@@ -6,6 +6,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [v2026.08.16] - 2026-08-16
+
+### Added
+
+- **14th Agent Skill: `colab-workshop-integrator`**:
+  - Automatically transforms workshop labs and starter/final code into interactive Google Colab Jupyter Notebooks (`.ipynb`).
+  - Injects zero-setup cells: automated `%pip install`, GPU accelerator verification (`!nvidia-smi`), and Colab Secrets credential handling (`google.colab.userdata`).
+  - Generates 'Open in Colab' SVG badges and Colab README documentation.
+  - Integrates with official [Google Colab CLI (`colab-cli`)](https://github.com/googlecolab/google-colab-cli) for automated headless cloud execution and smoke testing.
+- **CLI Commands (`harness_cli.py`)**:
+  - Added `export-colab` command with `--target`, `--output`, `--repo`, and `--test` flags.
+  - Added `test-colab` command for one-click Colab CLI verification.
+  - Updated `generate-all` pipeline to step 7/7 including Colab export.
+- **Documentation & Agent Standards**:
+  - Expanded `AGENTS.md` and MkDocs documentation to include 14 skills and Google Colab integration guides.
+
+---
+
 ## [v2026.08.01] - 2026-08-01
 
 ### Changed

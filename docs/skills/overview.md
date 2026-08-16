@@ -1,6 +1,6 @@
-# 13 Agent Skill Suite Catalog
+# 14 Agent Skill Suite Catalog
 
-`workshop-harness` features **13 specialized agent skills** distilled from real-world workshop facilitation. Each skill is defined with YAML frontmatter and markdown instructions in `skills/*/SKILL.md`.
+`workshop-harness` features **14 specialized agent skills** distilled from real-world workshop facilitation. Each skill is defined with YAML frontmatter and markdown instructions in `skills/*/SKILL.md`.
 
 ---
 
@@ -21,3 +21,4 @@
 | 11 | `workshop-web-researcher` | Tool/Model query | Real-time web auditing of latest tool/SDK releases & breaking changes | [`skills/workshop-web-researcher/SKILL.md`](file:///Users/jaichang/Documents/GitHub/workshop-harness/skills/workshop-web-researcher/SKILL.md) |
 | 12 | `workshop-persona-loop-evaluator` | Topic & materials | Multi-persona loop engineering audit across 4 attendee levels (Non-Coder, Novice, Intermediate, Senior) | [`skills/workshop-persona-loop-evaluator/SKILL.md`](file:///Users/jaichang/Documents/GitHub/workshop-harness/skills/workshop-persona-loop-evaluator/SKILL.md) |
 | 13 | `open-codelabs-integrator` | Workshop project path | Converts workshop artifacts to Open Codelabs manifests (`codelab.yaml`) & pushes via `oc` CLI/MCP | [`skills/open-codelabs-integrator/SKILL.md`](file:///Users/jaichang/Documents/GitHub/workshop-harness/skills/open-codelabs-integrator/SKILL.md) |
+| 14 | `colab-workshop-integrator` | Workshop project path | Generates Google Colab interactive notebooks (`.ipynb`), badges, and automates headless smoke tests via `colab` CLI | [`skills/colab-workshop-integrator/SKILL.md`](file:///Users/jaichang/Documents/GitHub/workshop-harness/skills/colab-workshop-integrator/SKILL.md) |
