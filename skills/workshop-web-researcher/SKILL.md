@@ -27,31 +27,47 @@ Before writing any code, README, setup guide, or prompt pack that references sof
 
 ## Primary Verification Lookup Table
 
-| Target Tool / Model | Primary Official Source URL | Example Query |
-|---|---|---|
-| **Google GenAI SDK** | `https://pypi.org/project/google-genai/` | `site:pypi.org google-genai latest SDK methods` |
-| **Ollama** | `https://github.com/ollama/ollama/releases` | `site:github.com/ollama/ollama releases latest` |
-| **Gemma Models** | `https://ollama.com/library/gemma` | `site:ollama.com/library gemma release tags` |
-| **Google Gemini API** | `https://ai.google.dev/gemini-api/docs/models/gemini` | `site:ai.google.dev gemini model versions` |
-| **LangChain / LangGraph** | `https://github.com/langchain-ai/langchain/releases` | `site:github.com/langchain-ai/langchain releases latest` |
-| **LM Studio** | `https://github.com/lmstudio-ai/lms/releases` | `site:github.com/lmstudio-ai/lms releases` |
-| **Astral uv** | `https://github.com/astral-sh/uv/releases` | `site:github.com/astral-sh/uv releases` |
-| **Docker Engine** | `https://docs.docker.com/engine/release-notes/` | `docker engine release notes latest` |
+| Target Tool / Model | Primary Official Source URL | Example Query | Latest Recommended Tags (2026) |
+|---|---|---|---|
+| **Google GenAI SDK** | `https://pypi.org/project/google-genai/` | `site:pypi.org google-genai latest SDK methods` | `google-genai` (Unified SDK) |
+| **Google Gemini API** | `https://ai.google.dev/gemini-api/docs/models/gemini` | `site:ai.google.dev gemini model versions` | `gemini-3.7-flash`, `gemini-3.5-flash`, `gemini-3.1-pro-preview` |
+| **Ollama** | `https://github.com/ollama/ollama/releases` | `site:github.com/ollama/ollama releases latest` | `ollama` latest engine |
+| **Gemma Models** | `https://ollama.com/library/gemma` | `site:ollama.com/library gemma release tags` | `gemma4`, `gemma:latest` |
+| **LangChain / LangGraph** | `https://github.com/langchain-ai/langchain/releases` | `site:github.com/langchain-ai/langchain releases latest` | `langchain>=0.3`, `langgraph` |
+| **LM Studio** | `https://github.com/lmstudio-ai/lms/releases` | `site:github.com/lmstudio-ai/lms releases` | `lms` CLI latest |
+| **Astral uv** | `https://github.com/astral-sh/uv/releases` | `site:github.com/astral-sh/uv releases` | `uv` package manager |
+| **Docker Engine** | `https://docs.docker.com/engine/release-notes/` | `docker engine release notes latest` | Latest official Docker Engine |
 
 ---
 
 ## 🔍 SDK Breaking Changes & Migration Checks
 
 When researching technical topics, verify:
-1. **New Unified SDKs**: e.g., Migrate from legacy `google-generativeai` (`import google.generativeai as genai`) to the unified **`google-genai`** SDK (`from google import genai`).
-2. **Structured Outputs**: Verify the latest JSON Schema / Pydantic integration API (e.g. `response_schema` or structured tool calling).
-3. **Pydantic V2 vs V1**: Ensure all schema definitions use Pydantic V2 (`model_validate`, `field_validator`, `BaseModel`).
+1. **Google Gemini 3.x Models**: Use the frontier **`gemini-3.7-flash`** (GA flagship workhorse for coding/agents) and **`gemini-3.5-flash`**. Leverage the new `thinking_level` parameter for controlling reasoning depth.
+2. **New Unified SDKs**: Migrate from legacy `google-generativeai` (`import google.generativeai as genai`) to the official unified **`google-genai`** SDK:
+   ```python
+   # Modern Google GenAI SDK (2026 standard)
+   from google import genai
+   from google.genai import types
+
+   client = genai.Client()
+   response = client.models.generate_content(
+       model="gemini-3.7-flash",
+       contents="Implement local RAG with Gemma 4",
+       config=types.GenerateContentConfig(
+           temperature=0.7,
+           thinking_config=types.ThinkingConfig(thinking_budget=1024)
+       )
+   )
+   ```
+3. **Structured Outputs**: Verify the latest JSON Schema / Pydantic integration API (`response_mime_type="application/json"`, `response_schema=MyModel`).
+4. **Pydantic V2 vs V1**: Ensure all schema definitions use Pydantic V2 (`model_validate`, `field_validator`, `BaseModel`).
 
 ---
 
 ## Anti-Pattern Rules (Prohibited Actions)
 
-- ❌ **Prohibited**: Hardcoding legacy models like `gpt-3.5-turbo`, `llama-2`, or `gemma-1` without live verification.
-- ❌ **Prohibited**: Using deprecated SDK import patterns or unmaintained library wrappers.
+- ❌ **Prohibited**: Hardcoding legacy retired models like `gemini-1.0-pro`, `gpt-3.5-turbo`, `llama-2`, or `gemma-1`.
+- ❌ **Prohibited**: Using deprecated `google-generativeai` import patterns instead of modern `google-genai`.
 - ❌ **Prohibited**: Relying on unpinned `latest` tags without confirming what exact model version tag it resolves to.
 - ❌ **Prohibited**: Omitting currency timestamp labels from generated preparation guides.
