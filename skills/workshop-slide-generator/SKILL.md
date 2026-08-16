@@ -7,10 +7,18 @@ description: Generates high-impact, professional workshop presentation slide dec
 
 ## Purpose
 
-Automates the creation of publication-ready, beautifully formatted **presentation slide decks** for technical workshops (Build with AI, DevFest, hands-on labs). It parses workshop curriculum (`workshop/03_labs/README.md`), prerequisites, troubleshooting matrices, and facilitator runbooks (`RUNBOOK.md`) to produce:
+Automates the creation of high-impact, professional presentation slide decks for technical workshop facilitators. It reads workshop metadata (`README.md`), hands-on lab instructions (`workshop/03_labs/README.md`), and facilitator timelines (`RUNBOOK.md`) to produce ready-to-present slide decks synchronized 1:1 with session agenda milestones.
 
-1. **Marp-compatible Markdown** (`output/slides/slides.md`): Instant export to PDF/PPTX via Marp CLI or VS Code Marp extension.
-2. **Standalone Interactive Web Presentation** (`output/slides/index.html`): Zero-dependency HTML/CSS slide deck runnable in any browser with keyboard navigation, presenter notes, and mobile responsiveness.
+> 🌐 **Mandatory Autonomous Pre-Flight Web Search**:
+> Before writing code snippets or architecture bullet points for slides, perform live web search (`search_web`) to verify latest SDK imports and active model names.
+>
+> 🌍 **Developer-Idiomatic Localization Protocol**:
+> When generating slide content in Korean, Japanese, or Chinese:
+> - **NEVER perform awkward literal / word-for-word machine translations**.
+> - **MUST use authentic developer community terminology & jargon**:
+>   - **Korean (KO)**: "프롬프트 엔지니어링", "핸즈온 랩", "스캐폴딩", "의존성 주입", "양자화", "파인튜닝", "런북", "임베딩" (Never ❌ "손으로 하는 실험실").
+>   - **Japanese (JA)**: 「ハンズオン」, 「デプロイ」, 「スキャフォールディング」, 「トークン」, 「ファインチューニング」, 「ランブック」.
+>   - **Chinese (ZH)**: 「实战工作坊」, 「脚手架」, 「提示词工程」, 「微调」, 「演练手册」.
 
 ---
 

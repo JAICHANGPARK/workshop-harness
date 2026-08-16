@@ -8,6 +8,12 @@ description: Generates OS-specific (macOS Apple Silicon/Intel, Windows PowerShel
 ## Purpose
 Prevents attendees from getting blocked on workshop day due to missing programming languages, SDKs, AI models, local LLM server port misconfigurations, or missing **Google AI Studio / GCP Gemini API Keys** by generating comprehensive OS-specific setup documentation and automated verification scripts.
 
+> 🌐 **Mandatory Autonomous Pre-Flight Web Search**:
+> Before generating setup guides, execute live web search (`search_web`) to verify current download URLs, CLI installer flags, and active model tags (e.g. `gemma4`, `gemini-3.7-flash`).
+>
+> 🌍 **Developer-Idiomatic Localization Protocol**:
+> When generating setup guides in Korean, Japanese, or Chinese, use authentic developer jargon and standard IT terminology. Never use awkward literal machine translations.
+
 ---
 
 ## Local LLM Server API & Port Configuration Matrix

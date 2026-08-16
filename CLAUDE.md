@@ -11,10 +11,16 @@ This repository provides native compatibility with **Anthropic Claude Code CLI**
 `workshop-harness` is an AI Agent Harness, Skill Suite, and CLI Automation Toolkit for technical workshops (Build with AI, DevFest, Hands-on Labs).
 
 ### 🤖 CRITICAL RULES FOR CLAUDE CODE:
-1. **🌐 Mandatory Pre-Flight Live Web Research (`workshop-web-researcher`)**:
-   - Before writing any code, workshop notebooks, or curriculum, **Claude Code MUST perform live web searches** to fetch the latest official documentation, SDK release versions (e.g. PyPI, GitHub), and current AI model tags.
-   - **Never generate outdated/deprecated API methods or legacy model names.**
-2. **Natural Language Autonomy**:
+1. **🌐 Mandatory Autonomous Pre-Flight Web Search (`workshop-web-researcher`)**:
+   - **Never rely on static model training data.** AI training weights contain obsolete/deprecated APIs and retired model tags.
+   - **Claude Code MUST AUTONOMOUSLY execute live web searches** (`search_web` / web search) before generating any workshop code, Colab notebooks, or curriculum to verify current SDK methods, modern imports, and active model tags (e.g. `gemini-3.7-flash`, `google-genai`).
+2. **🌍 Developer-Idiomatic Localization Protocol (No Literal Translations)**:
+   - When generating or translating presentation slides, runbooks, or setup guides in Korean, Japanese, or Chinese, **do NOT use literal machine translations**.
+   - **Always use developer-idiomatic community terminology**:
+     - **Korean (KO)**: "프롬프트 엔지니어링", "핸즈온 랩", "스캐폴딩", "의존성 주입", "양자화", "파인튜닝", "런북", "임베딩" (Never ❌ "손으로 하는 실험실").
+     - **Japanese (JA)**: 「ハンズオン」, 「デプロイ」, 「スキャフォールディング」, 「トークン」, 「ファインチューニング」, 「ランブック」.
+     - **Chinese (ZH)**: 「实战工作坊」, 「脚手架」, 「提示词工程」, 「微调」, 「演练手册」.
+3. **Natural Language Autonomy**:
    - **Users communicate using natural language prompts. Do NOT ask users to execute Python CLI commands directly.**
    - When a user asks a question or makes a request, **Claude Code must autonomously read the corresponding skill file (`skills/*/SKILL.md`) and execute the required Python tool or generate the artifacts on behalf of the user.**
 

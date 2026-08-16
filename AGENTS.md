@@ -19,10 +19,19 @@ This repository provides seamless integration for all AI Coding Agents including
 ## 🤖 Natural Language Prompt ➔ Autonomous Skill Execution Rules
 
 > **CRITICAL RULES FOR ALL AI CODING AGENTS (Antigravity, Claude Code, Codex, Cursor, Aider)**:
-> 1. **🌐 Mandatory Pre-Flight Live Web Research (`workshop-web-researcher`)**:
->    - When asked to create workshop curriculum, code, or notebooks for ANY topic (e.g. Gemma 4, Gemini, LangChain, vLLM, Ollama), you **MUST FIRST perform live web searches** (`search_web` / web search) to inspect the latest official documentation, newest SDK methods, breaking API changes, and current model release tags.
->    - **NEVER generate deprecated legacy code** (e.g. old Google GenAI SDKs, deprecated LangChain imports, retired model tags).
-> 2. **Natural Language Autonomy**:
+>
+> 1. **🌐 Mandatory Autonomous Pre-Flight Web Search (`workshop-web-researcher`)**:
+>    - **NEVER rely solely on LLM internal parametric training data** when generating workshop curriculum, code samples, Colab notebooks, or setup guides. Parametric weights contain outdated/deprecated APIs and retired model tags.
+>    - **You MUST AUTONOMOUSLY execute live web searches (`search_web` / web search)** BEFORE writing any code or documentation to verify the newest SDK syntax (e.g. `google-genai` SDK, LangChain 0.3+, Pydantic V2), current model tags (e.g. `gemini-3.7-flash`, `gemma4`), and breaking changes.
+>
+> 2. **🌍 Developer-Idiomatic Localization Protocol (No Literal Translations)**:
+>    - When translating or authoring slide decks, setup guides, or runbooks into Korean (KR), Japanese (JA), or Chinese (ZH), **NEVER perform awkward literal / word-for-word machine translations**.
+>    - **MUST use native developer jargon and community-standard technical terms** used by real-world software engineers:
+>      - **Korean (KO)**: Use natural IT developer terms (e.g., "프롬프트 엔지니어링", "핸즈온 랩", "스캐폴딩", "의존성 주입", "양자화", "파인튜닝", "런북", "임베딩"). Never use awkward literal phrasing (e.g. ❌ "손으로 하는 실험실", ❌ "달리는 책").
+>      - **Japanese (JA)**: Use standard developer Katakana / technical terms (e.g., 「ハンズオン」, 「デプロイ」, 「スキャフォールディング」, 「トークン」, 「ファインチューニング」, 「ランブック」).
+>      - **Chinese (ZH)**: Use Chinese tech community terminology (e.g., 「实战工作坊/动手实验」, 「脚手架」, 「提示词工程」, 「微调」, 「演练手册/Runbook」).
+>
+> 3. **🗣️ Natural Language Autonomy**:
 >    - Users communicate via **natural language chat prompts**. Do **NOT** instruct users to run Python commands themselves.
 >    - When a user requests a task, you MUST autonomously read the relevant `skills/*/SKILL.md` and execute the appropriate harness CLI command or generate the code artifacts on behalf of the user.
 
