@@ -17,17 +17,18 @@ HARNESS_ROOT = Path(__file__).parent.resolve()
 TEMPLATES_DIR = HARNESS_ROOT / "templates"
 
 def ensure_uv_dependencies():
-    """Ensure reportlab, pymupdf, pillow are installed automatically via uv or pip."""
+    """Ensure reportlab, pymupdf, pillow, python-pptx are installed automatically via uv or pip."""
     try:
         import reportlab
         import fitz  # PyMuPDF
         import PIL  # Pillow
+        import pptx  # python-pptx
     except ImportError:
         print("📦 Installing required dependencies automatically via uv/pip...")
         if shutil.which("uv"):
-            subprocess.run(["uv", "pip", "install", "reportlab", "pymupdf", "pillow"], check=False)
+            subprocess.run(["uv", "pip", "install", "reportlab", "pymupdf", "pillow", "python-pptx"], check=False)
         else:
-            subprocess.run([sys.executable, "-m", "pip", "install", "reportlab", "pymupdf", "pillow"], check=False)
+            subprocess.run([sys.executable, "-m", "pip", "install", "reportlab", "pymupdf", "pillow", "python-pptx"], check=False)
 
 def init_workshop(name: str, topic: str, target_dir: str = None):
     project_dir = Path(target_dir) / name if target_dir else Path.cwd() / name

@@ -34,21 +34,41 @@ Automates the creation of publication-ready, beautifully formatted **presentatio
 
 ---
 
-## 📁 Slide Bundle Directory Structure
+### 3. Deliverables Artifacts Structure
 
-```text
+Generated inside `<workshop-project>/output/slides/`:
+
+```
 output/slides/
-├── slides.md          # Marp-ready presentation markdown
-├── index.html         # Zero-dependency interactive web presentation
-└── README.md          # Guide for presenting and exporting to PDF/PPTX via Marp CLI
+├── slides.pptx               # 16:9 Google Slides & PowerPoint Native Deck (Ready for Google Slides Import)
+├── create_google_slides.gs   # Google Apps Script macro for direct Google Drive creation
+├── slides.md                 # Marp Markdown presentation deck
+├── index.html                # Standalone interactive zero-dependency Web presentation
+├── README.md                 # Slide presentation and Google Slides import guide
 ```
 
 ---
 
-## 🛠 Slide Generation Workflows
+## ⚡ Step-by-Step Google Slides Integration
 
-### 1. Generate Slides from Workshop Content
+### Method 1: Google Slides 1-Click Import (Recommended)
+1. Open [slides.google.com](https://slides.google.com) and click **Blank Presentation** (+).
+2. Go to **File ➔ Import slides** (`파일 ➔ 슬라이드 가져오기`).
+3. Under the **Upload** tab, drag and drop `output/slides/slides.pptx`.
+4. Click **Select all slides** ➔ **Import slides**.
+5. The full 16:9 widescreen dark presentation is immediately imported and ready to present!
+
+### Method 2: Google Apps Script Creation
+1. Open [script.google.com](https://script.google.com) and create a New Project.
+2. Paste the code from `output/slides/create_google_slides.gs` and click **Run**.
+3. A new Google Slides file is directly created in your Google Drive.
+
+---
+
+## ⚡ CLI Command Reference
+
 ```bash
+# Build Google Slides (.pptx), Marp Markdown, and Web HTML
 python3 harness_cli.py build-slides --target my-bwai-workshop
 ```
 

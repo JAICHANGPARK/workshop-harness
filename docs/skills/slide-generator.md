@@ -22,7 +22,12 @@ flowchart LR
 
 ## 🚀 Key Features
 
-### 1. Zero-Setup Web Presentation (`index.html`)
+### 1. Google Slides (구글 프레젠테이션) 1-Click Import
+- Native 16:9 widescreen `.pptx` built specifically for Google Slides.
+- Go to Google Slides ➔ **File > Import slides** ➔ Upload `slides.pptx` ➔ 100% formatted Google Slides deck created instantly.
+- Also generates a **Google Apps Script** (`create_google_slides.gs`) to programmatically build slides via Google Drive APIs.
+
+### 2. Zero-Setup Web Presentation (`index.html`)
 - Open `output/slides/index.html` in any browser (Chrome, Safari, Edge, Firefox).
 - Keyboard shortcuts:
   - `Right Arrow` / `Space` ➔ Next Slide
@@ -31,11 +36,11 @@ flowchart LR
   - `Home` / `End` ➔ First / Last Slide
 - Includes dynamic progress bar, modern typography (Inter Display + JetBrains Mono), and dark mode.
 
-### 2. Marp Markdown (`slides.md`)
+### 3. Marp Markdown (`slides.md`)
 - Ready for presentation using VS Code Marp extension or Marp CLI.
 - Standard themes, custom scoped styles, and presenter speaker notes (`<!-- Speaker Notes: ... -->`).
 
-### 3. Facilitator Runbook 1:1 Sync
+### 4. Facilitator Runbook 1:1 Sync
 - Automatically syncs agenda minutes and slide topics with `RUNBOOK.md` timestamps and `[Slide #X]` markers.
 
 ---
@@ -43,7 +48,7 @@ flowchart LR
 ## 🛠 Usage & CLI Commands
 
 ```bash
-# Build slide deck (Marp markdown and web presentation)
+# Build slide deck (Google Slides PPTX, Marp markdown, and Web presentation)
 python3 harness_cli.py build-slides --target my-bwai-workshop
 
 # Open web presentation in browser
