@@ -10,9 +10,13 @@ This repository provides native compatibility with **Anthropic Claude Code CLI**
 
 `workshop-harness` is an AI Agent Harness, Skill Suite, and CLI Automation Toolkit for technical workshops (Build with AI, DevFest, Hands-on Labs).
 
-### 🤖 CRITICAL RULE FOR CLAUDE CODE:
-**Users will communicate using natural language prompts. Do NOT ask users to execute Python CLI commands directly.**
-When a user asks a question or makes a request, **Claude Code must autonomously read the corresponding skill file (`skills/*/SKILL.md`) and execute the required Python tool or generate the artifacts on behalf of the user.**
+### 🤖 CRITICAL RULES FOR CLAUDE CODE:
+1. **🌐 Mandatory Pre-Flight Live Web Research (`workshop-web-researcher`)**:
+   - Before writing any code, workshop notebooks, or curriculum, **Claude Code MUST perform live web searches** to fetch the latest official documentation, SDK release versions (e.g. PyPI, GitHub), and current AI model tags.
+   - **Never generate outdated/deprecated API methods or legacy model names.**
+2. **Natural Language Autonomy**:
+   - **Users communicate using natural language prompts. Do NOT ask users to execute Python CLI commands directly.**
+   - When a user asks a question or makes a request, **Claude Code must autonomously read the corresponding skill file (`skills/*/SKILL.md`) and execute the required Python tool or generate the artifacts on behalf of the user.**
 
 ---
 
@@ -20,7 +24,7 @@ When a user asks a question or makes a request, **Claude Code must autonomously 
 
 | User Natural Language Prompt | Autonomous Claude Action & Triggered Skill | Execution Command / Action |
 |:---|:---|:---|
-| *"Create a 1-hour workshop for Local RAG with Gemma 4"* | Read `skills/workshop-scaffolder/SKILL.md` + full pipeline | Run `python3 harness_cli.py generate-all --name "<name>" --topic "<topic>"` |
+| *"Create a 1-hour workshop for Local RAG with Gemma 4"* | Read `skills/workshop-web-researcher/SKILL.md` ➔ `skills/workshop-scaffolder/SKILL.md` | 1. Web search latest Gemma 4 & Ollama APIs<br>2. Run `python3 harness_cli.py generate-all --name "<name>" --topic "<topic>"` |
 | *"Build Google Slides presentation for this workshop"* | Read `skills/workshop-slide-generator/SKILL.md` | Run `python3 harness_cli.py build-slides --target <dir>` |
 | *"Convert workshop to Google Colab notebooks with badges"* | Read `skills/colab-workshop-integrator/SKILL.md` | Run `python3 harness_cli.py export-colab --target <dir>` |
 | *"Audit cross-architecture risks for Intel Mac and Windows"* | Read `skills/cross-architecture-checker/SKILL.md` | Run `python3 harness_cli.py audit-compat --stack "<stack>"` |

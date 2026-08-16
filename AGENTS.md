@@ -18,15 +18,19 @@ This repository provides seamless integration for all AI Coding Agents including
 
 ## 🤖 Natural Language Prompt ➔ Autonomous Skill Execution Rules
 
-> **CRITICAL RULE FOR ALL AI CODING AGENTS (Antigravity, Claude Code, Codex, Cursor, Aider)**:
-> Users communicate via **natural language chat prompts**. Do **NOT** instruct users to run Python commands themselves.
-> When a user requests a task, you MUST autonomously read the relevant `skills/*/SKILL.md` and execute the appropriate harness CLI command or generate the code artifacts on behalf of the user.
+> **CRITICAL RULES FOR ALL AI CODING AGENTS (Antigravity, Claude Code, Codex, Cursor, Aider)**:
+> 1. **🌐 Mandatory Pre-Flight Live Web Research (`workshop-web-researcher`)**:
+>    - When asked to create workshop curriculum, code, or notebooks for ANY topic (e.g. Gemma 4, Gemini, LangChain, vLLM, Ollama), you **MUST FIRST perform live web searches** (`search_web` / web search) to inspect the latest official documentation, newest SDK methods, breaking API changes, and current model release tags.
+>    - **NEVER generate deprecated legacy code** (e.g. old Google GenAI SDKs, deprecated LangChain imports, retired model tags).
+> 2. **Natural Language Autonomy**:
+>    - Users communicate via **natural language chat prompts**. Do **NOT** instruct users to run Python commands themselves.
+>    - When a user requests a task, you MUST autonomously read the relevant `skills/*/SKILL.md` and execute the appropriate harness CLI command or generate the code artifacts on behalf of the user.
 
 | User Chat Prompt Example | Triggered Agent Skill | Autonomous Agent Tool Call / Action |
 |:---|:---|:---|
-| *"Create a 1-hour hands-on workshop on Gemma 4 Local RAG"* | `workshop-scaffolder` + All Skills | `python3 harness_cli.py generate-all --name "..." --topic "..."` |
+| *"Create a 1-hour hands-on workshop on Gemma 4 Local RAG"* | `workshop-web-researcher` ➔ `workshop-scaffolder` + All Skills | 1. Web search latest Gemma 4 & Ollama/vLLM APIs<br>2. `python3 harness_cli.py generate-all --name "..." --topic "..."` |
 | *"Build presentation slides and Google Slides deck"* | `workshop-slide-generator` | `python3 harness_cli.py build-slides --target <dir>` |
-| *"Convert workshop to Google Colab interactive notebooks"* | `colab-workshop-integrator` | `python3 harness_cli.py export-colab --target <dir>` |
+| *"Convert workshop to Google Colab interactive notebooks"* | `workshop-web-researcher` ➔ `colab-workshop-integrator` | 1. Web search latest Colab CUDA/pip packages<br>2. `python3 harness_cli.py export-colab --target <dir>` |
 | *"Audit hardware risks for Intel Mac and Windows users"* | `cross-architecture-checker` | `python3 harness_cli.py audit-compat --stack "..."` |
 | *"Review workshop from beginner, intermediate, and senior personas"* | `workshop-persona-loop-evaluator` | `python3 harness_cli.py audit-loop --topic "..."` |
 | *"Attendee terminal error: CUDA OutOfMemoryError"* | `live-debug-assistant` | Provide immediate 10-sec hotfix & CPU/quantization fallback |

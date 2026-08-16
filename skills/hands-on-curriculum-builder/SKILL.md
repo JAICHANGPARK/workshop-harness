@@ -8,6 +8,9 @@ description: Builds step-by-step hands-on lab curriculum (Lab 1, Lab 2, Lab 3), 
 ## Purpose
 Modularizes workshop content into sequential, timed hands-on labs (60 to 120 minutes total). Enforces a clean separation between starter scaffolding (`01_starter`), reference solutions (`02_final`), step-by-step lab guides (`03_labs/README.md`), and structured prompt engineering packs (`prompt-pack/README.md`).
 
+> 🌐 **Mandatory Pre-Flight Web Research Protocol**:
+> Before generating any lab code or instructions, the agent **MUST** perform live web searches (`search_web` / `workshop-web-researcher`) to verify the latest SDK syntax (e.g. `google-genai` SDK vs legacy `google-generativeai`, current LangChain/Ollama versions, latest model tags) and ensure zero deprecated code.
+
 ---
 
 ## Lab Architecture & Timing Rules

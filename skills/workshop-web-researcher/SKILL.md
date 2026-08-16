@@ -29,17 +29,29 @@ Before writing any code, README, setup guide, or prompt pack that references sof
 
 | Target Tool / Model | Primary Official Source URL | Example Query |
 |---|---|---|
+| **Google GenAI SDK** | `https://pypi.org/project/google-genai/` | `site:pypi.org google-genai latest SDK methods` |
 | **Ollama** | `https://github.com/ollama/ollama/releases` | `site:github.com/ollama/ollama releases latest` |
-| **Gemma Models** | `https://ollama.com/library/gemma4` | `site:ollama.com/library gemma release` |
+| **Gemma Models** | `https://ollama.com/library/gemma` | `site:ollama.com/library gemma release tags` |
 | **Google Gemini API** | `https://ai.google.dev/gemini-api/docs/models/gemini` | `site:ai.google.dev gemini model versions` |
+| **LangChain / LangGraph** | `https://github.com/langchain-ai/langchain/releases` | `site:github.com/langchain-ai/langchain releases latest` |
 | **LM Studio** | `https://github.com/lmstudio-ai/lms/releases` | `site:github.com/lmstudio-ai/lms releases` |
 | **Astral uv** | `https://github.com/astral-sh/uv/releases` | `site:github.com/astral-sh/uv releases` |
 | **Docker Engine** | `https://docs.docker.com/engine/release-notes/` | `docker engine release notes latest` |
 
 ---
 
+## 🔍 SDK Breaking Changes & Migration Checks
+
+When researching technical topics, verify:
+1. **New Unified SDKs**: e.g., Migrate from legacy `google-generativeai` (`import google.generativeai as genai`) to the unified **`google-genai`** SDK (`from google import genai`).
+2. **Structured Outputs**: Verify the latest JSON Schema / Pydantic integration API (e.g. `response_schema` or structured tool calling).
+3. **Pydantic V2 vs V1**: Ensure all schema definitions use Pydantic V2 (`model_validate`, `field_validator`, `BaseModel`).
+
+---
+
 ## Anti-Pattern Rules (Prohibited Actions)
 
 - ❌ **Prohibited**: Hardcoding legacy models like `gpt-3.5-turbo`, `llama-2`, or `gemma-1` without live verification.
+- ❌ **Prohibited**: Using deprecated SDK import patterns or unmaintained library wrappers.
 - ❌ **Prohibited**: Relying on unpinned `latest` tags without confirming what exact model version tag it resolves to.
 - ❌ **Prohibited**: Omitting currency timestamp labels from generated preparation guides.
