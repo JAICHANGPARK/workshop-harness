@@ -1,6 +1,6 @@
 # CLAUDE.md - Claude Code Agent Instructions for Workshop Harness
 
-> Standard Claude Code Context & Instructions for Workshop Harness (15 Agent Skills)
+> Standard Claude Code Context & Instructions for Workshop Harness (16 Agent Skills)
 
 This repository provides native compatibility with **Anthropic Claude Code CLI**, **Claude Sonnet 5 / Claude Opus 5**, and **Claude Desktop**.
 
@@ -46,7 +46,7 @@ This repository provides native compatibility with **Anthropic Claude Code CLI**
 
 ---
 
-## 📁 15 Specialized Agent Skills Index
+## 📁 16 Specialized Agent Skills Index
 
 Claude Code should inspect these Markdown skills whenever relevant:
 
@@ -65,6 +65,7 @@ Claude Code should inspect these Markdown skills whenever relevant:
 13. [`skills/open-codelabs-integrator/SKILL.md`](skills/open-codelabs-integrator/SKILL.md)
 14. [`skills/colab-workshop-integrator/SKILL.md`](skills/colab-workshop-integrator/SKILL.md)
 15. [`skills/workshop-slide-generator/SKILL.md`](skills/workshop-slide-generator/SKILL.md)
+16. [`skills/adk-workshop-builder/SKILL.md`](skills/adk-workshop-builder/SKILL.md)
 
 ---
 

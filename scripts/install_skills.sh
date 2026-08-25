@@ -44,11 +44,12 @@ skills=(
     "open-codelabs-integrator"
     "colab-workshop-integrator"
     "workshop-slide-generator"
+    "adk-workshop-builder"
 )
 
 for target_dir in "${TARGET_DIRS[@]}"; do
     mkdir -p "$target_dir"
-    echo "📦 Installing 15 Workshop Harness Skills to $target_dir..."
+    echo "📦 Installing 16 Workshop Harness Skills to $target_dir..."
     for skill in "${skills[@]}"; do
         if [ -d "$SOURCE_DIR/$skill" ]; then
             dest="$target_dir/$skill"
@@ -58,4 +59,4 @@ for target_dir in "${TARGET_DIRS[@]}"; do
     done
 done
 
-echo "✅ All 15 Workshop Harness skills & dependencies installed successfully across Gemini, Claude Code, and Codex agent environments!"
+echo "✅ All 16 Workshop Harness skills & dependencies installed successfully across Gemini, Claude Code, and Codex agent environments!"
