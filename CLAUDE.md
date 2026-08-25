@@ -2,7 +2,7 @@
 
 > Standard Claude Code Context & Instructions for Workshop Harness (15 Agent Skills)
 
-This repository provides native compatibility with **Anthropic Claude Code CLI**, **Claude 3.7 Sonnet**, and **Claude Desktop**.
+This repository provides native compatibility with **Anthropic Claude Code CLI**, **Claude Sonnet 5 / Claude Opus 5**, and **Claude Desktop**.
 
 ---
 

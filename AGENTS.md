@@ -22,7 +22,7 @@ This repository provides seamless integration for all AI Coding Agents including
 >
 > 1. **🌐 Mandatory Autonomous Pre-Flight Web Search (`workshop-web-researcher`)**:
 >    - **NEVER rely solely on LLM internal parametric training data** when generating workshop curriculum, code samples, Colab notebooks, or setup guides. Parametric weights contain outdated/deprecated APIs and retired model tags.
->    - **You MUST AUTONOMOUSLY execute live web searches (`search_web` / web search)** BEFORE writing any code or documentation to verify the newest SDK syntax (e.g. `google-genai` SDK, LangChain 0.3+, Pydantic V2), current model tags (e.g. `gemini-3.7-flash`, `gemma4`), and breaking changes.
+>    - **You MUST AUTONOMOUSLY execute live web searches (`search_web` / web search)** BEFORE writing any code or documentation to verify the newest SDK syntax (e.g. `google-genai` SDK, LangChain 0.3+, Pydantic V2), current model tags (e.g. `gemini-3.7-flash`, `claude-sonnet-5`, `gpt-5.6-sol`, `gemma4`), and breaking changes.
 >
 > 2. **🌍 Developer-Idiomatic Localization Protocol (No Literal Translations)**:
 >    - When translating or authoring slide decks, setup guides, or runbooks into Korean (KR), Japanese (JA), or Chinese (ZH), **NEVER perform awkward literal / word-for-word machine translations**.

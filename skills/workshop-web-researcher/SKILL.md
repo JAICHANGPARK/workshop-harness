@@ -31,6 +31,10 @@ Before writing any code, README, setup guide, or prompt pack that references sof
 |---|---|---|---|
 | **Google GenAI SDK** | `https://pypi.org/project/google-genai/` | `site:pypi.org google-genai latest SDK methods` | `google-genai` (Unified SDK) |
 | **Google Gemini API** | `https://ai.google.dev/gemini-api/docs/models/gemini` | `site:ai.google.dev gemini model versions` | `gemini-3.7-flash`, `gemini-3.5-flash`, `gemini-3.1-pro-preview` |
+| **Google Gemini Live API** | `https://ai.google.dev/gemini-api/docs/live` | `site:ai.google.dev gemini live api` | `gemini-3.1-flash-live-preview`, `gemini-3.5-live-translate-preview` |
+| **Flutter Gemini Live** | `https://pub.dev/packages/gemini_live` | `site:pub.dev gemini_live flutter` | `gemini_live` (pub.dev direct WebSocket package) |
+| **Anthropic Claude API** | `https://docs.anthropic.com/en/docs/about-claude/models` | `site:docs.anthropic.com claude models release` | `claude-sonnet-5`, `claude-opus-5`, `claude-fable-5` |
+| **OpenAI API** | `https://platform.openai.com/docs/models` | `site:platform.openai.com/docs/models latest` | `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna` |
 | **Ollama** | `https://github.com/ollama/ollama/releases` | `site:github.com/ollama/ollama releases latest` | `ollama` latest engine |
 | **Gemma Models** | `https://ollama.com/library/gemma` | `site:ollama.com/library gemma release tags` | `gemma4`, `gemma:latest` |
 | **LangChain / LangGraph** | `https://github.com/langchain-ai/langchain/releases` | `site:github.com/langchain-ai/langchain releases latest` | `langchain>=0.3`, `langgraph` |
@@ -40,11 +44,19 @@ Before writing any code, README, setup guide, or prompt pack that references sof
 
 ---
 
-## 🔍 SDK Breaking Changes & Migration Checks
+## SDK Breaking Changes & Migration Checks
 
 When researching technical topics, verify:
 1. **Google Gemini 3.x Models**: Use the frontier **`gemini-3.7-flash`** (GA flagship workhorse for coding/agents) and **`gemini-3.5-flash`**. Leverage the new `thinking_level` parameter for controlling reasoning depth.
-2. **New Unified SDKs**: Migrate from legacy `google-generativeai` (`import google.generativeai as genai`) to the official unified **`google-genai`** SDK:
+2. **Google Gemini Live Real-time Multimodal API**:
+   - Primary model: **`gemini-3.1-flash-live-preview`** for low-latency bidirectional audio/video/text streaming.
+   - Real-time Translation: **`gemini-3.5-live-translate-preview`** for speech-to-speech live streaming translation.
+   - **Flutter / Dart SDK**: Use the pub.dev **`gemini_live`** package for zero-Firebase direct WebSocket integration or `firebase_ai` for enterprise apps.
+   - **Python SDK**: Use `client.aio.live.connect` with `send_realtime_input` from `google-genai`.
+   - **JavaScript / TypeScript SDK**: Use `@google/genai` `ai.live.connect` and Ephemeral Tokens for browser-based client security.
+3. **Anthropic Claude Generation 5**: Use **`claude-sonnet-5`** (coding/balanced workhorse), **`claude-opus-5`** (complex reasoning/enterprise), and **`claude-fable-5`** (long-horizon agents).
+4. **OpenAI GPT-5.6 Series**: Use **`gpt-5.6-sol`** (flagship coding & reasoning), **`gpt-5.6-terra`** (general agentic workflow), and **`gpt-5.6-luna`** (lightweight fast inference).
+5. **New Unified SDKs**: Migrate from legacy `google-generativeai` (`import google.generativeai as genai`) to the official unified **`google-genai`** SDK:
    ```python
    # Modern Google GenAI SDK (2026 standard)
    from google import genai
@@ -60,8 +72,8 @@ When researching technical topics, verify:
        )
    )
    ```
-3. **Structured Outputs**: Verify the latest JSON Schema / Pydantic integration API (`response_mime_type="application/json"`, `response_schema=MyModel`).
-4. **Pydantic V2 vs V1**: Ensure all schema definitions use Pydantic V2 (`model_validate`, `field_validator`, `BaseModel`).
+6. **Structured Outputs**: Verify the latest JSON Schema / Pydantic integration API (`response_mime_type="application/json"`, `response_schema=MyModel`).
+7. **Pydantic V2 vs V1**: Ensure all schema definitions use Pydantic V2 (`model_validate`, `field_validator`, `BaseModel`).
 
 ---
 

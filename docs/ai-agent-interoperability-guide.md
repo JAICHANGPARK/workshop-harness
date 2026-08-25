@@ -28,7 +28,7 @@
 ---
 
 ### 4. CLI 도구 직접 실행 (모든 에이전트 공통)
-- 에이전트가 어떤 LLM 모델(Gemini 3.7 Flash, Claude 3.7 Sonnet, GPT-4o 등)이든 관계없이 터미널 실행 권한이 있다면 아래 명령어를 통해 모든 기능을 실행할 수 있습니다:
+- 에이전트가 어떤 LLM 모델(Gemini 3.7 Flash, Claude Sonnet 5, GPT-5.6 Terra 등)이든 관계없이 터미널 실행 권한이 있다면 아래 명령어를 통해 모든 기능을 실행할 수 있습니다:
   ```bash
   python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
   ```

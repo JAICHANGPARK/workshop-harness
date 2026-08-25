@@ -17,6 +17,7 @@ Modularizes workshop content into sequential, timed hands-on labs (60 to 120 min
 
 A standard technical workshop curriculum is divided into 3 progressive lab phases:
 
+### Standard LLM / RAG Track
 ```text
 +-------------------------------------------------------------------+
 | Lab 01: Setup & API Sanity Check (15-20 min)                       |
@@ -33,6 +34,27 @@ A standard technical workshop curriculum is divided into 3 progressive lab phase
 +-------------------------------------------------------------------+
 | Lab 03: RAG / Agent Multi-step Pipeline (35-40 min)               |
 | -> Connect Vector Search or Tool Calling for end-to-end output    |
++-------------------------------------------------------------------+
+```
+
+### Gemini Live Real-time Streaming & Multimodal Track (Python / JS / Flutter)
+```text
++-------------------------------------------------------------------+
+| Lab 01: WebSocket Connection & Ephemeral Tokens (15-20 min)        |
+| -> Connect to gemini-3.1-flash-live-preview via LiveSession / SDK |
++-------------------------------------------------------------------+
+                                 |
+                                 v
++-------------------------------------------------------------------+
+| Lab 02: Real-time Bidirectional Audio & VAD Handling (30-35 min)  |
+| -> Stream 16kHz PCM audio chunk & handle model speech playback     |
+| -> (Flutter: gemini_live | Python: google-genai | JS: @google/genai) |
++-------------------------------------------------------------------+
+                                 |
+                                 v
++-------------------------------------------------------------------+
+| Lab 03: Real-time Multimodal (Camera/Video) & Live Tool Calling   |
+| -> Stream JPEG video frames & execute real-time function calling  |
 +-------------------------------------------------------------------+
 ```
 
