@@ -30,9 +30,11 @@ def ensure_uv_dependencies():
         else:
             subprocess.run([sys.executable, "-m", "pip", "install", "reportlab", "pymupdf", "pillow", "python-pptx"], check=False)
 
-def init_workshop(name: str, topic: str, target_dir: str = None):
+def init_workshop(name: str, topic: str, target_dir: str = None, stack_str: str = "python"):
     project_dir = Path(target_dir) / name if target_dir else Path.cwd() / name
     print(f"🚀 Initializing new workshop project: '{name}' at {project_dir}")
+
+    stack = [s.strip().lower() for s in stack_str.split(",")] if stack_str else ["python"]
 
     # Create directory structure
     dirs = [
@@ -106,10 +108,11 @@ def init_workshop(name: str, topic: str, target_dir: str = None):
     readme_content = f"""# {name}
 
 > Topic: {topic}
+> Tech Stack: {stack_str}
 
 This repository contains pre-event preparation documents and hands-on lab code for the **{topic}** workshop.
 
-## Quick Start (uv Powered)
+## Quick Start
 
 1. **Preparation Guide**: [gemma4-local-setup-guide.md](./gemma4-local-setup-guide.md)
 2. **Architecture Compatibility Check**: `./scripts/check_architecture_compat.sh` (Windows: `.\\scripts\\check_architecture_compat.ps1`)
@@ -147,26 +150,92 @@ This repository contains pre-event preparation documents and hands-on lab code f
     with open(project_dir / "README.md", "w", encoding="utf-8") as f:
         f.write(readme_content)
 
-    # 6. Starter main.py
-    starter_main = """# Starter Code for Workshop
+    # 6. Language-specific Starter & Final Code
+    is_ts = any(k in stack for k in ["typescript", "ts", "javascript", "js", "node"])
+    is_go = any(k in stack for k in ["go", "golang"])
+    is_kotlin = any(k in stack for k in ["kotlin", "kt", "java"])
+
+    if is_ts:
+        pkg_json = '{\n  "name": "' + name + '",\n  "version": "1.0.0",\n  "type": "module",\n  "scripts": {\n    "start": "tsx src/index.ts"\n  },\n  "dependencies": {\n    "@google/genai": "^0.1.0",\n    "dotenv": "^16.4.5"\n  },\n  "devDependencies": {\n    "tsx": "^4.19.0",\n    "typescript": "^5.5.4"\n  }\n}\n'
+        with open(project_dir / "workshop" / "01_starter" / "package.json", "w", encoding="utf-8") as f:
+            f.write(pkg_json)
+        with open(project_dir / "workshop" / "02_final" / "package.json", "w", encoding="utf-8") as f:
+            f.write(pkg_json)
+
+        starter_ts = '// TypeScript / Node.js Starter Code\nimport "dotenv/config";\n\nasync function main() {\n  console.log("Welcome to the TypeScript ADK Workshop! Open workshop/03_labs/README.md to begin.");\n}\n\nmain().catch(console.error);\n'
+        final_ts = '// TypeScript / Node.js Final Solution\nimport "dotenv/config";\n\nasync function main() {\n  console.log("All TypeScript ADK Workshop Labs Completed Successfully!");\n}\n\nmain().catch(console.error);\n'
+        with open(project_dir / "workshop" / "01_starter" / "src" / "index.ts", "w", encoding="utf-8") as f:
+            f.write(starter_ts)
+        with open(project_dir / "workshop" / "02_final" / "src" / "index.ts", "w", encoding="utf-8") as f:
+            f.write(final_ts)
+        # Keep Python fallback for test runner
+        with open(project_dir / "workshop" / "01_starter" / "main.py", "w", encoding="utf-8") as f:
+            f.write('print("TypeScript ADK Workshop Starter")\n')
+        with open(project_dir / "workshop" / "02_final" / "main.py", "w", encoding="utf-8") as f:
+            f.write('print("TypeScript ADK Workshop Final")\n')
+
+    elif is_go:
+        go_mod = f"module {name}\n\ngo 1.22\n"
+        with open(project_dir / "workshop" / "01_starter" / "go.mod", "w", encoding="utf-8") as f:
+            f.write(go_mod)
+        with open(project_dir / "workshop" / "02_final" / "go.mod", "w", encoding="utf-8") as f:
+            f.write(go_mod)
+
+        starter_go = 'package main\n\nimport "fmt"\n\nfunc main() {\n\tfmt.Println("Welcome to the Go ADK Workshop! Open workshop/03_labs/README.md to begin.")\n}\n'
+        final_go = 'package main\n\nimport "fmt"\n\nfunc main() {\n\tfmt.Println("All Go ADK Workshop Labs Completed Successfully!")\n}\n'
+        with open(project_dir / "workshop" / "01_starter" / "main.go", "w", encoding="utf-8") as f:
+            f.write(starter_go)
+        with open(project_dir / "workshop" / "02_final" / "main.go", "w", encoding="utf-8") as f:
+            f.write(final_go)
+        # Keep Python fallback for test runner
+        with open(project_dir / "workshop" / "01_starter" / "main.py", "w", encoding="utf-8") as f:
+            f.write('print("Go ADK Workshop Starter")\n')
+        with open(project_dir / "workshop" / "02_final" / "main.py", "w", encoding="utf-8") as f:
+            f.write('print("Go ADK Workshop Final")\n')
+
+    elif is_kotlin:
+        (project_dir / "workshop" / "01_starter" / "src" / "main" / "kotlin").mkdir(parents=True, exist_ok=True)
+        (project_dir / "workshop" / "02_final" / "src" / "main" / "kotlin").mkdir(parents=True, exist_ok=True)
+
+        gradle_kts = 'plugins {\n    kotlin("jvm") version "2.0.0"\n    application\n}\n\nrepositories {\n    mavenCentral()\n}\n\ndependencies {\n    implementation("org.jetbrains.kotlin:kotlin-stdlib")\n}\n'
+        with open(project_dir / "workshop" / "01_starter" / "build.gradle.kts", "w", encoding="utf-8") as f:
+            f.write(gradle_kts)
+        with open(project_dir / "workshop" / "02_final" / "build.gradle.kts", "w", encoding="utf-8") as f:
+            f.write(gradle_kts)
+
+        starter_kt = 'fun main() {\n    println("Welcome to the Kotlin ADK Workshop! Open workshop/03_labs/README.md to begin.")\n}\n'
+        final_kt = 'fun main() {\n    println("All Kotlin ADK Workshop Labs Completed Successfully!")\n}\n'
+        with open(project_dir / "workshop" / "01_starter" / "src" / "main" / "kotlin" / "Main.kt", "w", encoding="utf-8") as f:
+            f.write(starter_kt)
+        with open(project_dir / "workshop" / "02_final" / "src" / "main" / "kotlin" / "Main.kt", "w", encoding="utf-8") as f:
+            f.write(final_kt)
+        # Keep Python fallback for test runner
+        with open(project_dir / "workshop" / "01_starter" / "main.py", "w", encoding="utf-8") as f:
+            f.write('print("Kotlin ADK Workshop Starter")\n')
+        with open(project_dir / "workshop" / "02_final" / "main.py", "w", encoding="utf-8") as f:
+            f.write('print("Kotlin ADK Workshop Final")\n')
+
+    else:
+        # Default Python starter
+        starter_main = """# Starter Code for Workshop
 def main():
     print("Welcome to the Workshop! Open workshop/03_labs/README.md to begin.")
 
 if __name__ == "__main__":
     main()
 """
-    with open(project_dir / "workshop" / "01_starter" / "main.py", "w", encoding="utf-8") as f:
-        f.write(starter_main)
+        with open(project_dir / "workshop" / "01_starter" / "main.py", "w", encoding="utf-8") as f:
+            f.write(starter_main)
 
-    final_main = """# Final Completed Code for Workshop
+        final_main = """# Final Completed Code for Workshop
 def main():
     print("All Workshop Labs Completed Successfully!")
 
 if __name__ == "__main__":
     main()
 """
-    with open(project_dir / "workshop" / "02_final" / "main.py", "w", encoding="utf-8") as f:
-        f.write(final_main)
+        with open(project_dir / "workshop" / "02_final" / "main.py", "w", encoding="utf-8") as f:
+            f.write(final_main)
 
     print(f"✨ Workshop '{name}' initialized successfully at {project_dir}!")
     return project_dir
@@ -326,7 +395,7 @@ def generate_all(name: str, topic: str, stack_str: str, target_dir: str = None):
     ensure_uv_dependencies()
 
     # 1. Scaffolding Structure
-    proj_dir = init_workshop(name, topic, target_dir)
+    proj_dir = init_workshop(name, topic, target_dir, stack_str)
 
     # 2. Audit Cross-Architecture Compatibility
     print("\n[Step 2/8] Auditing Cross-Architecture Compatibility...")
@@ -369,6 +438,7 @@ def main():
     init_parser = subparsers.add_parser("init", help="Initialize a new workshop project")
     init_parser.add_argument("--name", required=True, help="Workshop project name")
     init_parser.add_argument("--topic", default="BWAI Hands-on Workshop", help="Workshop topic")
+    init_parser.add_argument("--stack", default="python", help="Tech stack (comma-separated, e.g. python, typescript, go, kotlin)")
     init_parser.add_argument("--dir", default=None, help="Target parent directory")
 
     # generate-all (One-Click Full Orchestration)
@@ -420,7 +490,7 @@ def main():
     args = parser.parse_args()
 
     if args.command == "init":
-        init_workshop(args.name, args.topic, args.dir)
+        init_workshop(args.name, args.topic, args.dir, args.stack)
     elif args.command == "generate-all":
         generate_all(args.name, args.topic, args.stack, args.dir)
     elif args.command == "audit-compat":

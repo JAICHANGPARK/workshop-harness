@@ -60,7 +60,11 @@ When scaffolding a new workshop project:
 2. **Template Copying**: Copy master templates from `templates/doc-templates/` and `templates/script-templates/`.
 3. **Executable Bit Enforcement**: Mark all `.sh` and `.py` scripts as executable (`chmod 755`).
 4. **Environment Initialization**: Write `.env.sample` containing placeholder keys (`GEMINI_API_KEY=YOUR_GEMINI_API_KEY_HERE`).
-5. **Dependency Declarations**: Copy `pyproject.toml` supporting Astral `uv`.
+5. **Multi-Language Starter Scaffolding (Python, TypeScript, Go, Kotlin)**:
+   - **Python**: Generates `pyproject.toml` and `main.py` entrypoints.
+   - **TypeScript / JavaScript**: Generates `package.json` with `@google/genai` dependencies and `src/index.ts`.
+   - **Go (Golang)**: Generates `go.mod` and `main.go`.
+   - **Kotlin / Java**: Generates `build.gradle.kts` and `src/main/kotlin/Main.kt`.
 
 ---
 
