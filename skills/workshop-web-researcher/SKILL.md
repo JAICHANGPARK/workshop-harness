@@ -30,6 +30,7 @@ Before writing any code, README, setup guide, or prompt pack that references sof
 | Target Tool / Model | Primary Official Source URL | Example Query | Latest Recommended Tags (2026) |
 |---|---|---|---|
 | **Google GenAI SDK** | `https://pypi.org/project/google-genai/` | `site:pypi.org google-genai latest SDK methods` | `google-genai` (Unified SDK) |
+| **Google Agent Development Kit (ADK)** | `https://cloud.google.com/vertex-ai/docs/agent-development-kit` | `site:cloud.google.com agent development kit adk` | `google-adk`, `google-genai-adk` (Python, TS, Go) |
 | **Google Gemini API** | `https://ai.google.dev/gemini-api/docs/models/gemini` | `site:ai.google.dev gemini model versions` | `gemini-3.7-flash`, `gemini-3.5-flash`, `gemini-3.1-pro-preview` |
 | **Google Gemini Live API** | `https://ai.google.dev/gemini-api/docs/live` | `site:ai.google.dev gemini live api` | `gemini-3.1-flash-live-preview`, `gemini-3.5-live-translate-preview` |
 | **Flutter Gemini Live** | `https://pub.dev/packages/gemini_live` | `site:pub.dev gemini_live flutter` | `gemini_live` (pub.dev direct WebSocket package) |
