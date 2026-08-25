@@ -87,6 +87,8 @@ For enterprise or GCP-based workshops, connect via the Vertex AI API.
 - **macOS**: `brew install --cask flutter`
 - **Windows**: `winget install Flutter.Flutter`
 - **Linux**: `sudo snap install flutter --classic`
+- **Gemini Live Package**: `flutter pub add gemini_live`
+- **LiteRT-LM (On-Device)**: `flutter pub add google_litert` (or platform native LiteRT C/Swift libraries)
 
 ---
 
