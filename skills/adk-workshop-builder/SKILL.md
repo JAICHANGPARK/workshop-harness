@@ -33,23 +33,12 @@ When generating an ADK workshop, enforce the following three foundational archit
 - **Coordinator (Root Agent)**: Receives user queries, decomposes complex objectives into sub-tasks, and delegates to specialized sub-agents.
 - **Specialist Sub-Agents**: Dedicated agents with narrow scopes and custom tools (e.g. `ResearchAgent`, `CodeExecutionAgent`, `ReviewerAgent`).
 
-```text
-               +-----------------------------+
-               |   User Natural Language     |
-               +-----------------------------+
-                              |
-                              v
-               +-----------------------------+
-               |  Coordinator Agent (Root)   |
-               |  (Gemini 3.7 Flash)         |
-               +-----------------------------+
-                 /            |            \
-                /             |             \
-               v              v              v
-    +---------------+ +---------------+ +---------------+
-    |  Search Agent | |  Coder Agent  | | Review Agent  |
-    |  (Tool: Web)  | | (Tool: Exec)  | |(Tool: Linter) |
-    +---------------+ +---------------+ +---------------+
+```mermaid
+flowchart TD
+    User["User Natural Language Prompt"] --> Coordinator["Coordinator Agent (Root)<br>(Gemini 3.7 Flash)"]
+    Coordinator --> SearchAgent["Search Agent<br>(Tool: Web Search)"]
+    Coordinator --> CoderAgent["Coder Agent<br>(Tool: Code Exec)"]
+    Coordinator --> ReviewAgent["Review Agent<br>(Tool: Linter)"]
 ```
 
 ### 2. Custom Tool Definition & Structured Output Binding
@@ -66,23 +55,13 @@ When generating an ADK workshop, enforce the following three foundational archit
 
 ## 3-Stage Hands-on Lab Curriculum
 
-```text
-+-------------------------------------------------------------------------+
-| Lab 01: ADK Single Agent & Custom Tool Binding (20-25 min)              |
-| -> Initialize ADK Agent, register custom tools, test structured outputs |
-+-------------------------------------------------------------------------+
-                                    |
-                                    v
-+-------------------------------------------------------------------------+
-| Lab 02: Multi-Agent Orchestration & Sub-Agent Delegation (35-40 min)    |
-| -> Build Coordinator Agent and delegate tasks to specialized workers    |
-+-------------------------------------------------------------------------+
-                                    |
-                                    v
-+-------------------------------------------------------------------------+
-| Lab 03: Human-in-the-Loop Interruption & Trajectory Eval (25-30 min)    |
-| -> Implement approval checkpoints and benchmark agent decision paths    |
-+-------------------------------------------------------------------------+
+```mermaid
+flowchart TD
+    Lab1["Lab 01: ADK Single Agent & Custom Tool Binding (20-25 min)<br>Initialize ADK Agent, register custom tools, test structured outputs"]
+    Lab2["Lab 02: Multi-Agent Orchestration & Sub-Agent Delegation (35-40 min)<br>Build Coordinator Agent and delegate tasks to specialized workers"]
+    Lab3["Lab 03: Human-in-the-Loop Interruption & Trajectory Eval (25-30 min)<br>Implement approval checkpoints and benchmark agent decision paths"]
+
+    Lab1 --> Lab2 --> Lab3
 ```
 
 ---
