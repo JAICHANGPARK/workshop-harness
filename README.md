@@ -122,7 +122,7 @@ Realistic quantitative metrics experienced by facilitators (speakers/TAs) using 
 | **Attendee Capacity per TA** | **1 : 6 Attendees** | **1 : 25~30 Attendees** | **4-5x Support Capacity** | `live-debug-assistant` |
 | **Live Debugging MTTR** | **18 Min / Case** | **0.5 Min (30s) / Case** | **36x Faster Resolution** | `live-debug-assistant` |
 | **Live Session Delays** | **~35 Min Avg** | **< 3 Min** | **91.4% Delay Reduction** | `cross-architecture-checker` |
-| **Facilitator Labor Savings** | 100% Baseline | **15 Hours Saved** | **~2 Days Saved / Workshop** | All 13 Skills |
+| **Facilitator Labor Savings** | 100% Baseline | **15 Hours Saved** | **~2 Days Saved / Workshop** | All 15 Skills |
 
 > 💡 **Facilitator Live Debugging Tip**: When an attendee hits a terminal error during a live lab, invoking `live-debug-assistant` generates a 10-second hotfix command for immediate 30-second resolution.
 
@@ -170,7 +170,7 @@ Participants bring a wide variety of hardware architectures. This matrix identif
 Using Python 3.9+ and `uv`, you can manage workshops via the command-line interface:
 
 ```bash
-# 1. One-Click Full Workshop Generation Across All 13 Skills
+# 1. One-Click Full Workshop Generation Across All 15 Skills
 uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 
 # 2. Audit tech stack for cross-architecture risks
