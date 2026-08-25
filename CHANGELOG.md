@@ -6,6 +6,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [v2026.08.26] - 2026-08-26
+
+### Added & Updated
+
+- **Gemini 3.7 Flash & Google GenAI SDK Support**:
+  - Integrated `gemini-3.7-flash` as primary workhorse model for coding and agentic tasks.
+  - Added support for thinking budget control (`thinking_config` / `thinkingLevel`).
+  - Standardized on unified `google-genai` Python and `@google/genai` JavaScript/TypeScript SDKs.
+- **Gemini Live API & Real-Time Multimodal Streaming**:
+  - Added full support for `gemini-3.1-flash-live-preview` (low-latency voice/audio/video) and `gemini-3.5-live-translate-preview`.
+  - Added pub.dev `gemini_live` Flutter package integration (zero Firebase dependency, direct WebSocket streaming).
+  - Added 3-step Gemini Live real-time curriculum track to `hands-on-curriculum-builder`.
+  - Added acoustic echo/VAD prevention and microphone permission audit rules to `cross-architecture-checker` and `prerequisite-checker`.
+- **Next-Gen Model Specifications**:
+  - Added Anthropic Claude Generation 5 (`claude-sonnet-5`, `claude-opus-5`, `claude-fable-5`).
+  - Added OpenAI GPT-5.6 series (`gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`).
+- **On-Device AI & LiteRT-LM Integration**:
+  - Added Google LiteRT-LM, Gemma 4 (`.litertlm`), and Apple MLX (`mlx-lm`) on-device hands-on lab guidelines.
+- **15 Agent Skills Metadata & Localization Sync**:
+  - Synchronized 15 skills metadata across `docs/`, `README.md`, `CLAUDE.md`, `AGENTS.md`, and `website/app.js` (EN, KO, JA, ZH).
+
+---
+
 ## [v2026.08.16] - 2026-08-16
 
 ### Added
