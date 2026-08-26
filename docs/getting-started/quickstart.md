@@ -25,12 +25,12 @@ Ensure the following tools are installed:
 git clone https://github.com/JAICHANGPARK/workshop-harness.git
 cd workshop-harness
 
-# 2. Auto-install 16 skills to ~/.gemini/skills/
+# 2. Auto-install 17 skills to ~/.gemini/skills/
 chmod +x scripts/install_skills.sh
 ./scripts/install_skills.sh
 ```
 
-The `install_skills.sh` script copies all 16 agent skill directories to `~/.gemini/skills/` and syncs required dependencies (`reportlab`, `pymupdf`, `pillow`).
+The `install_skills.sh` script copies all 17 agent skill directories to `~/.gemini/skills/` and syncs required dependencies (`reportlab`, `pymupdf`, `pillow`).
 
 ---
 

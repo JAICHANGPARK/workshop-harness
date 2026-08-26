@@ -1,6 +1,6 @@
 # Workshop Harness
 
-> **AI Agent Harness, 16 Skill Suite & CLI Automation Toolkit** for Technical Workshops (Build with AI, DevFest, Hands-on Labs)
+> **AI Agent Harness, 17 Skill Suite & CLI Automation Toolkit** for Technical Workshops (Build with AI, DevFest, Hands-on Labs)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![uv Powered](https://img.shields.io/badge/python%20package%20manager-uv-de1f88.svg)](https://astral.sh/uv)
@@ -19,8 +19,8 @@ Adhering to the [AGENTS.md open specification](https://agents.md/), this harness
 
 ## Key Features
 
-- **One-Click Full Generation (`generate-all`)**: Runs an 8-step automated pipeline across all 16 agent skills to generate repo scaffolds, guides, architecture compatibility audits, persona loop evaluations, smoke tests, PDF handouts, Open Codelabs bundles, Google Colab notebooks, and presentation slide decks in under 60 seconds.
-- **16 Agent Skills (`skills/*`)**: Packed with 16 specialized agent skills capturing real-world workshop facilitation expertise.
+- **One-Click Full Generation (`generate-all`)**: Runs an 8-step automated pipeline across all 17 agent skills to generate repo scaffolds, guides, architecture compatibility audits, persona loop evaluations, smoke tests, PDF handouts, Open Codelabs bundles, Google Colab notebooks, and presentation slide decks in under 60 seconds.
+- **17 Agent Skills (`skills/*`)**: Packed with 17 specialized agent skills capturing real-world workshop facilitation expertise.
 - **Presentation Slide Deck Generator**: Automatically builds Marp Markdown (`slides.md`) and zero-dependency interactive Web Presentations (`index.html`) synced 1:1 with facilitator runbook markers.
 - **Google Colab & Colab CLI Integration**: Converts workshops into interactive Jupyter Notebooks (`.ipynb`) with 'Open in Colab' badges, GPU checks, Colab Secrets, and automated headless testing via the official [Google Colab CLI](https://github.com/googlecolab/google-colab-cli).
 - **Cross-Architecture Audit**: Automatically diagnoses hardware & GPU compatibility risks across Apple Silicon (M1~M4), Intel Mac (x86_64), Windows (x64/Snapdragon ARM64), and Linux/ChromeOS environments with mandatory fallback guidance.
@@ -36,7 +36,7 @@ Adhering to the [AGENTS.md open specification](https://agents.md/), this harness
 git clone https://github.com/JAICHANGPARK/workshop-harness.git
 cd workshop-harness
 
-# 2. Auto-install 16 skills to local agent environment (~/.gemini/skills)
+# 2. Auto-install 17 skills to local agent environment (~/.gemini/skills)
 chmod +x scripts/install_skills.sh
 ./scripts/install_skills.sh
 

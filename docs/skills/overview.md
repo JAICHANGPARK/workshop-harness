@@ -1,6 +1,6 @@
-# 16 Agent Skill Suite Catalog
+# 17 Agent Skill Suite Catalog
 
-`workshop-harness` features **16 specialized agent skills** distilled from real-world workshop facilitation. Each skill is defined with YAML frontmatter and markdown instructions in `skills/*/SKILL.md`.
+`workshop-harness` features **17 specialized agent skills** distilled from real-world workshop facilitation. Each skill is defined with YAML frontmatter and markdown instructions in `skills/*/SKILL.md`.
 
 ---
 
@@ -24,3 +24,4 @@
 | 14 | `colab-workshop-integrator` | Workshop project path | Generates Google Colab interactive notebooks (`.ipynb`), badges, and automates headless smoke tests via `colab` CLI | [`skills/colab-workshop-integrator/SKILL.md`](file:///Users/jaichang/Documents/GitHub/workshop-harness/skills/colab-workshop-integrator/SKILL.md) |
 | 15 | `workshop-slide-generator` | Workshop project path | Generates Marp Markdown (`slides.md`) and interactive standalone Web Presentation (`index.html`) synced with runbook | [`skills/workshop-slide-generator/SKILL.md`](file:///Users/jaichang/Documents/GitHub/workshop-harness/skills/workshop-slide-generator/SKILL.md) |
 | 16 | `adk-workshop-builder` | ADK workshop topic & stack | Builds multi-language (Python, TypeScript, Go, Kotlin) ADK autonomous agent and multi-agent system labs | [`skills/adk-workshop-builder/SKILL.md`](file:///Users/jaichang/Documents/GitHub/workshop-harness/skills/adk-workshop-builder/SKILL.md) |
+| 17 | `eli5-concept-explainer` | Technical concept or error | Translates complex AI mechanics and errors into 3-tier ELI5 physical analogies & mental maps | [`skills/eli5-concept-explainer/SKILL.md`](file:///Users/jaichang/Documents/GitHub/workshop-harness/skills/eli5-concept-explainer/SKILL.md) |

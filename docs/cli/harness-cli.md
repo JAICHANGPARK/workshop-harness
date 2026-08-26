@@ -8,7 +8,7 @@
 
 | Subcommand | Primary Flags | Description |
 |---|---|---|
-| `generate-all` | `--name`, `--topic`, `--stack`, `--dir` | One-click full workshop generation across all 16 skills |
+| `generate-all` | `--name`, `--topic`, `--stack`, `--dir` | One-click full workshop generation across all 17 skills |
 | `init` | `--name`, `--topic`, `--dir` | Scaffolds basic repository structure & script templates |
 | `audit-compat` | `--stack` | Audits tech stack cross-architecture risks across hardware chipsets |
 | `audit-loop` | `--topic` | Loop engineering multi-persona review for beginner, intermediate, & advanced attendees |

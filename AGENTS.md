@@ -11,7 +11,7 @@ This repository provides seamless integration for all AI Coding Agents including
 `workshop-harness` is an AI Agent Harness, Skill Suite, and CLI Automation Toolkit for technical workshops (Build with AI, DevFest, community coding labs).
 
 - **CLI Automation**: `python3 harness_cli.py`
-- **16 Agent Skills**: Located under `skills/*/SKILL.md`
+- **17 Agent Skills**: Located under `skills/*/SKILL.md`
 - **Document Templates**: Located under `templates/doc-templates/`
 
 ---
@@ -109,7 +109,7 @@ python3 harness_cli.py build-slides --target my-bwai-workshop
 
 ---
 
-## 📁 16 Agent Skills Index
+## 📁 17 Agent Skills Index
 
 When handling user requests, reference the specific skill instructions in `skills/`:
 
@@ -129,6 +129,7 @@ When handling user requests, reference the specific skill instructions in `skill
 14. [`skills/colab-workshop-integrator/SKILL.md`](skills/colab-workshop-integrator/SKILL.md)
 15. [`skills/workshop-slide-generator/SKILL.md`](skills/workshop-slide-generator/SKILL.md)
 16. [`skills/adk-workshop-builder/SKILL.md`](skills/adk-workshop-builder/SKILL.md)
+17. [`skills/eli5-concept-explainer/SKILL.md`](skills/eli5-concept-explainer/SKILL.md)
 
 ---
 

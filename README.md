@@ -120,14 +120,14 @@ Workshop Harness adopts the open **[AGENTS.md specification](https://agents.md/)
 | **Attendee Capacity per TA** | **1 : 6 Attendees** | **1 : 25~30 Attendees** | **4-5x Support Capacity** | `live-debug-assistant` |
 | **Live Debugging MTTR** | **18 Min / Case** | **0.5 Min (30s) / Case** | **36x Faster Resolution** | `live-debug-assistant` |
 | **Live Session Delays** | **~35 Min Avg** | **< 3 Min** | **91.4% Delay Reduction** | `cross-architecture-checker` |
-| **Facilitator Labor Savings** | 100% Baseline | **15 Hours Saved** | **~2 Days Saved / Workshop** | All 16 Skills |
+| **Facilitator Labor Savings** | 100% Baseline | **15 Hours Saved** | **~2 Days Saved / Workshop** | All 17 Skills |
 
 > 💡 **Facilitator Live Debugging Tip**: When an attendee hits a terminal error during a live lab, invoking `live-debug-assistant` generates a 10-second hotfix command for immediate 30-second resolution.
 
 ---
 
 
-## 16 Specialized Agent Skills Specification
+## 17 Specialized Agent Skills Specification
 
 | # | Skill Name | Input / Trigger | Output & Artifacts | Primary Role |
 |---|---|---|---|---|
@@ -147,6 +147,7 @@ Workshop Harness adopts the open **[AGENTS.md specification](https://agents.md/)
 | 14 | [`colab-workshop-integrator`](skills/colab-workshop-integrator/SKILL.md) | Workshop project path | `output/colab/` (`*.ipynb`, badges), `colab` CLI test | Generates Google Colab interactive notebooks (.ipynb), 'Open in Colab' badges & automated headless testing via Google Colab CLI |
 | 15 | [`workshop-slide-generator`](skills/workshop-slide-generator/SKILL.md) | Workshop project path | `output/slides/` (`slides.md`, `index.html`), PDF export | Generates Marp Markdown (`slides.md`) and interactive standalone Web Presentation (`index.html`) synced with runbook |
 | 16 | [`adk-workshop-builder`](skills/adk-workshop-builder/SKILL.md) | ADK topic & stack | Multi-agent coordinator & sub-agent code scaffolds | Builds multi-language (Python, TS, Go, Kotlin) ADK autonomous agent and multi-agent system labs |
+| 17 | [`eli5-concept-explainer`](skills/eli5-concept-explainer/SKILL.md) | Technical concept or error | 3-tier ELI5 physical analogies & mental maps | Translates complex AI concepts and errors into beginner-friendly analogies and mental maps |
 
 ---
 
@@ -169,7 +170,7 @@ Participants bring a wide variety of hardware architectures. This matrix identif
 Using Python 3.9+ and `uv`, you can manage workshops via the command-line interface:
 
 ```bash
-# 1. One-Click Full Workshop Generation Across All 16 Skills
+# 1. One-Click Full Workshop Generation Across All 17 Skills
 uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 
 # 2. Audit tech stack for cross-architecture risks
