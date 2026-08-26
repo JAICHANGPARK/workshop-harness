@@ -22,6 +22,7 @@ fi
 
 # 2. Target Skill Directories for Different AI Agents
 TARGET_DIRS=(
+    "$HOME/.gemini/config/skills"
     "$HOME/.gemini/skills"
     "$HOME/.claude/skills"
     "$HOME/.agents/skills"
