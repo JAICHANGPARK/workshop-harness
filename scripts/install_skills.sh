@@ -46,6 +46,7 @@ skills=(
     "workshop-slide-generator"
     "adk-workshop-builder"
     "eli5-concept-explainer"
+    "eli5"
 )
 
 for target_dir in "${TARGET_DIRS[@]}"; do
