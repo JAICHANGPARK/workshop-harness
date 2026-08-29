@@ -236,6 +236,18 @@ my-workshop-repo/
 
 ---
 
+## References
+
+- [AGENTS.md Open Standard](https://agents.md/)
+- [Official Google Android CLI & Skills](https://developer.android.com/tools/agents/android-cli)
+- [Official Flutter AI Development Guide](https://docs.flutter.dev/ai/get-started)
+- [Flutter Package Skills Specification](https://docs.flutter.dev/ai/package-skills)
+- [Official Flutter Agent Plugins Repository](https://github.com/flutter/agent-plugins)
+- [A2UI Open Protocol Specification](https://a2ui.org)
+- [Astral uv Python Package Manager](https://astral.sh/uv)
+
+---
+
 ## Changelog
 
 See [CHANGELOG.md](./CHANGELOG.md) for full release history.
@@ -245,3 +257,4 @@ See [CHANGELOG.md](./CHANGELOG.md) for full release history.
 ## License
 
 [MIT License](LICENSE)
+

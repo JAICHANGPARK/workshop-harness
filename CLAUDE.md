@@ -79,5 +79,9 @@ Claude Code should inspect these Markdown skills whenever relevant:
 
 - [AGENTS.md Specification](./AGENTS.md)
 - [Official Repository](https://github.com/JAICHANGPARK/workshop-harness)
+- [Flutter AI Development Guide](https://docs.flutter.dev/ai/get-started)
+- [Flutter Package Skills](https://docs.flutter.dev/ai/package-skills)
+- [Flutter Agent Plugins](https://github.com/flutter/agent-plugins)
 - [A2UI Open Protocol Specification](https://a2ui.org)
+
 

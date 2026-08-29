@@ -241,6 +241,19 @@ my-workshop-repo/
 
 ---
 
+## 참고 자료 (References)
+
+- [AGENTS.md 오픈 표준 규격](https://agents.md/)
+- [공식 Google Android CLI 및 Skills 안내](https://developer.android.com/tools/agents/android-cli)
+- [공식 Flutter AI 개발 가이드](https://docs.flutter.dev/ai/get-started)
+- [Flutter Package Skills 규격](https://docs.flutter.dev/ai/package-skills)
+- [공식 Flutter Agent Plugins 저장소](https://github.com/flutter/agent-plugins)
+- [A2UI 오픈 프로토콜 규격](https://a2ui.org)
+- [Astral uv 파이썬 패키지 매니저](https://astral.sh/uv)
+
+---
+
 ## 라이선스
 
 [MIT License](LICENSE)
+

@@ -154,7 +154,11 @@ When handling user requests, reference the specific skill instructions in `skill
 - **AGENTS.md Open Specification**: [https://agents.md/](https://agents.md/)
 - **Official Repository**: [https://github.com/JAICHANGPARK/workshop-harness](https://github.com/JAICHANGPARK/workshop-harness)
 - **Open Codelabs Platform**: [https://github.com/JAICHANGPARK/open-codelabs](https://github.com/JAICHANGPARK/open-codelabs)
+- **Flutter AI Development**: [https://docs.flutter.dev/ai/get-started](https://docs.flutter.dev/ai/get-started)
+- **Flutter Package Skills**: [https://docs.flutter.dev/ai/package-skills](https://docs.flutter.dev/ai/package-skills)
+- **Flutter Agent Plugins**: [https://github.com/flutter/agent-plugins](https://github.com/flutter/agent-plugins)
 - **A2UI Open Protocol**: [https://a2ui.org](https://a2ui.org)
 - **Google Colab CLI**: [https://github.com/googlecolab/google-colab-cli](https://github.com/googlecolab/google-colab-cli)
+
 
 - **Google Colab CLI**: [https://github.com/googlecolab/google-colab-cli](https://github.com/googlecolab/google-colab-cli)

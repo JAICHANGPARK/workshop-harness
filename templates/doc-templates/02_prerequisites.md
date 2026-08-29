@@ -83,12 +83,27 @@ For enterprise or GCP-based workshops, connect via the Vertex AI API.
 
 ---
 
-### Flutter SDK & Dart
+### Flutter SDK, GenUI & Flutter Agent Plugins
+
+#### 1. Install Flutter SDK & Dart
 - **macOS**: `brew install --cask flutter`
 - **Windows**: `winget install Flutter.Flutter`
 - **Linux**: `sudo snap install flutter --classic`
-- **GenAI & GenUI Packages**: `flutter pub add google_generative_ai genui`
-- **LiteRT-LM (On-Device)**: `flutter pub add google_litert`
+
+#### 2. Install Official Flutter Agent Skills (`flutter/agent-plugins`)
+Equip your AI coding assistant with official Flutter/Dart procedural skills and diagnostics:
+```bash
+# Option A: Universal Skills CLI
+npx skills add flutter/agent-plugins --skill '*' --agent universal --yes
+
+# Option B: Discover bundled package skills from dependencies
+dart run skills@ get
+```
+
+#### 3. Essential GenAI & GenUI Packages
+- **Gemini SDK & Generative UI**: `flutter pub add google_generative_ai genui`
+- **On-Device LiteRT**: `flutter pub add google_litert`
+
 
 ---
 
@@ -152,7 +167,10 @@ android emulator start <avd-name>
 
 - **Google AI Studio Key Issuance**: [https://aistudio.google.com](https://aistudio.google.com)
 - **GCP Vertex AI Setup**: [https://cloud.google.com/vertex-ai/docs](https://cloud.google.com/vertex-ai/docs)
-- **Astral uv Official Guide**: [https://astral.sh/uv](https://astral.sh/uv)
 - **Official Android CLI & Skills**: [https://developer.android.com/tools/agents/android-cli](https://developer.android.com/tools/agents/android-cli)
+- **Flutter AI Development Guide**: [https://docs.flutter.dev/ai/get-started](https://docs.flutter.dev/ai/get-started)
+- **Flutter Package Skills**: [https://docs.flutter.dev/ai/package-skills](https://docs.flutter.dev/ai/package-skills)
+- **Flutter Agent Plugins**: [https://github.com/flutter/agent-plugins](https://github.com/flutter/agent-plugins)
 - **A2UI Open Protocol**: [https://a2ui.org](https://a2ui.org)
+
 

@@ -136,6 +136,19 @@ final customCatalog = WidgetCatalog([
 
 ---
 
+## 🛠️ Flutter Agent Plugins & Package Skills Integration
+
+Combine GenUI & A2UI development with official **Flutter Agent Plugins (`github.com/flutter/agent-plugins`)** and **Dart Package Skills (`docs.flutter.dev/ai/package-skills`)**:
+
+1. **Package Skills Auto-Discovery**:
+   - Run `dart run skills@ get` to auto-discover bundled AI skills from `genui` and third-party packages on `pub.dev`.
+2. **Layout Resilience with `flutter-fix-layout-issues`**:
+   - AI-generated dynamic widget trees are prone to unbounded height or RenderFlex overflow errors. Enforce `flutter-fix-layout-issues` and `flutter-build-responsive-layout` in the widget catalog builders.
+3. **Dart & Flutter MCP Server**:
+   - Use `hot_reload` and `widget_inspector` MCP tools to instantly preview streaming A2UI UI updates.
+
+---
+
 ## Troubleshooting & Best Practices for A2UI Workshops
 
 1. **Deterministic Schema Enforcement**:
@@ -143,4 +156,5 @@ final customCatalog = WidgetCatalog([
 2. **Offline Fallback with `genui_mock`**:
    - In venues with unstable WiFi, use `genui_mock` recorded sessions to let attendees complete UI layout and interaction exercises without live API calls.
 3. **Cross-Platform Delivery**:
-   - Run via Flutter Web (`flutter run -d chrome`) for the fastest attendee onboarding.
+   - Run via Flutter Web (`flutter run -d chrome`) for the fastest attendee onboarding without heavy emulator requirements.
+
