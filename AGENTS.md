@@ -11,7 +11,6 @@ This repository provides seamless integration for all AI Coding Agents including
 `workshop-harness` is an AI Agent Harness, Skill Suite, and CLI Automation Toolkit for technical workshops (Build with AI, DevFest, community coding labs).
 
 - **CLI Automation**: `python3 harness_cli.py`
-- **CLI Automation**: `python3 harness_cli.py`
 - **20 Agent Skills**: Located under `skills/*/SKILL.md`
 - **Document Templates**: Located under `templates/doc-templates/`
 
@@ -154,11 +153,10 @@ When handling user requests, reference the specific skill instructions in `skill
 - **AGENTS.md Open Specification**: [https://agents.md/](https://agents.md/)
 - **Official Repository**: [https://github.com/JAICHANGPARK/workshop-harness](https://github.com/JAICHANGPARK/workshop-harness)
 - **Open Codelabs Platform**: [https://github.com/JAICHANGPARK/open-codelabs](https://github.com/JAICHANGPARK/open-codelabs)
+- **Official Google Android CLI & Skills**: [https://developer.android.com/tools/agents/android-cli](https://developer.android.com/tools/agents/android-cli)
 - **Flutter AI Development**: [https://docs.flutter.dev/ai/get-started](https://docs.flutter.dev/ai/get-started)
 - **Flutter Package Skills**: [https://docs.flutter.dev/ai/package-skills](https://docs.flutter.dev/ai/package-skills)
 - **Flutter Agent Plugins**: [https://github.com/flutter/agent-plugins](https://github.com/flutter/agent-plugins)
 - **A2UI Open Protocol**: [https://a2ui.org](https://a2ui.org)
 - **Google Colab CLI**: [https://github.com/googlecolab/google-colab-cli](https://github.com/googlecolab/google-colab-cli)
 
-
-- **Google Colab CLI**: [https://github.com/googlecolab/google-colab-cli](https://github.com/googlecolab/google-colab-cli)

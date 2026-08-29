@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [v2026.08.29] - 2026-08-29
+
+### Added & Updated
+
+- **3 New Agent Skills (Total 20 Skills)**:
+  - **`skills/android-workshop-builder`**: Builds Jetpack Compose & Kotlin 2.x Android GenAI workshops with `com.google.genai` SDK, Google `android` CLI (`android init`, `android skills add --all`, `android docs`, `android layout`, `android run`), and official Android Skills (`camerax`, `edge-to-edge`, `adaptive`, `navigation-3`, `appfunctions`, `testing-setup`).
+  - **`skills/flutter-workshop-builder`**: Builds Flutter GenAI workshops with Flutter 3.x, `google_generative_ai`, official Flutter Agent Plugins (`github.com/flutter/agent-plugins`), Package Skills (`docs.flutter.dev/ai/package-skills` / `dart run skills@ get`), Dart & Flutter MCP Server diagnostics, and zero-install Flutter Web fallback.
+  - **`skills/a2ui-workshop-builder`**: Builds Generative UI & dynamic surface workshops on A2UI (`a2ui.org`) protocol and Flutter `genui` SDK (`genui`, `genui_catalog`), covering `WidgetCatalog` registration, `SurfaceController` streaming, and interactive action loops.
+- **CLI Engine & Scaffolding Updates (`harness_cli.py`)**:
+  - Added `--stack android` and `--stack "flutter,genui,a2ui"` scaffolding support with build definitions, manifests, and test entrypoints.
+  - Extended `audit-compat` for AVD emulator CPU virtualization and Flutter platform requirements.
+- **Prerequisite Guides & Environment Scripts**:
+  - Updated `templates/doc-templates/02_prerequisites.md`, `check_env.sh`, and `check_env.ps1` to verify `android` CLI, Flutter SDK, Dart toolchain, and Android development tools.
+
 ---
 
 ## [v2026.08.26] - 2026-08-26
