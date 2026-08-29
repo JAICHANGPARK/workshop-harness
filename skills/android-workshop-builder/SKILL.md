@@ -161,6 +161,60 @@ class ChatViewModel : ViewModel() {
 
 ---
 
+---
+
+## 🎪 Facilitator Field Playbook & Pro-Tips
+
+### 1. Venue Network Pre-Caching (Avoid Wi-Fi Collapse)
+When 30-50 attendees simultaneously run `./gradlew build` or download AVD system images, venue Wi-Fi often slows down or fails.
+- **Pre-event Preparation**:
+  - Pre-download the Gradle wrapper distribution and Android dependencies before arriving at the venue:
+    ```bash
+    bash scripts/bundle_offline_assets.sh
+    ```
+  - Pre-download the recommended AVD system image (`android emulator create ...`).
+  - Prepare 2-3 USB flash drives containing the `offline_assets_bundle/` directory as an emergency fallback.
+
+### 2. API Key Security & `local.properties` Handling
+- Never hardcode Gemini API keys in Kotlin source code.
+- Store keys in `local.properties`:
+  ```properties
+  GEMINI_API_KEY=AIzaSy...
+  ```
+- Ensure `local.properties` is strictly ignored in `.gitignore`.
+- Inject the key into `BuildConfig` via `app/build.gradle.kts`:
+  ```kotlin
+  val localProperties = java.util.Properties().apply {
+      val localPropsFile = rootProject.file("local.properties")
+      if (localPropsFile.exists()) {
+          load(localPropsFile.inputStream())
+      }
+  }
+  val geminiApiKey = localProperties.getProperty("GEMINI_API_KEY") ?: ""
+  
+  android {
+      buildFeatures {
+          buildConfig = true
+      }
+      defaultConfig {
+          buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
+      }
+  }
+  ```
+
+### 3. Step-by-Step Fast-Forward Checkpoints (Git Tags / Branches)
+To prevent attendees from falling behind if they encounter build errors in Lab 01 or Lab 02:
+- Provide designated Git checkpoint tags:
+  - `lab-01-complete`: Working Gemini client & input UI.
+  - `lab-02-complete`: Working ViewModel, StateFlow & Structured Outputs.
+  - `lab-03-final`: Complete multimodal vision and AppFunctions reference code.
+- Instruct lagging attendees to fast-forward immediately:
+  ```bash
+  git checkout lab-02-complete
+  ```
+
+---
+
 ## Facilitator Verification Checklist
 
 1. Ensure `android --version` or `android info` reports valid SDK setup.
@@ -168,4 +222,5 @@ class ChatViewModel : ViewModel() {
 3. Verify `android skills list` shows installed Android agent skills (`edge-to-edge`, `camerax`, `adaptive`, `navigation-3`).
 4. Ensure `local.properties` contains `GEMINI_API_KEY` without committing secrets to git.
 5. Pre-download Android Gradle dependencies and AVD images before the event to prevent workshop venue network bottlenecks.
+
 

@@ -359,10 +359,20 @@ plugins {
             with open(project_dir / "workshop" / stage / "build.gradle.kts", "w", encoding="utf-8") as f:
                 f.write(root_build_gradle)
 
-            app_build_gradle = """plugins {
+            app_build_gradle = """import java.util.Properties
+
+plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
+
+val localProperties = Properties().apply {
+    val localPropsFile = rootProject.file("local.properties")
+    if (localPropsFile.exists()) {
+        load(localPropsFile.inputStream())
+    }
+}
+val geminiApiKey: String = localProperties.getProperty("GEMINI_API_KEY") ?: ""
 
 android {
     namespace = "com.example.workshop"
@@ -375,10 +385,12 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "GEMINI_API_KEY", "\\\"$geminiApiKey\\\"")
     }
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.14"
@@ -407,6 +419,12 @@ dependencies {
 """
             with open(app_dir / "build.gradle.kts", "w", encoding="utf-8") as f:
                 f.write(app_build_gradle)
+
+            # Android .gitignore & local.properties.sample
+            with open(project_dir / "workshop" / stage / ".gitignore", "w", encoding="utf-8") as f:
+                f.write(".gradle/\nbuild/\nlocal.properties\n*.apk\n*.aab\n.idea/\n")
+            with open(project_dir / "workshop" / stage / "local.properties.sample", "w", encoding="utf-8") as f:
+                f.write("# Copy this file to local.properties and insert your Gemini API Key\nGEMINI_API_KEY=AIzaSyYourGeminiApiKeyHere\n")
 
             manifest = """<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
@@ -485,11 +503,62 @@ class MainActivity : ComponentActivity() {
         with open(project_dir / "workshop" / "02_final" / "app" / "src" / "main" / "kotlin" / "com" / "example" / "workshop" / "MainActivity.kt", "w", encoding="utf-8") as f:
             f.write(final_main_kt)
 
+        # Scaffold 3-stage Android Lab step files
+        labs_dir = project_dir / "workshop" / "03_labs"
+        with open(labs_dir / "01_lab_gemini_client.md", "w", encoding="utf-8") as f:
+            f.write("""# Lab 01: Android CLI Setup & Gemini Client Integration
+
+## Objective
+Initialize the Android project using Google `android` CLI and configure the official Google GenAI Kotlin SDK (`com.google.genai`).
+
+## Instructions
+1. Copy `local.properties.sample` to `local.properties` and add your `GEMINI_API_KEY`.
+2. Inspect `app/build.gradle.kts` and verify `buildConfigField("String", "GEMINI_API_KEY", ...)`.
+3. Open `MainActivity.kt` and initialize the Google GenAI Client with `BuildConfig.GEMINI_API_KEY`.
+4. Run the app on emulator or physical device:
+   ```bash
+   android run
+   ```
+
+> Fast-Forward Checkpoint:
+> If you fall behind or run into environment errors, fast-forward to the completed Lab 01 state:
+> `git checkout lab-01-complete` (or inspect `workshop/02_final/`).
+""")
+        with open(labs_dir / "02_lab_mvvm_stateflow.md", "w", encoding="utf-8") as f:
+            f.write("""# Lab 02: MVVM Architecture, StateFlow & Structured Outputs
+
+## Objective
+Implement reactive unidirectional data flow (UDF) using Android ViewModel and StateFlow with type-safe Structured JSON output.
+
+## Instructions
+1. Create `ChatViewModel.kt` with `StateFlow<ChatUiState>`.
+2. Connect `ChatViewModel` to `MainActivity.kt` via Compose `viewModel()`.
+3. Configure `gemini-3.7-flash` with JSON output schema for structured response parsing.
+
+> Fast-Forward Checkpoint:
+> `git checkout lab-02-complete`
+""")
+        with open(labs_dir / "03_lab_camerax_appfunctions.md", "w", encoding="utf-8") as f:
+            f.write("""# Lab 03: CameraX Multimodal Vision & On-Device AppFunctions
+
+## Objective
+Capture image frames using CameraX and feed them to Gemini multimodal API, exposing on-device shortcuts via AppFunctions.
+
+## Instructions
+1. Integrate `camerax` skill for image capture and preview.
+2. Send image bytes to Gemini multimodal `generateContent`.
+3. Bind AppFunctions for Android system shortcut triggering.
+
+> Fast-Forward Checkpoint:
+> `git checkout lab-03-final`
+""")
+
         # Keep Python fallback for test runner
         with open(project_dir / "workshop" / "01_starter" / "main.py", "w", encoding="utf-8") as f:
             f.write('print("Android GenAI Workshop Starter")\n')
         with open(project_dir / "workshop" / "02_final" / "main.py", "w", encoding="utf-8") as f:
             f.write('print("Android GenAI Workshop Final")\n')
+
 
     elif is_ts:
         pkg_json = '{\n  "name": "' + name + '",\n  "version": "1.0.0",\n  "type": "module",\n  "scripts": {\n    "start": "tsx src/index.ts"\n  },\n  "dependencies": {\n    "@google/genai": "^0.1.0",\n    "dotenv": "^16.4.5"\n  },\n  "devDependencies": {\n    "tsx": "^4.19.0",\n    "typescript": "^5.5.4"\n  }\n}\n'
