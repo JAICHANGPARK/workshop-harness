@@ -584,10 +584,10 @@ def audit_compatibility(stack_str: str):
     issues = []
     if any(k in stack for k in ["android", "compose"]):
         issues.append({
-            "tool": "Android Studio & AVD Emulator",
+            "tool": "Google Android CLI & AVD Emulator",
             "target": "Intel Mac (x86_64) / Windows Hyper-V / Linux KVM",
             "risk": "AVD emulator CPU architecture mismatch (arm64 vs x86_64) or missing Hyper-V/KVM virtualization.",
-            "fallback": "Use physical Android device via USB debugging or use Android SDK command-line tools."
+            "fallback": "Install Google Android CLI (curl -fsSL https://dl.google.com/android/cli/latest/darwin_arm64/install.sh | bash) and run 'android init' & 'android skills add --all'. Use physical device with USB debugging as fallback."
         })
     if any(k in stack for k in ["flutter", "genui", "a2ui"]):
         issues.append({

@@ -36,7 +36,7 @@ This repository provides native compatibility with **Anthropic Claude Code CLI**
 | User Natural Language Prompt | Autonomous Claude Action & Triggered Skill | Execution Command / Action |
 |:---|:---|:---|
 | *"Create a 1-hour workshop for Local RAG with Gemma 4"* | Read `skills/workshop-web-researcher/SKILL.md` ➔ `skills/workshop-scaffolder/SKILL.md` | 1. Web search latest Gemma 4 & Ollama APIs<br>2. Run `python3 harness_cli.py generate-all --name "<name>" --topic "<topic>"` |
-| *"Build Android Jetpack Compose GenAI workshop"* | Read `skills/android-workshop-builder/SKILL.md` | Run `python3 harness_cli.py init --name "<name>" --stack "android"` |
+| *"Build Android Jetpack Compose GenAI workshop with android CLI"* | Read `skills/android-workshop-builder/SKILL.md` | Run `python3 harness_cli.py init --name "<name>" --stack "android"` |
 | *"Build Flutter GenUI and A2UI dynamic surface workshop"* | Read `skills/flutter-workshop-builder/SKILL.md` + `skills/a2ui-workshop-builder/SKILL.md` | Run `python3 harness_cli.py init --name "<name>" --stack "flutter,genui,a2ui"` |
 | *"Build Google Slides presentation for this workshop"* | Read `skills/workshop-slide-generator/SKILL.md` | Run `python3 harness_cli.py build-slides --target <dir>` |
 | *"Convert workshop to Google Colab notebooks with badges"* | Read `skills/colab-workshop-integrator/SKILL.md` | Run `python3 harness_cli.py export-colab --target <dir>` |

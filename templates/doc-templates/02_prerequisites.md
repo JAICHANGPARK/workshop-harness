@@ -87,8 +87,49 @@ For enterprise or GCP-based workshops, connect via the Vertex AI API.
 - **macOS**: `brew install --cask flutter`
 - **Windows**: `winget install Flutter.Flutter`
 - **Linux**: `sudo snap install flutter --classic`
-- **Gemini Live Package**: `flutter pub add gemini_live`
-- **LiteRT-LM (On-Device)**: `flutter pub add google_litert` (or platform native LiteRT C/Swift libraries)
+- **GenAI & GenUI Packages**: `flutter pub add google_generative_ai genui`
+- **LiteRT-LM (On-Device)**: `flutter pub add google_litert`
+
+---
+
+### Android Development & Google `android` CLI
+
+To streamline environment setup, project scaffolding, and headless emulator management, install the official **Google `android` CLI**:
+
+#### 1. Install `android` CLI
+- **macOS Apple Silicon (`arm64`)**:
+  ```bash
+  curl -fsSL https://dl.google.com/android/cli/latest/darwin_arm64/install.sh | bash
+  ```
+- **macOS Intel (`x86_64`)**:
+  ```bash
+  curl -fsSL https://dl.google.com/android/cli/latest/darwin_x86_64/install.sh | bash
+  ```
+- **Linux (`x86_64`)**:
+  ```bash
+  curl -fsSL https://dl.google.com/android/cli/latest/linux_x86_64/install.sh | bash
+  ```
+- **Windows (PowerShell)**:
+  ```powershell
+  curl.exe -fsSL https://dl.google.com/android/cli/latest/windows_x86_64/install.cmd -o "$env:TEMP\i.cmd"; & "$env:TEMP\i.cmd"
+  ```
+
+#### 2. Initialize Android Skills
+Initialize the Android CLI and install official Android Agent Skills (`edge-to-edge`, `camerax`, `adaptive`, `navigation-3`, `appfunctions`, `testing-setup`):
+```bash
+android init
+android skills add --all
+```
+
+#### 3. Verify Android Environment & Emulator
+```bash
+# Check SDK configuration and connected devices
+android info
+
+# List and launch AVD emulator
+android emulator list
+android emulator start <avd-name>
+```
 
 ---
 
@@ -112,3 +153,6 @@ For enterprise or GCP-based workshops, connect via the Vertex AI API.
 - **Google AI Studio Key Issuance**: [https://aistudio.google.com](https://aistudio.google.com)
 - **GCP Vertex AI Setup**: [https://cloud.google.com/vertex-ai/docs](https://cloud.google.com/vertex-ai/docs)
 - **Astral uv Official Guide**: [https://astral.sh/uv](https://astral.sh/uv)
+- **Official Android CLI & Skills**: [https://developer.android.com/tools/agents/android-cli](https://developer.android.com/tools/agents/android-cli)
+- **A2UI Open Protocol**: [https://a2ui.org](https://a2ui.org)
+

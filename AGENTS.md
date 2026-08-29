@@ -47,7 +47,7 @@ This repository provides seamless integration for all AI Coding Agents including
 | User Chat Prompt Example | Triggered Agent Skill | Autonomous Agent Tool Call / Action |
 |:---|:---|:---|
 | *"Create a 1-hour hands-on workshop on Gemma 4 Local RAG"* | `workshop-web-researcher` ➔ `workshop-scaffolder` + All Skills | 1. Web search latest Gemma 4 & Ollama/vLLM APIs<br>2. `python3 harness_cli.py generate-all --name "..." --topic "..."` |
-| *"Build Android Jetpack Compose GenAI workshop"* | `workshop-web-researcher` ➔ `android-workshop-builder` | 1. Web search latest `com.google.genai` SDK<br>2. `python3 harness_cli.py init --name "..." --stack "android"` |
+| *"Build Android Jetpack Compose GenAI workshop with android CLI"* | `workshop-web-researcher` ➔ `android-workshop-builder` | 1. Web search latest `com.google.genai` SDK & `android` CLI<br>2. `python3 harness_cli.py init --name "..." --stack "android"` |
 | *"Build Flutter GenUI and A2UI dynamic surface workshop"* | `workshop-web-researcher` ➔ `flutter-workshop-builder` + `a2ui-workshop-builder` | 1. Web search latest Flutter `genui` & `google_generative_ai`<br>2. `python3 harness_cli.py init --name "..." --stack "flutter,genui,a2ui"` |
 | *"Build presentation slides and Google Slides deck"* | `workshop-slide-generator` | `python3 harness_cli.py build-slides --target <dir>` |
 | *"Convert workshop to Google Colab interactive notebooks"* | `workshop-web-researcher` ➔ `colab-workshop-integrator` | 1. Web search latest Colab CUDA/pip packages<br>2. `python3 harness_cli.py export-colab --target <dir>` |

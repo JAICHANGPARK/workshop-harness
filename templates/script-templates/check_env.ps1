@@ -59,6 +59,15 @@ if ($adbCmd) {
     Write-Host "[OK] Android Debug Bridge (adb) found." -ForegroundColor Green
 }
 
+# 6. Check Google Android CLI & Skills (Optional for Android Labs)
+$androidCmd = Get-Command android -ErrorAction SilentlyContinue
+if ($androidCmd) {
+    Write-Host "[OK] Google Android CLI found." -ForegroundColor Green
+} else {
+    Write-Host "[INFO] Google Android CLI not detected. (Install: curl.exe -fsSL https://dl.google.com/android/cli/latest/windows_x86_64/install.cmd -o `"$env:TEMP\i.cmd`"; & `"$env:TEMP\i.cmd`")" -ForegroundColor DarkGray
+}
+
 Write-Host ""
 Write-Host "=== Check Completed! ===" -ForegroundColor Cyan
+
 

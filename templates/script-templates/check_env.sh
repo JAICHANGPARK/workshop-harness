@@ -60,14 +60,14 @@ else
     echo -e "${YELLOW}[INFO] Java JDK not detected in PATH (Required for Android/Compose labs).${NC}"
 fi
 
-if [ -n "$ANDROID_HOME" ] || [ -n "$ANDROID_SDK_ROOT" ]; then
-    echo -e "${GREEN}[OK] Android SDK Root configured.${NC}"
-fi
-
-if command -v adb &> /dev/null; then
-    echo -e "${GREEN}[OK] Android Debug Bridge (adb):${NC} $(adb --version | head -n 1)"
+# 7. Check Google Android CLI & Skills (Optional for Android Labs)
+if command -v android &> /dev/null; then
+    echo -e "${GREEN}[OK] Google Android CLI:${NC} $(android --version 2>&1 | head -n 1)"
+else
+    echo -e "${YELLOW}[INFO] Google Android CLI not detected. (Install: curl -fsSL https://dl.google.com/android/cli/latest/darwin_arm64/install.sh | bash)${NC}"
 fi
 
 echo ""
 echo "=== Check Completed! ==="
+
 
