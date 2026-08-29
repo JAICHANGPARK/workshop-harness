@@ -46,8 +46,10 @@ fi
 # 5. Check Flutter & Dart (Optional for Mobile Labs)
 if command -v flutter &> /dev/null; then
     echo -e "${GREEN}[OK] Flutter SDK:${NC} $(flutter --version | head -n 1)"
+    echo -e "     ${GREEN}-> Tip: Discover bundled AI skills via: dart run skills@ get${NC}"
 elif command -v dart &> /dev/null; then
     echo -e "${GREEN}[OK] Dart SDK:${NC} $(dart --version)"
+    echo -e "     ${GREEN}-> Tip: Discover bundled AI skills via: dart run skills@ get${NC}"
 else
     echo -e "${YELLOW}[INFO] Flutter/Dart not detected in PATH (Required only for Flutter/GenUI/A2UI labs).${NC}"
 fi

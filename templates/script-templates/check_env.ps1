@@ -41,6 +41,7 @@ $flutterCmd = Get-Command flutter -ErrorAction SilentlyContinue
 if ($flutterCmd) {
     $flVer = flutter --version | Select-Object -First 1
     Write-Host "[OK] Flutter SDK: $flVer" -ForegroundColor Green
+    Write-Host "     -> Tip: Discover bundled AI skills via: dart run skills@ get" -ForegroundColor Green
 } else {
     Write-Host "[INFO] Flutter SDK not detected in PATH (Required only for Flutter/GenUI/A2UI labs)." -ForegroundColor DarkGray
 }

@@ -138,9 +138,42 @@ Workshops often run into venue WiFi bottlenecks or laptop emulator performance i
    - Instruct attendees to run `dart run skills@ get` to install bundled agent skills from newly added dependencies.
 3. **Mobile Target: Physical Device USB Debugging**:
    - For Android: Enable Developer Options and USB Debugging.
-   - For iOS: Requires macOS and Xcode signing certificate.
-4. **API Key Handling**:
-   - Pass keys via `--dart-define=GEMINI_API_KEY=your_key` during `flutter run` to avoid hardcoding secrets.
+## 🎪 Facilitator Field Playbook & Pro-Tips
+
+### 1. Zero-Exposure API Key Security for Flutter Web
+In Flutter Web builds, hardcoded strings in Dart files are compiled into readable JavaScript client bundles.
+- **Strict Rule**: Never commit or hardcode API keys.
+- **Recommended Setup**:
+  1. Create a `config.json` file (ensure it is in `.gitignore`):
+     ```json
+     {
+       "GEMINI_API_KEY": "AIzaSy..."
+     }
+     ```
+  2. Read in Dart via environment constants:
+     ```dart
+     const apiKey = String.fromEnvironment('GEMINI_API_KEY');
+     ```
+  3. Execute using `--dart-define-from-file`:
+     ```bash
+     flutter run -d chrome --dart-define-from-file=config.json
+     ```
+
+### 2. State Management Escalation Path
+- **Lab 01 (Beginner)**: Keep UI state in `StatefulWidget` to minimize cognitive load on attendees unfamiliar with third-party state managers.
+- **Lab 02 & 03 (Intermediate/Advanced)**: Decouple streaming chat sessions into `ValueNotifier<ChatUiState>` or Riverpod/Bloc to maintain clean separation between AI streaming tokens and UI widget trees.
+
+### 3. Package Skills Discovery Protocol
+After attendees add new pub packages (e.g. `google_generative_ai`, `genui`), instruct them to run:
+```bash
+dart run skills@ get
+```
+This scans dependencies for bundled AI instructions and equips their AI assistant with the library author's official procedural guidelines.
+
+### 4. Step-by-Step Fast-Forward Checkpoints (Git Tags)
+- `lab-01-complete`: Working Material 3 prompt input and Gemini streaming client.
+- `lab-02-complete`: Responsive chat layout and multimodal image picker.
+- `lab-03-final`: Complete GenUI dynamic surface and A2UI action loop.
 
 ---
 
@@ -149,4 +182,5 @@ Workshops often run into venue WiFi bottlenecks or laptop emulator performance i
 1. Run `flutter doctor -v` to ensure Flutter SDK and Dart toolchain are healthy.
 2. Run `dart run skills@ get` to verify package skills installation.
 3. Run `flutter test` to ensure unit and widget test suites pass before distributing materials.
+
 

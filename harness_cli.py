@@ -315,12 +315,70 @@ class _GenUISurfacePageState extends State<GenUISurfacePage> {
             f.write(starter_dart)
         with open(project_dir / "workshop" / "02_final" / "lib" / "main.dart", "w", encoding="utf-8") as f:
             f.write(final_dart)
+        for stage in ["01_starter", "02_final"]:
+            with open(project_dir / "workshop" / stage / ".gitignore", "w", encoding="utf-8") as f:
+                f.write(".dart_tool/\nbuild/\n.flutter-plugins\n.flutter-plugins-dependencies\nconfig.json\n.env\n")
+            with open(project_dir / "workshop" / stage / "config.json.sample", "w", encoding="utf-8") as f:
+                f.write('{\n  "GEMINI_API_KEY": "AIzaSyYourGeminiApiKeyHere"\n}\n')
+
+        # Scaffold 3-stage Flutter Lab step files
+        labs_dir = project_dir / "workshop" / "03_labs"
+        with open(labs_dir / "01_lab_flutter_gemini_setup.md", "w", encoding="utf-8") as f:
+            f.write("""# Lab 01: Flutter Material 3 Scaffold & Gemini Client Setup
+
+## Objective
+Initialize the Flutter project with `google_generative_ai` and configure API key injection using `--dart-define-from-file`.
+
+## Instructions
+1. Copy `config.json.sample` to `config.json` and enter your Gemini API Key.
+2. Initialize `GenerativeModel` in `lib/main.dart`:
+   ```dart
+   const apiKey = String.fromEnvironment('GEMINI_API_KEY');
+   final model = GenerativeModel(model: 'gemini-3.7-flash', apiKey: apiKey);
+   ```
+3. Run the app on Flutter Web (or connected device):
+   ```bash
+   flutter run -d chrome --dart-define-from-file=config.json
+   ```
+
+> Fast-Forward Checkpoint:
+> `git checkout lab-01-complete` (or inspect `workshop/02_final/`).
+""")
+        with open(labs_dir / "02_lab_responsive_chat_multimodal.md", "w", encoding="utf-8") as f:
+            f.write("""# Lab 02: Responsive Chat UI & Multimodal Vision
+
+## Objective
+Build an adaptive chat UI using `flutter-build-responsive-layout` and attach images using `image_picker` and `DataPart`.
+
+## Instructions
+1. Implement `Stream<GenerateContentResponse>` handling for real-time word-by-word streaming.
+2. Add image attachment button and pass `DataPart(mimeType, imageBytes)` to `generateContent`.
+3. Use `flutter-fix-layout-issues` if experiencing `RenderFlex overflowed` errors.
+
+> Fast-Forward Checkpoint:
+> `git checkout lab-02-complete`
+""")
+        with open(labs_dir / "03_lab_genui_a2ui_surfaces.md", "w", encoding="utf-8") as f:
+            f.write("""# Lab 03: Generative UI & A2UI Dynamic Surface Streaming
+
+## Objective
+Build a dynamic widget catalog and render ephemeral surfaces streamed directly from the AI agent using the A2UI protocol.
+
+## Instructions
+1. Define custom `CatalogItem` (e.g. `WeatherCard`, `ProductRecommendation`).
+2. Wire `SurfaceController` with `WidgetCatalog` to parse declarative JSON streams.
+3. Handle bi-directional button actions with `dispatchAction` and trigger agent tool executions.
+
+> Fast-Forward Checkpoint:
+> `git checkout lab-03-final`
+""")
 
         # Keep Python fallback for test runner
         with open(project_dir / "workshop" / "01_starter" / "main.py", "w", encoding="utf-8") as f:
             f.write('print("Flutter GenAI & GenUI Workshop Starter")\n')
         with open(project_dir / "workshop" / "02_final" / "main.py", "w", encoding="utf-8") as f:
             f.write('print("Flutter GenAI & GenUI Workshop Final")\n')
+
 
     elif is_android:
         for stage in ["01_starter", "02_final"]:
