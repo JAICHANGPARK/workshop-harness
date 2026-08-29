@@ -121,7 +121,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 ---
 
 
-## 전체 12개 에이전트 스킬 명세서
+## 전체 20개 에이전트 스킬 명세서
 
 | # | 스킬 이름 | 입력 / 트리거 | 출력 및 생성물 | 상세 역할 |
 |---|---|---|---|---|
@@ -140,6 +140,11 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 | 13 | [`open-codelabs-integrator`](skills/open-codelabs-integrator/SKILL.md) | 워크숍 프로젝트 경로 | `output/open-codelabs/` (`codelab.yaml`, `steps/`), `oc` push | workshop-harness 산출물을 Open Codelabs 플랫폼 매니페스트로 변환 및 `oc` CLI/MCP 연동 발행 |
 | 14 | [`colab-workshop-integrator`](skills/colab-workshop-integrator/SKILL.md) | 워크숍 프로젝트 경로 | `output/colab/` (`*.ipynb`, 뱃지), `colab` CLI 테스트 | 워크숍 코드를 Google Colab 노트북(`.ipynb`)으로 변환, 'Open in Colab' 뱃지 삽입 및 Google Colab CLI 원격 테스트 |
 | 15 | [`workshop-slide-generator`](skills/workshop-slide-generator/SKILL.md) | 워크숍 프로젝트 경로 | `output/slides/` (`slides.md`, `index.html`), PDF | Marp 마크다운 및 런북과 1:1 동기화되는 독립형 인터랙티브 웹 발표 슬라이드 자동 생성 |
+| 16 | [`adk-workshop-builder`](skills/adk-workshop-builder/SKILL.md) | ADK 주제 & 언어 | 멀티에이전트 코디네이터 및 서브에이전트 코드 스켈레톤 | 다국어(Python, TS, Go, Kotlin) Google ADK 자율 멀티에이전트 워크숍 생성 |
+| 17 | [`eli5-concept-explainer`](skills/eli5-concept-explainer/SKILL.md) | AI 기술 개념/에러 | 3단계 ELI5 물리 비유 & 멘탈 모델 | 복잡한 AI 개념과 현장 장애를 초심자 눈높이 비유와 시각 멘탈 맵으로 해설 |
+| 18 | [`android-workshop-builder`](skills/android-workshop-builder/SKILL.md) | Android 주제 & 스택 | Jetpack Compose + Google GenAI Kotlin SDK 스켈레톤 | 최신 Jetpack Compose Material 3 및 ViewModel 구조의 Android GenAI 워크숍 생성 |
+| 19 | [`flutter-workshop-builder`](skills/flutter-workshop-builder/SKILL.md) | Flutter 주제 & 스택 | Flutter 3.x + `google_generative_ai` 스켈레톤 | 크로스플랫폼 Flutter GenAI 워크숍 및 Flutter Web 무설치 즉시 실습 폴백 지원 |
+| 20 | [`a2ui-workshop-builder`](skills/a2ui-workshop-builder/SKILL.md) | A2UI / GenUI 주제 | `genui` + `WidgetCatalog` + `SurfaceController` | A2UI 선언형 JSON 스트리밍 및 Flutter GenUI 동적 위젯 조합 인터랙티브 실습 생성 |
 
 ---
 
@@ -154,6 +159,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 | Windows x86_64 (Intel/AMD) | LM Studio / Ollama | PowerShell 스크립트 실행 제한, Docker 시 WSL2 필요 | PowerShell Bypass 스크립트 제공 |
 | Windows ARM64 (Snapdragon) | Ollama CLI (Native build) | x64 에뮬레이션 시 추론 속도 저하 | Ollama Native build 사용 |
 | Linux / ChromeOS | Ollama CLI | GUI 미지원 / 가상화 샌드박스 | `ollama serve` 터미널 모드 및 소형 모델(`e2b`) 안내 |
+| Universal / Web | Flutter Web (`-d chrome`) | 에뮬레이터 메모리 부족 및 가상화 미지원 | Flutter 및 A2UI/GenUI 실습 시 무설치 즉시 실행 대안 |
 
 ---
 
@@ -162,22 +168,28 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 Python 3.9+ 및 `uv` 환경에서 `harness_cli.py` 도구를 이용해 손쉽게 워크숍 프로젝트를 구성하고 관리할 수 있습니다.
 
 ```bash
-# 1. 15개 전체 스킬 원클릭 연속 발동 생성 (의존성 라이브러리 자동 설치됨)
+# 1. 원클릭 전체 스킬 파이프라인 워크숍 생성
 uv run harness_cli.py generate-all --name my-bwai-workshop --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 
-# 2. 기술 스택 크로스 아키텍처 호환성 위험 오디팅
-uv run harness_cli.py audit-compat --stack "lmstudio,docker,mlx"
+# 2. Android Jetpack Compose GenAI 워크숍 초기화
+uv run harness_cli.py init --name android-gemini-lab --topic "Android GenAI with Jetpack Compose" --stack "android"
 
-# 3. 루프 엔지니어링 기반 초급/중급/고급 참가자 페르소나 멀티 리뷰
+# 3. Flutter GenUI 및 A2UI 동적 UI 워크숍 초기화
+uv run harness_cli.py init --name flutter-genui-lab --topic "Generative UI with Flutter and A2UI" --stack "flutter,genui,a2ui"
+
+# 4. 기술 스택 크로스 아키텍처 호환성 위험 오디팅
+uv run harness_cli.py audit-compat --stack "android,flutter,genui,docker"
+
+# 5. 루프 엔지니어링 기반 초급/중급/고급 참가자 페르소나 멀티 리뷰
 uv run harness_cli.py audit-loop --topic "Local RAG with Gemma 4"
 
-# 4. 워크숍 코드 실행 및 마크다운 깨진 링크 자동 검증
+# 6. 워크숍 코드 실행 및 마크다운 깨진 링크 자동 검증
 uv run harness_cli.py test --target my-bwai-workshop
 
-# 5. 마크다운 가이드 문서들을 PDF 핸드아웃으로 빌드
+# 7. 마크다운 가이드 문서들을 PDF 핸드아웃으로 빌드
 uv run harness_cli.py build-pdf --target my-bwai-workshop
 
-# 6. Open Codelabs 플랫폼용 매니페스트 번들 내보내기 & 발행
+# 8. Open Codelabs 플랫폼용 매니페스트 번들 내보내기 & 발행
 uv run harness_cli.py export-codelab --target my-bwai-workshop --push
 ```
 

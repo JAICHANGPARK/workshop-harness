@@ -11,7 +11,8 @@ This repository provides seamless integration for all AI Coding Agents including
 `workshop-harness` is an AI Agent Harness, Skill Suite, and CLI Automation Toolkit for technical workshops (Build with AI, DevFest, community coding labs).
 
 - **CLI Automation**: `python3 harness_cli.py`
-- **17 Agent Skills**: Located under `skills/*/SKILL.md`
+- **CLI Automation**: `python3 harness_cli.py`
+- **20 Agent Skills**: Located under `skills/*/SKILL.md`
 - **Document Templates**: Located under `templates/doc-templates/`
 
 ---
@@ -22,7 +23,7 @@ This repository provides seamless integration for all AI Coding Agents including
 >
 > 1. **🌐 Mandatory Autonomous Pre-Flight Web Search (`workshop-web-researcher`)**:
 >    - **NEVER rely solely on LLM internal parametric training data** when generating workshop curriculum, code samples, Colab notebooks, or setup guides. Parametric weights contain outdated/deprecated APIs and retired model tags.
->    - **You MUST AUTONOMOUSLY execute live web searches (`search_web` / web search)** BEFORE writing any code or documentation to verify the newest SDK syntax (e.g. `google-genai` SDK, LangChain 0.3+, Pydantic V2), current model tags (e.g. `gemini-3.7-flash`, `claude-sonnet-5`, `gpt-5.6-sol`, `gemma4`), and breaking changes.
+>    - **You MUST AUTONOMOUSLY execute live web searches (`search_web` / web search)** BEFORE writing any code or documentation to verify the newest SDK syntax (e.g. `google-genai` SDK, `com.google.genai:google-genai-kotlin-android`, `google_generative_ai`, `genui`), current model tags (e.g. `gemini-3.7-flash`, `claude-sonnet-5`, `gpt-5.6-sol`, `gemma4`), and breaking changes.
 >
 > 2. **🌍 Developer-Idiomatic Localization Protocol (No Literal Translations)**:
 >    - When translating or authoring slide decks, setup guides, or runbooks into Korean (KR), Japanese (JA), or Chinese (ZH), **NEVER perform awkward literal / word-for-word machine translations**.
@@ -46,6 +47,8 @@ This repository provides seamless integration for all AI Coding Agents including
 | User Chat Prompt Example | Triggered Agent Skill | Autonomous Agent Tool Call / Action |
 |:---|:---|:---|
 | *"Create a 1-hour hands-on workshop on Gemma 4 Local RAG"* | `workshop-web-researcher` ➔ `workshop-scaffolder` + All Skills | 1. Web search latest Gemma 4 & Ollama/vLLM APIs<br>2. `python3 harness_cli.py generate-all --name "..." --topic "..."` |
+| *"Build Android Jetpack Compose GenAI workshop"* | `workshop-web-researcher` ➔ `android-workshop-builder` | 1. Web search latest `com.google.genai` SDK<br>2. `python3 harness_cli.py init --name "..." --stack "android"` |
+| *"Build Flutter GenUI and A2UI dynamic surface workshop"* | `workshop-web-researcher` ➔ `flutter-workshop-builder` + `a2ui-workshop-builder` | 1. Web search latest Flutter `genui` & `google_generative_ai`<br>2. `python3 harness_cli.py init --name "..." --stack "flutter,genui,a2ui"` |
 | *"Build presentation slides and Google Slides deck"* | `workshop-slide-generator` | `python3 harness_cli.py build-slides --target <dir>` |
 | *"Convert workshop to Google Colab interactive notebooks"* | `workshop-web-researcher` ➔ `colab-workshop-integrator` | 1. Web search latest Colab CUDA/pip packages<br>2. `python3 harness_cli.py export-colab --target <dir>` |
 | *"Audit hardware risks for Intel Mac and Windows users"* | `cross-architecture-checker` | `python3 harness_cli.py audit-compat --stack "..."` |
@@ -58,50 +61,60 @@ This repository provides seamless integration for all AI Coding Agents including
 
 ## ⚡ Quick Agent Commands & Workflows (Under-the-Hood)
 
-### 1. One-Click Full Workshop Generation Across All 15 Skills
+### 1. One-Click Full Workshop Generation Across Skills
 Execute the full orchestration pipeline:
 ```bash
 python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 ```
 
-### 2. Cross-Architecture Compatibility Audit
-Audit tech stack risks across Apple Silicon, Intel Mac, Windows, and Linux:
+### 2. Android Hands-on Workshop Initialization
 ```bash
-python3 harness_cli.py audit-compat --stack "lmstudio,docker,mlx"
+python3 harness_cli.py init --name "android-gemini-lab" --topic "Android GenAI with Jetpack Compose" --stack "android"
 ```
 
-### 3. Loop Engineering Multi-Persona Review
+### 3. Flutter & A2UI / GenUI Hands-on Workshop Initialization
+```bash
+python3 harness_cli.py init --name "flutter-genui-lab" --topic "Generative UI with Flutter and A2UI" --stack "flutter,genui,a2ui"
+```
+
+### 4. Cross-Architecture Compatibility Audit
+Audit tech stack risks across Apple Silicon, Intel Mac, Windows, and Linux:
+```bash
+python3 harness_cli.py audit-compat --stack "android,flutter,genui,docker"
+```
+
+### 5. Loop Engineering Multi-Persona Review
 Evaluate curriculum and code from beginner, intermediate, and advanced attendee personas:
 ```bash
 python3 harness_cli.py audit-loop --topic "Local RAG with Gemma 4"
 ```
 
-### 4. Code Smoke Test & Markdown Link Integrity
+### 6. Code Smoke Test & Markdown Link Integrity
 Verify markdown relative links and execute test scripts:
 ```bash
 python3 harness_cli.py test --target my-bwai-workshop
 ```
 
-### 5. Build Publication PDF Handout
+### 7. Build Publication PDF Handout
 Generate PDF handouts from markdown documentation:
 ```bash
 python3 harness_cli.py build-pdf --target my-bwai-workshop
 ```
 
-### 6. Export & Push to Open Codelabs Platform
+### 8. Export & Push to Open Codelabs Platform
 Convert workshop to Open Codelabs bundle (`codelab.yaml`) and push via `oc` CLI:
 ```bash
 python3 harness_cli.py export-codelab --target my-bwai-workshop --push
 ```
 
-### 7. Export Google Colab Notebooks & Run Smoke Test via Colab CLI
+### 9. Export Google Colab Notebooks & Run Smoke Test via Colab CLI
 Convert workshop to Google Colab interactive notebooks (`.ipynb`) with 'Open in Colab' badges and verify via `colab` CLI:
 ```bash
 python3 harness_cli.py export-colab --target my-bwai-workshop
 python3 harness_cli.py test-colab --target my-bwai-workshop
 ```
 
-### 8. Build Presentation Slide Deck (Google Slides, Marp & Web HTML)
+### 10. Build Presentation Slide Deck (Google Slides, Marp & Web HTML)
 Generate Google Slides 16:9 `.pptx`, Marp Markdown (`slides.md`), and interactive standalone Web HTML presentation:
 ```bash
 python3 harness_cli.py build-slides --target my-bwai-workshop
@@ -109,7 +122,7 @@ python3 harness_cli.py build-slides --target my-bwai-workshop
 
 ---
 
-## 📁 17 Agent Skills Index
+## 📁 20 Agent Skills Index
 
 When handling user requests, reference the specific skill instructions in `skills/`:
 
@@ -130,6 +143,9 @@ When handling user requests, reference the specific skill instructions in `skill
 15. [`skills/workshop-slide-generator/SKILL.md`](skills/workshop-slide-generator/SKILL.md)
 16. [`skills/adk-workshop-builder/SKILL.md`](skills/adk-workshop-builder/SKILL.md)
 17. [`skills/eli5-concept-explainer/SKILL.md`](skills/eli5-concept-explainer/SKILL.md)
+18. [`skills/android-workshop-builder/SKILL.md`](skills/android-workshop-builder/SKILL.md)
+19. [`skills/flutter-workshop-builder/SKILL.md`](skills/flutter-workshop-builder/SKILL.md)
+20. [`skills/a2ui-workshop-builder/SKILL.md`](skills/a2ui-workshop-builder/SKILL.md)
 
 ---
 
@@ -138,4 +154,7 @@ When handling user requests, reference the specific skill instructions in `skill
 - **AGENTS.md Open Specification**: [https://agents.md/](https://agents.md/)
 - **Official Repository**: [https://github.com/JAICHANGPARK/workshop-harness](https://github.com/JAICHANGPARK/workshop-harness)
 - **Open Codelabs Platform**: [https://github.com/JAICHANGPARK/open-codelabs](https://github.com/JAICHANGPARK/open-codelabs)
+- **A2UI Open Protocol**: [https://a2ui.org](https://a2ui.org)
+- **Google Colab CLI**: [https://github.com/googlecolab/google-colab-cli](https://github.com/googlecolab/google-colab-cli)
+
 - **Google Colab CLI**: [https://github.com/googlecolab/google-colab-cli](https://github.com/googlecolab/google-colab-cli)

@@ -127,7 +127,7 @@ Workshop Harness adopts the open **[AGENTS.md specification](https://agents.md/)
 ---
 
 
-## 17 Specialized Agent Skills Specification
+## 20 Specialized Agent Skills Specification
 
 | # | Skill Name | Input / Trigger | Output & Artifacts | Primary Role |
 |---|---|---|---|---|
@@ -148,6 +148,9 @@ Workshop Harness adopts the open **[AGENTS.md specification](https://agents.md/)
 | 15 | [`workshop-slide-generator`](skills/workshop-slide-generator/SKILL.md) | Workshop project path | `output/slides/` (`slides.md`, `index.html`), PDF export | Generates Marp Markdown (`slides.md`) and interactive standalone Web Presentation (`index.html`) synced with runbook |
 | 16 | [`adk-workshop-builder`](skills/adk-workshop-builder/SKILL.md) | ADK topic & stack | Multi-agent coordinator & sub-agent code scaffolds | Builds multi-language (Python, TS, Go, Kotlin) ADK autonomous agent and multi-agent system labs |
 | 17 | [`eli5-concept-explainer`](skills/eli5-concept-explainer/SKILL.md) | Technical concept or error | 3-tier ELI5 physical analogies & mental maps | Translates complex AI concepts and errors into beginner-friendly analogies and mental maps |
+| 18 | [`android-workshop-builder`](skills/android-workshop-builder/SKILL.md) | Android topic & stack | Jetpack Compose + Google GenAI Kotlin SDK scaffolds | Builds modern Android Generative AI workshops with Compose Material 3 & ViewModel architecture |
+| 19 | [`flutter-workshop-builder`](skills/flutter-workshop-builder/SKILL.md) | Flutter topic & stack | Flutter 3.x + `google_generative_ai` scaffolds | Builds cross-platform Flutter GenAI workshops with Material 3 and Flutter Web fallback |
+| 20 | [`a2ui-workshop-builder`](skills/a2ui-workshop-builder/SKILL.md) | A2UI / GenUI topic | `genui` + `WidgetCatalog` + `SurfaceController` | Builds cutting-edge Generative UI and A2UI declarative JSON streaming interactive workshops |
 
 ---
 
@@ -162,6 +165,7 @@ Participants bring a wide variety of hardware architectures. This matrix identif
 | Windows x86_64 (Intel/AMD) | LM Studio / Ollama | PowerShell execution policy restriction, WSL2 required for Docker | Provide PowerShell bypass script |
 | Windows ARM64 (Snapdragon) | Ollama CLI (Native) | Performance degradation under x64 emulation | Use Ollama native build |
 | Linux / ChromeOS | Ollama CLI | No GUI support / Sandbox container | Use `ollama serve` terminal mode & small models (`e2b`) |
+| Universal / Web | Flutter Web (`-d chrome`) | Emulator memory limits & missing virtualization | Instant zero-install fallback for Flutter & A2UI workshops |
 
 ---
 
@@ -170,22 +174,28 @@ Participants bring a wide variety of hardware architectures. This matrix identif
 Using Python 3.9+ and `uv`, you can manage workshops via the command-line interface:
 
 ```bash
-# 1. One-Click Full Workshop Generation Across All 17 Skills
+# 1. One-Click Full Workshop Generation Across Skills
 uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 
-# 2. Audit tech stack for cross-architecture risks
-uv run harness_cli.py audit-compat --stack "lmstudio,docker,mlx"
+# 2. Android Jetpack Compose GenAI Workshop Initialization
+uv run harness_cli.py init --name "android-gemini-lab" --topic "Android GenAI with Jetpack Compose" --stack "android"
 
-# 3. Loop Engineering multi-persona audit for beginner, intermediate, and advanced attendees
+# 3. Flutter Generative UI & A2UI Workshop Initialization
+uv run harness_cli.py init --name "flutter-genui-lab" --topic "Generative UI with Flutter and A2UI" --stack "flutter,genui,a2ui"
+
+# 4. Audit tech stack for cross-architecture risks
+uv run harness_cli.py audit-compat --stack "android,flutter,genui,docker"
+
+# 5. Loop Engineering multi-persona audit for beginner, intermediate, and advanced attendees
 uv run harness_cli.py audit-loop --topic "Local RAG with Gemma 4"
 
-# 4. Test workshop code execution & markdown broken links
+# 6. Test workshop code execution & markdown broken links
 uv run harness_cli.py test --target my-bwai-workshop
 
-# 5. Build PDF handout from markdown docs
+# 7. Build PDF handout from markdown docs
 uv run harness_cli.py build-pdf --target my-bwai-workshop
 
-# 6. Export Open Codelabs bundle & manifest and push via oc CLI
+# 8. Export Open Codelabs bundle & manifest and push via oc CLI
 uv run harness_cli.py export-codelab --target my-bwai-workshop --push
 ```
 

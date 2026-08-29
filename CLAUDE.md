@@ -1,6 +1,6 @@
 # CLAUDE.md - Claude Code Agent Instructions for Workshop Harness
 
-> Standard Claude Code Context & Instructions for Workshop Harness (17 Agent Skills)
+> Standard Claude Code Context & Instructions for Workshop Harness (20 Agent Skills)
 
 This repository provides native compatibility with **Anthropic Claude Code CLI**, **Claude Sonnet 5 / Claude Opus 5**, and **Claude Desktop**.
 
@@ -13,7 +13,7 @@ This repository provides native compatibility with **Anthropic Claude Code CLI**
 ### 🤖 CRITICAL RULES FOR CLAUDE CODE:
 1. **🌐 Mandatory Autonomous Pre-Flight Web Search (`workshop-web-researcher`)**:
    - **Never rely on static model training data.** AI training weights contain obsolete/deprecated APIs and retired model tags.
-   - **Claude Code MUST AUTONOMOUSLY execute live web searches** (`search_web` / web search) before generating any workshop code, Colab notebooks, or curriculum to verify current SDK methods, modern imports, and active model tags (e.g. `gemini-3.7-flash`, `google-genai`).
+   - **Claude Code MUST AUTONOMOUSLY execute live web searches** (`search_web` / web search) before generating any workshop code, Colab notebooks, or curriculum to verify current SDK methods, modern imports, and active model tags (e.g. `gemini-3.7-flash`, `google-genai`, `com.google.genai`, `genui`).
 2. **🌍 Developer-Idiomatic Localization Protocol (No Literal Translations)**:
    - When generating or translating presentation slides, runbooks, or setup guides in Korean, Japanese, or Chinese, **do NOT use literal machine translations**.
    - **Always use developer-idiomatic community terminology**:
@@ -36,6 +36,8 @@ This repository provides native compatibility with **Anthropic Claude Code CLI**
 | User Natural Language Prompt | Autonomous Claude Action & Triggered Skill | Execution Command / Action |
 |:---|:---|:---|
 | *"Create a 1-hour workshop for Local RAG with Gemma 4"* | Read `skills/workshop-web-researcher/SKILL.md` ➔ `skills/workshop-scaffolder/SKILL.md` | 1. Web search latest Gemma 4 & Ollama APIs<br>2. Run `python3 harness_cli.py generate-all --name "<name>" --topic "<topic>"` |
+| *"Build Android Jetpack Compose GenAI workshop"* | Read `skills/android-workshop-builder/SKILL.md` | Run `python3 harness_cli.py init --name "<name>" --stack "android"` |
+| *"Build Flutter GenUI and A2UI dynamic surface workshop"* | Read `skills/flutter-workshop-builder/SKILL.md` + `skills/a2ui-workshop-builder/SKILL.md` | Run `python3 harness_cli.py init --name "<name>" --stack "flutter,genui,a2ui"` |
 | *"Build Google Slides presentation for this workshop"* | Read `skills/workshop-slide-generator/SKILL.md` | Run `python3 harness_cli.py build-slides --target <dir>` |
 | *"Convert workshop to Google Colab notebooks with badges"* | Read `skills/colab-workshop-integrator/SKILL.md` | Run `python3 harness_cli.py export-colab --target <dir>` |
 | *"Audit cross-architecture risks for Intel Mac and Windows"* | Read `skills/cross-architecture-checker/SKILL.md` | Run `python3 harness_cli.py audit-compat --stack "<stack>"` |
@@ -46,7 +48,7 @@ This repository provides native compatibility with **Anthropic Claude Code CLI**
 
 ---
 
-## 📁 17 Specialized Agent Skills Index
+## 📁 20 Specialized Agent Skills Index
 
 Claude Code should inspect these Markdown skills whenever relevant:
 
@@ -67,6 +69,9 @@ Claude Code should inspect these Markdown skills whenever relevant:
 15. [`skills/workshop-slide-generator/SKILL.md`](skills/workshop-slide-generator/SKILL.md)
 16. [`skills/adk-workshop-builder/SKILL.md`](skills/adk-workshop-builder/SKILL.md)
 17. [`skills/eli5-concept-explainer/SKILL.md`](skills/eli5-concept-explainer/SKILL.md)
+18. [`skills/android-workshop-builder/SKILL.md`](skills/android-workshop-builder/SKILL.md)
+19. [`skills/flutter-workshop-builder/SKILL.md`](skills/flutter-workshop-builder/SKILL.md)
+20. [`skills/a2ui-workshop-builder/SKILL.md`](skills/a2ui-workshop-builder/SKILL.md)
 
 ---
 
@@ -74,3 +79,5 @@ Claude Code should inspect these Markdown skills whenever relevant:
 
 - [AGENTS.md Specification](./AGENTS.md)
 - [Official Repository](https://github.com/JAICHANGPARK/workshop-harness)
+- [A2UI Open Protocol Specification](https://a2ui.org)
+
