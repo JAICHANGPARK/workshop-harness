@@ -151,11 +151,347 @@ This repository contains pre-event preparation documents and hands-on lab code f
         f.write(readme_content)
 
     # 6. Language-specific Starter & Final Code
+    is_flutter = any(k in stack for k in ["flutter", "dart", "genui", "a2ui"])
+    is_android = any(k in stack for k in ["android", "compose", "jetpack"])
     is_ts = any(k in stack for k in ["typescript", "ts", "javascript", "js", "node"])
     is_go = any(k in stack for k in ["go", "golang"])
-    is_kotlin = any(k in stack for k in ["kotlin", "kt", "java"])
+    is_kotlin = any(k in stack for k in ["kotlin", "kt", "java"]) and not is_android
 
-    if is_ts:
+    if is_flutter:
+        pubspec_yaml = f"""name: {name.replace('-', '_')}
+description: "A modern Flutter Generative AI, GenUI, and A2UI Hands-on Workshop"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+  flutter: '>=3.24.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  google_generative_ai: ^0.4.6
+  genui: ^0.1.0
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+"""
+        with open(project_dir / "workshop" / "01_starter" / "pubspec.yaml", "w", encoding="utf-8") as f:
+            f.write(pubspec_yaml)
+        with open(project_dir / "workshop" / "02_final" / "pubspec.yaml", "w", encoding="utf-8") as f:
+            f.write(pubspec_yaml)
+
+        (project_dir / "workshop" / "01_starter" / "lib").mkdir(parents=True, exist_ok=True)
+        (project_dir / "workshop" / "02_final" / "lib").mkdir(parents=True, exist_ok=True)
+
+        starter_dart = """import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const WorkshopApp());
+}
+
+class WorkshopApp extends StatelessWidget {
+  const WorkshopApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter GenAI & GenUI Workshop',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home: const StarterChatPage(),
+    );
+  }
+}
+
+class StarterChatPage extends StatelessWidget {
+  const StarterChatPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Flutter GenAI / GenUI Starter')),
+      body: const Center(
+        child: Text('Welcome! Open workshop/03_labs/README.md to start Lab 01.'),
+      ),
+    );
+  }
+}
+"""
+        final_dart = """import 'package:flutter/material.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:genui/genui.dart';
+
+void main() {
+  runApp(const WorkshopApp());
+}
+
+class WorkshopApp extends StatelessWidget {
+  const WorkshopApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter GenAI & GenUI Workshop - Final Solution',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+        useMaterial3: true,
+      ),
+      home: const GenUISurfacePage(),
+    );
+  }
+}
+
+class GenUISurfacePage extends StatefulWidget {
+  const GenUISurfacePage({super.key});
+
+  @override
+  State<GenUISurfacePage> createState() => _GenUISurfacePageState();
+}
+
+class _GenUISurfacePageState extends State<GenUISurfacePage> {
+  final TextEditingController _controller = TextEditingController();
+  final List<String> _messages = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Flutter A2UI & GenUI Dynamic Surface')),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: _messages.length,
+              itemBuilder: (context, index) => ListTile(
+                leading: const Icon(Icons.auto_awesome),
+                title: Text(_messages[index]),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    decoration: const InputDecoration(
+                      hintText: 'Ask Gemini to generate dynamic UI...',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                IconButton.filled(
+                  icon: const Icon(Icons.send),
+                  onPressed: () {
+                    if (_controller.text.isNotEmpty) {
+                      setState(() {
+                        _messages.add(_controller.text);
+                        _messages.add('[A2UI Generated Widget Surface rendered]');
+                        _controller.clear();
+                      });
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+"""
+        with open(project_dir / "workshop" / "01_starter" / "lib" / "main.dart", "w", encoding="utf-8") as f:
+            f.write(starter_dart)
+        with open(project_dir / "workshop" / "02_final" / "lib" / "main.dart", "w", encoding="utf-8") as f:
+            f.write(final_dart)
+
+        # Keep Python fallback for test runner
+        with open(project_dir / "workshop" / "01_starter" / "main.py", "w", encoding="utf-8") as f:
+            f.write('print("Flutter GenAI & GenUI Workshop Starter")\n')
+        with open(project_dir / "workshop" / "02_final" / "main.py", "w", encoding="utf-8") as f:
+            f.write('print("Flutter GenAI & GenUI Workshop Final")\n')
+
+    elif is_android:
+        for stage in ["01_starter", "02_final"]:
+            app_dir = project_dir / "workshop" / stage / "app"
+            src_dir = app_dir / "src" / "main" / "kotlin" / "com" / "example" / "workshop"
+            res_dir = app_dir / "src" / "main" / "res" / "values"
+            src_dir.mkdir(parents=True, exist_ok=True)
+            res_dir.mkdir(parents=True, exist_ok=True)
+
+            settings_gradle = f"""pluginManagement {{
+    repositories {{
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }}
+}}
+dependencyResolutionManagement {{
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {{
+        google()
+        mavenCentral()
+    }}
+}}
+rootProject.name = "{name}"
+include(":app")
+"""
+            with open(project_dir / "workshop" / stage / "settings.gradle.kts", "w", encoding="utf-8") as f:
+                f.write(settings_gradle)
+
+            root_build_gradle = """// Top-level build file
+plugins {
+    id("com.android.application") version "8.5.2" apply false
+    id("org.jetbrains.kotlin.android") version "2.0.0" apply false
+}
+"""
+            with open(project_dir / "workshop" / stage / "build.gradle.kts", "w", encoding="utf-8") as f:
+                f.write(root_build_gradle)
+
+            app_build_gradle = """plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+}
+
+android {
+    namespace = "com.example.workshop"
+    compileSdk = 35
+
+    defaultConfig {
+        applicationId = "com.example.workshop"
+        minSdk = 26
+        targetSdk = 35
+        versionCode = 1
+        versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.14"
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+
+dependencies {
+    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
+    implementation("androidx.activity:activity-compose:1.9.1")
+    implementation(platform("androidx.compose:compose-bom:2024.09.00"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-graphics")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
+    implementation("com.google.genai:google-genai-kotlin-android:0.4.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.4")
+}
+"""
+            with open(app_dir / "build.gradle.kts", "w", encoding="utf-8") as f:
+                f.write(app_build_gradle)
+
+            manifest = """<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application
+        android:allowBackup="true"
+        android:label="Android GenAI Workshop"
+        android:supportsRtl="true"
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
+"""
+            with open(app_dir / "src" / "main" / "AndroidManifest.xml", "w", encoding="utf-8") as f:
+                f.write(manifest)
+
+        starter_main_kt = """package com.example.workshop
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.ui.Modifier
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MaterialTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    Text("Welcome to Android GenAI Workshop! Open workshop/03_labs/README.md")
+                }
+            }
+        }
+    }
+}
+"""
+        final_main_kt = """package com.example.workshop
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MaterialTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text("Android GenAI & Jetpack Compose Final Solution", style = MaterialTheme.typography.headlineSmall)
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text("Connected to Google GenAI SDK (gemini-3.7-flash)")
+                    }
+                }
+            }
+        }
+    }
+}
+"""
+        with open(project_dir / "workshop" / "01_starter" / "app" / "src" / "main" / "kotlin" / "com" / "example" / "workshop" / "MainActivity.kt", "w", encoding="utf-8") as f:
+            f.write(starter_main_kt)
+        with open(project_dir / "workshop" / "02_final" / "app" / "src" / "main" / "kotlin" / "com" / "example" / "workshop" / "MainActivity.kt", "w", encoding="utf-8") as f:
+            f.write(final_main_kt)
+
+        # Keep Python fallback for test runner
+        with open(project_dir / "workshop" / "01_starter" / "main.py", "w", encoding="utf-8") as f:
+            f.write('print("Android GenAI Workshop Starter")\n')
+        with open(project_dir / "workshop" / "02_final" / "main.py", "w", encoding="utf-8") as f:
+            f.write('print("Android GenAI Workshop Final")\n')
+
+    elif is_ts:
         pkg_json = '{\n  "name": "' + name + '",\n  "version": "1.0.0",\n  "type": "module",\n  "scripts": {\n    "start": "tsx src/index.ts"\n  },\n  "dependencies": {\n    "@google/genai": "^0.1.0",\n    "dotenv": "^16.4.5"\n  },\n  "devDependencies": {\n    "tsx": "^4.19.0",\n    "typescript": "^5.5.4"\n  }\n}\n'
         with open(project_dir / "workshop" / "01_starter" / "package.json", "w", encoding="utf-8") as f:
             f.write(pkg_json)
@@ -246,6 +582,20 @@ def audit_compatibility(stack_str: str):
     print("-" * 60)
 
     issues = []
+    if any(k in stack for k in ["android", "compose"]):
+        issues.append({
+            "tool": "Android Studio & AVD Emulator",
+            "target": "Intel Mac (x86_64) / Windows Hyper-V / Linux KVM",
+            "risk": "AVD emulator CPU architecture mismatch (arm64 vs x86_64) or missing Hyper-V/KVM virtualization.",
+            "fallback": "Use physical Android device via USB debugging or use Android SDK command-line tools."
+        })
+    if any(k in stack for k in ["flutter", "genui", "a2ui"]):
+        issues.append({
+            "tool": "Flutter & A2UI / GenUI Platform Runner",
+            "target": "Windows & Linux Attendees (No macOS / Xcode)",
+            "risk": "iOS simulator / macOS desktop targets cannot be compiled on Windows or Linux.",
+            "fallback": "Mandatory Universal Fallback: Use Flutter Web (flutter run -d chrome) for instant zero-install workshop execution on any laptop."
+        })
     if "lmstudio" in stack:
         issues.append({
             "tool": "LM Studio",

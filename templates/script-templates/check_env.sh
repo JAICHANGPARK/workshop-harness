@@ -43,5 +43,31 @@ if command -v git &> /dev/null; then
     echo -e "${GREEN}[OK] Git is installed:${NC} $(git --version)"
 fi
 
+# 5. Check Flutter & Dart (Optional for Mobile Labs)
+if command -v flutter &> /dev/null; then
+    echo -e "${GREEN}[OK] Flutter SDK:${NC} $(flutter --version | head -n 1)"
+elif command -v dart &> /dev/null; then
+    echo -e "${GREEN}[OK] Dart SDK:${NC} $(dart --version)"
+else
+    echo -e "${YELLOW}[INFO] Flutter/Dart not detected in PATH (Required only for Flutter/GenUI/A2UI labs).${NC}"
+fi
+
+# 6. Check Java & Android SDK (Optional for Android Labs)
+if command -v java &> /dev/null; then
+    java_ver=$(java -version 2>&1 | head -n 1)
+    echo -e "${GREEN}[OK] Java Runtime:${NC} $java_ver"
+else
+    echo -e "${YELLOW}[INFO] Java JDK not detected in PATH (Required for Android/Compose labs).${NC}"
+fi
+
+if [ -n "$ANDROID_HOME" ] || [ -n "$ANDROID_SDK_ROOT" ]; then
+    echo -e "${GREEN}[OK] Android SDK Root configured.${NC}"
+fi
+
+if command -v adb &> /dev/null; then
+    echo -e "${GREEN}[OK] Android Debug Bridge (adb):${NC} $(adb --version | head -n 1)"
+fi
+
 echo ""
 echo "=== Check Completed! ==="
+

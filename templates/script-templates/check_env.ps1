@@ -36,5 +36,29 @@ try {
     }
 }
 
+# 4. Check Flutter & Dart (Optional for Mobile Labs)
+$flutterCmd = Get-Command flutter -ErrorAction SilentlyContinue
+if ($flutterCmd) {
+    $flVer = flutter --version | Select-Object -First 1
+    Write-Host "[OK] Flutter SDK: $flVer" -ForegroundColor Green
+} else {
+    Write-Host "[INFO] Flutter SDK not detected in PATH (Required only for Flutter/GenUI/A2UI labs)." -ForegroundColor DarkGray
+}
+
+# 5. Check Java & Android SDK (Optional for Android Labs)
+$javaCmd = Get-Command java -ErrorAction SilentlyContinue
+if ($javaCmd) {
+    $jVer = java -version 2>&1 | Select-Object -First 1
+    Write-Host "[OK] Java Runtime: $jVer" -ForegroundColor Green
+} else {
+    Write-Host "[INFO] Java JDK not detected in PATH (Required for Android/Compose labs)." -ForegroundColor DarkGray
+}
+
+$adbCmd = Get-Command adb -ErrorAction SilentlyContinue
+if ($adbCmd) {
+    Write-Host "[OK] Android Debug Bridge (adb) found." -ForegroundColor Green
+}
+
 Write-Host ""
 Write-Host "=== Check Completed! ===" -ForegroundColor Cyan
+
