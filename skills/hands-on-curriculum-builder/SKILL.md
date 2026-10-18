@@ -8,8 +8,8 @@ description: Builds step-by-step hands-on lab curriculum (Lab 1, Lab 2, Lab 3), 
 ## Purpose
 Modularizes workshop content into sequential, timed hands-on labs (60 to 120 minutes total). Enforces a clean separation between starter scaffolding (`01_starter`), reference solutions (`02_final`), step-by-step lab guides (`03_labs/README.md`), and structured prompt engineering packs (`prompt-pack/README.md`).
 
-> 🌐 **Mandatory Pre-Flight Web Research Protocol**:
-> Before generating any lab code or instructions, the agent **MUST** perform live web searches (`search_web` / `workshop-web-researcher`) to verify the latest SDK syntax (e.g. `google-genai` SDK vs legacy `google-generativeai`, current LangChain/Ollama versions, latest model tags) and ensure zero deprecated code.
+> **Mandatory Pre-Flight Web Research Protocol**:
+> Before generating any lab code or instructions, the agent **MUST** perform live web searches (`search_web` / `workshop-web-researcher`) to verify the latest SDK syntax (e.g. `google-genai >= 2.30.1` SDK vs legacy `google-generativeai`, current LangChain/Ollama versions, latest model tags like `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.8-live`, `gemma4`) and ensure zero deprecated code.
 
 ---
 
@@ -30,9 +30,9 @@ flowchart TD
 ### Gemini Live Real-time Streaming & Multimodal Track (Python / JS / Flutter)
 ```mermaid
 flowchart TD
-    Live1["Lab 01: WebSocket Connection & Ephemeral Tokens (15-20 min)<br>Connect to gemini-3.1-flash-live-preview via LiveSession / SDK"]
+    Live1["Lab 01: WebSocket Connection & Ephemeral Tokens (15-20 min)<br>Connect to gemini-3.8-live via LiveSession / SDK"]
     Live2["Lab 02: Real-time Bidirectional Audio & VAD Handling (30-35 min)<br>Stream 16kHz PCM audio chunks and handle model speech playback<br>(Flutter: gemini_live | Python: google-genai | JS: @google/genai)"]
-    Live3["Lab 03: Real-time Multimodal (Camera/Video) & Live Tool Calling (30-35 min)<br>Stream JPEG video frames and execute real-time function calling"]
+    Live3["Lab 03: Real-time Multimodal (Camera/Video) & Live Tool Calling (30-35 min)<br>Stream JPEG video frames and execute non-blocking real-time function calling"]
 
     Live1 --> Live2 --> Live3
 ```

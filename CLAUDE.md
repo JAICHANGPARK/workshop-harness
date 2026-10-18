@@ -1,8 +1,8 @@
 # CLAUDE.md - Claude Code Agent Instructions for Workshop Harness
 
-> Standard Claude Code Context & Instructions for Workshop Harness (20 Agent Skills)
+> Standard Claude Code Context & Instructions for Workshop Harness (21 Agent Skills)
 
-This repository provides native compatibility with **Anthropic Claude Code CLI**, **Claude Sonnet 5 / Claude Opus 5**, and **Claude Desktop**.
+This repository provides native compatibility with **Anthropic Claude Code CLI**, **Claude Sonnet 5.5 / Claude Opus 5.5 / Claude Fable 5.1**, and **Claude Desktop**.
 
 ---
 
@@ -13,7 +13,7 @@ This repository provides native compatibility with **Anthropic Claude Code CLI**
 ### 🤖 CRITICAL RULES FOR CLAUDE CODE:
 1. **🌐 Mandatory Autonomous Pre-Flight Web Search (`workshop-web-researcher`)**:
    - **Never rely on static model training data.** AI training weights contain obsolete/deprecated APIs and retired model tags.
-   - **Claude Code MUST AUTONOMOUSLY execute live web searches** (`search_web` / web search) before generating any workshop code, Colab notebooks, or curriculum to verify current SDK methods, modern imports, and active model tags (e.g. `gemini-3.7-flash`, `google-genai`, `com.google.genai`, `genui`).
+   - **Claude Code MUST AUTONOMOUSLY execute live web searches** (`search_web` / web search) before generating any workshop code, Colab notebooks, or curriculum to verify current SDK methods, modern imports, and active model tags (e.g. `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.8-live`, `claude-sonnet-5.5`, `claude-opus-5.5`, `gpt-6-astra`, `gpt-6.1-sol`, `gemma4`, `google-genai`, `google-adk`, `google-agents-cli`, `com.google.genai`, `genui`).
 2. **🌍 Developer-Idiomatic Localization Protocol (No Literal Translations)**:
    - When generating or translating presentation slides, runbooks, or setup guides in Korean, Japanese, or Chinese, **do NOT use literal machine translations**.
    - **Always use developer-idiomatic community terminology**:
@@ -21,7 +21,7 @@ This repository provides native compatibility with **Anthropic Claude Code CLI**
      - **Japanese (JA)**: 「ハンズオン」, 「デプロイ」, 「スキャフォールディング」, 「トークン」, 「ファインチューニング」, 「ランブック」.
      - **Chinese (ZH)**: 「实战工作坊」, 「脚手架」, 「提示词工程」, 「微调」, 「演练手册」.
 3. **🚫 Typography Rule (No Em Dash)**:
-   - **NEVER generate em dash characters (`—` or `\u2014`)** anywhere in slides, docs, code, or markdown. Always use standard hyphens (`-`), colons (`:`), or parentheses.
+   - **NEVER generate em dash characters (`\u2014`)** anywhere in slides, docs, code, or markdown. Always use standard hyphens (`-`), colons (`:`), or parentheses.
 4. **🚫 No Emojis in Documentation (Default: Clean Professional Text)**:
    - **Do NOT use emojis in generated documentation, slide decks, setup guides, code comments, or runbooks by default.**
    - Emojis may only be used if the user explicitly requests them in their prompt.
@@ -36,19 +36,21 @@ This repository provides native compatibility with **Anthropic Claude Code CLI**
 | User Natural Language Prompt | Autonomous Claude Action & Triggered Skill | Execution Command / Action |
 |:---|:---|:---|
 | *"Create a 1-hour workshop for Local RAG with Gemma 4"* | Read `skills/workshop-web-researcher/SKILL.md` ➔ `skills/workshop-scaffolder/SKILL.md` | 1. Web search latest Gemma 4 & Ollama APIs<br>2. Run `python3 harness_cli.py generate-all --name "<name>" --topic "<topic>"` |
+| *"Build Google ADK & agents-cli multi-agent lifecycle workshop"* | Read `skills/adk-workshop-builder/SKILL.md` + `skills/agents-cli-workshop-builder/SKILL.md` | Run `python3 harness_cli.py init --name "<name>" --stack "python,adk,agents-cli"` |
 | *"Build Android Jetpack Compose GenAI workshop with android CLI"* | Read `skills/android-workshop-builder/SKILL.md` | Run `python3 harness_cli.py init --name "<name>" --stack "android"` |
 | *"Build Flutter GenUI and A2UI dynamic surface workshop"* | Read `skills/flutter-workshop-builder/SKILL.md` + `skills/a2ui-workshop-builder/SKILL.md` | Run `python3 harness_cli.py init --name "<name>" --stack "flutter,genui,a2ui"` |
+| *"List or audit workshop AI models and upgrade legacy tags"* | Read `skills/workshop-web-researcher/SKILL.md` | Run `python3 harness_cli.py list-models` or `python3 harness_cli.py audit-models --target <dir> --fix` |
 | *"Build Google Slides presentation for this workshop"* | Read `skills/workshop-slide-generator/SKILL.md` | Run `python3 harness_cli.py build-slides --target <dir>` |
 | *"Convert workshop to Google Colab notebooks with badges"* | Read `skills/colab-workshop-integrator/SKILL.md` | Run `python3 harness_cli.py export-colab --target <dir>` |
 | *"Audit cross-architecture risks for Intel Mac and Windows"* | Read `skills/cross-architecture-checker/SKILL.md` | Run `python3 harness_cli.py audit-compat --stack "<stack>"` |
-| *"Review workshop from beginner & senior developer perspectives"* | Read `skills/workshop-persona-loop-evaluator/SKILL.md` | Run `python3 harness_cli.py audit-loop --topic "<topic>"` |
+| *"Review workshop from beginner & senior developer perspectives"* | Read `skills/workshop-persona-loop-evaluator/SKILL.md` | Run `python3 harness_cli.py audit-loop --topic "<topic>" --target <dir>` |
 | *"Attendee terminal error: CUDA OutOfMemoryError"* | Read `skills/live-debug-assistant/SKILL.md` | Provide 10-sec hotfix command & quantization fallback |
 | *"Generate PDF handouts and contact sheet previews"* | Read `skills/pdf-handout-generator/SKILL.md` | Run `python3 harness_cli.py build-pdf --target <dir>` |
 | *"Export and push to Open Codelabs platform"* | Read `skills/open-codelabs-integrator/SKILL.md` | Run `python3 harness_cli.py export-codelab --target <dir> --push` |
 
 ---
 
-## 📁 20 Specialized Agent Skills Index
+## 📁 21 Specialized Agent Skills Index
 
 Claude Code should inspect these Markdown skills whenever relevant:
 
@@ -72,6 +74,7 @@ Claude Code should inspect these Markdown skills whenever relevant:
 18. [`skills/android-workshop-builder/SKILL.md`](skills/android-workshop-builder/SKILL.md)
 19. [`skills/flutter-workshop-builder/SKILL.md`](skills/flutter-workshop-builder/SKILL.md)
 20. [`skills/a2ui-workshop-builder/SKILL.md`](skills/a2ui-workshop-builder/SKILL.md)
+21. [`skills/agents-cli-workshop-builder/SKILL.md`](skills/agents-cli-workshop-builder/SKILL.md)
 
 ---
 
@@ -79,6 +82,8 @@ Claude Code should inspect these Markdown skills whenever relevant:
 
 - [AGENTS.md Specification](./AGENTS.md)
 - [Official Repository](https://github.com/JAICHANGPARK/workshop-harness)
+- [Google Agent Development Kit (ADK)](https://adk.dev)
+- [Google Agents CLI (`google/agents-cli`)](https://github.com/google/agents-cli)
 - [Official Google Android CLI & Skills](https://developer.android.com/tools/agents/android-cli)
 - [Flutter AI Development Guide](https://docs.flutter.dev/ai/get-started)
 - [Flutter Package Skills](https://docs.flutter.dev/ai/package-skills)

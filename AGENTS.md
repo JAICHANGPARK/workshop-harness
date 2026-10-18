@@ -11,7 +11,7 @@ This repository provides seamless integration for all AI Coding Agents including
 `workshop-harness` is an AI Agent Harness, Skill Suite, and CLI Automation Toolkit for technical workshops (Build with AI, DevFest, community coding labs).
 
 - **CLI Automation**: `python3 harness_cli.py`
-- **20 Agent Skills**: Located under `skills/*/SKILL.md`
+- **21 Agent Skills**: Located under `skills/*/SKILL.md`
 - **Document Templates**: Located under `templates/doc-templates/`
 
 ---
@@ -22,7 +22,7 @@ This repository provides seamless integration for all AI Coding Agents including
 >
 > 1. **🌐 Mandatory Autonomous Pre-Flight Web Search (`workshop-web-researcher`)**:
 >    - **NEVER rely solely on LLM internal parametric training data** when generating workshop curriculum, code samples, Colab notebooks, or setup guides. Parametric weights contain outdated/deprecated APIs and retired model tags.
->    - **You MUST AUTONOMOUSLY execute live web searches (`search_web` / web search)** BEFORE writing any code or documentation to verify the newest SDK syntax (e.g. `google-genai` SDK, `com.google.genai:google-genai-kotlin-android`, `google_generative_ai`, `genui`), current model tags (e.g. `gemini-3.7-flash`, `claude-sonnet-5`, `gpt-5.6-sol`, `gemma4`), and breaking changes.
+>    - **You MUST AUTONOMOUSLY execute live web searches (`search_web` / web search)** BEFORE writing any code or documentation to verify the newest SDK syntax (e.g. `google-genai >= 2.30.1` SDK, `@google/genai >= 2.29.1`, `google-adk`, `google-agents-cli`, `com.google.genai:google-genai-kotlin-android`, `google_generative_ai`, `genui`), current model tags (e.g. `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.8-live`, `gemini-nano-banana-2.1`, `gemini-omni-1.1-flash`, `claude-sonnet-5.5`, `claude-opus-5.5`, `gpt-6-astra`, `gpt-6.1-sol`, `gemma4`, `qwen3.6`), and breaking changes.
 >
 > 2. **🌍 Developer-Idiomatic Localization Protocol (No Literal Translations)**:
 >    - When translating or authoring slide decks, setup guides, or runbooks into Korean (KR), Japanese (JA), or Chinese (ZH), **NEVER perform awkward literal / word-for-word machine translations**.
@@ -32,7 +32,7 @@ This repository provides seamless integration for all AI Coding Agents including
 >      - **Chinese (ZH)**: Use Chinese tech community terminology (e.g., 「实战工作坊/动手实验」, 「脚手架」, 「提示词工程」, 「微调」, 「演练手册/Runbook」).
 >
 > 3. **🚫 Typography Rule (No Em Dash)**:
->    - **NEVER generate em dash characters (`—` or `\u2014`)** in any generated documentation, code comments, slide decks, or markdown files.
+>    - **NEVER generate em dash characters (`\u2014`)** in any generated documentation, code comments, slide decks, or markdown files.
 >    - Always use standard hyphens (`-`), colons (`:`), or parentheses `()` instead.
 >
 > 4. **🚫 No Emojis in Documentation (Default: Clean Professional Text)**:
@@ -46,12 +46,14 @@ This repository provides seamless integration for all AI Coding Agents including
 | User Chat Prompt Example | Triggered Agent Skill | Autonomous Agent Tool Call / Action |
 |:---|:---|:---|
 | *"Create a 1-hour hands-on workshop on Gemma 4 Local RAG"* | `workshop-web-researcher` ➔ `workshop-scaffolder` + All Skills | 1. Web search latest Gemma 4 & Ollama/vLLM APIs<br>2. `python3 harness_cli.py generate-all --name "..." --topic "..."` |
+| *"Build Google ADK & agents-cli multi-agent lifecycle workshop"* | `workshop-web-researcher` ➔ `adk-workshop-builder` + `agents-cli-workshop-builder` | 1. Web search latest `google-adk` & `google-agents-cli`<br>2. `python3 harness_cli.py init --name "..." --stack "python,adk,agents-cli"` |
 | *"Build Android Jetpack Compose GenAI workshop with android CLI"* | `workshop-web-researcher` ➔ `android-workshop-builder` | 1. Web search latest `com.google.genai` SDK & `android` CLI<br>2. `python3 harness_cli.py init --name "..." --stack "android"` |
 | *"Build Flutter GenUI and A2UI dynamic surface workshop"* | `workshop-web-researcher` ➔ `flutter-workshop-builder` + `a2ui-workshop-builder` | 1. Web search latest Flutter `genui` & `google_generative_ai`<br>2. `python3 harness_cli.py init --name "..." --stack "flutter,genui,a2ui"` |
+| *"List or audit workshop AI models and upgrade legacy tags"* | `workshop-web-researcher` | `python3 harness_cli.py list-models` / `python3 harness_cli.py audit-models --target <dir> --fix` |
 | *"Build presentation slides and Google Slides deck"* | `workshop-slide-generator` | `python3 harness_cli.py build-slides --target <dir>` |
 | *"Convert workshop to Google Colab interactive notebooks"* | `workshop-web-researcher` ➔ `colab-workshop-integrator` | 1. Web search latest Colab CUDA/pip packages<br>2. `python3 harness_cli.py export-colab --target <dir>` |
 | *"Audit hardware risks for Intel Mac and Windows users"* | `cross-architecture-checker` | `python3 harness_cli.py audit-compat --stack "..."` |
-| *"Review workshop from beginner, intermediate, and senior personas"* | `workshop-persona-loop-evaluator` | `python3 harness_cli.py audit-loop --topic "..."` |
+| *"Review workshop from beginner, intermediate, and senior personas"* | `workshop-persona-loop-evaluator` | `python3 harness_cli.py audit-loop --topic "..." --target <dir>` |
 | *"Attendee terminal error: CUDA OutOfMemoryError"* | `live-debug-assistant` | Provide immediate 10-sec hotfix & CPU/quantization fallback |
 | *"Generate publication-ready PDF handouts and previews"* | `pdf-handout-generator` | `python3 harness_cli.py build-pdf --target <dir>` |
 | *"Export workshop to Open Codelabs bundle and publish"* | `open-codelabs-integrator` | `python3 harness_cli.py export-codelab --target <dir> --push` |
@@ -63,57 +65,69 @@ This repository provides seamless integration for all AI Coding Agents including
 ### 1. One-Click Full Workshop Generation Across Skills
 Execute the full orchestration pipeline:
 ```bash
-python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
+python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker" --model "gemini-3.8-flash"
 ```
 
-### 2. Android Hands-on Workshop Initialization
+### 2. List & Audit 2026 Frontier Models
+Inspect verified 2026 models or auto-upgrade deprecated model strings across a project:
+```bash
+python3 harness_cli.py list-models
+python3 harness_cli.py audit-models --target my-bwai-workshop --fix
+```
+
+### 3. Google ADK & Agents CLI (`google-agents-cli`) Workshop Initialization
+```bash
+python3 harness_cli.py init --name "adk-agents-cli-lab" --topic "Multi-Agent ADLC with Google ADK and agents-cli" --stack "python,adk,agents-cli"
+```
+
+### 4. Android Hands-on Workshop Initialization
 ```bash
 python3 harness_cli.py init --name "android-gemini-lab" --topic "Android GenAI with Jetpack Compose" --stack "android"
 ```
 
-### 3. Flutter & A2UI / GenUI Hands-on Workshop Initialization
+### 5. Flutter & A2UI / GenUI Hands-on Workshop Initialization
 ```bash
 python3 harness_cli.py init --name "flutter-genui-lab" --topic "Generative UI with Flutter and A2UI" --stack "flutter,genui,a2ui"
 ```
 
-### 4. Cross-Architecture Compatibility Audit
+### 6. Cross-Architecture Compatibility Audit
 Audit tech stack risks across Apple Silicon, Intel Mac, Windows, and Linux:
 ```bash
-python3 harness_cli.py audit-compat --stack "android,flutter,genui,docker"
+python3 harness_cli.py audit-compat --stack "adk,agents-cli,android,flutter,genui,docker,gemini-live"
 ```
 
-### 5. Loop Engineering Multi-Persona Review
-Evaluate curriculum and code from beginner, intermediate, and advanced attendee personas:
+### 7. Loop Engineering 4-Persona Review
+Evaluate curriculum and code from non-coder, novice, intermediate, and senior attendee personas:
 ```bash
-python3 harness_cli.py audit-loop --topic "Local RAG with Gemma 4"
+python3 harness_cli.py audit-loop --topic "Local RAG with Gemma 4" --target my-bwai-workshop
 ```
 
-### 6. Code Smoke Test & Markdown Link Integrity
-Verify markdown relative links and execute test scripts:
+### 8. Code Smoke Test & Markdown Link Integrity
+Verify markdown relative links, model currency, and execute test scripts:
 ```bash
 python3 harness_cli.py test --target my-bwai-workshop
 ```
 
-### 7. Build Publication PDF Handout
+### 9. Build Publication PDF Handout
 Generate PDF handouts from markdown documentation:
 ```bash
 python3 harness_cli.py build-pdf --target my-bwai-workshop
 ```
 
-### 8. Export & Push to Open Codelabs Platform
+### 10. Export & Push to Open Codelabs Platform
 Convert workshop to Open Codelabs bundle (`codelab.yaml`) and push via `oc` CLI:
 ```bash
 python3 harness_cli.py export-codelab --target my-bwai-workshop --push
 ```
 
-### 9. Export Google Colab Notebooks & Run Smoke Test via Colab CLI
+### 11. Export Google Colab Notebooks & Run Smoke Test via Colab CLI
 Convert workshop to Google Colab interactive notebooks (`.ipynb`) with 'Open in Colab' badges and verify via `colab` CLI:
 ```bash
 python3 harness_cli.py export-colab --target my-bwai-workshop
 python3 harness_cli.py test-colab --target my-bwai-workshop
 ```
 
-### 10. Build Presentation Slide Deck (Google Slides, Marp & Web HTML)
+### 12. Build Presentation Slide Deck (Google Slides, Marp & Web HTML)
 Generate Google Slides 16:9 `.pptx`, Marp Markdown (`slides.md`), and interactive standalone Web HTML presentation:
 ```bash
 python3 harness_cli.py build-slides --target my-bwai-workshop
@@ -121,7 +135,7 @@ python3 harness_cli.py build-slides --target my-bwai-workshop
 
 ---
 
-## 📁 20 Agent Skills Index
+## 📁 21 Agent Skills Index
 
 When handling user requests, reference the specific skill instructions in `skills/`:
 
@@ -145,6 +159,7 @@ When handling user requests, reference the specific skill instructions in `skill
 18. [`skills/android-workshop-builder/SKILL.md`](skills/android-workshop-builder/SKILL.md)
 19. [`skills/flutter-workshop-builder/SKILL.md`](skills/flutter-workshop-builder/SKILL.md)
 20. [`skills/a2ui-workshop-builder/SKILL.md`](skills/a2ui-workshop-builder/SKILL.md)
+21. [`skills/agents-cli-workshop-builder/SKILL.md`](skills/agents-cli-workshop-builder/SKILL.md)
 
 ---
 
@@ -152,6 +167,8 @@ When handling user requests, reference the specific skill instructions in `skill
 
 - **AGENTS.md Open Specification**: [https://agents.md/](https://agents.md/)
 - **Official Repository**: [https://github.com/JAICHANGPARK/workshop-harness](https://github.com/JAICHANGPARK/workshop-harness)
+- **Google Agent Development Kit (ADK)**: [https://adk.dev](https://adk.dev)
+- **Google Agents CLI (`google/agents-cli`)**: [https://github.com/google/agents-cli](https://github.com/google/agents-cli)
 - **Open Codelabs Platform**: [https://github.com/JAICHANGPARK/open-codelabs](https://github.com/JAICHANGPARK/open-codelabs)
 - **Official Google Android CLI & Skills**: [https://developer.android.com/tools/agents/android-cli](https://developer.android.com/tools/agents/android-cli)
 - **Flutter AI Development**: [https://docs.flutter.dev/ai/get-started](https://docs.flutter.dev/ai/get-started)

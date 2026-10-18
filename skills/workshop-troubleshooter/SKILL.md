@@ -12,11 +12,11 @@ Hardware variations, operating system firewall policies, and local LLM server po
 
 ## RAM-Tier Sizing & Model Selection Matrix
 
-| Hardware RAM Tier | Maximum Parameter Size | Recommended Ollama Model Tag | Context Window Limit (`num_ctx`) |
+| Hardware RAM Tier | Maximum Parameter Size | Recommended Local Model Tag | Context Window Limit (`num_ctx`) |
 |---|---|---|---|
-| **8GB RAM** | 2B parameters max | `gemma4:e2b` or `phi-4-mini` | `2048` |
-| **16GB RAM** | 4B parameters comfortable | `gemma4:e4b` | `4096` |
-| **32GB+ RAM** | 12B - 14B parameters | `gemma4:e12b` or `qwen3:14b` | `8192` |
+| **8GB RAM** | 2B - 8B (4-bit quantized) | `gemma4:e2b`, `qwen3:8b`, or `deepseek-r1:8b` | `2048` |
+| **16GB RAM** | 4B - 14B parameters | `gemma4:e4b`, `qwen3:14b`, or `deepseek-r1:14b` | `4096` |
+| **32GB+ RAM** | 12B - 31B / MoE parameters | `gemma4:e12b`, `gemma4:26b-a4b`, `gemma4:31b`, `qwen3.6:27b`, `qwen3-coder:30b`, or `llama4:scout` | `8192` - `32768` |
 
 ---
 

@@ -136,7 +136,7 @@ class ChatViewModel : ViewModel() {
             _uiState.value = ChatUiState.Loading
             try {
                 val response = aiClient.models.generateContent(
-                    model = "gemini-3.7-flash",
+                    model = "gemini-3.8-flash",
                     prompt = prompt
                 )
                 _uiState.value = ChatUiState.Success(response.text ?: "No response")

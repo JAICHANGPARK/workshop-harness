@@ -11,7 +11,7 @@ When integrating local LLMs into Python, Node.js, or Go applications, verify the
 | **Ollama** | `11434` | `http://localhost:11434` | `http://localhost:11434/v1` | `ollama` (or any string) |
 | **LM Studio** | `1234` | `http://localhost:1234` | `http://localhost:1234/v1` | `lm-studio` (or any string) |
 
-> 💡 **Port Tip**: If `http://localhost:11434/v1` throws `Connection Refused`, check if `ollama serve` is running. If `http://localhost:1234/v1` fails, ensure the "Local Inference Server" is started inside LM Studio's Developer tab.
+> **Port Tip**: If `http://localhost:11434/v1` throws `Connection Refused`, check if `ollama serve` is running. If `http://localhost:1234/v1` fails, ensure the "Local Inference Server" is started inside LM Studio's Developer tab.
 
 ---
 
@@ -19,9 +19,9 @@ When integrating local LLMs into Python, Node.js, or Go applications, verify the
 
 | RAM | Recommended Model | Runtime Tool | Notes |
 | --- | --- | --- | --- |
-| **8GB** | `gemma4:e2b` (or 2B-3B class) | Ollama / LM Studio | Set context length to 2048 or below |
-| **16GB** | `gemma4:e4b` (or 7B-9B class) | LM Studio / Ollama | Recommended baseline spec for hands-on labs |
-| **32GB+** | `gemma4:26b-a4b` or 31B | LM Studio / Ollama / MLX | Supports advanced pipelines and multi-agent labs |
+| **8GB** | `gemma4:e2b`, `qwen3:8b`, or `deepseek-r1:8b` | Ollama / LM Studio | Set context length to 2048 or below |
+| **16GB** | `gemma4:e4b`, `qwen3:14b`, or `deepseek-r1:14b` | LM Studio / Ollama | Recommended baseline spec for hands-on labs |
+| **32GB+** | `gemma4:26b-a4b`, `gemma4:31b`, `qwen3.6:27b`, `qwen3-coder:30b`, or `llama4:scout` | LM Studio / Ollama / MLX | Supports advanced pipelines and multi-agent labs |
 
 > **Note**: The 'B' in parameter count stands for Billion (1,000,000,000). This does not correspond 1:1 with file size in GB. Check the actual download size for 4-bit quantized (Q4_K_M) models.
 

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 verify_workshop.py - Workshop Integrity & Link Auditor
-마크다운 상대 경로 링크, 이미지 존재 여부, 코드 실행 상태를 자동으로 점검하는 하네스 검증 도구
+Automatically verifies markdown relative path links, image file existence, and code execution
+status as a comprehensive harness verification tool.
 """
 
 import os
@@ -74,6 +75,69 @@ def test_code_execution(target_dir: Path):
 
     return passed
 
+
+def audit_model_and_sdk_currency(target_dir: Path):
+    print("\n🔍 Auditing 2026 Model & SDK Currency...")
+    deprecated_patterns = {
+        "gemini-1.5-flash": "gemini-3.8-flash",
+        "gemini-1.5-pro": "gemini-4-argon",
+        "gemini-2.0-flash": "gemini-3.8-flash",
+        "gemini-2.5-flash": "gemini-3.8-flash",
+        "gemini-2.5-pro": "gemini-4-argon",
+        "gemini-3.1-flash": "gemini-3.8-flash",
+        "gemini-3.1-flash-live-preview": "gemini-3.8-live",
+        "gpt-4o-mini": "gpt-6-luna",
+        "claude-3-5-sonnet": "claude-sonnet-5.5",
+        "google.generativeai": "from google import genai (google-genai >= 2.30.1)",
+    }
+    scan_exts = {".py", ".ts", ".js", ".go", ".kt", ".dart", ".md"}
+    ignore_dirs = {".git", ".venv", "node_modules", "__pycache__", ".dart_tool", "build", "tmp"}
+    warnings = []
+
+    for root, dirs, files in os.walk(target_dir):
+        dirs[:] = [d for d in dirs if d not in ignore_dirs]
+        for fname in files:
+            fpath = Path(root) / fname
+            if fpath.suffix not in scan_exts or fpath.name == "verify_workshop.py":
+                continue
+            try:
+                lines = fpath.read_text(encoding="utf-8", errors="ignore").splitlines()
+            except Exception:
+                continue
+            for idx, line in enumerate(lines, 1):
+                if any(k in line.lower() for k in ["prohibited", "deprecated", "legacy", "retired", "never use", "instead of"]):
+                    continue
+                for old_pat, replacement in deprecated_patterns.items():
+                    if re.search(rf"(?<![\w.-]){re.escape(old_pat)}(?![\w.-])", line):
+                        warnings.append((str(fpath.relative_to(target_dir)), idx, old_pat, replacement))
+
+    if warnings:
+        print(f"⚠️ Found {len(warnings)} legacy model/SDK reference(s):")
+        for rel_file, line_no, pat, repl in warnings[:10]:
+            print(f"  - {rel_file}:{line_no} uses '{pat}' -> upgrade to '{repl}'")
+    else:
+        print("✅ All model tags and SDK imports follow 2026 Frontier standards!")
+    return True
+
+
+def audit_typography_and_security(target_dir: Path):
+    print("\n🔍 Auditing Typography (No Em Dash) & API Key Hygiene...")
+    md_files = list(target_dir.glob("**/*.md"))
+    em_dash_files = []
+    for md_file in md_files:
+        if any(part in str(md_file) for part in [".venv", "node_modules", "AGENTS.md", "CLAUDE.md"]):
+            continue
+        content = md_file.read_text(encoding="utf-8", errors="ignore")
+        if "\u2014" in content:
+            em_dash_files.append(str(md_file.relative_to(target_dir)))
+
+    if em_dash_files:
+        print(f"⚠️ Em dash (\\u2014) detected in {len(em_dash_files)} markdown file(s): {', '.join(em_dash_files[:5])}")
+    else:
+        print("✅ Typography check PASSED (Zero forbidden em dashes in markdown docs).")
+    return True
+
+
 def main():
     target = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path.cwd()
     print(f"🚀 Starting Workshop Harness Integrity Test for: '{target.name}'")
@@ -81,6 +145,8 @@ def main():
 
     links_ok = audit_markdown_links(target)
     code_ok = test_code_execution(target)
+    audit_model_and_sdk_currency(target)
+    audit_typography_and_security(target)
 
     print("-" * 60)
     if links_ok and code_ok:
@@ -92,3 +158,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

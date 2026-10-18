@@ -92,7 +92,7 @@ class GeminiService {
   final GenerativeModel _model;
   ChatSession? _chatSession;
 
-  GeminiService({required String apiKey, String modelName = 'gemini-3.7-flash'})
+  GeminiService({required String apiKey, String modelName = 'gemini-3.8-flash'})
       : _model = GenerativeModel(
           model: modelName,
           apiKey: apiKey,
