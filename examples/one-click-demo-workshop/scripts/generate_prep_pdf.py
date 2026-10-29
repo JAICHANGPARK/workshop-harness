@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 generate_prep_pdf.py - Workshop Harness PDF Generator
-ReportLab, PyMuPDF(fitz), Pillow를 사용하여 docs/ 디렉토리의 마크다운 가이드 문서들을
-출판용 품질의 단일 PDF 핸드아웃으로 빌드하고, 미리보기 contact sheet 이미지를 생성합니다.
+Uses ReportLab, PyMuPDF (fitz), and Pillow to build markdown guide documents from the docs/
+directory into a single publication-quality PDF handout with a preview contact sheet image.
 """
 
 import os
@@ -10,16 +10,24 @@ import sys
 import glob
 import re
 from pathlib import Path
+from xml.sax.saxutils import escape as xml_escape
+
+def format_pdf_text(text: str) -> str:
+    """Escape XML special characters first, then apply basic bold/italic markdown formatting."""
+    escaped = xml_escape(text)
+    escaped = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', escaped)
+    escaped = re.sub(r'\*(.*?)\*', r'<i>\1</i>', escaped)
+    return escaped
 
 def generate_pdf(docs_dir: str, output_pdf_path: str, preview_dir: str):
     try:
         from reportlab.lib.pagesizes import letter, A4
-        from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, HRFlowable, Code
+        from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, HRFlowable
         from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
         from reportlab.lib import colors
         from reportlab.pdfgen import canvas
-    except ImportError:
-        print("❌ Error: reportlab is not installed. Run: pip install reportlab pymupdf pillow")
+    except ImportError as exc:
+        print(f"Error: reportlab is not installed ({exc}). Run: pip install reportlab pymupdf pillow")
         sys.exit(1)
 
     print(f"📄 Building PDF from docs in '{docs_dir}' -> '{output_pdf_path}'...")
@@ -102,18 +110,15 @@ def generate_pdf(docs_dir: str, output_pdf_path: str, preview_dir: str):
             if not line_str:
                 continue
             if line_str.startswith("# "):
-                story.append(Paragraph(line_str[2:], h1_style))
+                story.append(Paragraph(format_pdf_text(line_str[2:]), h1_style))
             elif line_str.startswith("## "):
-                story.append(Paragraph(line_str[3:], h2_style))
+                story.append(Paragraph(format_pdf_text(line_str[3:]), h2_style))
             elif line_str.startswith("### "):
-                story.append(Paragraph(line_str[4:], h2_style))
+                story.append(Paragraph(format_pdf_text(line_str[4:]), h2_style))
             elif line_str.startswith("- ") or line_str.startswith("* "):
-                story.append(Paragraph(f"• {line_str[2:]}", body_style))
+                story.append(Paragraph(f"• {format_pdf_text(line_str[2:])}", body_style))
             else:
-                # Clean basic markdown tags
-                clean_text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', line_str)
-                clean_text = re.sub(r'\*(.*?)\*', r'<i>\1</i>', clean_text)
-                story.append(Paragraph(clean_text, body_style))
+                story.append(Paragraph(format_pdf_text(line_str), body_style))
 
         story.append(Spacer(1, 15))
         story.append(PageBreak())

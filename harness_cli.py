@@ -1121,6 +1121,17 @@ class MainActivity : ComponentActivity() {
 
         # Scaffold 3-stage Android Lab step files
         labs_dir = project_dir / "workshop" / "03_labs"
+        with open(labs_dir / "README.md", "w", encoding="utf-8") as f:
+            f.write(f"""# {topic} - Android Jetpack Compose Hands-on Lab Session Guide
+
+This guide covers building modern Android GenAI applications using Jetpack Compose Material 3, Google GenAI Kotlin SDK (`com.google.genai`), and the Google `android` CLI.
+
+## Step-by-Step Labs
+
+1. **[Lab 01: Android CLI Setup & Gemini Client Integration](./01_lab_gemini_client.md)**
+2. **[Lab 02: MVVM Architecture, StateFlow & Structured Outputs](./02_lab_mvvm_stateflow.md)**
+3. **[Lab 03: CameraX Multimodal Vision & On-Device AppFunctions](./03_lab_camerax_appfunctions.md)**
+""")
         with open(labs_dir / "01_lab_gemini_client.md", "w", encoding="utf-8") as f:
             f.write("""# Lab 01: Android CLI Setup & Gemini Client Integration
 
@@ -1293,6 +1304,17 @@ main().catch(console.error);
             f.write(final_ts)
 
         labs_dir = project_dir / "workshop" / "03_labs"
+        with open(labs_dir / "README.md", "w", encoding="utf-8") as f:
+            f.write(f"""# {topic} - TypeScript ADK Hands-on Lab Session Guide
+
+This guide covers building production multi-agent systems in TypeScript using **Google Agent Development Kit (`@google/adk`)** and **Zod**.
+
+## Step-by-Step Labs
+
+1. **[Lab 01: TypeScript ADK Setup & Zod FunctionTools](./01_lab_ts_adk_agent_and_zod_tools.md)**
+2. **[Lab 02: Multi-Agent Delegation with subAgents](./02_lab_ts_subagents_and_routing.md)**
+3. **[Lab 03: ADK Web Dev UI, Trajectory Evaluation & API Serving](./03_lab_ts_eval_and_api_server.md)**
+""")
         with open(labs_dir / "01_lab_ts_adk_agent_and_zod_tools.md", "w", encoding="utf-8") as f:
             f.write(f"""# Lab 01: TypeScript ADK Setup & Zod FunctionTools
 
@@ -2361,6 +2383,30 @@ export const rootAgent = new LlmAgent({{
 }});
 ''')
 
+        with open(labs_dir / "README.md", "w", encoding="utf-8") as f:
+            f.write(f"""# {topic} - Hands-on Lab Session Guide
+
+This guide outlines the session schedule and step-by-step objectives for the **{topic}** workshop.
+Write your code in `workshop/01_starter`. If you get stuck, refer to the completed reference solution in `workshop/02_final`.
+
+---
+
+## Session Schedule (60 minutes total)
+
+- **00m - 10m**: Workshop overview & environment verification (`./scripts/check_env.sh`)
+- **10m - 25m**: **Lab 01** - Environment Verification, ADK Scaffolding & Custom Tools (`01_lab_environment_and_client.md`)
+- **25m - 45m**: **Lab 02** - Multi-Agent Hierarchy, Sub-Agent Delegation & Structured Outputs (`02_lab_structured_outputs.md`)
+- **45m - 55m**: **Lab 03** - Trajectory Evaluation (`adk eval`), ADLC Optimization & Deployment (`03_lab_end_to_end_pipeline.md`)
+- **55m - 60m**: Q&A and wrap-up
+
+---
+
+## Step-by-Step Labs
+
+1. **[Lab 01: Environment Verification, ADK Scaffolding & Custom Tools](./01_lab_environment_and_client.md)**
+2. **[Lab 02: Multi-Agent Hierarchy, Sub-Agent Delegation & Structured Outputs](./02_lab_structured_outputs.md)**
+3. **[Lab 03: Trajectory Evaluation (adk eval), ADLC Optimization & Deployment](./03_lab_end_to_end_pipeline.md)**
+""")
         with open(labs_dir / "01_lab_environment_and_client.md", "w", encoding="utf-8") as f:
             f.write(f"""# Lab 01: Environment Verification, ADK Scaffolding & Custom Tools
 
@@ -2602,6 +2648,13 @@ This document applies the **Loop Engineering** methodology to audit the workshop
     print("-" * 60)
     print("✅ Loop Engineering 4-Persona Evaluation Completed! Report saved to docs/00-persona-loop-review-report.md")
 
+def _run_python_script(args_list):
+    """Execute a python script using uv's harness project environment if available, otherwise sys.executable."""
+    if shutil.which("uv"):
+        subprocess.run(["uv", "run", "--project", str(HARNESS_ROOT), "python"] + args_list, check=False)
+    else:
+        subprocess.run([sys.executable] + args_list, check=False)
+
 def test_workshop(target_dir: str):
     target = Path(target_dir).resolve()
     script = target / "scripts" / "verify_workshop.py"
@@ -2609,10 +2662,7 @@ def test_workshop(target_dir: str):
         script = TEMPLATES_DIR / "script-templates" / "verify_workshop.py"
 
     print(f"🔍 Running Workshop Integrity Audit on '{target}'...")
-    if shutil.which("uv"):
-        subprocess.run(["uv", "run", "python3", str(script), str(target)], check=False)
-    else:
-        subprocess.run([sys.executable, str(script), str(target)], check=False)
+    _run_python_script([str(script), str(target)])
 
 def build_pdf(target_dir: str):
     ensure_uv_dependencies()
@@ -2627,10 +2677,7 @@ def build_pdf(target_dir: str):
         return
 
     print(f"📄 Building PDF for {target.name}...")
-    if shutil.which("uv"):
-        subprocess.run(["uv", "run", "python3", str(script), str(docs_dir), str(output_pdf), str(preview_dir)], check=False)
-    else:
-        subprocess.run([sys.executable, str(script), str(docs_dir), str(output_pdf), str(preview_dir)], check=False)
+    _run_python_script([str(script), str(docs_dir), str(output_pdf), str(preview_dir)])
 
 def export_codelab(target_dir: str, output_dir: str = None, push: bool = False):
     target = Path(target_dir).resolve()
@@ -2639,16 +2686,13 @@ def export_codelab(target_dir: str, output_dir: str = None, push: bool = False):
         script = HARNESS_ROOT / "scripts" / "export_open_codelabs.py"
 
     print(f"📦 Exporting Open Codelabs Bundle for '{target.name}'...")
-    cmd = [sys.executable, str(script), "--target", str(target)]
+    cmd = [str(script), "--target", str(target)]
     if output_dir:
         cmd.extend(["--output", str(output_dir)])
     if push:
         cmd.append("--push")
 
-    if shutil.which("uv"):
-        subprocess.run(["uv", "run"] + cmd, check=False)
-    else:
-        subprocess.run(cmd, check=False)
+    _run_python_script(cmd)
 
 def export_colab(target_dir: str, output_dir: str = None, repo: str = None, test: bool = False):
     target = Path(target_dir).resolve()
@@ -2657,7 +2701,7 @@ def export_colab(target_dir: str, output_dir: str = None, repo: str = None, test
         script = HARNESS_ROOT / "scripts" / "export_colab.py"
 
     print(f"📦 Exporting Google Colab Notebooks for '{target.name}'...")
-    cmd = [sys.executable, str(script), "--target", str(target)]
+    cmd = [str(script), "--target", str(target)]
     if output_dir:
         cmd.extend(["--output", str(output_dir)])
     if repo:
@@ -2665,10 +2709,7 @@ def export_colab(target_dir: str, output_dir: str = None, repo: str = None, test
     if test:
         cmd.append("--test")
 
-    if shutil.which("uv"):
-        subprocess.run(["uv", "run"] + cmd, check=False)
-    else:
-        subprocess.run(cmd, check=False)
+    _run_python_script(cmd)
 
 def test_colab(target_dir: str):
     target = Path(target_dir).resolve()
@@ -2677,29 +2718,23 @@ def test_colab(target_dir: str):
         script = HARNESS_ROOT / "scripts" / "export_colab.py"
 
     print(f"🧪 Testing Google Colab Notebooks via Colab CLI for '{target.name}'...")
-    cmd = [sys.executable, str(script), "--target", str(target), "--test"]
-    if shutil.which("uv"):
-        subprocess.run(["uv", "run"] + cmd, check=False)
-    else:
-        subprocess.run(cmd, check=False)
+    _run_python_script([str(script), "--target", str(target), "--test"])
 
 def build_slides(target_dir: str, output_dir: str = None, export_pdf: bool = False):
+    ensure_uv_dependencies()
     target = Path(target_dir).resolve()
     script = target / "scripts" / "build_slides.py"
     if not script.exists():
         script = HARNESS_ROOT / "scripts" / "build_slides.py"
 
     print(f"🎨 Building Presentation Slides for '{target.name}'...")
-    cmd = [sys.executable, str(script), "--target", str(target)]
+    cmd = [str(script), "--target", str(target)]
     if output_dir:
         cmd.extend(["--output", str(output_dir)])
     if export_pdf:
         cmd.append("--export-pdf")
 
-    if shutil.which("uv"):
-        subprocess.run(["uv", "run"] + cmd, check=False)
-    else:
-        subprocess.run(cmd, check=False)
+    _run_python_script(cmd)
 
 def generate_all(name: str, topic: str, stack_str: str, target_dir: str = None, model_name: str = None):
     print("=" * 70)

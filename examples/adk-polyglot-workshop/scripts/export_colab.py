@@ -95,9 +95,16 @@ def export_to_colab(target_dir: str, output_dir: str = None, repo_name: str = No
     solution_code = solution_code_file.read_text(encoding="utf-8") if solution_code_file.exists() else "# Solution code placeholder\nprint('Completed workshop!')"
 
     # Read lab markdown
-    labs_file = target / "workshop" / "03_labs" / "README.md"
+    labs_dir = target / "workshop" / "03_labs"
+    labs_file = labs_dir / "README.md"
     lab_sections = []
-    if labs_file.exists():
+    lab_step_files = sorted(labs_dir.glob("[0-9][0-9]_lab_*.md")) if labs_dir.exists() else []
+    if lab_step_files:
+        for lf in lab_step_files:
+            sec = lf.read_text(encoding="utf-8").strip()
+            if sec:
+                lab_sections.append(sec)
+    elif labs_file.exists():
         labs_content = labs_file.read_text(encoding="utf-8")
         raw_sections = re.split(r"(?=\n##\s+)", "\n" + labs_content)
         for sec in raw_sections:
@@ -113,8 +120,10 @@ def export_to_colab(target_dir: str, output_dir: str = None, repo_name: str = No
         ]
 
     # Common setup cells
-    env_setup_code = """# [Step 0] Environment Setup & Dependencies Installation
-!pip install -q google-genai pydantic requests
+    has_adk = (target / "workshop" / "01_starter" / "agent.py").exists()
+    pip_pkgs = "google-genai google-adk pydantic requests" if has_adk else "google-genai pydantic requests"
+    env_setup_code = f"""# [Step 0] Environment Setup & Dependencies Installation
+!pip install -q {pip_pkgs}
 !nvidia-smi || echo "Running on CPU runtime"
 """
 

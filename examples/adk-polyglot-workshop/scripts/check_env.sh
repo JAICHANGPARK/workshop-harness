@@ -69,6 +69,24 @@ else
     echo -e "${YELLOW}[INFO] Google Android CLI not detected. (Install: curl -fsSL https://dl.google.com/android/cli/latest/darwin_arm64/install.sh | bash)${NC}"
 fi
 
+# 8. Check Google ADK CLI & Google Agents CLI (Optional for Agentic Labs)
+if command -v adk &> /dev/null; then
+    echo -e "${GREEN}[OK] Google ADK CLI (adk):${NC} $(adk --version 2>&1 | head -n 1)"
+else
+    echo -e "${YELLOW}[INFO] Google ADK CLI not detected in PATH (Install via: uv add google-adk).${NC}"
+fi
+
+if command -v agents-cli &> /dev/null; then
+    echo -e "${GREEN}[OK] Google Agents CLI (agents-cli):${NC} detected"
+else
+    echo -e "${YELLOW}[INFO] Google Agents CLI not detected in PATH (Run: uvx google-agents-cli setup).${NC}"
+fi
+
+# 9. Check Go (Optional for Go ADK Labs)
+if command -v go &> /dev/null; then
+    echo -e "${GREEN}[OK] Go Toolchain:${NC} $(go version)"
+fi
+
 echo ""
 echo "=== Check Completed! ==="
 

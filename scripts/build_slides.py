@@ -36,9 +36,16 @@ def generate_slides(target_dir: str, output_dir: str = None, export_pdf: bool = 
             topic = topic_match.group(1).strip()
 
     # Read lab sections
-    labs_file = target / "workshop" / "03_labs" / "README.md"
+    labs_dir = target / "workshop" / "03_labs"
+    labs_file = labs_dir / "README.md"
     lab_sections = []
-    if labs_file.exists():
+    lab_step_files = sorted(labs_dir.glob("[0-9][0-9]_lab_*.md")) if labs_dir.exists() else []
+    if lab_step_files:
+        for lf in lab_step_files:
+            sec = lf.read_text(encoding="utf-8").strip()
+            if sec:
+                lab_sections.append(sec)
+    elif labs_file.exists():
         labs_content = labs_file.read_text(encoding="utf-8")
         raw_sections = re.split(r"(?=\n##\s+)", "\n" + labs_content)
         for sec in raw_sections:
@@ -155,14 +162,22 @@ style: |
 """
 
     for idx, lab in enumerate(lab_sections, 1):
-        lab_title_match = re.match(r"^##\s+(.+)$", lab, re.MULTILINE)
+        lab_title_match = re.match(r"^#{1,2}\s+(.+)$", lab, re.MULTILINE)
         lab_title = lab_title_match.group(1).strip() if lab_title_match else f"Lab {idx:02d}"
-        clean_body = re.sub(r"^##\s+.+$", "", lab, flags=re.MULTILINE).strip()
+        clean_body = re.sub(r"^#{1,2}\s+.+$", "", lab, count=1, flags=re.MULTILINE).strip()
+        # Convert relative markdown links into inline code references so slides.md in output/slides/ has zero broken relative links
+        clean_body = re.sub(r"\[([^\]]+)\]\((?!https?://|mailto:|#)([^)]+)\)", r"**\1** (`\2`)", clean_body)
+        # Keep non-code summary lines for clean slide layout
+        summary_lines = [
+            line for line in clean_body.splitlines()
+            if line.strip() and not line.strip().startswith("```")
+        ][:6]
+        slide_body = "\n".join(summary_lines)
 
         marp_content += f"""
 ## 🚀 {lab_title}
 
-{clean_body[:400]}...
+{slide_body}
 
 ```bash
 # Run and verify your Lab {idx:02d} implementation:

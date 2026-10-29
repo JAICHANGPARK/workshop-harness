@@ -16,19 +16,19 @@ This guide outlines the session schedule and step-by-step objectives for the day
 
 ## Labs
 
-### Lab 01: Local LLM Server API Integration
-- **Objective**: Send a request to the Ollama / LM Studio local port (11434 / 1234) and receive a streaming response
-- **Lab File**: `workshop/01_starter/src/lab1_basic.py`
-- **Key Code Marker**: Fill in the `TODO: [Lab 1]` sections
+### Lab 01: Environment & AI Client Integration
+- **Objective**: Verify your local or cloud AI environment (`gemini-3.8-flash` / `gemma4:e4b`) and run a basic sanity check
+- **Lab File**: `workshop/01_starter/main.py` (or `workshop/01_starter/agent.py` for ADK tracks)
+- **Key Code Marker**: Fill in the `TODO: [Lab 01]` sections
 
-### Lab 02: Structured Output Implementation
-- **Objective**: Use Pydantic / Output Schema to parse local LLM responses into typed JSON objects
-- **Lab File**: `workshop/01_starter/src/lab2_schema.py`
-- **Reference Prompt**: Copy and apply contents from `prompt-pack/02-output-schema.md`
+### Lab 02: Structured Output & Multi-Agent Delegation
+- **Objective**: Use typed schemas / Output Schema to parse LLM responses into deterministic JSON objects and configure sub-agent routing
+- **Lab File**: `workshop/01_starter/main.py`
+- **Reference Prompt**: Copy and apply contents from [`prompt-pack/README.md`](../../prompt-pack/README.md)
 
 ### Lab 03: Complete Hands-on Application & Testing
-- **Objective**: Integrate the full pipeline (User Input -> System Prompt -> LLM Execution -> Parsed Output -> Action)
-- **Lab File**: `workshop/01_starter/src/main.py`
+- **Objective**: Integrate the full pipeline (User Input -> System Prompt -> Agent/Tool Execution -> Parsed Output -> Verification)
+- **Lab File**: `workshop/02_final/main.py`
 - **Run Command**:
   ```bash
   ./run.sh  # (Windows: .\run.ps1)

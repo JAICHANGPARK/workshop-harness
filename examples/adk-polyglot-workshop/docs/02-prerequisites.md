@@ -148,6 +148,29 @@ android emulator start <avd-name>
 
 ---
 
+### Google Agent Development Kit (ADK) & Google Agents CLI (`google-agents-cli`)
+
+For autonomous agent and multi-agent workshops, install the official ADK SDK for your language track and the Google Agents CLI skill suite:
+
+- **Python (`google-adk` & `google-agents-cli`)**:
+  ```bash
+  uv add google-adk google-genai pydantic
+  uvx google-agents-cli setup
+  ```
+- **Go (`google.golang.org/adk/v2`)**:
+  ```bash
+  go get google.golang.org/adk/v2@latest
+  ```
+- **Java 21+ / Kotlin (`com.google.adk:google-adk`)**:
+  Add `com.google.adk:google-adk:0.5.0` (and `com.google.adk:google-adk-kotlin-core:0.5.0` for Kotlin) in Gradle or Maven.
+- **TypeScript / Node.js (`@google/adk`)**:
+  ```bash
+  npm install @google/adk @google/genai zod
+  npx skills add google/agents-cli
+  ```
+
+---
+
 ## Pre-Download Checklist
 
 1. **Download Ollama / LM Studio & pull models ahead of time**:

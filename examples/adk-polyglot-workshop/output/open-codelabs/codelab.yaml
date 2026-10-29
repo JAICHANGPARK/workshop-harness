@@ -1,0 +1,21 @@
+version: 1
+title: "adk-polyglot-workshop"
+description: "Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript)"
+author: "Workshop Facilitator"
+is_public: true
+quiz_enabled: false
+require_quiz: false
+require_feedback: true
+require_submission: false
+guide_markdown: "guide.md"
+steps:
+  - title: "Lab 01: Environment Verification, ADK Scaffolding & Custom Tools"
+    file: "steps/step_01.md"
+  - title: "Lab 02: Multi-Agent Hierarchy, Sub-Agent Delegation & Structured Outputs"
+    file: "steps/step_02.md"
+  - title: "Lab 03: Trajectory Evaluation (adk eval), ADLC Optimization & Deployment"
+    file: "steps/step_03.md"
+materials:
+  - title: "Starter Code & Workshop Repo"
+    type: "link"
+    url: "https://github.com/JAICHANGPARK/workshop-harness"

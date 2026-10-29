@@ -1,7 +1,7 @@
 # [Loop Engineering] 4-Persona Attendee Review & Audit Report
 
-> Workshop Topic: **Multi-Language Agent Systems with Google ADK**
-> Verified On: 2026-10-29
+> Workshop Topic: **Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript)**
+> Verified On: 2026-10-30
 
 This document applies the **Loop Engineering** methodology to audit the workshop curriculum, starter/final code, and environment setup across four distinct attendee personas.
 

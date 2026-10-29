@@ -68,6 +68,28 @@ if ($androidCmd) {
     Write-Host "[INFO] Google Android CLI not detected. (Install: curl.exe -fsSL https://dl.google.com/android/cli/latest/windows_x86_64/install.cmd -o `"$env:TEMP\i.cmd`"; & `"$env:TEMP\i.cmd`")" -ForegroundColor DarkGray
 }
 
+# 7. Check Google ADK CLI & Google Agents CLI (Optional for Agentic Labs)
+$adkCmd = Get-Command adk -ErrorAction SilentlyContinue
+if ($adkCmd) {
+    Write-Host "[OK] Google ADK CLI (adk) found." -ForegroundColor Green
+} else {
+    Write-Host "[INFO] Google ADK CLI not detected (Install via: uv add google-adk)." -ForegroundColor DarkGray
+}
+
+$agentsCliCmd = Get-Command agents-cli -ErrorAction SilentlyContinue
+if ($agentsCliCmd) {
+    Write-Host "[OK] Google Agents CLI (agents-cli) found." -ForegroundColor Green
+} else {
+    Write-Host "[INFO] Google Agents CLI not detected (Run: uvx google-agents-cli setup)." -ForegroundColor DarkGray
+}
+
+# 8. Check Go (Optional for Go ADK Labs)
+$goCmd = Get-Command go -ErrorAction SilentlyContinue
+if ($goCmd) {
+    $goVer = go version
+    Write-Host "[OK] Go Toolchain: $goVer" -ForegroundColor Green
+}
+
 Write-Host ""
 Write-Host "=== Check Completed! ===" -ForegroundColor Cyan
 
