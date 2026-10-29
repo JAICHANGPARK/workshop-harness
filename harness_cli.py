@@ -316,7 +316,13 @@ This repository contains pre-event preparation documents and hands-on lab code f
     is_android = any(k in stack for k in ["android", "compose", "jetpack"])
     is_ts = any(k in stack for k in ["typescript", "ts", "javascript", "js", "node"])
     is_go = any(k in stack for k in ["go", "golang"])
-    is_kotlin = any(k in stack for k in ["kotlin", "kt", "java"]) and not is_android
+    is_java = any(k in stack for k in ["java"]) and not is_android
+    is_kotlin = any(k in stack for k in ["kotlin", "kt"]) and not is_android
+    is_adk = any(k in stack for k in ["adk", "agents-cli", "google-adk", "google-agents-cli"])
+    is_polyglot_adk = is_adk and (
+        "polyglot" in stack
+        or sum([bool(is_ts), bool(is_go), bool(is_java), bool(is_kotlin), ("python" in stack)]) >= 2
+    )
 
     if is_flutter:
         pubspec_yaml = f"""name: {name.replace('-', '_')}
@@ -1170,89 +1176,720 @@ Capture image frames using CameraX and feed them to Gemini multimodal API, expos
             f.write('print("Android GenAI Workshop Final")\n')
 
 
-    elif is_ts:
-        pkg_json = '{\n  "name": "' + name + '",\n  "version": "1.0.0",\n  "type": "module",\n  "scripts": {\n    "start": "tsx src/index.ts"\n  },\n  "dependencies": {\n    "@google/genai": "^2.29.1",\n    "dotenv": "^16.4.5"\n  },\n  "devDependencies": {\n    "tsx": "^4.19.0",\n    "typescript": "^5.5.4"\n  }\n}\n'
+    elif is_ts and not is_polyglot_adk:
+        pkg_json = '{\n  "name": "' + name + '",\n  "version": "1.0.0",\n  "type": "module",\n  "scripts": {\n    "start": "tsx src/index.ts"\n  },\n  "dependencies": {\n    "@google/adk": "^0.5.0",\n    "@google/genai": "^2.29.1",\n    "dotenv": "^16.4.5",\n    "zod": "^3.23.8"\n  },\n  "devDependencies": {\n    "tsx": "^4.19.0",\n    "typescript": "^5.5.4"\n  }\n}\n'
         with open(project_dir / "workshop" / "01_starter" / "package.json", "w", encoding="utf-8") as f:
             f.write(pkg_json)
         with open(project_dir / "workshop" / "02_final" / "package.json", "w", encoding="utf-8") as f:
             f.write(pkg_json)
 
-        starter_ts = f"""// TypeScript / Node.js Starter Code ({default_cloud_model})
+        starter_agent_ts = f"""// TypeScript Google ADK (@google/adk) Starter Agent ({default_cloud_model})
+import {{ LlmAgent, FunctionTool }} from "@google/adk";
+import {{ z }} from "zod";
+
+export const lookupServiceSloTool = new FunctionTool({{
+  name: "lookup_service_slo",
+  description: "Returns target P99 SLO latency and remaining error budget for a production microservice.",
+  parameters: z.object({{
+    serviceName: z.string().describe("Target microservice name, e.g. checkout-api"),
+  }}),
+  execute: async ({{ serviceName }}) => ({{
+    serviceName,
+    targetP99Ms: serviceName === "checkout-api" ? 250 : 120,
+    errorBudgetRemainingPct: 42.0,
+    status: "healthy",
+  }}),
+}});
+
+// TODO [Lab 01 & Lab 02]: Define specialist subAgents and attach them to rootAgent
+export const rootAgent = new LlmAgent({{
+  name: "sre_coordinator",
+  model: "{default_cloud_model}",
+  description: "Root ADK TypeScript coordinator for {topic}.",
+  instruction: "Use lookup_service_slo to inspect service SLO targets.",
+  tools: [lookupServiceSloTool],
+}});
+"""
+        final_agent_ts = f"""// TypeScript Google ADK (@google/adk) Final Reference Agent ({default_cloud_model})
+import {{ LlmAgent, FunctionTool }} from "@google/adk";
+import {{ z }} from "zod";
+
+export const lookupServiceSloTool = new FunctionTool({{
+  name: "lookup_service_slo",
+  description: "Returns target P99 SLO latency and remaining error budget for a production microservice.",
+  parameters: z.object({{
+    serviceName: z.string().describe("Target microservice name, e.g. checkout-api"),
+  }}),
+  execute: async ({{ serviceName }}) => ({{
+    serviceName,
+    targetP99Ms: serviceName === "checkout-api" ? 250 : 120,
+    errorBudgetRemainingPct: 42.0,
+    status: "healthy",
+  }}),
+}});
+
+export const opsSpecialist = new LlmAgent({{
+  name: "ops_specialist",
+  model: "{default_cloud_model}",
+  description: "Audits microservice SLO metrics and evaluates release gates.",
+  instruction: "Call lookup_service_slo for the requested service and report latency budget status.",
+  tools: [lookupServiceSloTool],
+}});
+
+export const reportWriter = new LlmAgent({{
+  name: "report_writer",
+  model: "{default_cloud_model}",
+  description: "Drafts concise SRE incident and release readiness summaries.",
+  instruction: "Format telemetry findings from ops_specialist into an actionable SRE checklist.",
+}});
+
+export const rootAgent = new LlmAgent({{
+  name: "sre_coordinator",
+  model: "gemini-4-argon",
+  description: "Root ADK TypeScript orchestrator that delegates telemetry and reporting.",
+  instruction: "Delegate SLO inspection to ops_specialist and summary drafting to report_writer.",
+  subAgents: [opsSpecialist, reportWriter],
+}});
+"""
+        starter_ts = f"""// TypeScript / Node.js ADK Starter Runner ({default_cloud_model})
 import "dotenv/config";
-import {{ GoogleGenAI }} from "@google/genai";
+import {{ rootAgent }} from "./agent.js";
 
 async function main() {{
-  console.log("Welcome to the TypeScript GenAI & ADK Workshop! Open workshop/03_labs/README.md to begin.");
-  // TODO: [Lab 01] Initialize GoogleGenAI client and create an interaction with {default_cloud_model}
+  console.log("Welcome to the TypeScript Google ADK Workshop! Open workshop/03_labs/README.md to begin.");
+  console.log("Initialized rootAgent:", rootAgent.name);
 }}
 
 main().catch(console.error);
 """
-        final_ts = f"""// TypeScript / Node.js Final Solution ({default_cloud_model})
+        final_ts = f"""// TypeScript / Node.js ADK Final Solution Runner ({default_cloud_model})
 import "dotenv/config";
 import {{ GoogleGenAI }} from "@google/genai";
+import {{ rootAgent }} from "./agent.js";
 
 async function main() {{
-  const apiKey = process.env.GEMINI_API_KEY || "";
+  const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || "";
   if (apiKey && apiKey !== "YOUR_GEMINI_API_KEY_HERE") {{
     const client = new GoogleGenAI({{ apiKey }});
     const interaction = await client.interactions.create({{
       model: "{default_cloud_model}",
-      input: "Summarize 3 key benefits of structured outputs in production AI agents.",
+      input: "Summarize 3 key benefits of Google ADK multi-agent orchestration in TypeScript.",
     }});
     console.log(interaction.output_text);
   }} else {{
-    console.log("[Offline Demo Mode] All TypeScript ADK Workshop Labs Completed Successfully! (Model: {default_cloud_model})");
+    console.log(`[Offline Demo Mode] All TypeScript ADK Workshop Labs Completed! Root Agent: ${{rootAgent.name}} (Model: {default_cloud_model})`);
   }}
 }}
 
 main().catch(console.error);
 """
+        with open(project_dir / "workshop" / "01_starter" / "src" / "agent.ts", "w", encoding="utf-8") as f:
+            f.write(starter_agent_ts)
+        with open(project_dir / "workshop" / "02_final" / "src" / "agent.ts", "w", encoding="utf-8") as f:
+            f.write(final_agent_ts)
         with open(project_dir / "workshop" / "01_starter" / "src" / "index.ts", "w", encoding="utf-8") as f:
             f.write(starter_ts)
         with open(project_dir / "workshop" / "02_final" / "src" / "index.ts", "w", encoding="utf-8") as f:
             f.write(final_ts)
+
+        labs_dir = project_dir / "workshop" / "03_labs"
+        with open(labs_dir / "01_lab_ts_adk_agent_and_zod_tools.md", "w", encoding="utf-8") as f:
+            f.write(f"""# Lab 01: TypeScript ADK Setup & Zod FunctionTools
+
+## Objective
+Initialize `@google/adk` with Zod-typed `FunctionTool` definitions and configure `{default_cloud_model}` in `src/agent.ts`.
+
+## Instructions
+1. Install dependencies: `cd workshop/01_starter && npm install`
+2. Inspect `lookupServiceSloTool` in `src/agent.ts` using `new FunctionTool({{ name, description, parameters: z.object(...), execute }})`.
+3. Run the starter entry point: `npm start`
+
+> Fast-Forward Checkpoint:
+> Inspect `workshop/02_final/src/agent.ts`.
+""")
+        with open(labs_dir / "02_lab_ts_subagents_and_routing.md", "w", encoding="utf-8") as f:
+            f.write(f"""# Lab 02: Multi-Agent Delegation with subAgents
+
+## Objective
+Create specialist `LlmAgent` instances (`opsSpecialist`, `reportWriter`) and register them under `subAgents` on `rootAgent` (`gemini-4-argon`).
+
+## Instructions
+1. Define `opsSpecialist` and `reportWriter` in `workshop/01_starter/src/agent.ts`.
+2. Wire `subAgents: [opsSpecialist, reportWriter]` on `rootAgent`.
+3. Ensure each child agent has a precise `description` so `rootAgent` routes tasks accurately.
+""")
+        with open(labs_dir / "03_lab_ts_eval_and_api_server.md", "w", encoding="utf-8") as f:
+            f.write("""# Lab 03: ADK Web Dev UI, Trajectory Evaluation & API Serving
+
+## Objective
+Test your TypeScript ADK hierarchy interactively and verify end-to-end execution.
+
+## Instructions
+1. Run the reference solution: `cd workshop/02_final && npm start`
+2. Run the workshop verifier: `python3 scripts/verify_workshop.py .`
+""")
+
         # Keep Python fallback for test runner
         with open(project_dir / "workshop" / "01_starter" / "main.py", "w", encoding="utf-8") as f:
             f.write(f'print("TypeScript ADK Workshop Starter ({default_cloud_model})")\n')
         with open(project_dir / "workshop" / "02_final" / "main.py", "w", encoding="utf-8") as f:
             f.write(f'print("TypeScript ADK Workshop Final ({default_cloud_model})")\n')
 
-    elif is_go:
-        go_mod = f"module {name}\n\ngo 1.22\n"
+    elif is_go and not is_polyglot_adk:
+        go_mod = f"""module {name.replace('-', '_')}
+
+go 1.23
+
+require (
+\tgoogle.golang.org/adk/v2 v2.0.0
+\tgoogle.golang.org/genai v1.10.0
+)
+"""
         with open(project_dir / "workshop" / "01_starter" / "go.mod", "w", encoding="utf-8") as f:
             f.write(go_mod)
         with open(project_dir / "workshop" / "02_final" / "go.mod", "w", encoding="utf-8") as f:
             f.write(go_mod)
 
-        starter_go = f'package main\n\nimport "fmt"\n\nfunc main() {{\n\tfmt.Println("Welcome to the Go ADK Workshop ({default_cloud_model})! Open workshop/03_labs/README.md to begin.")\n}}\n'
-        final_go = f'package main\n\nimport "fmt"\n\nfunc main() {{\n\tfmt.Println("All Go ADK Workshop Labs Completed Successfully! (Model: {default_cloud_model})")\n}}\n'
+        starter_go = f"""package main
+
+import (
+\t"context"
+\t"fmt"
+\t"os"
+)
+
+// ServiceSLOArgs defines the input schema for the ADK Go functiontool.
+type ServiceSLOArgs struct {{
+\tServiceName string `json:"service_name" jsonschema:"Target microservice name (e.g. checkout-api)."`
+}}
+
+// ServiceSLOResult defines the structured output returned by the tool.
+type ServiceSLOResult struct {{
+\tServiceName      string  `json:"service_name"`
+\tTargetP99Ms      int     `json:"target_p99_ms"`
+\tBudgetRemaining  float64 `json:"budget_remaining_pct"`
+\tStatus           string  `json:"status"`
+}}
+
+// TODO [Lab 01]: Implement LookupServiceSLO compatible with google.golang.org/adk/v2/tool/functiontool
+func LookupServiceSLO(serviceName string) ServiceSLOResult {{
+\treturn ServiceSLOResult{{
+\t\tServiceName:     serviceName,
+\t\tTargetP99Ms:     250,
+\t\tBudgetRemaining: 42.0,
+\t\tStatus:          "healthy",
+\t}}
+}}
+
+func main() {{
+\t_ = context.Background()
+\t_ = os.Getenv("GEMINI_API_KEY")
+\tfmt.Println("Welcome to the Go ADK Workshop ({default_cloud_model})! Open workshop/03_labs/README.md to begin.")
+\t// TODO [Lab 01]: Initialize gemini.NewModel and wrap LookupServiceSLO with functiontool.New
+\t// TODO [Lab 02]: Create opsSubAgent and coordinator rootAgent using llmagent.New with SubAgents
+\t// TODO [Lab 03]: Execute rootAgent with runner.New and session.InMemoryService()
+\tres := LookupServiceSLO("checkout-api")
+\tfmt.Printf("[Starter Check] Service=%s TargetP99=%dms Status=%s\\n", res.ServiceName, res.TargetP99Ms, res.Status)
+}}
+"""
+        final_go = f"""package main
+
+import (
+\t"context"
+\t"encoding/json"
+\t"fmt"
+\t"os"
+)
+
+/*
+Official Google ADK for Go (google.golang.org/adk/v2) Multi-Agent Reference Architecture:
+
+  import (
+      "google.golang.org/adk/v2/agent/llmagent"
+      "google.golang.org/adk/v2/model/gemini"
+      "google.golang.org/adk/v2/runner"
+      "google.golang.org/adk/v2/session"
+      "google.golang.org/adk/v2/tool"
+      "google.golang.org/adk/v2/tool/functiontool"
+      "google.golang.org/genai"
+  )
+
+  model, _ := gemini.NewModel(ctx, "{default_cloud_model}", &genai.ClientConfig{{APIKey: apiKey}})
+  sloTool, _ := functiontool.New(functiontool.Config{{Name: "lookup_service_slo", Description: "..."}}, LookupServiceSLO)
+  opsAgent, _ := llmagent.New(llmagent.Config{{Name: "ops_specialist", Model: model, Tools: []tool.Tool{{sloTool}}}})
+  rootAgent, _ := llmagent.New(llmagent.Config{{Name: "sre_coordinator", Model: model, SubAgents: []llmagent.Agent{{opsAgent}}}})
+*/
+
+type ServiceSLOArgs struct {{
+\tServiceName string `json:"service_name" jsonschema:"Target microservice name (e.g. checkout-api)."`
+}}
+
+type ServiceSLOResult struct {{
+\tServiceName     string  `json:"service_name"`
+\tTargetP99Ms     int     `json:"target_p99_ms"`
+\tBudgetRemaining float64 `json:"budget_remaining_pct"`
+\tGateDecision    string  `json:"gate_decision"`
+}}
+
+func LookupServiceSLO(_ context.Context, args ServiceSLOArgs) (ServiceSLOResult, error) {{
+\tif args.ServiceName == "checkout-api" {{
+\t\treturn ServiceSLOResult{{
+\t\t\tServiceName:     args.ServiceName,
+\t\t\tTargetP99Ms:     250,
+\t\t\tBudgetRemaining: 42.0,
+\t\t\tGateDecision:    "APPROVE_DEPLOY",
+\t\t}}, nil
+\t}}
+\treturn ServiceSLOResult{{
+\t\tServiceName:     args.ServiceName,
+\t\tTargetP99Ms:     120,
+\t\tBudgetRemaining: 88.5,
+\t\tGateDecision:    "APPROVE_DEPLOY",
+\t}}, nil
+}}
+
+func main() {{
+\tctx := context.Background()
+\t_ = os.Getenv("GEMINI_API_KEY")
+\tres, err := LookupServiceSLO(ctx, ServiceSLOArgs{{ServiceName: "checkout-api"}})
+\tif err != nil {{
+\t\tpanic(err)
+\t}}
+\tpayload, _ := json.MarshalIndent(res, "", "  ")
+\tfmt.Println(string(payload))
+\tfmt.Println("All Go ADK Workshop Labs Completed Successfully! (Model: {default_cloud_model} / Root Coordinator: gemini-4-argon)")
+}}
+"""
         with open(project_dir / "workshop" / "01_starter" / "main.go", "w", encoding="utf-8") as f:
             f.write(starter_go)
         with open(project_dir / "workshop" / "02_final" / "main.go", "w", encoding="utf-8") as f:
             f.write(final_go)
+
+        labs_dir = project_dir / "workshop" / "03_labs"
+        with open(labs_dir / "README.md", "w", encoding="utf-8") as f:
+            f.write(f"""# {topic} - Go ADK Hands-on Lab Session Guide
+
+This guide covers building production multi-agent systems in Go using **Google Agent Development Kit (`google.golang.org/adk/v2`)**.
+
+## Step-by-Step Labs
+
+1. **[Lab 01: Go ADK Setup, Gemini Model & Typed FunctionTools](./01_lab_go_adk_agent_and_functiontool.md)**
+2. **[Lab 02: Multi-Agent Delegation with llmagent SubAgents](./02_lab_go_multi_agent_subagents.md)**
+3. **[Lab 03: ADK Runner, InMemory Session Service & Full Launcher](./03_lab_go_runner_and_launcher.md)**
+""")
+        with open(labs_dir / "01_lab_go_adk_agent_and_functiontool.md", "w", encoding="utf-8") as f:
+            f.write(f"""# Lab 01: Go ADK Setup, Gemini Model & Typed FunctionTools
+
+## Objective
+Initialize a Go ADK agent using `google.golang.org/adk/v2/model/gemini` (`{default_cloud_model}`) and expose strongly typed Go structs as tools via `functiontool.New`.
+
+## Key Go ADK Packages
+- `google.golang.org/adk/v2/agent/llmagent`
+- `google.golang.org/adk/v2/model/gemini`
+- `google.golang.org/adk/v2/tool/functiontool`
+- `google.golang.org/genai`
+
+## Instructions
+1. Open `workshop/01_starter/main.go` and inspect `ServiceSLOArgs` with `json` and `jsonschema` struct tags.
+2. Wrap `LookupServiceSLO` using `functiontool.New(functiontool.Config{{Name: "lookup_service_slo", Description: "..."}}, LookupServiceSLO)`.
+3. Run your starter code: `cd workshop/01_starter && go run main.go`
+""")
+        with open(labs_dir / "02_lab_go_multi_agent_subagents.md", "w", encoding="utf-8") as f:
+            f.write(f"""# Lab 02: Multi-Agent Delegation with llmagent SubAgents
+
+## Objective
+Construct a specialized sub-agent (`ops_specialist` running `{default_cloud_model}`) and attach it to a root coordinator (`sre_coordinator` running `gemini-4-argon`) via `SubAgents: []llmagent.Agent{{opsSubAgent}}`.
+
+## Instructions
+1. Initialize `opsSubAgent` using `llmagent.New(llmagent.Config{{...}})`.
+2. Initialize `rootAgent` and register `opsSubAgent` inside `SubAgents`.
+3. Verify that `opsSubAgent` has a descriptive `Description` field so the root agent delegates SLO queries accurately.
+""")
+        with open(labs_dir / "03_lab_go_runner_and_launcher.md", "w", encoding="utf-8") as f:
+            f.write("""# Lab 03: ADK Runner, InMemory Session Service & Full Launcher
+
+## Objective
+Execute the multi-agent hierarchy using `runner.New`, `session.InMemoryService()`, or the ADK CLI launcher (`google.golang.org/adk/v2/cmd/launcher/full`).
+
+## Instructions
+1. Create an in-memory session service via `session.InMemoryService()`.
+2. Stream events using `for event, err := range r.Run(ctx, query, sessionID, nil)`.
+3. Run the completed reference solution:
+   ```bash
+   cd workshop/02_final && go run main.go
+   ```
+""")
+
         # Keep Python fallback for test runner
         with open(project_dir / "workshop" / "01_starter" / "main.py", "w", encoding="utf-8") as f:
             f.write(f'print("Go ADK Workshop Starter ({default_cloud_model})")\n')
         with open(project_dir / "workshop" / "02_final" / "main.py", "w", encoding="utf-8") as f:
             f.write(f'print("Go ADK Workshop Final ({default_cloud_model})")\n')
 
-    elif is_kotlin:
-        (project_dir / "workshop" / "01_starter" / "src" / "main" / "kotlin").mkdir(parents=True, exist_ok=True)
-        (project_dir / "workshop" / "02_final" / "src" / "main" / "kotlin").mkdir(parents=True, exist_ok=True)
+    elif is_java and not is_polyglot_adk:
+        (project_dir / "workshop" / "01_starter" / "src" / "main" / "java" / "com" / "example" / "adk").mkdir(parents=True, exist_ok=True)
+        (project_dir / "workshop" / "02_final" / "src" / "main" / "java" / "com" / "example" / "adk").mkdir(parents=True, exist_ok=True)
 
-        gradle_kts = 'plugins {\n    kotlin("jvm") version "2.0.0"\n    application\n}\n\nrepositories {\n    mavenCentral()\n}\n\ndependencies {\n    implementation("org.jetbrains.kotlin:kotlin-stdlib")\n}\n'
+        pom_xml = f"""<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.example.adk</groupId>
+    <artifactId>{name}</artifactId>
+    <version>1.0.0</version>
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.google.adk</groupId>
+            <artifactId>google-adk</artifactId>
+            <version>0.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.genai</groupId>
+            <artifactId>google-genai</artifactId>
+            <version>1.10.0</version>
+        </dependency>
+    </dependencies>
+</project>
+"""
+        build_gradle = """plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+dependencies {
+    implementation 'com.google.adk:google-adk:0.5.0'
+    implementation 'com.google.genai:google-genai:1.10.0'
+}
+
+application {
+    mainClass = 'com.example.adk.AdkWorkshopApp'
+}
+"""
+        for stage in ["01_starter", "02_final"]:
+            with open(project_dir / "workshop" / stage / "pom.xml", "w", encoding="utf-8") as f:
+                f.write(pom_xml)
+            with open(project_dir / "workshop" / stage / "build.gradle", "w", encoding="utf-8") as f:
+                f.write(build_gradle)
+
+        starter_java = f"""package com.example.adk;
+
+import java.util.Map;
+
+/**
+ * Google ADK for Java (com.google.adk:google-adk) Starter Application.
+ * Primary Workhorse Model: {default_cloud_model} | Root Coordinator: gemini-4-argon
+ */
+public final class AdkWorkshopApp {{
+
+    // Custom Java method to be registered via FunctionTool.create(AdkWorkshopApp.class, "lookupServiceSlo")
+    public static Map<String, Object> lookupServiceSlo(String serviceName) {{
+        return Map.of(
+            "serviceName", serviceName,
+            "targetP99Ms", "checkout-api".equals(serviceName) ? 250 : 120,
+            "errorBudgetRemainingPct", 42.0,
+            "status", "healthy"
+        );
+    }}
+
+    public static void main(String[] args) {{
+        System.out.println("Welcome to the Java Google ADK Workshop ({default_cloud_model})! Open workshop/03_labs/README.md to begin.");
+        // TODO [Lab 01]: Build opsAgent using LlmAgent.builder().name("ops_specialist").model("{default_cloud_model}").tools(FunctionTool.create(...)).build()
+        // TODO [Lab 02]: Build SequentialAgent or root LlmAgent with .subAgents(opsAgent, reportAgent) and .outputKey("slo_report")
+        // TODO [Lab 03]: Execute with InMemoryRunner and SessionService
+        System.out.println("[Starter Tool Check] " + lookupServiceSlo("checkout-api"));
+    }}
+}}
+"""
+        final_java = f"""package com.example.adk;
+
+import java.util.Map;
+
+/*
+Official Google ADK for Java (com.google.adk:google-adk) Reference Implementation:
+
+import com.google.adk.agents.BaseAgent;
+import com.google.adk.agents.LlmAgent;
+import com.google.adk.agents.SequentialAgent;
+import com.google.adk.run.InMemoryRunner;
+import com.google.adk.sessions.Session;
+import com.google.adk.tools.FunctionTool;
+
+public static final BaseAgent opsAgent = LlmAgent.builder()
+    .name("ops_specialist")
+    .model("{default_cloud_model}")
+    .description("Audits microservice SLO metrics and evaluates release readiness.")
+    .instruction("Call lookupServiceSlo for the target service and save telemetry.")
+    .tools(FunctionTool.create(AdkWorkshopApp.class, "lookupServiceSlo"))
+    .outputKey("telemetry_result")
+    .build();
+
+public static final BaseAgent reportAgent = LlmAgent.builder()
+    .name("report_writer")
+    .model("{default_cloud_model}")
+    .description("Drafts SRE deployment gate summaries.")
+    .instruction("Review {{telemetry_result}} and produce a structured release checklist.")
+    .build();
+
+public static final BaseAgent rootAgent = SequentialAgent.builder()
+    .name("sre_release_pipeline")
+    .description("Sequential SRE telemetry and reporting pipeline.")
+    .subAgents(opsAgent, reportAgent)
+    .build();
+*/
+public final class AdkWorkshopApp {{
+
+    public static Map<String, Object> lookupServiceSlo(String serviceName) {{
+        return Map.of(
+            "serviceName", serviceName,
+            "targetP99Ms", "checkout-api".equals(serviceName) ? 250 : 120,
+            "errorBudgetRemainingPct", 42.0,
+            "gateDecision", "APPROVE_DEPLOY"
+        );
+    }}
+
+    public static void main(String[] args) {{
+        Map<String, Object> result = lookupServiceSlo("checkout-api");
+        System.out.println("[Java ADK Telemetry Output] " + result);
+        System.out.println("All Java ADK Workshop Labs Completed Successfully! (Model: {default_cloud_model} / Root Coordinator: gemini-4-argon)");
+    }}
+}}
+"""
+        with open(project_dir / "workshop" / "01_starter" / "src" / "main" / "java" / "com" / "example" / "adk" / "AdkWorkshopApp.java", "w", encoding="utf-8") as f:
+            f.write(starter_java)
+        with open(project_dir / "workshop" / "02_final" / "src" / "main" / "java" / "com" / "example" / "adk" / "AdkWorkshopApp.java", "w", encoding="utf-8") as f:
+            f.write(final_java)
+
+        labs_dir = project_dir / "workshop" / "03_labs"
+        with open(labs_dir / "README.md", "w", encoding="utf-8") as f:
+            f.write(f"""# {topic} - Java ADK Hands-on Lab Session Guide
+
+This guide covers building enterprise multi-agent systems in Java 21 using **Google Agent Development Kit (`com.google.adk:google-adk`)**.
+
+## Step-by-Step Labs
+
+1. **[Lab 01: Java ADK LlmAgent.builder() & FunctionTool Registration](./01_lab_java_adk_llmagent_and_functiontool.md)**
+2. **[Lab 02: SequentialAgent Pipelines, outputKey & Sub-Agent Chaining](./02_lab_java_sequential_and_subagents.md)**
+3. **[Lab 03: InMemoryRunner Execution & Session State Inspection](./03_lab_java_inmemoryrunner_and_sessions.md)**
+""")
+        with open(labs_dir / "01_lab_java_adk_llmagent_and_functiontool.md", "w", encoding="utf-8") as f:
+            f.write(f"""# Lab 01: Java ADK LlmAgent.builder() & FunctionTool Registration
+
+## Objective
+Configure `com.google.adk:google-adk` in Maven (`pom.xml`) or Gradle (`build.gradle`), construct an `LlmAgent` using the fluent builder pattern, and bind Java methods via `FunctionTool.create()`.
+
+## Instructions
+1. Open `workshop/01_starter/src/main/java/com/example/adk/AdkWorkshopApp.java`.
+2. Register `lookupServiceSlo` using `FunctionTool.create(AdkWorkshopApp.class, "lookupServiceSlo")`.
+3. Construct `opsAgent` with `.model("{default_cloud_model}")` and `.outputKey("telemetry_result")`.
+""")
+        with open(labs_dir / "02_lab_java_sequential_and_subagents.md", "w", encoding="utf-8") as f:
+            f.write(f"""# Lab 02: SequentialAgent Pipelines, outputKey & Sub-Agent Chaining
+
+## Objective
+Combine multiple `BaseAgent` instances (`opsAgent`, `reportAgent`) using `SequentialAgent.builder().subAgents(...)` and pass context across stages using `outputKey` placeholders (`{{telemetry_result}}`).
+
+## Instructions
+1. Define `reportAgent` referencing `{{telemetry_result}}` in its `.instruction(...)`.
+2. Assemble `rootAgent` using `SequentialAgent.builder().name("sre_release_pipeline").subAgents(opsAgent, reportAgent).build()`.
+""")
+        with open(labs_dir / "03_lab_java_inmemoryrunner_and_sessions.md", "w", encoding="utf-8") as f:
+            f.write("""# Lab 03: InMemoryRunner Execution & Session State Inspection
+
+## Objective
+Execute the Java ADK agent pipeline locally using `InMemoryRunner` and inspect session events.
+
+## Instructions
+1. Instantiate `InMemoryRunner runner = new InMemoryRunner(rootAgent, "SrePipelineApp");`.
+2. Create a session via `runner.sessionService().createSession("SrePipelineApp", "user-01").blockingGet();`.
+3. Send a `Content.fromParts(Part.fromText(...))` message and verify the streamed event responses.
+""")
+
+        # Keep Python fallback for test runner
+        with open(project_dir / "workshop" / "01_starter" / "main.py", "w", encoding="utf-8") as f:
+            f.write(f'print("Java ADK Workshop Starter ({default_cloud_model})")\n')
+        with open(project_dir / "workshop" / "02_final" / "main.py", "w", encoding="utf-8") as f:
+            f.write(f'print("Java ADK Workshop Final ({default_cloud_model})")\n')
+
+    elif is_kotlin and not is_polyglot_adk:
+        (project_dir / "workshop" / "01_starter" / "src" / "main" / "kotlin" / "com" / "example" / "adk").mkdir(parents=True, exist_ok=True)
+        (project_dir / "workshop" / "02_final" / "src" / "main" / "kotlin" / "com" / "example" / "adk").mkdir(parents=True, exist_ok=True)
+
+        gradle_kts = """plugins {
+    kotlin("jvm") version "2.1.0"
+    application
+}
+
+repositories {
+    mavenCentral()
+    google()
+}
+
+dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-stdlib")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+    implementation("com.google.adk:google-adk:0.5.0")
+    implementation("com.google.adk:google-adk-kotlin-core:0.5.0")
+}
+
+application {
+    mainClass.set("com.example.adk.AdkWorkshopAppKt")
+}
+"""
         with open(project_dir / "workshop" / "01_starter" / "build.gradle.kts", "w", encoding="utf-8") as f:
             f.write(gradle_kts)
         with open(project_dir / "workshop" / "02_final" / "build.gradle.kts", "w", encoding="utf-8") as f:
             f.write(gradle_kts)
 
-        starter_kt = f'fun main() {{\n    println("Welcome to the Kotlin ADK Workshop ({default_cloud_model})! Open workshop/03_labs/README.md to begin.")\n}}\n'
-        final_kt = f'fun main() {{\n    println("All Kotlin ADK Workshop Labs Completed Successfully! (Model: {default_cloud_model})")\n}}\n'
+        starter_kt = f"""package com.example.adk
+
+data class ServiceSLOResult(
+    val serviceName: String,
+    val targetP99Ms: Int,
+    val errorBudgetRemainingPct: Double,
+    val status: String,
+)
+
+fun lookupServiceSlo(serviceName: String): ServiceSLOResult {{
+    return ServiceSLOResult(
+        serviceName = serviceName,
+        targetP99Ms = if (serviceName == "checkout-api") 250 else 120,
+        errorBudgetRemainingPct = 42.0,
+        status = "healthy",
+    )
+}}
+
+fun main() {{
+    println("Welcome to the Kotlin Google ADK Workshop ({default_cloud_model})! Open workshop/03_labs/README.md to begin.")
+    // TODO [Lab 01]: Define opsSpecialist using Kotlin ADK LlmAgent(name = ..., model = Gemini("{default_cloud_model}"), tools = listOf(FunctionTool.create(::lookupServiceSlo)))
+    // TODO [Lab 02]: Define rootAgent with subAgents = listOf(opsSpecialist, reportSpecialist)
+    // TODO [Lab 03]: Execute rootAgent with InMemoryRunner and coroutines
+    println("[Starter Tool Check] ${{lookupServiceSlo("checkout-api")}}")
+}}
+"""
+        final_kt = f"""package com.example.adk
+
+/*
+Official Google ADK for Kotlin (com.google.adk:google-adk-kotlin-core / com.google.adk:google-adk) Reference Implementation:
+
+import com.google.adk.kt.agents.Instruction
+import com.google.adk.kt.agents.LlmAgent
+import com.google.adk.kt.models.Gemini
+import com.google.adk.tools.FunctionTool
+
+val opsSpecialist = LlmAgent(
+    name = "ops_specialist",
+    model = Gemini("{default_cloud_model}"),
+    description = "Monitors infrastructure hosts and audits microservice SLO budgets.",
+    instruction = Instruction("Use lookupServiceSlo to inspect service telemetry and report status."),
+    tools = listOf(FunctionTool.create(::lookupServiceSlo)),
+)
+
+val reportSpecialist = LlmAgent(
+    name = "report_specialist",
+    model = Gemini("{default_cloud_model}"),
+    description = "Drafts concise SRE release readiness checklists.",
+    instruction = Instruction("Summarize telemetry from ops_specialist into an executive gate decision."),
+)
+
+val rootAgent = LlmAgent.builder()
+    .name("sre_coordinator")
+    .model("gemini-4-argon")
+    .description("Root Kotlin ADK coordinator agent.")
+    .instruction("Delegate SLO checks to ops_specialist and summary drafting to report_specialist.")
+    .subAgents(listOf(opsSpecialist, reportSpecialist))
+    .build()
+*/
+
+data class ServiceSLOResult(
+    val serviceName: String,
+    val targetP99Ms: Int,
+    val errorBudgetRemainingPct: Double,
+    val gateDecision: String,
+)
+
+fun lookupServiceSlo(serviceName: String): ServiceSLOResult {{
+    return ServiceSLOResult(
+        serviceName = serviceName,
+        targetP99Ms = if (serviceName == "checkout-api") 250 else 120,
+        errorBudgetRemainingPct = 42.0,
+        gateDecision = "APPROVE_DEPLOY",
+    )
+}}
+
+fun main() {{
+    val metrics = lookupServiceSlo("checkout-api")
+    println("[Kotlin ADK Telemetry] $metrics")
+    println("All Kotlin ADK Workshop Labs Completed Successfully! (Model: {default_cloud_model} / Root Coordinator: gemini-4-argon)")
+}}
+"""
+        with open(project_dir / "workshop" / "01_starter" / "src" / "main" / "kotlin" / "com" / "example" / "adk" / "AdkWorkshopApp.kt", "w", encoding="utf-8") as f:
+            f.write(starter_kt)
+        with open(project_dir / "workshop" / "02_final" / "src" / "main" / "kotlin" / "com" / "example" / "adk" / "AdkWorkshopApp.kt", "w", encoding="utf-8") as f:
+            f.write(final_kt)
         with open(project_dir / "workshop" / "01_starter" / "src" / "main" / "kotlin" / "Main.kt", "w", encoding="utf-8") as f:
             f.write(starter_kt)
         with open(project_dir / "workshop" / "02_final" / "src" / "main" / "kotlin" / "Main.kt", "w", encoding="utf-8") as f:
             f.write(final_kt)
+
+        labs_dir = project_dir / "workshop" / "03_labs"
+        with open(labs_dir / "README.md", "w", encoding="utf-8") as f:
+            f.write(f"""# {topic} - Kotlin ADK Hands-on Lab Session Guide
+
+This guide covers building type-safe multi-agent systems in Kotlin using **Google Agent Development Kit (`com.google.adk:google-adk-kotlin-core` & `com.google.adk:google-adk`)**.
+
+## Step-by-Step Labs
+
+1. **[Lab 01: Kotlin ADK Idiomatic LlmAgent & FunctionTool.create(::fn)](./01_lab_kotlin_adk_dsl_and_tools.md)**
+2. **[Lab 02: Multi-Agent Hierarchy & Sub-Agent Delegation](./02_lab_kotlin_multi_agent_orchestration.md)**
+3. **[Lab 03: Coroutine Execution, InMemoryRunner & Cloud/On-Device Hybrid Routing](./03_lab_kotlin_runner_and_hybrid_deploy.md)**
+""")
+        with open(labs_dir / "01_lab_kotlin_adk_dsl_and_tools.md", "w", encoding="utf-8") as f:
+            f.write(f"""# Lab 01: Kotlin ADK Idiomatic LlmAgent & FunctionTool.create(::fn)
+
+## Objective
+Initialize `LlmAgent` using Kotlin idiomatic constructor parameters (`Gemini("{default_cloud_model}")`, `Instruction(...)`) and bind Kotlin top-level functions via `FunctionTool.create(::lookupServiceSlo)`.
+
+## Instructions
+1. Open `workshop/01_starter/src/main/kotlin/com/example/adk/AdkWorkshopApp.kt`.
+2. Inspect `ServiceSLOResult` data class and `lookupServiceSlo` function.
+3. Configure `opsSpecialist` with `Gemini("{default_cloud_model}")` and `FunctionTool.create(::lookupServiceSlo)`.
+""")
+        with open(labs_dir / "02_lab_kotlin_multi_agent_orchestration.md", "w", encoding="utf-8") as f:
+            f.write("""# Lab 02: Multi-Agent Hierarchy & Sub-Agent Delegation
+
+## Objective
+Wire `opsSpecialist` and `reportSpecialist` under `rootAgent` (`gemini-4-argon`) using `.subAgents(listOf(opsSpecialist, reportSpecialist))`.
+
+## Instructions
+1. Define `reportSpecialist` to format telemetry findings into an actionable SRE checklist.
+2. Build `rootAgent` and register both specialists in `subAgents`.
+""")
+        with open(labs_dir / "03_lab_kotlin_runner_and_hybrid_deploy.md", "w", encoding="utf-8") as f:
+            f.write("""# Lab 03: Coroutine Execution, InMemoryRunner & Cloud/On-Device Hybrid Routing
+
+## Objective
+Run the Kotlin ADK hierarchy locally with `InMemoryRunner` and verify deterministic output.
+
+## Instructions
+1. Compare your code with `workshop/02_final/src/main/kotlin/com/example/adk/AdkWorkshopApp.kt`.
+2. Run the automated workshop verifier: `python3 scripts/verify_workshop.py .`
+""")
+
         # Keep Python fallback for test runner
         with open(project_dir / "workshop" / "01_starter" / "main.py", "w", encoding="utf-8") as f:
             f.write(f'print("Kotlin ADK Workshop Starter ({default_cloud_model})")\n')
@@ -1401,7 +2038,6 @@ if __name__ == "__main__":
 
         # Also create modular lab files in workshop/03_labs/
         labs_dir = project_dir / "workshop" / "03_labs"
-        is_adk = any(k in stack for k in ["adk", "agents-cli", "google-adk", "google-agents-cli"])
         if is_adk:
             starter_agent_py = f'''"""
 ADK & Google Agents CLI (google-agents-cli) Starter Agent (`agent.py`)
@@ -1513,11 +2149,230 @@ root_agent = LlmAgent(
             with open(project_dir / "workshop" / "02_final" / "agent.py", "w", encoding="utf-8") as f:
                 f.write(final_agent_py)
 
+            # Standard `adk create` package layout (`sre_agent/__init__.py` + `sre_agent/agent.py`) + `evalset.json`
+            for stage, agent_code in [("01_starter", starter_agent_py), ("02_final", final_agent_py)]:
+                pkg_dir = project_dir / "workshop" / stage / "sre_agent"
+                pkg_dir.mkdir(parents=True, exist_ok=True)
+                with open(pkg_dir / "__init__.py", "w", encoding="utf-8") as f:
+                    f.write("from . import agent\n")
+                with open(pkg_dir / "agent.py", "w", encoding="utf-8") as f:
+                    f.write(agent_code)
+
+            evalset_json = """[
+  {
+    "eval_id": "checkout_slo_gate_pass",
+    "conversation": [
+      {
+        "user_content": "Check if checkout-api with staging P99 of 210ms passes the release gate.",
+        "expected_tool_use": [
+          {
+            "tool_name": "lookup_service_slo",
+            "tool_input": {"service_name": "checkout-api"}
+          },
+          {
+            "tool_name": "verify_release_gate",
+            "tool_input": {"service_name": "checkout-api", "current_p99_ms": 210}
+          }
+        ],
+        "expected_intermediate_agent_responses": ["slo_specialist", "report_specialist"],
+        "reference": "APPROVE_DEPLOY"
+      }
+    ]
+  }
+]
+"""
+            with open(project_dir / "workshop" / "02_final" / "evalset.json", "w", encoding="utf-8") as f:
+                f.write(evalset_json)
+
+            # If polyglot ADK mode is requested, also generate Official Go, Java, Kotlin, and TypeScript ADK tracks under polyglot/
+            if is_polyglot_adk:
+                for stage in ["01_starter", "02_final"]:
+                    poly_root = project_dir / "workshop" / stage / "polyglot"
+                    (poly_root / "go").mkdir(parents=True, exist_ok=True)
+                    (poly_root / "java" / "src" / "main" / "java" / "com" / "example" / "adk").mkdir(parents=True, exist_ok=True)
+                    (poly_root / "kotlin" / "src" / "main" / "kotlin" / "com" / "example" / "adk").mkdir(parents=True, exist_ok=True)
+                    (poly_root / "typescript" / "src").mkdir(parents=True, exist_ok=True)
+
+                    with open(poly_root / "go" / "go.mod", "w", encoding="utf-8") as f:
+                        f.write(f"module {name.replace('-', '_')}_go\n\ngo 1.23\n\nrequire (\n\tgoogle.golang.org/adk/v2 v2.0.0\n\tgoogle.golang.org/genai v1.10.0\n)\n")
+                    with open(poly_root / "go" / "main.go", "w", encoding="utf-8") as f:
+                        f.write( f'''package main
+
+import (
+\t"context"
+\t"fmt"
+\t"os"
+
+\t"google.golang.org/adk/v2/agent/llmagent"
+\t"google.golang.org/adk/v2/model/gemini"
+\t"google.golang.org/adk/v2/tool"
+\t"google.golang.org/adk/v2/tool/functiontool"
+\t"google.golang.org/genai"
+)
+
+type SLOArgs struct {{
+\tServiceName string `json:"service_name" jsonschema:"Target microservice name (e.g. checkout-api)."`
+}}
+
+type SLOResult struct {{
+\tServiceName  string `json:"service_name"`
+\tTargetP99Ms  int    `json:"target_p99_ms"`
+\tGateDecision string `json:"gate_decision"`
+}}
+
+func LookupSLO(_ tool.Context, args SLOArgs) (SLOResult, error) {{
+\treturn SLOResult{{ServiceName: args.ServiceName, TargetP99Ms: 250, GateDecision: "APPROVE_DEPLOY"}}, nil
+}}
+
+func BuildRootAgent(ctx context.Context) (llmagent.Agent, error) {{
+\tmodel, err := gemini.NewModel(ctx, "{default_cloud_model}", &genai.ClientConfig{{APIKey: os.Getenv("GEMINI_API_KEY")}})
+\tif err != nil {{
+\t\treturn nil, err
+\t}}
+\tsloTool, err := functiontool.New(functiontool.Config{{Name: "lookup_service_slo", Description: "Fetches SLO target."}}, LookupSLO)
+\tif err != nil {{
+\t\treturn nil, err
+\t}}
+\topsAgent, err := llmagent.New(llmagent.Config{{
+\t\tName:        "ops_specialist",
+\t\tModel:       model,
+\t\tDescription: "Audits microservice SLO metrics.",
+\t\tInstruction: "Call lookup_service_slo and return gate decision.",
+\t\tTools:       []tool.Tool{{sloTool}},
+\t}})
+\tif err != nil {{
+\t\treturn nil, err
+\t}}
+\treturn llmagent.New(llmagent.Config{{
+\t\tName:        "sre_coordinator",
+\t\tModel:       model,
+\t\tDescription: "Root Go ADK coordinator.",
+\t\tInstruction: "Delegate SLO inspection to ops_specialist.",
+\t\tSubAgents:   []llmagent.Agent{{opsAgent}},
+\t}})
+}}
+
+func main() {{
+\tfmt.Println("Go ADK (google.golang.org/adk/v2) track ready ({stage}).")
+}}
+''')
+                    with open(poly_root / "java" / "src" / "main" / "java" / "com" / "example" / "adk" / "SreAdkJavaApp.java", "w", encoding="utf-8") as f:
+                        f.write(f'''package com.example.adk;
+
+import com.google.adk.agents.BaseAgent;
+import com.google.adk.agents.LlmAgent;
+import com.google.adk.agents.SequentialAgent;
+import com.google.adk.run.InMemoryRunner;
+import com.google.adk.tools.FunctionTool;
+import java.util.Map;
+
+public final class SreAdkJavaApp {{
+
+    public static Map<String, Object> lookupServiceSlo(String serviceName) {{
+        return Map.of("serviceName", serviceName, "targetP99Ms", 250, "gateDecision", "APPROVE_DEPLOY");
+    }}
+
+    public static final BaseAgent opsAgent = LlmAgent.builder()
+            .name("ops_specialist")
+            .model("{default_cloud_model}")
+            .description("Audits microservice SLO metrics in Java.")
+            .instruction("Use lookupServiceSlo and store output in telemetry_result.")
+            .tools(FunctionTool.create(SreAdkJavaApp.class, "lookupServiceSlo"))
+            .outputKey("telemetry_result")
+            .build();
+
+    public static final BaseAgent reportAgent = LlmAgent.builder()
+            .name("report_writer")
+            .model("{default_cloud_model}")
+            .description("Formats SRE deployment gate reports.")
+            .instruction("Summarize {{telemetry_result}} into a release checklist.")
+            .build();
+
+    public static final BaseAgent rootAgent = SequentialAgent.builder()
+            .name("sre_release_pipeline")
+            .description("Java ADK SequentialAgent pipeline.")
+            .subAgents(opsAgent, reportAgent)
+            .build();
+
+    public static void main(String[] args) {{
+        InMemoryRunner runner = new InMemoryRunner(rootAgent, "SreAdkJavaApp");
+        System.out.println("Initialized Java ADK InMemoryRunner for: " + runner.toString());
+    }}
+}}
+''')
+                    with open(poly_root / "kotlin" / "src" / "main" / "kotlin" / "com" / "example" / "adk" / "SreAdkKotlinApp.kt", "w", encoding="utf-8") as f:
+                        f.write(f'''package com.example.adk
+
+import com.google.adk.kt.agents.Instruction
+import com.google.adk.kt.agents.LlmAgent
+import com.google.adk.kt.models.Gemini
+import com.google.adk.tools.FunctionTool
+
+data class SloMetrics(val serviceName: String, val targetP99Ms: Int, val gateDecision: String)
+
+fun lookupServiceSlo(serviceName: String): SloMetrics =
+    SloMetrics(serviceName = serviceName, targetP99Ms = 250, gateDecision = "APPROVE_DEPLOY")
+
+val opsSpecialist = LlmAgent(
+    name = "ops_specialist",
+    model = Gemini("{default_cloud_model}"),
+    description = "Monitors service SLO budgets in Kotlin.",
+    instruction = Instruction("Use lookupServiceSlo to inspect service health."),
+    tools = listOf(FunctionTool.create(::lookupServiceSlo)),
+)
+
+val rootAgent = LlmAgent.builder()
+    .name("sre_coordinator")
+    .model("gemini-4-argon")
+    .description("Root Kotlin ADK coordinator.")
+    .instruction("Delegate SLO checks to ops_specialist.")
+    .subAgents(listOf(opsSpecialist))
+    .build()
+
+fun main() {{
+    println("Initialized Kotlin ADK rootAgent: ${{rootAgent.name()}}")
+}}
+''')
+                    with open(poly_root / "typescript" / "src" / "agent.ts", "w", encoding="utf-8") as f:
+                        f.write(f'''import {{ LlmAgent, FunctionTool }} from "@google/adk";
+import {{ z }} from "zod";
+
+export const lookupServiceSloTool = new FunctionTool({{
+  name: "lookup_service_slo",
+  description: "Returns target P99 SLO latency for a microservice.",
+  parameters: z.object({{ serviceName: z.string() }}),
+  execute: async ({{ serviceName }}) => ({{ serviceName, targetP99Ms: 250, gateDecision: "APPROVE_DEPLOY" }}),
+}});
+
+export const opsSpecialist = new LlmAgent({{
+  name: "ops_specialist",
+  model: "{default_cloud_model}",
+  description: "Audits microservice SLO metrics in TypeScript.",
+  instruction: "Call lookup_service_slo and return gate decision.",
+  tools: [lookupServiceSloTool],
+}});
+
+export const rootAgent = new LlmAgent({{
+  name: "sre_coordinator",
+  model: "gemini-4-argon",
+  description: "Root TypeScript ADK coordinator.",
+  instruction: "Delegate SLO inspection to ops_specialist.",
+  subAgents: [opsSpecialist],
+}});
+''')
+
         with open(labs_dir / "01_lab_environment_and_client.md", "w", encoding="utf-8") as f:
-            f.write(f"""# Lab 01: Environment Verification & AI Client Setup
+            f.write(f"""# Lab 01: Environment Verification, ADK Scaffolding & Custom Tools
 
 ## Objective
-Verify your local environment using `./scripts/check_env.sh` and initialize the AI client using either Google GenAI (`{default_cloud_model}`), ADK (`google-adk` / `google-agents-cli`), or Local Ollama (`{default_local_model}`).
+Verify your local environment using `./scripts/check_env.sh` and initialize your ADK agent using Google Agent Development Kit (`google-adk` / `google.golang.org/adk/v2` / `com.google.adk:google-adk` / `@google/adk`) with `{default_cloud_model}`.
+
+## Official Multi-Language ADK Entry Points
+- **Python (`google-adk`)**: `workshop/01_starter/sre_agent/agent.py` exposing `root_agent = LlmAgent(...)`
+- **Go (`google.golang.org/adk/v2`)**: `llmagent.New`, `functiontool.New`, and `gemini.NewModel`
+- **Java (`com.google.adk:google-adk`)**: `LlmAgent.builder()`, `SequentialAgent.builder()`, and `FunctionTool.create()`
+- **Kotlin (`com.google.adk:google-adk-kotlin-core`)**: `LlmAgent(...)`, `Gemini("{default_cloud_model}")`, and `FunctionTool.create(::fn)`
+- **TypeScript (`@google/adk`)**: `new LlmAgent({{...}})` and Zod-typed `new FunctionTool({{...}})`
 
 ## Instructions
 1. Run `./scripts/check_env.sh` (or `.\\scripts\\check_env.ps1` on Windows).
@@ -1525,35 +2380,43 @@ Verify your local environment using `./scripts/check_env.sh` and initialize the 
    ```bash
    uvx google-agents-cli setup
    ```
-3. Open `workshop/01_starter/main.py` and inspect `lab1_sanity_check()`.
+3. Open `workshop/01_starter/main.py` (and `workshop/01_starter/agent.py` or `polyglot/`) and inspect the starter tool definitions.
 4. Test execution:
    ```bash
    python3 workshop/01_starter/main.py
    ```
 """)
         with open(labs_dir / "02_lab_structured_outputs.md", "w", encoding="utf-8") as f:
-            f.write(f"""# Lab 02: Structured JSON Schema Outputs & Multi-Agent Delegation
+            f.write(f"""# Lab 02: Multi-Agent Hierarchy, Sub-Agent Delegation & Structured Outputs
 
 ## Objective
-Enforce deterministic JSON schema outputs using `WorkshopTaskResult`, configure reasoning depth (`thinking_level` / `thinking_config`) on `{default_cloud_model}` or `gemini-4-argon`, and wire `root_agent` sub-agents in ADK.
+Wire specialized sub-agents (`slo_specialist`, `report_specialist`) under a root coordinator (`root_agent` running `gemini-4-argon`) and enforce deterministic JSON schema outputs.
 
 ## Instructions
 1. Review `prompt-pack/README.md` for the target JSON Schema.
-2. Complete `lab2_structured_output()` in `workshop/01_starter/main.py` (and `workshop/01_starter/agent.py` if using ADK).
-3. Compare your output against `workshop/02_final/main.py`.
+2. In Python (`workshop/01_starter/agent.py`), attach `sub_agents=[slo_specialist, report_specialist]` to `root_agent`.
+3. If exploring the Go, Java, Kotlin, or TypeScript tracks under `workshop/02_final/polyglot/`, compare how `SubAgents` / `subAgents` and `SequentialAgent` delegate tasks across languages.
+4. Launch the interactive ADK Dev UI to inspect sub-agent handoff events visually:
+   ```bash
+   cd workshop/02_final && adk web
+   ```
 """)
         with open(labs_dir / "03_lab_end_to_end_pipeline.md", "w", encoding="utf-8") as f:
-            f.write(f"""# Lab 03: End-to-End Agentic Pipeline, ADK Eval & Deployment
+            f.write(f"""# Lab 03: Trajectory Evaluation (adk eval), ADLC Optimization & Deployment
 
 ## Objective
-Combine multi-turn state management, tool execution, trajectory evaluation (`adk eval` / `agents-cli eval`), and automated smoke testing.
+Evaluate multi-agent tool trajectories against `evalset.json` (`adk eval` / `agents-cli eval`), run `InMemoryRunner` tests, and prepare for Cloud Run / Vertex AI Agent Engine deployment.
 
 ## Instructions
 1. Run the reference solution:
    ```bash
    python3 workshop/02_final/main.py
    ```
-2. Run the automated workshop integrity verifier:
+2. Evaluate the ADK agent trajectory against `workshop/02_final/evalset.json`:
+   ```bash
+   adk eval workshop/02_final/sre_agent workshop/02_final/evalset.json
+   ```
+3. Run the automated workshop integrity verifier:
    ```bash
    python3 scripts/verify_workshop.py .
    ```
@@ -1896,7 +2759,7 @@ def main():
     init_parser.add_argument("--topic", default="BWAI Hands-on Workshop", help="Workshop topic")
     init_parser.add_argument("--stack", default="python", help="Tech stack (comma-separated, e.g. python, typescript, go, kotlin)")
     init_parser.add_argument("--model", default=None, help="Primary AI model tag (default: gemini-3.8-flash)")
-    init_parser.add_argument("--dir", default=None, help="Target parent directory")
+    init_parser.add_argument("--dir", "--target", dest="dir", default=None, help="Target parent directory")
 
     # generate-all (One-Click Full Orchestration)
     gen_all_parser = subparsers.add_parser("generate-all", help="One-Click full workshop generation across all skills")
@@ -1904,7 +2767,7 @@ def main():
     gen_all_parser.add_argument("--topic", default="BWAI Hands-on Workshop", help="Workshop topic")
     gen_all_parser.add_argument("--stack", default="python,ollama,docker", help="Tech stack (comma-separated)")
     gen_all_parser.add_argument("--model", default=None, help="Primary AI model tag (default: gemini-3.8-flash)")
-    gen_all_parser.add_argument("--dir", default=None, help="Target parent directory")
+    gen_all_parser.add_argument("--dir", "--target", dest="dir", default=None, help="Target parent directory")
 
     # list-models command
     models_parser = subparsers.add_parser("list-models", help="Display verified 2026 Frontier & Open-Weight Model Catalog")

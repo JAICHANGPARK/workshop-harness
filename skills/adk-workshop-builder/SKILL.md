@@ -16,12 +16,14 @@ Automates the end-to-end creation of technical hands-on workshops focused on **G
 
 ## Supported Language & SDK Import Matrix
 
-| Language Track | Official Repository / Package | Dependency Installation | Required Entry Point |
-|---|---|---|---|
-| **Python** | `google/adk-python` (`google-adk`) | `uv add google-adk google-genai pydantic` | `agent.py` exposing `root_agent` |
-| **TypeScript / Node.js** | `google/adk-js` (`@google/adk`) | `npm install @google/adk @google/genai zod` | `src/agent.ts` exposing `rootAgent` |
-| **Go (Golang)** | `google/adk-go` (`google.golang.org/adk/v2`) | `go get google.golang.org/adk/v2@latest` | `main.go` |
-| **Java / Kotlin** | `google/adk-java` (`com.google.adk:google-adk`) | `implementation("com.google.adk:google-adk:+")` | `src/main/kotlin/AgentApp.kt` |
+| Language Track | Official Repository / Package | Dependency Installation | Required Entry Point | Harness CLI Command |
+|---|---|---|---|---|
+| **Python** | `google/adk-python` (`google-adk`) | `uv add google-adk google-genai pydantic` | `agent.py` exposing `root_agent` | `python3 harness_cli.py init --name "..." --stack "python,adk"` |
+| **Go (Golang)** | `google/adk-go` (`google.golang.org/adk/v2`) | `go get google.golang.org/adk/v2@latest` | `main.go` | `python3 harness_cli.py init --name "..." --stack "go,adk"` |
+| **Java 21+** | `google/adk-java` (`com.google.adk:google-adk`) | `implementation 'com.google.adk:google-adk:0.5.0'` | `src/main/java/com/example/adk/AdkWorkshopApp.java` | `python3 harness_cli.py init --name "..." --stack "java,adk"` |
+| **Kotlin** | `google/adk-java` (`com.google.adk:google-adk-kotlin-core`) | `implementation("com.google.adk:google-adk-kotlin-core:0.5.0")` | `src/main/kotlin/com/example/adk/AdkWorkshopApp.kt` | `python3 harness_cli.py init --name "..." --stack "kotlin,adk"` |
+| **TypeScript / Node.js** | `google/adk-js` (`@google/adk`) | `npm install @google/adk @google/genai zod` | `src/agent.ts` exposing `rootAgent` | `python3 harness_cli.py init --name "..." --stack "typescript,adk"` |
+| **Polyglot (All 5 Tracks)** | All Official ADK SDKs | Multi-language workspace (`polyglot/`) | `agent.py` + `polyglot/{go,java,kotlin,typescript}` | `python3 harness_cli.py init --name "..." --stack "adk,polyglot"` |
 
 ---
 
@@ -181,62 +183,159 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 
-	"google.golang.org/adk/v2"
+	"google.golang.org/adk/v2/agent/llmagent"
+	"google.golang.org/adk/v2/model/gemini"
+	"google.golang.org/adk/v2/runner"
+	"google.golang.org/adk/v2/session"
+	"google.golang.org/adk/v2/tool"
+	"google.golang.org/adk/v2/tool/functiontool"
+	"google.golang.org/genai"
 )
 
-type ServerMetrics struct {
+type ServerMetricsArgs struct {
+	Host string `json:"host" jsonschema:"Target server hostname (e.g. prod-web-01)."`
+}
+
+type ServerMetricsResult struct {
 	Host         string  `json:"host"`
 	CPU          string  `json:"cpu"`
 	MemoryFreeGB float64 `json:"memory_free_gb"`
 	Status       string  `json:"status"`
 }
 
-func fetchSystemMetrics(ctx context.Context, host string) (*ServerMetrics, error) {
-	return &ServerMetrics{Host: host, CPU: "24.5%", MemoryFreeGB: 14.2, Status: "healthy"}, nil
+func FetchSystemMetrics(_ tool.Context, args ServerMetricsArgs) (ServerMetricsResult, error) {
+	return ServerMetricsResult{
+		Host:         args.Host,
+		CPU:          "24.5%",
+		MemoryFreeGB: 14.2,
+		Status:       "healthy",
+	}, nil
 }
 
 func main() {
 	ctx := context.Background()
 
-	opsAgent, err := adk.NewLlmAgent(&adk.LlmAgentConfig{
+	model, err := gemini.NewModel(ctx, "gemini-3.8-flash", &genai.ClientConfig{
+		APIKey: os.Getenv("GEMINI_API_KEY"),
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	metricsTool, err := functiontool.New(
+		functiontool.Config{
+			Name:        "fetch_system_metrics",
+			Description: "Fetches real-time CPU and memory metrics for a server host.",
+		},
+		FetchSystemMetrics,
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	opsAgent, err := llmagent.New(llmagent.Config{
 		Name:        "ops_specialist",
-		Model:       "gemini-3.8-flash",
+		Model:       model,
 		Description: "Monitors infrastructure hosts and fetches system metrics.",
 		Instruction: "Analyze system metrics and recommend scaling actions.",
-		Tools:       []adk.Tool{adk.NewFunctionTool("fetch_system_metrics", fetchSystemMetrics)},
+		Tools:       []tool.Tool{metricsTool},
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	rootAgent, err := adk.NewLlmAgent(&adk.LlmAgentConfig{
+	rootAgent, err := llmagent.New(llmagent.Config{
 		Name:        "sre_coordinator",
-		Model:       "gemini-4-argon",
+		Model:       model,
 		Description: "Root SRE coordinator agent.",
 		Instruction: "Coordinate infrastructure tasks and delegate to ops_specialist.",
-		SubAgents:   []*adk.LlmAgent{opsAgent},
+		SubAgents:   []llmagent.Agent{opsAgent},
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	res, err := rootAgent.Run(ctx, "Check prod-web-01 server status and summarize findings.")
+	sessionService := session.InMemoryService()
+	r, err := runner.New(runner.Config{
+		AppName:        "sre_adk_go_app",
+		Agent:          rootAgent,
+		SessionService: sessionService,
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(res.Output)
+	fmt.Printf("Initialized Go ADK Runner: %v\n", r)
 }
 ```
 
 ---
 
-### 4. Kotlin / Java (`com.google.adk`)
+### 4. Java 21+ (`com.google.adk:google-adk`)
+
+```java
+package com.example.adk;
+
+import com.google.adk.agents.BaseAgent;
+import com.google.adk.agents.LlmAgent;
+import com.google.adk.agents.SequentialAgent;
+import com.google.adk.run.InMemoryRunner;
+import com.google.adk.sessions.Session;
+import com.google.adk.tools.FunctionTool;
+import java.util.Map;
+
+public final class SreAdkJavaApp {
+
+    public static Map<String, Object> fetchSystemMetrics(String host) {
+        return Map.of(
+            "host", host,
+            "cpu", "24.5%",
+            "memoryFreeGb", 14.2,
+            "status", "healthy"
+        );
+    }
+
+    public static final BaseAgent opsAgent = LlmAgent.builder()
+            .name("ops_specialist")
+            .model("gemini-3.8-flash")
+            .description("Monitors infrastructure hosts and fetches system metrics.")
+            .instruction("Call fetchSystemMetrics for the target host and store output.")
+            .tools(FunctionTool.create(SreAdkJavaApp.class, "fetchSystemMetrics"))
+            .outputKey("telemetry_result")
+            .build();
+
+    public static final BaseAgent reportAgent = LlmAgent.builder()
+            .name("report_writer")
+            .model("gemini-3.8-flash")
+            .description("Drafts SRE deployment gate reports.")
+            .instruction("Summarize {telemetry_result} into an executive checklist.")
+            .build();
+
+    public static final BaseAgent rootAgent = SequentialAgent.builder()
+            .name("sre_coordinator_pipeline")
+            .description("Sequential Java ADK pipeline for telemetry and reporting.")
+            .subAgents(opsAgent, reportAgent)
+            .build();
+
+    public static void main(String[] args) {
+        InMemoryRunner runner = new InMemoryRunner(rootAgent, "SreAdkJavaApp");
+        Session session = runner.sessionService().createSession("SreAdkJavaApp", "user-01").blockingGet();
+        System.out.println("Created Java ADK session: " + session.id());
+    }
+}
+```
+
+---
+
+### 5. Kotlin (`com.google.adk:google-adk-kotlin-core` / `com.google.adk:google-adk`)
 
 ```kotlin
 package com.example.adk
 
-import com.google.adk.agents.LlmAgent
+import com.google.adk.kt.agents.Instruction
+import com.google.adk.kt.agents.LlmAgent
+import com.google.adk.kt.models.Gemini
 import com.google.adk.tools.FunctionTool
 
 data class ServerMetrics(val host: String, val cpu: String, val memoryFreeGb: Double, val status: String)
@@ -246,13 +345,13 @@ fun fetchSystemMetrics(host: String): ServerMetrics {
 }
 
 fun main() {
-    val opsAgent = LlmAgent.builder()
-        .name("ops_specialist")
-        .model("gemini-3.8-flash")
-        .description("Monitors infrastructure hosts and fetches system metrics.")
-        .instruction("Analyze system metrics and recommend scaling actions.")
-        .tools(listOf(FunctionTool.create(::fetchSystemMetrics)))
-        .build()
+    val opsAgent = LlmAgent(
+        name = "ops_specialist",
+        model = Gemini("gemini-3.8-flash"),
+        description = "Monitors infrastructure hosts and fetches system metrics.",
+        instruction = Instruction("Analyze system metrics and recommend scaling actions."),
+        tools = listOf(FunctionTool.create(::fetchSystemMetrics)),
+    )
 
     val rootAgent = LlmAgent.builder()
         .name("sre_coordinator")
@@ -262,7 +361,7 @@ fun main() {
         .subAgents(listOf(opsAgent))
         .build()
 
-    println("Initialized rootAgent: ${rootAgent.name()}")
+    println("Initialized Kotlin ADK rootAgent: ${rootAgent.name()}")
 }
 ```
 

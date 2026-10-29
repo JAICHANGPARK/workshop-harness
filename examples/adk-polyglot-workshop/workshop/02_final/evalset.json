@@ -1,0 +1,22 @@
+[
+  {
+    "eval_id": "checkout_slo_gate_pass",
+    "conversation": [
+      {
+        "user_content": "Check if checkout-api with staging P99 of 210ms passes the release gate.",
+        "expected_tool_use": [
+          {
+            "tool_name": "lookup_service_slo",
+            "tool_input": {"service_name": "checkout-api"}
+          },
+          {
+            "tool_name": "verify_release_gate",
+            "tool_input": {"service_name": "checkout-api", "current_p99_ms": 210}
+          }
+        ],
+        "expected_intermediate_agent_responses": ["slo_specialist", "report_specialist"],
+        "reference": "APPROVE_DEPLOY"
+      }
+    ]
+  }
+]
