@@ -4,6 +4,38 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [v2026.10.29] - 2026-10-29
+
+### Added & Updated
+
+- **21st Agent Skill: `skills/agents-cli-workshop-builder` (`google-agents-cli`)**:
+  - Added full Agent Development Lifecycle (ADLC) workshop support for Google Agents CLI (`google/agents-cli`, `uvx google-agents-cli setup`, `npx skills add google/agents-cli`).
+  - Integrated the 7 official agent skills (`google-agents-cli-workflow`, `google-agents-cli-scaffold`, `google-agents-cli-adk-code`, `google-agents-cli-eval`, `google-agents-cli-deploy`, `google-agents-cli-publish`, `google-agents-cli-observability`).
+  - Added 3-stage ADLC lab curriculum covering scaffolding (`scaffold enhance`), synthetic trajectory dataset generation and LLM-as-a-Judge optimization (`eval dataset synthesize`, `eval run`, `eval grade`, `eval optimize`), Cloud Run / Vertex AI Agent Engine deployment (`deploy`), Gemini Enterprise registry publishing (`publish`), and Cloud Trace diagnostics (`observability`).
+- **Official Multi-Language Google ADK Workshop Scaffolding (`skills/adk-workshop-builder` & `harness_cli.py`)**:
+  - Upgraded `harness_cli.py init` and `generate-all` to scaffold complete starter (`01_starter`), reference solution (`02_final`), build manifests, and 3-stage hands-on lab guides (`03_labs/`) across all 5 official ADK language tracks plus Polyglot mode:
+    - **Python (`--stack "python,adk,agents-cli"`)**: `google-adk`, `LlmAgent`, mandatory `root_agent` entry point, `sub_agents`, `sre_agent/` package layout, `evalset.json`, and `adk web` / `adk run` / `adk api_server` / `adk eval` / `adk deploy` workflows.
+    - **Go (`--stack "go,adk"`)**: `google.golang.org/adk/v2` (`llmagent.New`, `functiontool.New` with JSON Schema struct tags, `gemini.NewModel`, `SubAgents`, `runner.New`, `session.InMemoryService()`).
+    - **Java 21+ (`--stack "java,adk"`)**: `com.google.adk:google-adk` (`LlmAgent.builder()`, `SequentialAgent.builder()`, `FunctionTool.create()`, `outputKey` placeholders, `InMemoryRunner`) with Maven (`pom.xml`) and Gradle (`build.gradle`).
+    - **Kotlin (`--stack "kotlin,adk"`)**: `com.google.adk:google-adk-kotlin-core` and `com.google.adk:google-adk` (`LlmAgent`, `Instruction`, `Gemini`, `FunctionTool.create(::fn)`).
+    - **TypeScript (`--stack "typescript,adk"`)**: `@google/adk` with Zod-typed `FunctionTool`, `LlmAgent`, and `subAgents` on `rootAgent`.
+    - **Polyglot (`--stack "adk,polyglot,agents-cli"`)**: Scaffolds Python alongside `polyglot/{go,java,kotlin,typescript}` tracks; added reference example at `examples/adk-polyglot-workshop/`.
+- **October 2026 Frontier & Open-Weight AI Model Catalog Upgrade**:
+  - Updated all 21 skills, templates, and CLI registries to the verified October 2026 lineup:
+    - **Google Gemini (`google-genai >= 2.30.1`, `@google/genai >= 2.29.1` Interactions API)**: `gemini-4-argon` (flagship 1M context reasoning & orchestration), `gemini-3.8-flash` (default high-speed workhorse), `gemini-3.5-flash-lite`, `gemini-3.8-live`, `gemini-3.8-live-extended-thinking`, `gemini-3.5-transcribe-live`, `gemini-3.8-flash-tts`, `gemini-nano-banana-2.1`, `gemini-omni-1.1-flash`, `gemini-embedding-2`, `antigravity-preview-09-2026`.
+    - **Google Gemma 4**: Cloud `gemma-4-31b-it`, `gemma-4-26b-a4b-it`; Local Ollama RAM tiers (`gemma4:e2b` for 8GB, `gemma4:e4b` for 16GB, `gemma4:e12b` / `gemma4:26b-a4b` / `gemma4:31b` for 32GB+).
+    - **Anthropic Claude 5.5**: `claude-opus-5.5`, `claude-sonnet-5.5`, `claude-fable-5.1`, `claude-haiku-5.5`.
+    - **OpenAI GPT-6 / 5.6**: `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6-luna`, `gpt-5.6-terra`, `gpt-5.4`.
+    - **Local Open-Weight**: `qwen3.6:27b`, `qwen3-coder:30b`, `qwen3:14b`, `qwen3:8b`, `deepseek-r1:14b`, `deepseek-r1:8b`, `llama4:scout`.
+- **Harness CLI & Automated Verification Suite (`harness_cli.py`, `verify_workshop.py`)**:
+  - Added `list-models` subcommand to inspect the 2026 model catalog by provider.
+  - Added `audit-models --target <dir> --fix` subcommand to detect and auto-upgrade deprecated model strings and legacy SDK imports (`google-generativeai`).
+  - Added `--model` CLI flag and `--target` alias on `init` and `generate-all`.
+  - Upgraded `verify_workshop.py` to enforce 4 automated gates: markdown link integrity, code smoke tests, 2026 model/SDK currency audit, and typography/credential hygiene.
+  - Enhanced `audit-loop` with real file-system inspection across the 4 attendee personas (Non-Coder, Novice, Intermediate, Senior Engineer).
+
+---
+
 ## [v2026.08.29] - 2026-08-29
 
 ### Added & Updated
