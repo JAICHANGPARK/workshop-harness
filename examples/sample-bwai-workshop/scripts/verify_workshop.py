@@ -12,6 +12,13 @@ import glob
 import subprocess
 from pathlib import Path
 
+def _strip_code_blocks_and_spans(markdown_text: str) -> str:
+    """Remove fenced code blocks and inline code spans so example links inside code are not flagged."""
+    no_fenced = re.sub(r"```[\s\S]*?```", "", markdown_text)
+    no_inline = re.sub(r"`[^`\n]+`", "", no_fenced)
+    return no_inline
+
+
 def audit_markdown_links(target_dir: Path):
     print("🔍 Auditing Markdown Links & Assets...")
     md_files = list(target_dir.glob("**/*.md"))
@@ -19,20 +26,36 @@ def audit_markdown_links(target_dir: Path):
     total_links = 0
 
     link_pattern = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
+    is_harness_root = (target_dir / "harness_cli.py").exists() and (target_dir / "templates").exists()
 
     for md_file in md_files:
-        if ".venv" in str(md_file) or "node_modules" in str(md_file):
+        rel_md_str = str(md_file.relative_to(target_dir))
+        if ".venv" in rel_md_str or "node_modules" in rel_md_str or "site/" in rel_md_str:
+            continue
+        # Skip raw doc-templates when auditing the harness root itself (paths resolve after scaffolding)
+        if is_harness_root and rel_md_str.startswith("templates/doc-templates/"):
             continue
 
         with open(md_file, "r", encoding="utf-8", errors="ignore") as f:
-            content = f.read()
+            content = _strip_code_blocks_and_spans(f.read())
 
         matches = link_pattern.findall(content)
         for text, url in matches:
-            if url.startswith("http://") or url.startswith("https://") or url.startswith("#") or url.startswith("mailto:"):
+            url = url.strip()
+            if (
+                url.startswith("http://")
+                or url.startswith("https://")
+                or url.startswith("#")
+                or url.startswith("mailto:")
+                or url.startswith("tel:")
+            ):
                 continue
 
             total_links += 1
+            if url.startswith("file://"):
+                broken_links.append((rel_md_str, url))
+                continue
+
             # Clean anchor tags
             clean_url = url.split("#")[0]
             if not clean_url:
@@ -40,7 +63,7 @@ def audit_markdown_links(target_dir: Path):
 
             target_path = (md_file.parent / clean_url).resolve()
             if not target_path.exists():
-                broken_links.append((str(md_file.relative_to(target_dir)), url))
+                broken_links.append((rel_md_str, url))
 
     if broken_links:
         print(f"❌ Found {len(broken_links)} broken relative links out of {total_links} links:")
@@ -91,14 +114,15 @@ def audit_model_and_sdk_currency(target_dir: Path):
         "google.generativeai": "from google import genai (google-genai >= 2.30.1)",
     }
     scan_exts = {".py", ".ts", ".js", ".go", ".kt", ".dart", ".md"}
-    ignore_dirs = {".git", ".venv", "node_modules", "__pycache__", ".dart_tool", "build", "tmp"}
+    ignore_dirs = {".git", ".venv", "node_modules", "__pycache__", ".dart_tool", "build", "tmp", "site"}
+    ignore_files = {"verify_workshop.py", "harness_cli.py", "CHANGELOG.md"}
     warnings = []
 
     for root, dirs, files in os.walk(target_dir):
         dirs[:] = [d for d in dirs if d not in ignore_dirs]
         for fname in files:
             fpath = Path(root) / fname
-            if fpath.suffix not in scan_exts or fpath.name == "verify_workshop.py":
+            if fpath.suffix not in scan_exts or fpath.name in ignore_files:
                 continue
             try:
                 lines = fpath.read_text(encoding="utf-8", errors="ignore").splitlines()
@@ -115,9 +139,10 @@ def audit_model_and_sdk_currency(target_dir: Path):
         print(f"⚠️ Found {len(warnings)} legacy model/SDK reference(s):")
         for rel_file, line_no, pat, repl in warnings[:10]:
             print(f"  - {rel_file}:{line_no} uses '{pat}' -> upgrade to '{repl}'")
+        return False
     else:
         print("✅ All model tags and SDK imports follow 2026 Frontier standards!")
-    return True
+        return True
 
 
 def audit_typography_and_security(target_dir: Path):
@@ -145,11 +170,11 @@ def main():
 
     links_ok = audit_markdown_links(target)
     code_ok = test_code_execution(target)
-    audit_model_and_sdk_currency(target)
-    audit_typography_and_security(target)
+    models_ok = audit_model_and_sdk_currency(target)
+    typo_ok = audit_typography_and_security(target)
 
     print("-" * 60)
-    if links_ok and code_ok:
+    if links_ok and code_ok and models_ok and typo_ok:
         print("✨ All Workshop Harness Integrity Tests PASSED! Ready for publication.")
         sys.exit(0)
     else:

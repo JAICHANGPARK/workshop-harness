@@ -29,7 +29,11 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          uv pip install --system reportlab pymupdf pillow mkdocs mkdocs-material mkdocs-static-i18n
+          uv pip install --system reportlab pymupdf pillow python-pptx mkdocs mkdocs-material mkdocs-static-i18n
+
+      - name: Audit 2026 Model & SDK Currency
+        run: |
+          python3 harness_cli.py audit-models --target .
 
       - name: Test Agent Skills Installation Script
         run: |
@@ -42,6 +46,7 @@ jobs:
             --name "ci-demo-workshop" \
             --topic "CI Automated Verification Workshop" \
             --stack "python,ollama,docker"
+          python3 harness_cli.py test --target ci-demo-workshop
 
       - name: Verify Exported Open Codelabs Bundle Structure
         run: |

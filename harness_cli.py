@@ -261,9 +261,97 @@ def init_workshop(name: str, topic: str, target_dir: str = None, stack_str: str 
     shutil.copy(pdf_templates / "generate_prep_pdf.py", project_dir / "scripts" / "generate_prep_pdf.py")
     shutil.copy(HARNESS_ROOT / "pyproject.toml", project_dir / "pyproject.toml")
 
-    # 4. Create .env.sample & .gitignore
+    # 4. Create .env.sample, .gitignore, Intel Mac fallback guide & ELI5 cheat sheet
     with open(project_dir / ".env.sample", "w", encoding="utf-8") as f:
         f.write("# Sample Environment Variables\nGEMINI_API_KEY=YOUR_GEMINI_API_KEY_HERE\n")
+
+    with open(project_dir / ".gitignore", "w", encoding="utf-8") as f:
+        f.write(
+            "# Environment & Secrets (Never commit API keys)\n"
+            ".env\n"
+            "*.env\n"
+            "!.env.sample\n"
+            "*service-account*.json\n"
+            "local.properties\n"
+            "config.json\n\n"
+            "# Build & Runtime Artifacts\n"
+            ".venv/\n"
+            "__pycache__/\n"
+            "node_modules/\n"
+            ".dart_tool/\n"
+            ".gradle/\n"
+            "build/\n"
+            "tmp/\n"
+        )
+
+    with open(project_dir / "docs" / "18-intel-mac-prep.md", "w", encoding="utf-8") as f:
+        f.write(f"""# Intel Mac (x86_64) Dedicated Preparation & Fallback Guide
+
+> Workshop Topic: **{topic}**
+
+LM Studio lacks Metal GPU acceleration on Intel CPU-based Macs (`x86_64`) and can freeze during model loading. If you are using an Intel Mac, follow the **Ollama CLI** or **Google Colab Cloud GPU** workflow below.
+
+---
+
+## Option A: Ollama CLI Local Server (Recommended for Local Runs)
+
+1. **Install Ollama**: Download from [https://ollama.com/download/Ollama-darwin.zip](https://ollama.com/download/Ollama-darwin.zip)
+2. **Start the Local Server**:
+   ```bash
+   ollama serve
+   ```
+3. **Pull a Lightweight Quantized Model** (in a second terminal tab):
+   - **8GB RAM Intel Mac**:
+     ```bash
+     ollama pull gemma4:e2b
+     ```
+   - **16GB+ RAM Intel Mac**:
+     ```bash
+     ollama pull {default_local_model}
+     ```
+4. **Verify Local API Endpoint**:
+   ```bash
+   curl http://localhost:11434/api/version
+   ```
+
+---
+
+## Option B: Zero-Setup Google Colab Cloud GPU Fallback
+
+If your Intel Mac experiences thermal throttling or high CPU load:
+1. Open `output/colab/workshop_starter.ipynb` in **Google Colab**.
+2. Add your `GEMINI_API_KEY` (`{default_cloud_model}`) in Colab Secrets (left sidebar key icon).
+3. Run all lab exercises on cloud GPUs with zero local CPU/RAM overhead.
+
+## References
+- [Ollama Official Documentation](https://ollama.com)
+- [Google AI Studio API Key Setup](https://aistudio.google.com)
+""")
+
+    with open(project_dir / "docs" / "eli5-concept-cheat-sheet.md", "w", encoding="utf-8") as f:
+        f.write(f"""# ELI5 (Explain Like I'm 5) AI Concept Cheat Sheet
+
+> Workshop Topic: **{topic}**
+> Primary Cloud Model: `{default_cloud_model}` | Flagship Reasoning: `gemini-4-argon` | Local Model: `{default_local_model}`
+
+This cheat sheet translates core AI engineering concepts into intuitive everyday analogies across a 3-tier framework (Analogy -> Technical Mechanism -> Hands-on Action).
+
+---
+
+## Core Concepts At a Glance
+
+| Concept | Everyday Analogy (Tier 1) | Technical Mechanism (Tier 2) | Hands-on Lab Action (Tier 3) |
+| :--- | :--- | :--- | :--- |
+| **Local LLM (`{default_local_model}`)** | Having a personal librarian inside your laptop who works even with Wi-Fi turned off | Quantized model weights executing on local GPU/CPU and serving HTTP on `localhost:11434` | Run `ollama serve` and query local endpoints without cloud latency |
+| **Model Quantization (4-bit)** | Packing a winter jacket into a vacuum-sealed travel bag so it fits in a carry-on | Compressing 16-bit floating-point weights into 4-bit integers to reduce RAM usage by ~70% | Use `gemma4:e2b` on 8GB RAM laptops to prevent Out-Of-Memory (OOM) errors |
+| **Structured Outputs (JSON Schema)** | Handing someone a tax form with strict boxes instead of a blank sheet of paper | Constraining token sampling to match a typed schema (Pydantic / Zod / Data Class) | Parse LLM responses deterministically in `Lab 02` without regex |
+| **RAG (Retrieval-Augmented Generation)** | Taking an open-book exam where you look up the exact page before answering | Retrieving relevant document chunks via embeddings (`gemini-embedding-2`) and injecting them into the prompt | Ground model answers on verified workshop data |
+| **Multi-Agent Orchestration (ADK)** | A head chef (`gemini-4-argon`) delegating prep and plating to line cooks (`{default_cloud_model}`) | `root_agent` routing tasks to specialized `sub_agents` and FunctionTools | Inspect sub-agent delegation and trajectory evaluation in `Lab 02 & Lab 03` |
+
+## References
+- [Google Gemini API Documentation](https://ai.google.dev/gemini-api/docs)
+- [Google Agent Development Kit (ADK)](https://adk.dev)
+""")
 
     # 5. Create README.md
     readme_content = f"""# {name}
@@ -2648,21 +2736,22 @@ This document applies the **Loop Engineering** methodology to audit the workshop
     print("-" * 60)
     print("✅ Loop Engineering 4-Persona Evaluation Completed! Report saved to docs/00-persona-loop-review-report.md")
 
-def _run_python_script(args_list):
+def _run_python_script(args_list) -> int:
     """Execute a python script using uv's harness project environment if available, otherwise sys.executable."""
     if shutil.which("uv"):
-        subprocess.run(["uv", "run", "--project", str(HARNESS_ROOT), "python"] + args_list, check=False)
+        res = subprocess.run(["uv", "run", "--project", str(HARNESS_ROOT), "python"] + args_list, check=False)
     else:
-        subprocess.run([sys.executable] + args_list, check=False)
+        res = subprocess.run([sys.executable] + args_list, check=False)
+    return res.returncode
 
-def test_workshop(target_dir: str):
+def test_workshop(target_dir: str) -> bool:
     target = Path(target_dir).resolve()
     script = target / "scripts" / "verify_workshop.py"
     if not script.exists():
         script = TEMPLATES_DIR / "script-templates" / "verify_workshop.py"
 
     print(f"🔍 Running Workshop Integrity Audit on '{target}'...")
-    _run_python_script([str(script), str(target)])
+    return _run_python_script([str(script), str(target)]) == 0
 
 def build_pdf(target_dir: str):
     ensure_uv_dependencies()
@@ -2863,13 +2952,15 @@ def main():
     elif args.command == "list-models":
         list_models(args.provider)
     elif args.command == "audit-models":
-        audit_models(args.target, args.fix)
+        if not audit_models(args.target, args.fix):
+            sys.exit(1)
     elif args.command == "audit-compat":
         audit_compatibility(args.stack, args.target)
     elif args.command == "audit-loop":
         audit_persona_loop(args.topic, args.target)
     elif args.command == "test":
-        test_workshop(args.target)
+        if not test_workshop(args.target):
+            sys.exit(1)
     elif args.command == "build-pdf":
         build_pdf(args.target)
     elif args.command == "export-codelab":
