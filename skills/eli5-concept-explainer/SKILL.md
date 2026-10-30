@@ -55,7 +55,7 @@ The skill generates clean Mermaid diagrams to illustrate abstract data flows:
 flowchart LR
     User["User Question"] --> Search["Librarian Search<br>(Vector DB)"]
     Search --> Book["Relevant Book Pages<br>(Context Chunks)"]
-    Book --> LLM["Smart Student<br>(LLM / Gemini 3.7)"]
+    Book --> LLM["Smart Student<br>(LLM / Gemini 3.8 Flash)"]
     User --> LLM
     LLM --> Answer["Accurate Open-Book Answer"]
 ```
