@@ -1,5 +1,5 @@
 site_name: Workshop Harness
-site_description: AI Agent Harness, 17 Skill Suite & CLI Automation Toolkit for Technical Workshops
+site_description: AI Agent Harness, 21 Skill Suite & CLI Automation Toolkit for Technical Workshops
 site_author: JAICHANG PARK
 site_url: https://JAICHANGPARK.github.io/workshop-harness/
 
@@ -70,7 +70,7 @@ nav:
   - Getting Started:
       - Quickstart: getting-started/quickstart.md
       - Installation & Setup: getting-started/installation.md
-  - 15 Agent Skills:
+  - 21 Agent Skills:
       - Skill Catalog: skills/overview.md
       - Open Codelabs Integration: skills/open-codelabs.md
       - Google Colab Integration: skills/colab-integration.md

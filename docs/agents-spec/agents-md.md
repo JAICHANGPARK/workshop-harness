@@ -14,6 +14,6 @@
 
 ## Specification Files in Repository
 
-- **AGENTS.md**: [`AGENTS.md`](file:///Users/jaichang/Documents/GitHub/workshop-harness/AGENTS.md) (Open standard specification)
-- **CLAUDE.md**: [`CLAUDE.md`](file:///Users/jaichang/Documents/GitHub/workshop-harness/CLAUDE.md) (Anthropic Claude Code instructions)
+- **AGENTS.md**: [`AGENTS.md`](https://github.com/JAICHANGPARK/workshop-harness/blob/main/AGENTS.md) (Open standard specification)
+- **CLAUDE.md**: [`CLAUDE.md`](https://github.com/JAICHANGPARK/workshop-harness/blob/main/CLAUDE.md) (Anthropic Claude Code instructions)
 - **Native Skills**: `skills/*/SKILL.md` (Google Antigravity & Gemini CLI skills)

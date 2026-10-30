@@ -1,6 +1,6 @@
 # Cross-Architecture Checker Skill
 
-The **Cross-Architecture Checker** skill ([`skills/cross-architecture-checker/SKILL.md`](file:///Users/jaichang/Documents/GitHub/workshop-harness/skills/cross-architecture-checker/SKILL.md)) audits tech stack hardware risks across participant laptops (Apple Silicon, Intel Mac, Windows, Linux) and generates mandatory fallback guides.
+The **Cross-Architecture Checker** skill ([`skills/cross-architecture-checker/SKILL.md`](https://github.com/JAICHANGPARK/workshop-harness/blob/main/skills/cross-architecture-checker/SKILL.md)) audits tech stack hardware risks across participant laptops (Apple Silicon, Intel Mac, Windows, Linux) and generates mandatory fallback guides.
 
 ---
 

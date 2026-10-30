@@ -28,14 +28,14 @@ chmod +x scripts/install_skills.sh
 ./scripts/install_skills.sh
 ```
 
-This installs all 17 skill directories into `~/.gemini/skills/` so **Google Antigravity** and **Gemini CLI** natively detect them.
+This installs all 21 skill directories into `~/.gemini/skills/`, `~/.gemini/config/skills/`, `~/.claude/skills/`, and `~/.agents/skills/` so **Google Antigravity**, **Gemini CLI**, **Claude Code**, and **OpenAI Codex** natively detect them.
 
 ---
 
 ## AI Agent Integration Guide
 
 ### 1. Google Antigravity & Gemini CLI
-- **Native Skill Discovery**: All 17 skills in `~/.gemini/skills/` are automatically available.
+- **Native Skill Discovery**: All 21 skills in `~/.gemini/skills/` and `~/.gemini/config/skills/` are automatically available.
 - **Natural Language Trigger Example**:
   - *"Scaffold a new Gemma 4 local RAG workshop."*
   - *"Export this workshop to Open Codelabs format and push via oc CLI."*
