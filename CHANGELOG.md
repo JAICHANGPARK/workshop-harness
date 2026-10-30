@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [v2026.10.31] - 2026-10-31
+
+### Fixed & Improved
+
+- **Workshop Integrity Verifier (`templates/script-templates/verify_workshop.py`)**:
+  - Stripped fenced code blocks and inline code spans prior to Markdown link auditing to eliminate false positives on example syntax in skill documentation.
+  - Added `file://` URI detection and fixed hardcoded local `file://` paths across `docs/agents-spec/agents-md.md`, `docs/skills/overview.md`, `docs/skills/architecture-checker.md`, and `docs/skills/open-codelabs.md`.
+  - Synchronized model currency ignore rules (`harness_cli.py`, `CHANGELOG.md`, `verify_workshop.py`) and enforced non-zero exit codes when any of the 4 verification gates fail.
+- **Harness CLI & Out-of-the-Box Scaffolding (`harness_cli.py`, `pyproject.toml`)**:
+  - Propagated non-zero exit codes from `harness_cli.py test` and `harness_cli.py audit-models` for CI/CD enforcement.
+  - Auto-generated `.gitignore`, `docs/18-intel-mac-prep.md` (Intel Mac Ollama CLI & Colab fallback guide), and `docs/eli5-concept-cheat-sheet.md` (3-tier ELI5 AI concept cheat sheet) during `init` and `generate-all`.
+  - Added `[project.scripts]` entrypoint (`workshop-harness = "harness_cli:main"`) and included `scripts/` in package build targets.
+- **Documentation, Landing Page & Multilingual READMEs (`mkdocs.yml`, `docs/*`, `website/*`, `README*.md`)**:
+  - Updated `mkdocs.yml`, `docs/skills/overview.md`, `docs/index.{ko,ja,zh}.md`, `website/index.html`, and `website/app.js` to reflect all 21 specialized agent skills and the 9-step `generate-all` pipeline.
+  - Fixed unclosed HTML tags in `website/index.html` and fixed the `metrics-ribbon` IntersectionObserver selector in `website/app.js`.
+  - Synchronized `.cursorrules` and `.windsurfrules` with October 2026 model tags and removed literal em-dash characters.
+
+---
+
 ## [v2026.10.29] - 2026-10-29
 
 ### Added & Updated

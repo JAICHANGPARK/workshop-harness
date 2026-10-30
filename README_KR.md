@@ -8,7 +8,7 @@
 [![uv Powered](https://img.shields.io/badge/python%20package%20manager-uv-de1f88.svg)](https://astral.sh/uv)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Antigravity Skills](https://img.shields.io/badge/Antigravity-21%20Agent%20Skills-purple.svg)](https://github.com/JAICHANGPARK)
-[![Release](https://img.shields.io/badge/release-v2026.10.29-green.svg)](https://github.com/JAICHANGPARK/workshop-harness/releases)
+[![Release](https://img.shields.io/badge/release-v2026.10.31-green.svg)](https://github.com/JAICHANGPARK/workshop-harness/releases)
 
 Languages: [English](./README.md) | [Korean](./README_KR.md) | [Japanese](./README_JA.md) | [Chinese](./README_ZH.md)
 
@@ -60,9 +60,11 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 1. **자동 의존성 & 스킬 로컬 환경 설치**:
    `./scripts/install_skills.sh` 스크립트를 실행하면 `reportlab`, `pymupdf`, `pillow`, `python-pptx` 패키지가 `uv`로 자동 설치되고 21개 전용 에이전트 스킬이 `~/.gemini/skills` 및 `~/.gemini/config/skills`로 설치됩니다.
 2. **설치 상태 및 2026 모델 카탈로그 검증**:
+   (`uv run harness_cli.py` 및 `uv run workshop-harness` 엔트리포인트를 모두 지원합니다)
    ```bash
    uv run harness_cli.py --help
    uv run harness_cli.py list-models
+   uv run harness_cli.py test --target .
    ```
 
 ---
@@ -233,14 +235,17 @@ my-workshop-repo/
 ├── AGENTS.md                           # AGENTS.md 오픈 에이전트 표준 명세
 ├── CLAUDE.md                           # Claude Code CLI 연동 가이드
 ├── pyproject.toml                      # Astral uv 의존성 명세 파일
-├── gemma4-local-setup-guide.md          # 행사 전 통합 사전 준비 가이드
+├── .env.sample                         # 환경 변수 샘플 (GEMINI_API_KEY)
+├── .gitignore                          # API 키 및 빌드 아티팩트 보안 규칙
+├── gemma4-local-setup-guide.md         # 행사 전 통합 사전 준비 가이드
 ├── docs/                               # 상세 가이드 문서 (00 ~ 20)
 │   ├── 00-architecture-compatibility-matrix.md # 크로스 아키텍처 대비 가이드
 │   ├── 00-persona-loop-review-report.md# 루프 엔지니어링 페르소나 리뷰 리포트
-│   ├── ai-agent-interoperability-guide.md # Multi-AI 에이전트 연동 가이드
-│   ├── 01-hardware-and-env.md
-│   ├── 02-prerequisites.md
-│   └── 20-faq.md                       # 참석자용 FAQ
+│   ├── 01-hardware-and-env.md          # 하드웨어 사양 및 로컬 LLM 포트 가이드
+│   ├── 02-prerequisites.md             # OS별 SDK 및 API Key 발급 가이드
+│   ├── 18-intel-mac-prep.md            # Intel Mac (x86_64) 전용 Ollama/Colab 우회 가이드
+│   ├── 20-faq.md                       # 참석자용 트러블슈팅 & FAQ
+│   └── eli5-concept-cheat-sheet.md     # 3단계 ELI5 AI 핵심 개념 치트시트
 ├── workshop/                           # 당일 핸즈온 실습
 │   ├── 01_starter/                     # 참가자용 시작 코드 (sre_agent/, polyglot/ 등)
 │   ├── 02_final/                       # 정답 참고 코드 및 evalset.json

@@ -8,7 +8,7 @@
 [![uv Powered](https://img.shields.io/badge/python%20package%20manager-uv-de1f88.svg)](https://astral.sh/uv)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Antigravity Skills](https://img.shields.io/badge/Antigravity-21%20Agent%20Skills-purple.svg)](https://github.com/JAICHANGPARK)
-[![Release](https://img.shields.io/badge/release-v2026.10.29-green.svg)](https://github.com/JAICHANGPARK/workshop-harness/releases)
+[![Release](https://img.shields.io/badge/release-v2026.10.31-green.svg)](https://github.com/JAICHANGPARK/workshop-harness/releases)
 
 Languages: [English](./README.md) | [Korean](./README_KR.md) | [Japanese](./README_JA.md) | [Chinese](./README_ZH.md)
 
@@ -64,10 +64,11 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
    ```
 
 2. **Verifying Installation**:
-   Ensure the CLI works smoothly with `uv`:
+   Ensure the CLI works smoothly with `uv` (supports both `uv run harness_cli.py` and the installed `uv run workshop-harness` entrypoint):
    ```bash
    uv run harness_cli.py --help
    uv run harness_cli.py list-models
+   uv run harness_cli.py test --target .
    ```
 
 ---
@@ -225,14 +226,17 @@ my-workshop-repo/
 ├── AGENTS.md                           # AGENTS.md open specification standard
 ├── CLAUDE.md                           # Claude Code CLI integration guide
 ├── pyproject.toml                      # Astral uv project dependency specification
-├── gemma4-local-setup-guide.md          # Integrated pre-workshop setup guide
+├── .env.sample                         # Sample environment variables (GEMINI_API_KEY)
+├── .gitignore                          # Credential & build artifact hygiene rules
+├── gemma4-local-setup-guide.md         # Integrated pre-workshop setup guide
 ├── docs/                               # Detailed documentation (00 to 20)
 │   ├── 00-architecture-compatibility-matrix.md # Architecture fallback matrix
 │   ├── 00-persona-loop-review-report.md# Multi-persona loop review report
-│   ├── ai-agent-interoperability-guide.md # Multi-AI agent guide
-│   ├── 01-hardware-and-env.md
-│   ├── 02-prerequisites.md
-│   └── 20-faq.md                       # Attendee FAQ
+│   ├── 01-hardware-and-env.md          # Hardware & local LLM port guide
+│   ├── 02-prerequisites.md             # OS-specific SDK & API key guide
+│   ├── 18-intel-mac-prep.md            # Dedicated Intel Mac (x86_64) Ollama/Colab fallback
+│   ├── 20-faq.md                       # Attendee troubleshooting & FAQ
+│   └── eli5-concept-cheat-sheet.md     # 3-tier ELI5 AI concept cheat sheet
 ├── workshop/                           # Hands-on lab code
 │   ├── 01_starter/                     # Starter template (sre_agent/, polyglot/, etc.)
 │   ├── 02_final/                       # Final reference code & evalset.json
