@@ -279,6 +279,12 @@ my-workshop-repo/
 
 ---
 
+## 변경 이력 (Changelog)
+
+전체 릴리스 및 변경 내역은 [CHANGELOG.md](./CHANGELOG.md)에서 확인할 수 있습니다 (최신 버전: `v2026.10.31`).
+
+---
+
 ## 라이선스
 
 [MIT License](LICENSE)

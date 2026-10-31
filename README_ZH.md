@@ -132,6 +132,12 @@ uv run harness_cli.py export-codelab --target my-bwai-workshop --push
 
 ---
 
+## 更新日志 (Changelog)
+
+完整的版本发布历史请参阅 [CHANGELOG.md](./CHANGELOG.md)（最新版本：`v2026.10.31`）。
+
+---
+
 ## 开源协议
 
 [MIT License](LICENSE)

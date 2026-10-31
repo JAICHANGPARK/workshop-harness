@@ -6,23 +6,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [v2026.10.31] - 2026-10-31
 
-### Fixed & Improved
+### Added
+
+- **Developer Terminology & Bilingual Technical Term Notation Guide (`docs/agents-spec/terminology-and-style-guide.md`)**:
+  - Added the official authoring standard requiring developer-friendly terminology paired with original English technical terms in parentheses (`개발자 친화적 용어 (English Original Term)`) across all documentation, `.md` files, slide decks, setup guides, runbooks, and code comments (e.g., `핸즈온 랩 (Hands-on Lab)`, `스캐폴딩 (Scaffolding)`, `런북 (Runbook)`, `구조화 출력 (Structured Outputs)`, `툴 콜링 / 함수 호출 (Tool Calling / Function Calling)`, `검색 증강 생성 (RAG, Retrieval-Augmented Generation)`, `추론 예산 (Thinking Budget)`, `양자화 (Quantization)`, `멀티 에이전트 오케스트레이션 (Multi-Agent Orchestration)`, `서브 에이전트 위임 (Sub-Agent Delegation)`, `궤적 평가 (Trajectory Evaluation)`, `의존성 주입 (Dependency Injection)`, `폴백 (Fallback)`).
+  - Added `AWKWARD_LITERAL_TRANSLATION_REPLACEMENTS` dictionary to automatically detect and replace unnatural literal translations in `harness_cli.py` and `verify_workshop.py`.
+- **Automated Typography & Terminology CLI Auditor (`audit-typography`)**:
+  - Added `python3 harness_cli.py audit-typography --target <dir> [--fix]` to scan `.md`, `.txt`, `.yaml`, `.ipynb`, and source files for forbidden em dashes (`\u2014`) and awkward literal translations, with automatic hyphen (`-`) and developer-term sanitization.
+  - Added `sanitize_no_em_dash` automatic sanitization across `harness_cli.py`, `scripts/build_slides.py`, `scripts/export_colab.py`, `scripts/export_open_codelabs.py`, and `templates/pdf-templates/generate_prep_pdf.py`.
+- **Out-of-the-Box Workshop Scaffolding Artifacts (`harness_cli.py`)**:
+  - Auto-generated `AGENTS.md` and `CLAUDE.md` (with mandatory No-Em-Dash & Bilingual Developer Terminology rules), `.gitignore`, `docs/18-intel-mac-prep.md` (Intel Mac `x86_64` Ollama CLI & Google Colab fallback guide), and `docs/eli5-concept-cheat-sheet.md` (3-tier ELI5 AI concept cheat sheet) during `init` and `generate-all`.
+  - Added `[project.scripts]` CLI entrypoint (`workshop-harness = "harness_cli:main"`) in `pyproject.toml`.
+
+### Changed
+
+- **21 Agent Skills & Agent Rule Specifications (`skills/*/SKILL.md`, `AGENTS.md`, `CLAUDE.md`, `.cursorrules`, `.windsurfrules`)**:
+  - Embedded the `Typography, Developer Terminology & Bilingual Notation Rules` section across all `skills/*/SKILL.md` files and synchronized local installations via `scripts/install_skills.sh`.
+  - Updated `mkdocs.yml`, `docs/skills/overview.md`, `docs/index.{ko,ja,zh}.md`, `website/index.html`, `website/app.js`, and multilingual READMEs (`README.md`, `README_EN.md`, `README_KR.md`, `README_JA.md`, `README_ZH.md`) to reflect all 21 skills, the 9-step `generate-all` pipeline, and `v2026.10.31`.
+
+### Fixed
 
 - **Workshop Integrity Verifier (`templates/script-templates/verify_workshop.py`)**:
   - Stripped fenced code blocks and inline code spans prior to Markdown link auditing to eliminate false positives on example syntax in skill documentation.
-  - Added `file://` URI detection and fixed hardcoded local `file://` paths across `docs/agents-spec/agents-md.md`, `docs/skills/overview.md`, `docs/skills/architecture-checker.md`, and `docs/skills/open-codelabs.md`.
-  - Synchronized model currency ignore rules (`harness_cli.py`, `CHANGELOG.md`, `verify_workshop.py`) and enforced non-zero exit codes when any of the 4 verification gates fail (including strict hard-failure when any forbidden em dash `\u2014` is detected in `.md` or documentation files).
-- **Harness CLI, Typography & Bilingual Developer Terminology Enforcement (`harness_cli.py`, `scripts/*`, `skills/*/SKILL.md`, `docs/agents-spec/terminology-and-style-guide.md`)**:
-  - Added `audit-typography` CLI command (`python3 harness_cli.py audit-typography --target <dir> --fix`), automated `sanitize_no_em_dash` sanitization, and `AWKWARD_LITERAL_TRANSLATION_REPLACEMENTS` checks across `harness_cli.py`, `verify_workshop.py`, `scripts/build_slides.py`, `scripts/export_colab.py`, `scripts/export_open_codelabs.py`, and `templates/pdf-templates/generate_prep_pdf.py`.
-  - Added the official **Developer Terminology & Bilingual Technical Term Notation Guide (`docs/agents-spec/terminology-and-style-guide.md`)**, enforcing developer-friendly terminology paired with original English technical terms in parentheses (`개발자 친화적 용어 (English Original Term)`) across all documentation, slides, and code comments while prohibiting awkward literal translations.
-  - Embedded the mandatory Typography, Developer Terminology & Bilingual Notation Rules (No Em Dash `\u2014` & English Original Notation) across all `skills/*/SKILL.md` files and scaffolded `AGENTS.md` and `CLAUDE.md` with these rules during `init` and `generate-all`.
-  - Propagated non-zero exit codes from `harness_cli.py test` and `harness_cli.py audit-models` for CI/CD enforcement.
-  - Auto-generated `.gitignore`, `docs/18-intel-mac-prep.md` (Intel Mac Ollama CLI & Colab fallback guide), and `docs/eli5-concept-cheat-sheet.md` (3-tier ELI5 AI concept cheat sheet) during `init` and `generate-all`.
-  - Added `[project.scripts]` entrypoint (`workshop-harness = "harness_cli:main"`) and included `scripts/` in package build targets.
-- **Documentation, Landing Page & Multilingual READMEs (`mkdocs.yml`, `docs/*`, `website/*`, `README*.md`)**:
-  - Updated `mkdocs.yml`, `docs/skills/overview.md`, `docs/index.{ko,ja,zh}.md`, `website/index.html`, and `website/app.js` to reflect all 21 specialized agent skills and the 9-step `generate-all` pipeline.
-  - Fixed unclosed HTML tags in `website/index.html` and fixed the `metrics-ribbon` IntersectionObserver selector in `website/app.js`.
-  - Synchronized `.cursorrules` and `.windsurfrules` with October 2026 model tags and removed literal em-dash characters.
+  - Added `file://` URI detection and replaced hardcoded local `file://` links with repository URLs across `docs/agents-spec/agents-md.md`, `docs/skills/overview.md`, `docs/skills/architecture-checker.md`, and `docs/skills/open-codelabs.md`.
+  - Changed `audit_typography_and_security` to return `False` (exit code `1`) on any forbidden em dash (`\u2014`) or awkward literal translation in markdown files, enforcing a strict CI/CD verification gate.
+  - Propagated non-zero exit codes from `harness_cli.py test`, `harness_cli.py audit-models`, and `harness_cli.py audit-typography`.
+- **Landing Page HTML & Metrics Observer (`website/index.html`, `website/app.js`)**:
+  - Fixed unclosed `<div class="hero-cta-group reveal">` markup in `website/index.html` and updated the counter animation selector to `.metrics-ribbon` in `website/app.js`.
 
 ---
 
