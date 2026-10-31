@@ -223,4 +223,10 @@ To prevent attendees from falling behind if they encounter build errors in Lab 0
 4. Ensure `local.properties` contains `GEMINI_API_KEY` without committing secrets to git.
 5. Pre-download Android Gradle dependencies and AVD images before the event to prevent workshop venue network bottlenecks.
 
+---
 
+## Typography & Documentation Rule (No Em Dash)
+
+- **No Em Dash (`\u2014`)**: Never generate em dash characters (`\u2014`) in any generated documentation, markdown (`.md`) files, slide decks, setup guides, code comments, or runbooks.
+- **Approved Punctuation**: Always use standard hyphens (`-`), colons (`:`), or parentheses `()` instead.
+- **Automated Verification**: Run `python3 harness_cli.py audit-typography --target <dir> --fix` or `python3 harness_cli.py test --target <dir>` to verify and enforce zero em dashes across all generated markdown files.

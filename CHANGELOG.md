@@ -11,8 +11,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - **Workshop Integrity Verifier (`templates/script-templates/verify_workshop.py`)**:
   - Stripped fenced code blocks and inline code spans prior to Markdown link auditing to eliminate false positives on example syntax in skill documentation.
   - Added `file://` URI detection and fixed hardcoded local `file://` paths across `docs/agents-spec/agents-md.md`, `docs/skills/overview.md`, `docs/skills/architecture-checker.md`, and `docs/skills/open-codelabs.md`.
-  - Synchronized model currency ignore rules (`harness_cli.py`, `CHANGELOG.md`, `verify_workshop.py`) and enforced non-zero exit codes when any of the 4 verification gates fail.
-- **Harness CLI & Out-of-the-Box Scaffolding (`harness_cli.py`, `pyproject.toml`)**:
+  - Synchronized model currency ignore rules (`harness_cli.py`, `CHANGELOG.md`, `verify_workshop.py`) and enforced non-zero exit codes when any of the 4 verification gates fail (including strict hard-failure when any forbidden em dash `\u2014` is detected in `.md` or documentation files).
+- **Harness CLI, Typography Enforcement & Out-of-the-Box Scaffolding (`harness_cli.py`, `scripts/*`, `skills/*/SKILL.md`, `pyproject.toml`)**:
+  - Added `audit-typography` CLI command (`python3 harness_cli.py audit-typography --target <dir> --fix`) and automated `sanitize_no_em_dash` sanitization across `harness_cli.py`, `scripts/build_slides.py`, `scripts/export_colab.py`, `scripts/export_open_codelabs.py`, and `templates/pdf-templates/generate_prep_pdf.py`.
+  - Embedded the mandatory Typography & Documentation Rule (No Em Dash `\u2014`) across all `skills/*/SKILL.md` files and scaffolded `AGENTS.md` and `CLAUDE.md` with the rule during `init` and `generate-all`.
   - Propagated non-zero exit codes from `harness_cli.py test` and `harness_cli.py audit-models` for CI/CD enforcement.
   - Auto-generated `.gitignore`, `docs/18-intel-mac-prep.md` (Intel Mac Ollama CLI & Colab fallback guide), and `docs/eli5-concept-cheat-sheet.md` (3-tier ELI5 AI concept cheat sheet) during `init` and `generate-all`.
   - Added `[project.scripts]` entrypoint (`workshop-harness = "harness_cli:main"`) and included `scripts/` in package build targets.

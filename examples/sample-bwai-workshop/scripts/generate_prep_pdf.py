@@ -13,7 +13,9 @@ from pathlib import Path
 from xml.sax.saxutils import escape as xml_escape
 
 def format_pdf_text(text: str) -> str:
-    """Escape XML special characters first, then apply basic bold/italic markdown formatting."""
+    """Sanitize forbidden em-dashes, escape XML special characters, then apply basic bold/italic markdown formatting."""
+    if "\u2014" in text:
+        text = re.sub(r"(?<=\S)\u2014(?=\S)", " - ", text).replace("\u2014", "-")
     escaped = xml_escape(text)
     escaped = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', escaped)
     escaped = re.sub(r'\*(.*?)\*', r'<i>\1</i>', escaped)

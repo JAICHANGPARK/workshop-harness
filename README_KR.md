@@ -177,9 +177,10 @@ Python 3.9+ 및 `uv` 환경에서 `harness_cli.py` 도구를 이용해 손쉽게
 # 1. 원클릭 전체 21개 스킬 파이프라인 워크숍 생성
 uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker" --model "gemini-3.8-flash"
 
-# 2. 2026 Frontier & Open-Weight 모델 목록 조회 및 구버전 모델 태그 자동 업그레이드
+# 2. 2026 Frontier & Open-Weight 모델 목록 조회, 구버전 모델 태그 자동 업그레이드 및 마크다운 Em Dash(\u2014) 자동 제거
 uv run harness_cli.py list-models
 uv run harness_cli.py audit-models --target my-bwai-workshop --fix
+uv run harness_cli.py audit-typography --target my-bwai-workshop --fix
 
 # 3. 공식 5대 언어 Google ADK 및 Google Agents CLI 핸즈온 워크숍 초기화 (Python, Go, Java, Kotlin, TypeScript, Polyglot)
 uv run harness_cli.py init --name "adk-python-lab" --topic "Multi-Agent ADLC with Google ADK and agents-cli" --stack "python,adk,agents-cli"

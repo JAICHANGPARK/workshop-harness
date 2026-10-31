@@ -11,6 +11,15 @@ import shutil
 import subprocess
 from pathlib import Path
 
+
+def sanitize_no_em_dash(text: str) -> str:
+    """Replace forbidden em-dash characters (\\u2014) with standard hyphens (' - ' or '-')."""
+    if "\u2014" not in text:
+        return text
+    text = re.sub(r"(?<=\S)\u2014(?=\S)", " - ", text)
+    return text.replace("\u2014", "-")
+
+
 def export_to_open_codelabs(target_dir: str, output_dir: str = None, push: bool = False):
     target = Path(target_dir).resolve()
     if not target.exists():
@@ -53,7 +62,7 @@ def export_to_open_codelabs(target_dir: str, output_dir: str = None, push: bool 
     if not guide_content:
         guide_content = f"# Preparation Guide for {title}\n\nWelcome to {title}! Please follow facilitator instructions."
 
-    (out_path / "guide.md").write_text(guide_content, encoding="utf-8")
+    (out_path / "guide.md").write_text(sanitize_no_em_dash(guide_content), encoding="utf-8")
 
     # Build steps from workshop/03_labs/01_lab_*.md or workshop/03_labs/README.md
     labs_dir = target / "workshop" / "03_labs"
@@ -63,14 +72,14 @@ def export_to_open_codelabs(target_dir: str, output_dir: str = None, push: bool 
     lab_step_files = sorted(labs_dir.glob("[0-9][0-9]_lab_*.md")) if labs_dir.exists() else []
     if lab_step_files:
         for step_idx, lf in enumerate(lab_step_files, 1):
-            sec = lf.read_text(encoding="utf-8").strip()
+            sec = sanitize_no_em_dash(lf.read_text(encoding="utf-8").strip())
             header_match = re.match(r"^#\s+(.+)$", sec, re.MULTILINE)
             step_title = header_match.group(1).strip() if header_match else lf.stem
             filename = f"step_{step_idx:02d}.md"
             (steps_path / filename).write_text(sec, encoding="utf-8")
             steps_meta.append({"title": step_title, "file": f"steps/{filename}"})
     elif labs_file.exists():
-        labs_content = labs_file.read_text(encoding="utf-8")
+        labs_content = sanitize_no_em_dash(labs_file.read_text(encoding="utf-8"))
         # Split by level 2 headings "## Lab ..." or "## Step ..."
         sections = re.split(r"(?=\n##\s+)", "\n" + labs_content)
         step_idx = 1

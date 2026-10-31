@@ -31,9 +31,10 @@ This repository provides seamless integration for all AI Coding Agents including
 >      - **Japanese (JA)**: Use standard developer Katakana / technical terms (e.g., 「ハンズオン」, 「デプロイ」, 「スキャフォールディング」, 「トークン」, 「ファインチューニング」, 「ランブック」).
 >      - **Chinese (ZH)**: Use Chinese tech community terminology (e.g., 「实战工作坊/动手实验」, 「脚手架」, 「提示词工程」, 「微调」, 「演练手册/Runbook」).
 >
-> 3. **🚫 Typography Rule (No Em Dash)**:
->    - **NEVER generate em dash characters (`\u2014`)** in any generated documentation, code comments, slide decks, or markdown files.
+> 3. **🚫 Typography Rule (No Em Dash in Markdown & Documentation)**:
+>    - **NEVER generate em dash characters (`\u2014`)** in any generated documentation, `.md` files, code comments, slide decks, setup guides, or runbooks.
 >    - Always use standard hyphens (`-`), colons (`:`), or parentheses `()` instead.
+>    - Enforce and auto-sanitize via `python3 harness_cli.py audit-typography --target <dir> --fix` (verified as a hard gate by `python3 harness_cli.py test --target <dir>`).
 >
 > 4. **🚫 No Emojis in Documentation (Default: Clean Professional Text)**:
 >    - **Do NOT include emojis in generated documentation, slide decks, setup guides, code comments, or runbooks by default.**
@@ -50,6 +51,7 @@ This repository provides seamless integration for all AI Coding Agents including
 | *"Build Android Jetpack Compose GenAI workshop with android CLI"* | `workshop-web-researcher` ➔ `android-workshop-builder` | 1. Web search latest `com.google.genai` SDK & `android` CLI<br>2. `python3 harness_cli.py init --name "..." --stack "android"` |
 | *"Build Flutter GenUI and A2UI dynamic surface workshop"* | `workshop-web-researcher` ➔ `flutter-workshop-builder` + `a2ui-workshop-builder` | 1. Web search latest Flutter `genui` & `google_generative_ai`<br>2. `python3 harness_cli.py init --name "..." --stack "flutter,genui,a2ui"` |
 | *"List or audit workshop AI models and upgrade legacy tags"* | `workshop-web-researcher` | `python3 harness_cli.py list-models` / `python3 harness_cli.py audit-models --target <dir> --fix` |
+| *"Audit and strip forbidden em dashes from markdown docs"* | `workshop-tester` | `python3 harness_cli.py audit-typography --target <dir> --fix` |
 | *"Build presentation slides and Google Slides deck"* | `workshop-slide-generator` | `python3 harness_cli.py build-slides --target <dir>` |
 | *"Convert workshop to Google Colab interactive notebooks"* | `workshop-web-researcher` ➔ `colab-workshop-integrator` | 1. Web search latest Colab CUDA/pip packages<br>2. `python3 harness_cli.py export-colab --target <dir>` |
 | *"Audit hardware risks for Intel Mac and Windows users"* | `cross-architecture-checker` | `python3 harness_cli.py audit-compat --stack "..."` |
@@ -68,11 +70,12 @@ Execute the full orchestration pipeline:
 python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker" --model "gemini-3.8-flash"
 ```
 
-### 2. List & Audit 2026 Frontier Models
-Inspect verified 2026 models or auto-upgrade deprecated model strings across a project:
+### 2. List & Audit 2026 Frontier Models & Markdown Typography (No Em Dash)
+Inspect verified 2026 models, auto-upgrade deprecated model strings, or auto-remove forbidden em dashes (`\u2014`) across a project:
 ```bash
 python3 harness_cli.py list-models
 python3 harness_cli.py audit-models --target my-bwai-workshop --fix
+python3 harness_cli.py audit-typography --target my-bwai-workshop --fix
 ```
 
 ### 3. Google ADK & Agents CLI (`google-agents-cli`) Workshop Initialization

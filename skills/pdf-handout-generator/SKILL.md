@@ -57,3 +57,11 @@ uv run harness_cli.py build-pdf --target my-bwai-workshop
 
 1. **`output/pdf/<project-name>-prep-guide.pdf`**: Consolidated PDF handout ready for printing or offline distribution.
 2. **`tmp/pdfs/contact_sheet.png`**: High-resolution image preview displaying a 3x3 or 4x4 grid of all compiled PDF pages for visual inspection.
+
+---
+
+## Typography & Documentation Rule (No Em Dash)
+
+- **No Em Dash (`\u2014`)**: Never generate em dash characters (`\u2014`) in any generated documentation, markdown (`.md`) files, slide decks, setup guides, code comments, or runbooks.
+- **Approved Punctuation**: Always use standard hyphens (`-`), colons (`:`), or parentheses `()` instead.
+- **Automated Verification**: Run `python3 harness_cli.py audit-typography --target <dir> --fix` or `python3 harness_cli.py test --target <dir>` to verify and enforce zero em dashes across all generated markdown files.

@@ -60,3 +60,11 @@ uv run harness_cli.py audit-compat --stack "lmstudio,docker,mlx"
 1. **`docs/00-architecture-compatibility-matrix.md`**: Complete markdown matrix documenting supported platforms, risks, and fallback instructions for attendees.
 2. **`scripts/check_architecture_compat.sh`**: Shell script for macOS/Linux to detect CPU architecture, available RAM, and GPU capabilities.
 3. **`scripts/check_architecture_compat.ps1`**: PowerShell script for Windows to audit environment compatibility.
+
+---
+
+## Typography & Documentation Rule (No Em Dash)
+
+- **No Em Dash (`\u2014`)**: Never generate em dash characters (`\u2014`) in any generated documentation, markdown (`.md`) files, slide decks, setup guides, code comments, or runbooks.
+- **Approved Punctuation**: Always use standard hyphens (`-`), colons (`:`), or parentheses `()` instead.
+- **Automated Verification**: Run `python3 harness_cli.py audit-typography --target <dir> --fix` or `python3 harness_cli.py test --target <dir>` to verify and enforce zero em dashes across all generated markdown files.

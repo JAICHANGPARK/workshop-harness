@@ -42,3 +42,11 @@ Generates `RUNBOOK.md` at the repository root, a minute-by-minute execution play
 ## Output Artifact Specifications
 
 - **File Path**: `RUNBOOK.md` at repository root.
+
+---
+
+## Typography & Documentation Rule (No Em Dash)
+
+- **No Em Dash (`\u2014`)**: Never generate em dash characters (`\u2014`) in any generated documentation, markdown (`.md`) files, slide decks, setup guides, code comments, or runbooks.
+- **Approved Punctuation**: Always use standard hyphens (`-`), colons (`:`), or parentheses `()` instead.
+- **Automated Verification**: Run `python3 harness_cli.py audit-typography --target <dir> --fix` or `python3 harness_cli.py test --target <dir>` to verify and enforce zero em dashes across all generated markdown files.

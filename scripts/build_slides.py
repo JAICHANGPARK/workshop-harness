@@ -12,6 +12,15 @@ import shutil
 import subprocess
 from pathlib import Path
 
+
+def sanitize_no_em_dash(text: str) -> str:
+    """Replace forbidden em-dash characters (\\u2014) with standard hyphens (' - ' or '-')."""
+    if "\u2014" not in text:
+        return text
+    text = re.sub(r"(?<=\S)\u2014(?=\S)", " - ", text)
+    return text.replace("\u2014", "-")
+
+
 def generate_slides(target_dir: str, output_dir: str = None, export_pdf: bool = False):
     target = Path(target_dir).resolve()
     if not target.exists():
@@ -215,7 +224,7 @@ python3 workshop/01_starter/main.py
 """
 
     marp_file = out_path / "slides.md"
-    marp_file.write_text(marp_content, encoding="utf-8")
+    marp_file.write_text(sanitize_no_em_dash(marp_content), encoding="utf-8")
 
     # 2. Generate Standalone Web Presentation HTML (index.html)
     slides_data = [

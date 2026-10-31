@@ -168,9 +168,17 @@ def audit_models(target_dir: str, fix: bool = False) -> bool:
                     findings.append((str(rel_path), line_idx, "google-generativeai (Legacy SDK)", "google-genai (>=2.30.1)"))
 
             if fix and file_has_findings:
-                for old_tag, new_tag in DEPRECATED_MODEL_REPLACEMENTS.items():
-                    pattern = rf"(?<![\w.-]){re.escape(old_tag)}(?![\w.-])"
-                    content = re.sub(pattern, new_tag, content)
+                new_lines = []
+                for line in content.splitlines(keepends=True):
+                    if any(marker in line.lower() for marker in ["prohibited", "deprecated", "legacy", "retired", "never use", "instead of"]):
+                        new_lines.append(line)
+                        continue
+                    updated_line = line
+                    for old_tag, new_tag in DEPRECATED_MODEL_REPLACEMENTS.items():
+                        pattern = rf"(?<![\w.-]){re.escape(old_tag)}(?![\w.-])"
+                        updated_line = re.sub(pattern, new_tag, updated_line)
+                    new_lines.append(updated_line)
+                content = "".join(new_lines)
                 if content != original_content:
                     fpath.write_text(content, encoding="utf-8")
                     files_fixed += 1
@@ -187,6 +195,66 @@ def audit_models(target_dir: str, fix: bool = False) -> bool:
         return True
     else:
         print("💡 Run with `--fix` to automatically upgrade legacy model strings.")
+        return False
+
+
+def sanitize_no_em_dash(text: str) -> str:
+    """Replace forbidden em-dash characters (\\u2014) with standard hyphens (' - ' or '-')."""
+    if "\u2014" not in text:
+        return text
+    # If em-dash has no spaces on either side, replace with ' - '; otherwise replace with '-'
+    text = re.sub(r"(?<=\S)\u2014(?=\S)", " - ", text)
+    return text.replace("\u2014", "-")
+
+
+def audit_typography(target_dir: str, fix: bool = False) -> bool:
+    """Scan markdown and documentation files for forbidden em-dash characters (\\u2014)."""
+    target = Path(target_dir).resolve()
+    if not target.exists():
+        print(f"❌ Error: Target directory '{target}' does not exist.")
+        return False
+
+    print(f"🔍 Auditing Markdown & Document Typography (No Em Dash Rule) in '{target.name}'...")
+    scan_extensions = {".md", ".txt", ".yaml", ".yml", ".ipynb"}
+    ignore_dirs = {".git", ".venv", "node_modules", "__pycache__", ".dart_tool", "build", "tmp"}
+
+    findings = []
+    files_fixed = 0
+
+    for root, dirs, files in os.walk(target):
+        dirs[:] = [d for d in dirs if d not in ignore_dirs]
+        for fname in files:
+            fpath = Path(root) / fname
+            if fpath.suffix not in scan_extensions:
+                continue
+            try:
+                content = fpath.read_text(encoding="utf-8", errors="ignore")
+            except Exception:
+                continue
+
+            if "\u2014" in content:
+                rel_path = str(fpath.relative_to(target))
+                for line_idx, line in enumerate(content.splitlines(), 1):
+                    if "\u2014" in line:
+                        findings.append((rel_path, line_idx))
+                if fix:
+                    sanitized = sanitize_no_em_dash(content)
+                    if sanitized != content:
+                        fpath.write_text(sanitized, encoding="utf-8")
+                        files_fixed += 1
+
+    if not findings:
+        print("✅ Typography check PASSED (Zero forbidden em dashes in markdown/documentation files)!")
+        return True
+
+    print(f"⚠️ Found {len(findings)} forbidden em-dash (\\u2014) occurrence(s):")
+    for rel_path, line_no in findings[:25]:
+        print(f"  - {rel_path}:{line_no} contains forbidden em-dash (\\u2014)")
+    if fix:
+        print(f"🔧 Auto-replaced em dashes with standard hyphens across {files_fixed} file(s).")
+        return True
+    else:
+        print("💡 Run with `--fix` to automatically replace em dashes with standard hyphens ('-').")
         return False
 
 
@@ -353,7 +421,36 @@ This cheat sheet translates core AI engineering concepts into intuitive everyday
 - [Google Agent Development Kit (ADK)](https://adk.dev)
 """)
 
-    # 5. Create README.md
+    # 5. Create AGENTS.md, CLAUDE.md, and README.md
+    agent_rules_md = f"""# Agent Instructions & Typography Rules for {name}
+
+> Topic: **{topic}**
+> Tech Stack: `{stack_str}` | Primary Cloud Model: `{default_cloud_model}` | Local Model: `{default_local_model}`
+
+## Mandatory Rules for AI Coding Agents
+
+1. **Typography Rule (No Em Dash in Markdown or Documentation)**:
+   - **NEVER generate em dash characters (`\\u2014`)** in any generated documentation, markdown (`.md`) files, slide decks, setup guides, code comments, or runbooks.
+   - Always use standard hyphens (`-`), colons (`:`), or parentheses `()` instead.
+   - Run `python3 scripts/verify_workshop.py .` to verify zero forbidden em dashes exist.
+
+2. **No Emojis in Documentation by Default**:
+   - Do not include emojis in generated documentation, slide decks, setup guides, or runbooks unless explicitly requested.
+
+3. **2026 Frontier Model & SDK Currency**:
+   - Use `google-genai >= 2.30.1` (`from google import genai`) and 2026 model tags (`{default_cloud_model}`, `gemini-4-argon`, `{default_local_model}`).
+   - Never use deprecated `google-generativeai` or retired `gemini-1.5-*` / `gemini-2.0-*` / `gemini-2.5-*` tags.
+
+4. **Developer-Idiomatic Localization**:
+   - When authoring or translating materials into Korean (KR), Japanese (JA), or Chinese (ZH), use natural software engineering terminology rather than literal word-for-word translations.
+
+## References
+- [Workshop Harness Repository](https://github.com/JAICHANGPARK/workshop-harness)
+- [Google Gemini API Documentation](https://ai.google.dev/gemini-api/docs)
+"""
+    (project_dir / "AGENTS.md").write_text(agent_rules_md, encoding="utf-8")
+    (project_dir / "CLAUDE.md").write_text(agent_rules_md, encoding="utf-8")
+
     readme_content = f"""# {name}
 
 > Topic: {topic}
@@ -376,6 +473,8 @@ This repository contains pre-event preparation documents and hands-on lab code f
 
 ```text
 .
+├── AGENTS.md                     # AI Agent & Typography rules (No Em Dash rule)
+├── CLAUDE.md                     # Claude Code instructions
 ├── RUNBOOK.md                    # Facilitator & TA execution runbook
 ├── gemma4-local-setup-guide.md   # Unified preparation guide
 ├── pyproject.toml                # Astral uv dependency file
@@ -2556,6 +2655,7 @@ Evaluate multi-agent tool trajectories against `evalset.json` (`adk eval` / `age
    ```
 """)
 
+    audit_typography(str(project_dir), fix=True)
     print(f"✨ Workshop '{name}' initialized successfully at {project_dir}!")
     return project_dir
 
@@ -2840,9 +2940,10 @@ def generate_all(name: str, topic: str, stack_str: str, target_dir: str = None, 
     print("\n[Step 2/9] Auditing Cross-Architecture Compatibility...")
     audit_compatibility(stack_str, str(proj_dir))
 
-    # 3. Audit Model & SDK Currency
-    print("\n[Step 3/9] Auditing 2026 Frontier Model & SDK Currency...")
+    # 3. Audit Model, SDK Currency & Typography (No Em Dash)
+    print("\n[Step 3/9] Auditing 2026 Frontier Model, SDK Currency & Typography (No Em Dash)...")
     audit_models(str(proj_dir), fix=True)
+    audit_typography(str(proj_dir), fix=True)
 
     # 4. Loop Engineering Multi-Persona Evaluation
     print("\n[Step 4/9] Running Loop Engineering 4-Persona Review...")
@@ -2902,6 +3003,11 @@ def main():
     audit_models_parser.add_argument("--target", default=".", help="Path to workshop or harness directory")
     audit_models_parser.add_argument("--fix", action="store_true", help="Automatically replace deprecated model tags with 2026 equivalents")
 
+    # audit-typography command
+    audit_typo_parser = subparsers.add_parser("audit-typography", help="Audit and auto-remove forbidden em dashes (\\u2014) in markdown and documentation files")
+    audit_typo_parser.add_argument("--target", default=".", help="Path to workshop or harness directory")
+    audit_typo_parser.add_argument("--fix", action="store_true", help="Automatically replace em dashes with standard hyphens ('-')")
+
     # audit-compat command
     audit_parser = subparsers.add_parser("audit-compat", help="Audit tech stack cross-architecture compatibility")
     audit_parser.add_argument("--stack", required=True, help="Comma-separated tech stack")
@@ -2953,6 +3059,9 @@ def main():
         list_models(args.provider)
     elif args.command == "audit-models":
         if not audit_models(args.target, args.fix):
+            sys.exit(1)
+    elif args.command == "audit-typography":
+        if not audit_typography(args.target, args.fix):
             sys.exit(1)
     elif args.command == "audit-compat":
         audit_compatibility(args.stack, args.target)

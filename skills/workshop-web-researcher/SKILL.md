@@ -109,7 +109,15 @@ When researching technical topics, verify:
 
 ## Anti-Pattern Rules (Prohibited Actions)
 
-- **Prohibited**: Hardcoding legacy retired models like `gemini-3.8-flash`, `gemini-1.5-*`, `gemini-2.0-*`, `gemini-2.5-*`, `gemini-3.8-live`, `gpt-6-luna`, `gpt-4-*`, `claude-3-*`, `llama-2`, or `gemma-1`.
+- **Prohibited**: Hardcoding legacy retired models like `gemini-1.5-*`, `gemini-2.0-*`, `gemini-2.5-*`, `gemini-3.1-*`, `gpt-4-*`, `claude-3-*`, `llama-2`, or `gemma-1`.
 - **Prohibited**: Using deprecated `google-generativeai` (Python) or `@google/generative-ai` (JS) import patterns instead of modern `google-genai` and `@google/genai`.
 - **Prohibited**: Relying on unpinned `latest` tags without confirming what exact model version tag it resolves to.
 - **Prohibited**: Omitting currency timestamp labels from generated preparation guides.
+
+---
+
+## Typography & Documentation Rule (No Em Dash)
+
+- **No Em Dash (`\u2014`)**: Never generate em dash characters (`\u2014`) in any generated documentation, markdown (`.md`) files, slide decks, setup guides, code comments, or runbooks.
+- **Approved Punctuation**: Always use standard hyphens (`-`), colons (`:`), or parentheses `()` instead.
+- **Automated Verification**: Run `python3 harness_cli.py audit-typography --target <dir> --fix` or `python3 harness_cli.py test --target <dir>` to verify and enforce zero em dashes across all generated markdown files.

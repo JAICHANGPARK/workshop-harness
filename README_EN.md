@@ -179,9 +179,10 @@ Using Python 3.9+ and `uv`, you can manage workshops via the command-line interf
 # 1. One-Click Full Workshop Generation Across All 21 Skills
 uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker" --model "gemini-3.8-flash"
 
-# 2. Inspect Verified 2026 Frontier & Open-Weight Models or Auto-Upgrade Legacy Model Tags
+# 2. Inspect Verified 2026 Frontier & Open-Weight Models, Auto-Upgrade Legacy Model Tags, and Sanitize Markdown Typography (No Em Dash)
 uv run harness_cli.py list-models
 uv run harness_cli.py audit-models --target my-bwai-workshop --fix
+uv run harness_cli.py audit-typography --target my-bwai-workshop --fix
 
 # 3. Official Multi-Language Google ADK & Google Agents CLI (Python, Go, Java, Kotlin, TypeScript, Polyglot)
 uv run harness_cli.py init --name "adk-python-lab" --topic "Multi-Agent ADLC with Google ADK and agents-cli" --stack "python,adk,agents-cli"

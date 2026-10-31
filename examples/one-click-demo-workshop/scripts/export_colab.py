@@ -13,8 +13,18 @@ import shutil
 import subprocess
 from pathlib import Path
 
+def sanitize_no_em_dash(text: str) -> str:
+    """Replace forbidden em-dash characters (\\u2014) with standard hyphens (' - ' or '-')."""
+    if "\u2014" not in text:
+        return text
+    text = re.sub(r"(?<=\S)\u2014(?=\S)", " - ", text)
+    return text.replace("\u2014", "-")
+
+
 def create_notebook_cell(cell_type: str, source: str):
     """Create a standard Jupyter Notebook cell dictionary."""
+    if cell_type == "markdown":
+        source = sanitize_no_em_dash(source)
     lines = [line + "\n" for line in source.split("\n")]
     if lines and lines[-1] == "\n":
         lines[-1] = ""
@@ -204,7 +214,7 @@ You can run automated smoke tests on these notebooks using the official [Google 
 colab run output/colab/workshop_solution.ipynb
 ```
 """
-    (out_path / "README.md").write_text(colab_readme, encoding="utf-8")
+    (out_path / "README.md").write_text(sanitize_no_em_dash(colab_readme), encoding="utf-8")
 
     # 4. Create Colab Test Shell Script
     test_script_content = f"""#!/usr/bin/env bash

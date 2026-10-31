@@ -20,8 +20,9 @@ This repository provides native compatibility with **Anthropic Claude Code CLI**
      - **Korean (KO)**: "프롬프트 엔지니어링", "핸즈온 랩", "스캐폴딩", "의존성 주입", "양자화", "파인튜닝", "런북", "임베딩" (Never ❌ "손으로 하는 실험실").
      - **Japanese (JA)**: 「ハンズオン」, 「デプロイ」, 「スキャフォールディング」, 「トークン」, 「ファインチューニング」, 「ランブック」.
      - **Chinese (ZH)**: 「实战工作坊」, 「脚手架」, 「提示词工程」, 「微调」, 「演练手册」.
-3. **🚫 Typography Rule (No Em Dash)**:
-   - **NEVER generate em dash characters (`\u2014`)** anywhere in slides, docs, code, or markdown. Always use standard hyphens (`-`), colons (`:`), or parentheses.
+3. **🚫 Typography Rule (No Em Dash in Markdown & Documentation)**:
+   - **NEVER generate em dash characters (`\u2014`)** anywhere in generated `.md` files, documentation, slides, code comments, or runbooks. Always use standard hyphens (`-`), colons (`:`), or parentheses `()`.
+   - Run `python3 harness_cli.py audit-typography --target <dir> --fix` to audit and sanitize markdown typography automatically.
 4. **🚫 No Emojis in Documentation (Default: Clean Professional Text)**:
    - **Do NOT use emojis in generated documentation, slide decks, setup guides, code comments, or runbooks by default.**
    - Emojis may only be used if the user explicitly requests them in their prompt.
@@ -40,6 +41,7 @@ This repository provides native compatibility with **Anthropic Claude Code CLI**
 | *"Build Android Jetpack Compose GenAI workshop with android CLI"* | Read `skills/android-workshop-builder/SKILL.md` | Run `python3 harness_cli.py init --name "<name>" --stack "android"` |
 | *"Build Flutter GenUI and A2UI dynamic surface workshop"* | Read `skills/flutter-workshop-builder/SKILL.md` + `skills/a2ui-workshop-builder/SKILL.md` | Run `python3 harness_cli.py init --name "<name>" --stack "flutter,genui,a2ui"` |
 | *"List or audit workshop AI models and upgrade legacy tags"* | Read `skills/workshop-web-researcher/SKILL.md` | Run `python3 harness_cli.py list-models` or `python3 harness_cli.py audit-models --target <dir> --fix` |
+| *"Audit and remove em dashes from markdown docs"* | Read `skills/workshop-tester/SKILL.md` | Run `python3 harness_cli.py audit-typography --target <dir> --fix` |
 | *"Build Google Slides presentation for this workshop"* | Read `skills/workshop-slide-generator/SKILL.md` | Run `python3 harness_cli.py build-slides --target <dir>` |
 | *"Convert workshop to Google Colab notebooks with badges"* | Read `skills/colab-workshop-integrator/SKILL.md` | Run `python3 harness_cli.py export-colab --target <dir>` |
 | *"Audit cross-architecture risks for Intel Mac and Windows"* | Read `skills/cross-architecture-checker/SKILL.md` | Run `python3 harness_cli.py audit-compat --stack "<stack>"` |

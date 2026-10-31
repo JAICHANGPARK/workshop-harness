@@ -101,9 +101,10 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 # 1. 一键触发全套 21 项技能生成
 uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker" --model "gemini-3.8-flash"
 
-# 2. 查看 2026 前沿模型目录及自动升级旧版模型标签
+# 2. 查看 2026 前沿模型目录、自动升级旧版模型标签及自动清理 Markdown Em Dash(\u2014)
 uv run harness_cli.py list-models
 uv run harness_cli.py audit-models --target my-bwai-workshop --fix
+uv run harness_cli.py audit-typography --target my-bwai-workshop --fix
 
 # 3. 初始化官方 5 大语言 Google ADK 与 Google Agents CLI 实战工作坊 (Python, Go, Java, Kotlin, TypeScript, Polyglot)
 uv run harness_cli.py init --name "adk-python-lab" --topic "Multi-Agent ADLC with Google ADK and agents-cli" --stack "python,adk,agents-cli"

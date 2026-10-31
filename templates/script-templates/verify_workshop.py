@@ -146,21 +146,26 @@ def audit_model_and_sdk_currency(target_dir: Path):
 
 
 def audit_typography_and_security(target_dir: Path):
-    print("\n🔍 Auditing Typography (No Em Dash) & API Key Hygiene...")
+    print("\n🔍 Auditing Typography (No Em Dash Rule) & API Key Hygiene...")
     md_files = list(target_dir.glob("**/*.md"))
-    em_dash_files = []
+    em_dash_findings = []
     for md_file in md_files:
-        if any(part in str(md_file) for part in [".venv", "node_modules", "AGENTS.md", "CLAUDE.md"]):
+        if any(part in md_file.parts for part in [".git", ".venv", "node_modules", "tmp"]):
             continue
         content = md_file.read_text(encoding="utf-8", errors="ignore")
         if "\u2014" in content:
-            em_dash_files.append(str(md_file.relative_to(target_dir)))
+            rel_path = str(md_file.relative_to(target_dir))
+            for line_no, line in enumerate(content.splitlines(), 1):
+                if "\u2014" in line:
+                    em_dash_findings.append(f"{rel_path}:{line_no}")
 
-    if em_dash_files:
-        print(f"⚠️ Em dash (\\u2014) detected in {len(em_dash_files)} markdown file(s): {', '.join(em_dash_files[:5])}")
+    if em_dash_findings:
+        print(f"❌ Em dash (\\u2014) detected in {len(em_dash_findings)} location(s): {', '.join(em_dash_findings[:10])}")
+        print("💡 Rule violation: Never use em dashes (\\u2014) in documentation or .md files. Use '-', ':', or '()' instead.")
+        return False
     else:
         print("✅ Typography check PASSED (Zero forbidden em dashes in markdown docs).")
-    return True
+        return True
 
 
 def main():
