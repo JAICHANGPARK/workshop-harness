@@ -266,6 +266,7 @@ my-workshop-repo/
 
 ## 참고 자료 (References)
 
+- [개발자 친화적 용어 및 기술 용어 영어 원문 병기 지침 (Terminology & Bilingual Style Guide)](./docs/agents-spec/terminology-and-style-guide.md)
 - [AGENTS.md 오픈 표준 규격](https://agents.md/)
 - [Google Agent Development Kit (ADK)](https://adk.dev)
 - [Google Agents CLI (`google/agents-cli`)](https://github.com/google/agents-cli)

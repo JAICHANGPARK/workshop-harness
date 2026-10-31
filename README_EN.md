@@ -257,6 +257,7 @@ my-workshop-repo/
 
 ## References
 
+- [Developer Terminology & Bilingual Technical Term Style Guide](./docs/agents-spec/terminology-and-style-guide.md)
 - [AGENTS.md Open Standard](https://agents.md/)
 - [Google Agent Development Kit (ADK)](https://adk.dev)
 - [Google Agents CLI (`google/agents-cli`)](https://github.com/google/agents-cli)

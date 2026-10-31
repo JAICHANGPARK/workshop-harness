@@ -146,25 +146,59 @@ def audit_model_and_sdk_currency(target_dir: Path):
 
 
 def audit_typography_and_security(target_dir: Path):
-    print("\n🔍 Auditing Typography (No Em Dash Rule) & API Key Hygiene...")
+    print("\n🔍 Auditing Typography (No Em Dash), Developer Terminology & API Key Hygiene...")
     md_files = list(target_dir.glob("**/*.md"))
     em_dash_findings = []
+    literal_findings = []
+    awkward_literals = {
+        "손으로 하는 실험실": "핸즈온 랩 (Hands-on Lab)",
+        "달리는 책": "런북 (Runbook)",
+        "발판 설치": "스캐폴딩 (Scaffolding)",
+        "생각 예산": "추론 예산 (Thinking Budget)",
+        "구조화된 출력물": "구조화 출력 (Structured Outputs)",
+        "도구 부르기": "툴 콜링 (Tool Calling)",
+        "검색 증강된 생성": "검색 증강 생성 (RAG, Retrieval-Augmented Generation)",
+        "끼워넣기 벡터": "임베딩 (Embedding)",
+        "미세 조정하기": "파인튜닝 (Fine-tuning)",
+        "다중 대리인 지휘": "멀티 에이전트 오케스트레이션 (Multi-Agent Orchestration)",
+        "하위 대리인 넘기기": "서브 에이전트 위임 (Sub-Agent Delegation)",
+        "궤도 채점": "궤적 평가 (Trajectory Evaluation)",
+        "연기 시험": "스모크 테스트 (Smoke Test)",
+        "후퇴 경로": "폴백 (Fallback)",
+        "상투적인 판박이 코드": "보일러플레이트 코드 (Boilerplate Code)",
+        "의존성 주사": "의존성 주입 (Dependency Injection)",
+        "차가운 시작": "콜드 스타트 (Cold Start)",
+        "기억 장치 넘침": "메모리 부족 에러 (OOM, Out-Of-Memory)",
+    }
+    ignore_literal_files = {"harness_cli.py", "verify_workshop.py", "terminology-and-style-guide.md"}
+
     for md_file in md_files:
         if any(part in md_file.parts for part in [".git", ".venv", "node_modules", "tmp"]):
             continue
         content = md_file.read_text(encoding="utf-8", errors="ignore")
+        rel_path = str(md_file.relative_to(target_dir))
         if "\u2014" in content:
-            rel_path = str(md_file.relative_to(target_dir))
             for line_no, line in enumerate(content.splitlines(), 1):
                 if "\u2014" in line:
                     em_dash_findings.append(f"{rel_path}:{line_no}")
+        if md_file.name not in ignore_literal_files:
+            for line_no, line in enumerate(content.splitlines(), 1):
+                if any(m in line.lower() for m in ["❌", "prohibited", "never", "직역 금지", "awkward literal"]):
+                    continue
+                for bad_lit, good_term in awkward_literals.items():
+                    if bad_lit in line:
+                        literal_findings.append(f"{rel_path}:{line_no} ('{bad_lit}' -> '{good_term}')")
 
-    if em_dash_findings:
-        print(f"❌ Em dash (\\u2014) detected in {len(em_dash_findings)} location(s): {', '.join(em_dash_findings[:10])}")
-        print("💡 Rule violation: Never use em dashes (\\u2014) in documentation or .md files. Use '-', ':', or '()' instead.")
+    if em_dash_findings or literal_findings:
+        if em_dash_findings:
+            print(f"❌ Em dash (\\u2014) detected in {len(em_dash_findings)} location(s): {', '.join(em_dash_findings[:10])}")
+            print("💡 Rule violation: Never use em dashes (\\u2014) in documentation or .md files. Use '-', ':', or '()' instead.")
+        if literal_findings:
+            print(f"❌ Awkward literal translation detected in {len(literal_findings)} location(s): {', '.join(literal_findings[:5])}")
+            print("💡 Rule violation: Use developer-friendly terminology paired with the English original term in parentheses.")
         return False
     else:
-        print("✅ Typography check PASSED (Zero forbidden em dashes in markdown docs).")
+        print("✅ Typography & Developer Terminology check PASSED (Zero forbidden em dashes or awkward literal translations).")
         return True
 
 

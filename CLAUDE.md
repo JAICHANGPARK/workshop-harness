@@ -14,12 +14,13 @@ This repository provides native compatibility with **Anthropic Claude Code CLI**
 1. **🌐 Mandatory Autonomous Pre-Flight Web Search (`workshop-web-researcher`)**:
    - **Never rely on static model training data.** AI training weights contain obsolete/deprecated APIs and retired model tags.
    - **Claude Code MUST AUTONOMOUSLY execute live web searches** (`search_web` / web search) before generating any workshop code, Colab notebooks, or curriculum to verify current SDK methods, modern imports, and active model tags (e.g. `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.8-live`, `claude-sonnet-5.5`, `claude-opus-5.5`, `gpt-6-astra`, `gpt-6.1-sol`, `gemma4`, `google-genai`, `google-adk`, `google-agents-cli`, `com.google.genai`, `genui`).
-2. **🌍 Developer-Idiomatic Localization Protocol (No Literal Translations)**:
-   - When generating or translating presentation slides, runbooks, or setup guides in Korean, Japanese, or Chinese, **do NOT use literal machine translations**.
-   - **Always use developer-idiomatic community terminology**:
-     - **Korean (KO)**: "프롬프트 엔지니어링", "핸즈온 랩", "스캐폴딩", "의존성 주입", "양자화", "파인튜닝", "런북", "임베딩" (Never ❌ "손으로 하는 실험실").
-     - **Japanese (JA)**: 「ハンズオン」, 「デプロイ」, 「スキャフォールディング」, 「トークン」, 「ファインチューニング」, 「ランブック」.
-     - **Chinese (ZH)**: 「实战工作坊」, 「脚手架」, 「提示词工程」, 「微调」, 「演练手册」.
+2. **🌍 Developer-Friendly Terminology & Bilingual Technical Term Notation (영어 원문 병기 & 직역 금지)**:
+   - When generating or localizing documentation, `.md` files, presentation slides, runbooks, setup guides, or **code comments** in Korean, Japanese, or Chinese, **do NOT use awkward literal machine translations**.
+   - **Always use real-world developer terminology AND include the original English technical term alongside it (`개발자 친화적 용어 (English Original)`)**:
+     - **Korean (KO) + English Original**: "핸즈온 랩 (Hands-on Lab)", "스캐폴딩 (Scaffolding)", "런북 (Runbook)", "프롬프트 엔지니어링 (Prompt Engineering)", "구조화 출력 (Structured Outputs)", "툴 콜링 (Tool Calling)", "검색 증강 생성 (RAG, Retrieval-Augmented Generation)", "임베딩 (Embedding)", "양자화 (Quantization)", "추론 예산 (Thinking Budget)", "멀티 에이전트 오케스트레이션 (Multi-Agent Orchestration)", "의존성 주입 (Dependency Injection)", "폴백 (Fallback)" (Never ❌ "손으로 하는 실험실", ❌ "달리는 책", ❌ "발판 설치", ❌ "생각 예산").
+     - **Japanese (JA) + English Original**: 「ハンズオンラボ (Hands-on Lab)」, 「デプロイ (Deploy)」, 「スキャフォールディング (Scaffolding)」, 「構造化出力 (Structured Outputs)」, 「量子化 (Quantization)」, 「ランブック (Runbook)」.
+     - **Chinese (ZH) + English Original**: 「实战工作坊 (Hands-on Lab)」, 「脚手架 (Scaffolding)」, 「结构化输出 (Structured Outputs)」, 「量化 (Quantization)」, 「演练手册 (Runbook)」.
+     - **Code Comments**: Preserve exact English identifiers (`root_agent`, `FunctionTool`, `thinking_budget`, `response_schema`) and pair localized comments with English technical terms in parentheses. See [`docs/agents-spec/terminology-and-style-guide.md`](docs/agents-spec/terminology-and-style-guide.md).
 3. **🚫 Typography Rule (No Em Dash in Markdown & Documentation)**:
    - **NEVER generate em dash characters (`\u2014`)** anywhere in generated `.md` files, documentation, slides, code comments, or runbooks. Always use standard hyphens (`-`), colons (`:`), or parentheses `()`.
    - Run `python3 harness_cli.py audit-typography --target <dir> --fix` to audit and sanitize markdown typography automatically.

@@ -207,18 +207,43 @@ def sanitize_no_em_dash(text: str) -> str:
     return text.replace("\u2014", "-")
 
 
+AWKWARD_LITERAL_TRANSLATION_REPLACEMENTS = {
+    "손으로 하는 실험실": "핸즈온 랩 (Hands-on Lab)",
+    "달리는 책": "런북 (Runbook)",
+    "발판 설치": "스캐폴딩 (Scaffolding)",
+    "생각 예산": "추론 예산 (Thinking Budget)",
+    "구조화된 출력물": "구조화 출력 (Structured Outputs)",
+    "도구 부르기": "툴 콜링 (Tool Calling)",
+    "검색 증강된 생성": "검색 증강 생성 (RAG, Retrieval-Augmented Generation)",
+    "끼워넣기 벡터": "임베딩 (Embedding)",
+    "미세 조정하기": "파인튜닝 (Fine-tuning)",
+    "다중 대리인 지휘": "멀티 에이전트 오케스트레이션 (Multi-Agent Orchestration)",
+    "하위 대리인 넘기기": "서브 에이전트 위임 (Sub-Agent Delegation)",
+    "궤도 채점": "궤적 평가 (Trajectory Evaluation)",
+    "연기 시험": "스모크 테스트 (Smoke Test)",
+    "후퇴 경로": "폴백 (Fallback)",
+    "상투적인 판박이 코드": "보일러플레이트 코드 (Boilerplate Code)",
+    "의존성 주사": "의존성 주입 (Dependency Injection)",
+    "차가운 시작": "콜드 스타트 (Cold Start)",
+    "기억 장치 넘침": "메모리 부족 에러 (OOM, Out-Of-Memory)",
+}
+
+
 def audit_typography(target_dir: str, fix: bool = False) -> bool:
-    """Scan markdown and documentation files for forbidden em-dash characters (\\u2014)."""
+    """Scan markdown, documentation, and code files for forbidden em-dashes (\\u2014) and awkward literal translations."""
     target = Path(target_dir).resolve()
     if not target.exists():
         print(f"❌ Error: Target directory '{target}' does not exist.")
         return False
 
-    print(f"🔍 Auditing Markdown & Document Typography (No Em Dash Rule) in '{target.name}'...")
-    scan_extensions = {".md", ".txt", ".yaml", ".yml", ".ipynb"}
+    print(f"🔍 Auditing Markdown Typography (No Em Dash) & Developer Terminology in '{target.name}'...")
+    scan_extensions = {".md", ".txt", ".yaml", ".yml", ".ipynb", ".py", ".ts", ".js", ".go", ".kt", ".dart", ".java"}
+    doc_extensions = {".md", ".txt", ".yaml", ".yml", ".ipynb"}
     ignore_dirs = {".git", ".venv", "node_modules", "__pycache__", ".dart_tool", "build", "tmp"}
+    ignore_files = {"harness_cli.py", "verify_workshop.py", "terminology-and-style-guide.md"}
 
     findings = []
+    literal_findings = []
     files_fixed = 0
 
     for root, dirs, files in os.walk(target):
@@ -232,29 +257,57 @@ def audit_typography(target_dir: str, fix: bool = False) -> bool:
             except Exception:
                 continue
 
-            if "\u2014" in content:
-                rel_path = str(fpath.relative_to(target))
+            original_content = content
+            rel_path = str(fpath.relative_to(target))
+
+            # 1. Check for forbidden em-dash in documentation/markdown files
+            if fpath.suffix in doc_extensions and "\u2014" in content:
                 for line_idx, line in enumerate(content.splitlines(), 1):
                     if "\u2014" in line:
                         findings.append((rel_path, line_idx))
                 if fix:
-                    sanitized = sanitize_no_em_dash(content)
-                    if sanitized != content:
-                        fpath.write_text(sanitized, encoding="utf-8")
-                        files_fixed += 1
+                    content = sanitize_no_em_dash(content)
 
-    if not findings:
-        print("✅ Typography check PASSED (Zero forbidden em dashes in markdown/documentation files)!")
+            # 2. Check for awkward literal machine translations in docs and code comments
+            if fname not in ignore_files:
+                new_lines = []
+                for line_idx, line in enumerate(content.splitlines(keepends=True), 1):
+                    # Skip lines that explicitly document prohibited literal examples
+                    if any(m in line.lower() for m in ["❌", "prohibited", "never", "직역 금지", "awkward literal"]):
+                        new_lines.append(line)
+                        continue
+                    updated_line = line
+                    for bad_lit, good_term in AWKWARD_LITERAL_TRANSLATION_REPLACEMENTS.items():
+                        if bad_lit in updated_line:
+                            literal_findings.append((rel_path, line_idx, bad_lit, good_term))
+                            if fix:
+                                updated_line = updated_line.replace(bad_lit, good_term)
+                    new_lines.append(updated_line)
+                if fix:
+                    content = "".join(new_lines)
+
+            if fix and content != original_content:
+                fpath.write_text(content, encoding="utf-8")
+                files_fixed += 1
+
+    if not findings and not literal_findings:
+        print("✅ Typography & Terminology check PASSED (Zero em dashes and zero awkward literal translations)!")
         return True
 
-    print(f"⚠️ Found {len(findings)} forbidden em-dash (\\u2014) occurrence(s):")
-    for rel_path, line_no in findings[:25]:
-        print(f"  - {rel_path}:{line_no} contains forbidden em-dash (\\u2014)")
+    if findings:
+        print(f"⚠️ Found {len(findings)} forbidden em-dash (\\u2014) occurrence(s):")
+        for rel_path, line_no in findings[:25]:
+            print(f"  - {rel_path}:{line_no} contains forbidden em-dash (\\u2014)")
+    if literal_findings:
+        print(f"⚠️ Found {len(literal_findings)} awkward literal translation(s) (Use developer-friendly + English bilingual terms):")
+        for rel_path, line_no, bad_lit, good_term in literal_findings[:25]:
+            print(f"  - {rel_path}:{line_no} uses '{bad_lit}' -> replace with '{good_term}'")
+
     if fix:
-        print(f"🔧 Auto-replaced em dashes with standard hyphens across {files_fixed} file(s).")
+        print(f"🔧 Auto-sanitized typography and developer terminology across {files_fixed} file(s).")
         return True
     else:
-        print("💡 Run with `--fix` to automatically replace em dashes with standard hyphens ('-').")
+        print("💡 Run with `--fix` to automatically sanitize em dashes and literal translations.")
         return False
 
 
@@ -422,27 +475,31 @@ This cheat sheet translates core AI engineering concepts into intuitive everyday
 """)
 
     # 5. Create AGENTS.md, CLAUDE.md, and README.md
-    agent_rules_md = f"""# Agent Instructions & Typography Rules for {name}
+    agent_rules_md = f"""# Agent Instructions, Developer Terminology & Typography Rules for {name}
 
 > Topic: **{topic}**
 > Tech Stack: `{stack_str}` | Primary Cloud Model: `{default_cloud_model}` | Local Model: `{default_local_model}`
 
 ## Mandatory Rules for AI Coding Agents
 
-1. **Typography Rule (No Em Dash in Markdown or Documentation)**:
+1. **Developer-Friendly Terminology & Bilingual Technical Term Notation (영어 원문 병기 & 직역 금지)**:
+   - When authoring or localizing documentation, `.md` files, slide decks, setup guides, runbooks, or **code comments** into Korean (KR), Japanese (JA), or Chinese (ZH), **NEVER perform awkward literal / word-for-word machine translations**.
+   - **Always use real-world developer terminology AND include the original English technical term alongside it in parentheses (`개발자 친화적 용어 (English Original)`)**:
+     - Examples: **핸즈온 랩 (Hands-on Lab)**, **스캐폴딩 (Scaffolding)**, **런북 (Runbook)**, **프롬프트 엔지니어링 (Prompt Engineering)**, **구조화 출력 (Structured Outputs / JSON Schema)**, **툴 콜링 / 함수 호출 (Tool Calling / Function Calling)**, **검색 증강 생성 (RAG, Retrieval-Augmented Generation)**, **임베딩 (Embedding)**, **양자화 (Quantization)**, **추론 예산 (Thinking Budget)**, **멀티 에이전트 오케스트레이션 (Multi-Agent Orchestration)**, **서브 에이전트 위임 (Sub-Agent Delegation)**, **궤적 평가 (Trajectory Evaluation)**, **의존성 주입 (Dependency Injection)**, **폴백 (Fallback)**.
+     - Prohibited literal translations: never write awkward literal phrases such as "손으로 하는 실험실", "달리는 책", "발판 설치", "생각 예산", "도구 부르기", or "기억 장치 넘침".
+   - **Code Comments & Identifiers**: Keep all SDK symbols, class/function names, and CLI flags in their exact English form (`root_agent`, `LlmAgent`, `FunctionTool`, `thinking_budget`, `response_schema`), and write comments using developer-friendly terminology with English terms in parentheses.
+
+2. **Typography Rule (No Em Dash in Markdown or Documentation)**:
    - **NEVER generate em dash characters (`\\u2014`)** in any generated documentation, markdown (`.md`) files, slide decks, setup guides, code comments, or runbooks.
    - Always use standard hyphens (`-`), colons (`:`), or parentheses `()` instead.
-   - Run `python3 scripts/verify_workshop.py .` to verify zero forbidden em dashes exist.
+   - Run `python3 scripts/verify_workshop.py .` to verify zero forbidden em dashes or awkward literal translations exist.
 
-2. **No Emojis in Documentation by Default**:
+3. **No Emojis in Documentation by Default**:
    - Do not include emojis in generated documentation, slide decks, setup guides, or runbooks unless explicitly requested.
 
-3. **2026 Frontier Model & SDK Currency**:
+4. **2026 Frontier Model & SDK Currency**:
    - Use `google-genai >= 2.30.1` (`from google import genai`) and 2026 model tags (`{default_cloud_model}`, `gemini-4-argon`, `{default_local_model}`).
    - Never use deprecated `google-generativeai` or retired `gemini-1.5-*` / `gemini-2.0-*` / `gemini-2.5-*` tags.
-
-4. **Developer-Idiomatic Localization**:
-   - When authoring or translating materials into Korean (KR), Japanese (JA), or Chinese (ZH), use natural software engineering terminology rather than literal word-for-word translations.
 
 ## References
 - [Workshop Harness Repository](https://github.com/JAICHANGPARK/workshop-harness)
