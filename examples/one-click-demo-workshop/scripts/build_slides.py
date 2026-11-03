@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-build_slides.py - Generates presentation slide decks (Marp Markdown & Standalone Web Presentation HTML)
+build_slides.py - Generates presentation slide decks (Marp Markdown, 16:9 PPTX & Standalone Web Presentation HTML)
 for Workshop Harness projects.
 """
 
 import sys
 import os
 import re
+import html
 import argparse
 import shutil
 import subprocess
@@ -21,10 +22,39 @@ def sanitize_no_em_dash(text: str) -> str:
     return text.replace("\u2014", "-")
 
 
+def _extract_lab_title_and_summary(lab_markdown: str, idx: int):
+    """Extract clean lab title and summary lines without fenced code blocks or broken relative links."""
+    lab_title_match = re.search(r"^#{1,2}\s+(.+)$", lab_markdown, re.MULTILINE)
+    lab_title = lab_title_match.group(1).strip() if lab_title_match else f"Lab {idx:02d}"
+
+    # Remove the first main heading
+    clean_body = re.sub(r"^#{1,2}\s+.+$", "", lab_markdown, count=1, flags=re.MULTILINE)
+    # Remove fenced code blocks so raw code lines do not leak into summary text
+    clean_body = re.sub(r"```[\s\S]*?```", "", clean_body)
+    # Convert relative markdown links into inline code references so slides.md in output/slides/ has zero broken relative links
+    clean_body = re.sub(r"\[([^\]]+)\]\((?!https?://|mailto:|#)([^)]+)\)", r"**\1** (`\2`)", clean_body)
+
+    summary_lines = []
+    for raw_line in clean_body.splitlines():
+        line = raw_line.strip()
+        if not line:
+            continue
+        if line.startswith("#"):
+            heading_text = line.lstrip("#").strip()
+            if heading_text:
+                summary_lines.append(f"- **{heading_text}**")
+        else:
+            summary_lines.append(line)
+        if len(summary_lines) >= 6:
+            break
+
+    return lab_title, summary_lines
+
+
 def generate_slides(target_dir: str, output_dir: str = None, export_pdf: bool = False):
     target = Path(target_dir).resolve()
     if not target.exists():
-        print(f"❌ Error: Workshop directory '{target}' does not exist.")
+        print(f"[ERROR] Workshop directory '{target}' does not exist.")
         return False
 
     out_path = Path(output_dir).resolve() if output_dir else target / "output" / "slides"
@@ -64,12 +94,12 @@ def generate_slides(target_dir: str, output_dir: str = None, export_pdf: bool = 
 
     if not lab_sections:
         lab_sections = [
-            "## Lab 01: Environment & Hello World\nVerify local AI environment and run initial sanity check.",
+            "## Lab 01: Environment & Sanity Check\nVerify local AI environment and run initial sanity check.",
             "## Lab 02: Core Hands-on Logic\nImplement structured outputs, schema verification, and core pipeline.",
             "## Lab 03: Full Pipeline & Challenge\nRun end-to-end evaluation, benchmark metrics, and explore bonus challenge."
         ]
 
-    print(f"🎨 Generating Presentation Slide Decks for '{title}'...")
+    print(f"[INFO] Generating Presentation Slide Decks for '{title}'...")
 
     # 1. Generate Marp Markdown (slides.md)
     marp_content = f"""---
@@ -127,19 +157,19 @@ style: |
 
 ---
 
-## 📋 Session Agenda & Timeline
+## Session Agenda & Timeline
 
-* **00:00 - 00:10** (10m) ➔ Welcome & Architecture Overview
-* **00:10 - 00:20** (10m) ➔ Environment & Hardware Verification
-* **00:20 - 00:45** (25m) ➔ **Lab 01 & Lab 02 Hands-on**
-* **00:45 - 01:10** (25m) ➔ **Lab 03 Pipeline & Challenge**
-* **01:10 - 01:20** (10m) ➔ Wrap-up, Q&A & Community Resources
+* **00:00 - 00:10** (10m) -> Welcome & Architecture Overview
+* **00:10 - 00:20** (10m) -> Environment & Hardware Verification
+* **00:20 - 00:45** (25m) -> **Lab 01 & Lab 02 Hands-on**
+* **00:45 - 01:10** (25m) -> **Lab 03 Pipeline & Challenge**
+* **01:10 - 01:20** (10m) -> Wrap-up, Q&A & Community Resources
 
 <!-- Speaker Notes: Greet attendees, check that everyone is seated and on the workshop Wi-Fi. -->
 
 ---
 
-## ⚡ Prerequisites & Environment Check
+## Prerequisites & Environment Check
 
 * **Local Environment Setup**:
   * Run: `./scripts/check_env.sh` (Windows: `.\\scripts\\check_env.ps1`)
@@ -153,7 +183,7 @@ style: |
 
 ---
 
-## 🏗️ Architecture & Core Concepts
+## Architecture & Core Concepts
 
 ```text
 +-----------------------+      +-----------------------+      +-----------------------+
@@ -171,20 +201,11 @@ style: |
 """
 
     for idx, lab in enumerate(lab_sections, 1):
-        lab_title_match = re.match(r"^#{1,2}\s+(.+)$", lab, re.MULTILINE)
-        lab_title = lab_title_match.group(1).strip() if lab_title_match else f"Lab {idx:02d}"
-        clean_body = re.sub(r"^#{1,2}\s+.+$", "", lab, count=1, flags=re.MULTILINE).strip()
-        # Convert relative markdown links into inline code references so slides.md in output/slides/ has zero broken relative links
-        clean_body = re.sub(r"\[([^\]]+)\]\((?!https?://|mailto:|#)([^)]+)\)", r"**\1** (`\2`)", clean_body)
-        # Keep non-code summary lines for clean slide layout
-        summary_lines = [
-            line for line in clean_body.splitlines()
-            if line.strip() and not line.strip().startswith("```")
-        ][:6]
+        lab_title, summary_lines = _extract_lab_title_and_summary(lab, idx)
         slide_body = "\n".join(summary_lines)
 
         marp_content += f"""
-## 🚀 {lab_title}
+## {lab_title}
 
 {slide_body}
 
@@ -193,34 +214,34 @@ style: |
 python3 workshop/01_starter/main.py
 ```
 
-* 💡 **Tip**: Refer to `workshop/02_final/main.py` if you get stuck!
-* ☁️ **Colab Badge**: Open in Google Colab for instant GPU execution.
+* **Tip**: Refer to `workshop/02_final/main.py` if you get stuck.
+* **Colab Fallback**: Open `output/colab/workshop_starter.ipynb` in Google Colab for instant cloud GPU execution.
 
 ---
 """
 
     marp_content += f"""
-## 🚨 Live Troubleshooting & Emergency Fallbacks
+## Live Troubleshooting & Emergency Fallbacks
 
 | Symptom / Error | Quick 10s Hotfix Command |
 | :--- | :--- |
 | **Port 11434 Busy** | `pkill ollama && ollama serve &` |
-| **OOM / Low RAM** | Fallback to Google Colab Starter Notebook |
+| **OOM / Low RAM** | Fallback to Google Colab Starter Notebook (`gemma4:e2b` locally) |
 | **API Key Missing** | `export GEMINI_API_KEY="YOUR_KEY"` |
 
-👉 Ask roaming TAs for immediate live assistance!
+Ask roaming Teaching Assistants (TAs) for immediate live assistance.
 
 ---
 
 <!-- _class: lead -->
-# 🎉 Congratulations & Wrap-up!
+# Congratulations & Wrap-up
 
-### You've successfully built and verified the workshop pipeline!
+### You have successfully built and verified the workshop pipeline.
 
-* 📂 **GitHub Repo**: [https://github.com/JAICHANGPARK/{target.name}](https://github.com/JAICHANGPARK/{target.name})
-* 📄 **PDF Handout**: `output/pdf/`
-* ☁️ **Colab Notebooks**: `output/colab/`
-* 💬 **Feedback & Q&A**: Please take 1 minute to fill out the session survey!
+* **GitHub Repo**: [https://github.com/JAICHANGPARK/{target.name}](https://github.com/JAICHANGPARK/{target.name})
+* **PDF Handout**: `output/pdf/`
+* **Colab Notebooks**: `output/colab/`
+* **Feedback & Q&A**: Please take 1 minute to complete the session survey.
 """
 
     marp_file = out_path / "slides.md"
@@ -229,19 +250,19 @@ python3 workshop/01_starter/main.py
     # 2. Generate Standalone Web Presentation HTML (index.html)
     slides_data = [
         {
-            "title": title,
-            "subtitle": topic,
+            "title": html.escape(title),
+            "subtitle": html.escape(topic),
             "badge": "Hands-on Technical Lab",
-            "content": f"<p style='margin-top:20px; font-size:1.2rem; color:#94a3b8;'>Welcome to the session! Press <strong>Right Arrow</strong> or <strong>Space</strong> to advance.</p>"
+            "content": "<p style='margin-top:20px; font-size:1.2rem; color:#94a3b8;'>Welcome to the session. Press <strong>Right Arrow</strong> or <strong>Space</strong> to advance.</p>"
         },
         {
-            "title": "📋 Session Agenda & Timeline",
+            "title": "Session Agenda & Timeline",
             "subtitle": "Minute-by-minute session flow",
             "badge": "Schedule",
-            "content": "<ul><li><strong>00:00 - 00:10</strong> (10m) ➔ Welcome & Architecture Overview</li><li><strong>00:10 - 00:20</strong> (10m) ➔ Environment & Hardware Check</li><li><strong>00:20 - 00:45</strong> (25m) ➔ <strong>Lab 01 & 02 Hands-on</strong></li><li><strong>00:45 - 01:10</strong> (25m) ➔ <strong>Lab 03 Pipeline & Challenge</strong></li><li><strong>01:10 - 01:20</strong> (10m) ➔ Wrap-up, Q&A & Survey</li></ul>"
+            "content": "<ul><li><strong>00:00 - 00:10</strong> (10m) -&gt; Welcome &amp; Architecture Overview</li><li><strong>00:10 - 00:20</strong> (10m) -&gt; Environment &amp; Hardware Check</li><li><strong>00:20 - 00:45</strong> (25m) -&gt; <strong>Lab 01 &amp; 02 Hands-on</strong></li><li><strong>00:45 - 01:10</strong> (25m) -&gt; <strong>Lab 03 Pipeline &amp; Challenge</strong></li><li><strong>01:10 - 01:20</strong> (10m) -&gt; Wrap-up, Q&amp;A &amp; Survey</li></ul>"
         },
         {
-            "title": "⚡ Prerequisites & Environment Check",
+            "title": "Prerequisites & Environment Check",
             "subtitle": "Ensure zero-setup local & cloud readiness",
             "badge": "Setup",
             "content": "<ul><li>Run verification script: <code>./scripts/check_env.sh</code></li><li>Google Colab Cloud GPU Fallback: <code>output/colab/workshop_starter.ipynb</code></li><li>Set credentials: <code>export GEMINI_API_KEY=...</code></li></ul>"
@@ -249,28 +270,35 @@ python3 workshop/01_starter/main.py
     ]
 
     for idx, lab in enumerate(lab_sections, 1):
-        lab_title_match = re.match(r"^##\s+(.+)$", lab, re.MULTILINE)
-        lab_title = lab_title_match.group(1).strip() if lab_title_match else f"Lab {idx:02d}"
-        clean_body = re.sub(r"^##\s+.+$", "", lab, flags=re.MULTILINE).strip()
+        lab_title, summary_lines = _extract_lab_title_and_summary(lab, idx)
+        html_items = []
+        for s_line in summary_lines[:4]:
+            cleaned = re.sub(r"^[-*]\s+", "", s_line)
+            cleaned = re.sub(r"^\d+\.\s+", "", cleaned)
+            cleaned = html.escape(cleaned)
+            cleaned = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", cleaned)
+            cleaned = re.sub(r"`([^`]+)`", r"<code>\1</code>", cleaned)
+            html_items.append(f"<li>{cleaned}</li>")
+        list_html = "<ul>" + "".join(html_items) + "</ul>" if html_items else "<p>Follow the lab instructions in <code>workshop/03_labs/</code>.</p>"
         slides_data.append({
-            "title": f"🚀 {lab_title}",
+            "title": html.escape(lab_title),
             "subtitle": f"Hands-on Lab Step {idx}",
             "badge": f"Lab {idx:02d}",
-            "content": f"<p>{clean_body[:300]}...</p><pre><code># Test command:\npython3 workshop/01_starter/main.py</code></pre>"
+            "content": f"{list_html}<pre><code># Test command:\npython3 workshop/01_starter/main.py</code></pre>"
         })
 
     slides_data.append({
-        "title": "🚨 Live Troubleshooting & Hotfixes",
+        "title": "Live Troubleshooting & Hotfixes",
         "subtitle": "Quick resolution for common errors",
         "badge": "Troubleshooting",
-        "content": "<table style='width:100%; border-collapse:collapse; margin-top:15px;'><tr><th style='text-align:left; border-bottom:1px solid #334155; padding:8px;'>Issue</th><th style='text-align:left; border-bottom:1px solid #334155; padding:8px;'>Quick Hotfix</th></tr><tr><td style='padding:8px;'>Port 11434 Busy</td><td style='padding:8px;'><code>pkill ollama && ollama serve &</code></td></tr><tr><td style='padding:8px;'>Low RAM / Crash</td><td style='padding:8px;'>Switch to Google Colab Notebook</td></tr><tr><td style='padding:8px;'>API Key Missing</td><td style='padding:8px;'><code>export GEMINI_API_KEY=...</code></td></tr></table>"
+        "content": "<table style='width:100%; border-collapse:collapse; margin-top:15px;'><tr><th style='text-align:left; border-bottom:1px solid #334155; padding:8px;'>Issue</th><th style='text-align:left; border-bottom:1px solid #334155; padding:8px;'>Quick Hotfix</th></tr><tr><td style='padding:8px;'>Port 11434 Busy</td><td style='padding:8px;'><code>pkill ollama &amp;&amp; ollama serve &amp;</code></td></tr><tr><td style='padding:8px;'>Low RAM / Crash</td><td style='padding:8px;'>Switch to Google Colab Notebook</td></tr><tr><td style='padding:8px;'>API Key Missing</td><td style='padding:8px;'><code>export GEMINI_API_KEY=...</code></td></tr></table>"
     })
 
     slides_data.append({
-        "title": "🎉 Congratulations & Wrap-up!",
-        "subtitle": "You've completed all workshop milestones",
+        "title": "Congratulations & Wrap-up",
+        "subtitle": "You have completed all workshop milestones",
         "badge": "Complete",
-        "content": "<p style='font-size:1.2rem; line-height:1.8;'>Thank you for participating! Check out the generated PDF handout and Colab interactive notebooks in your repo.</p>"
+        "content": "<p style='font-size:1.2rem; line-height:1.8;'>Thank you for participating. Check out the generated PDF handout and Colab interactive notebooks in your repository.</p>"
     })
 
     html_slides = ""
@@ -295,7 +323,7 @@ python3 workshop/01_starter/main.py
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{title} - Presentation Slides</title>
+  <title>{html.escape(title)} - Presentation Slides</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -469,7 +497,7 @@ python3 workshop/01_starter/main.py
 
   <div class="controls-bar">
     <div class="controls-left">
-      <span style="font-weight:700; color:var(--primary); font-size:0.95rem;">{title}</span>
+      <span style="font-weight:700; color:var(--primary); font-size:0.95rem;">{html.escape(title)}</span>
     </div>
 
     <div class="progress-track">
@@ -477,9 +505,9 @@ python3 workshop/01_starter/main.py
     </div>
 
     <div class="controls-right">
-      <button class="btn-ctrl" onclick="prevSlide()">◀ Prev (Left)</button>
-      <button class="btn-ctrl" onclick="nextSlide()">Next (Right) ▶</button>
-      <button class="btn-ctrl" onclick="toggleFullScreen()">⛶ Fullscreen (F)</button>
+      <button class="btn-ctrl" onclick="prevSlide()">Prev (Left)</button>
+      <button class="btn-ctrl" onclick="nextSlide()">Next (Right)</button>
+      <button class="btn-ctrl" onclick="toggleFullScreen()">Fullscreen (F)</button>
     </div>
   </div>
 
@@ -540,7 +568,7 @@ python3 workshop/01_starter/main.py
 </html>
 """
     html_file = out_path / "index.html"
-    html_file.write_text(html_content, encoding="utf-8")
+    html_file.write_text(sanitize_no_em_dash(html_content), encoding="utf-8")
 
     # 3. Generate Native 16:9 PPTX for Google Slides
     pptx_file = out_path / "slides.pptx"
@@ -562,7 +590,6 @@ python3 workshop/01_starter/main.py
         TITLE_COLOR = RGBColor(56, 189, 248) # #38BDF8 Sky Cyan
         SUB_COLOR = RGBColor(129, 140, 248)  # #818CF8 Indigo
         TEXT_COLOR = RGBColor(241, 245, 249) # #F1F5F9 Slate White
-        CARD_BG = RGBColor(30, 41, 59)      # #1E293B Card Slate
 
         def add_bg(slide):
             shape = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, Inches(13.333), Inches(7.5))
@@ -615,7 +642,7 @@ python3 workshop/01_starter/main.py
         ]
         for t_slot, t_name in agenda_items:
             p = tf.add_paragraph()
-            p.text = f"• [{t_slot}] {t_name}"
+            p.text = f"- [{t_slot}] {t_name}"
             p.font.size = Pt(20)
             p.font.color.rgb = TEXT_COLOR
 
@@ -626,17 +653,16 @@ python3 workshop/01_starter/main.py
             tb = s.shapes.add_textbox(Inches(1.0), Inches(0.8), Inches(11.333), Inches(5.8))
             tf = tb.text_frame
             tf.word_wrap = True
-            lines = [l.strip() for l in sec.split("\n") if l.strip()]
-            sec_title = lines[0].replace("#", "").strip() if lines else f"Lab {i}"
+            sec_title, summary_lines = _extract_lab_title_and_summary(sec, i)
             p = tf.paragraphs[0]
             p.text = sec_title
             p.font.size = Pt(30)
             p.font.bold = True
             p.font.color.rgb = TITLE_COLOR
 
-            for line in lines[1:8]:
+            for line in summary_lines[:6]:
                 p = tf.add_paragraph()
-                p.text = f"• {line}"
+                p.text = f"- {line.lstrip('-* ')}"
                 p.font.size = Pt(18)
                 p.font.color.rgb = TEXT_COLOR
 
@@ -647,7 +673,7 @@ python3 workshop/01_starter/main.py
         tf = tb.text_frame
         tf.word_wrap = True
         p = tf.paragraphs[0]
-        p.text = "Congratulations! Lab Completed!"
+        p.text = "Congratulations - Lab Completed"
         p.font.size = Pt(38)
         p.font.bold = True
         p.font.color.rgb = TITLE_COLOR
@@ -666,17 +692,17 @@ python3 workshop/01_starter/main.py
     # 4. Generate Google Apps Script (create_google_slides.gs)
     gas_content = f"""/**
  * Google Apps Script to build Google Slides directly in Google Drive.
- * 
+ *
  * Instructions:
  * 1. Open https://script.google.com/
  * 2. Create a New Project, paste this code, and click 'Run' -> 'createWorkshopSlides'.
- * 3. A new Google Slides presentation will be created in your Google Drive!
+ * 3. A new Google Slides presentation will be created in your Google Drive.
  */
 function createWorkshopSlides() {{
   const title = "{title}";
   const topic = "{topic}";
   const deck = SlidesApp.create(title + " - Presentation");
-  
+
   // Slide 1: Title
   const slide1 = deck.getSlides()[0];
   slide1.getBackground().setSolidFill("#0f172a");
@@ -690,14 +716,14 @@ function createWorkshopSlides() {{
   slide2.getBackground().setSolidFill("#0f172a");
   const agTitle = slide2.insertTextBox("Workshop Agenda", 50, 40, 620, 50);
   agTitle.getText().getTextStyle().setFontSize(24).setForegroundColor("#38bdf8").setBold(true);
-  const agBody = slide2.insertTextBox("• [00 - 15m] Architecture & Prerequisites Setup\\n• [15 - 45m] Lab 01 & Lab 02 Hands-on Implementation\\n• [45 - 55m] Lab 03 End-to-End Pipeline & Evaluation\\n• [55 - 60m] Q&A, Troubleshooting & Wrap-up", 50, 110, 620, 250);
+  const agBody = slide2.insertTextBox("- [00 - 15m] Architecture & Prerequisites Setup\\n- [15 - 45m] Lab 01 & Lab 02 Hands-on Implementation\\n- [45 - 55m] Lab 03 End-to-End Pipeline & Evaluation\\n- [55 - 60m] Q&A, Troubleshooting & Wrap-up", 50, 110, 620, 250);
   agBody.getText().getTextStyle().setFontSize(16).setForegroundColor("#f8fafc");
 
-  Logger.log("✅ Google Slides created successfully: " + deck.getUrl());
+  Logger.log("[OK] Google Slides created successfully: " + deck.getUrl());
 }}
 """
     gas_file = out_path / "create_google_slides.gs"
-    gas_file.write_text(gas_content, encoding="utf-8")
+    gas_file.write_text(sanitize_no_em_dash(gas_content), encoding="utf-8")
 
     # 5. Generate Google Slides Integration Guide & README.md
     slides_readme = f"""# Presentation Slides for {title}
@@ -706,49 +732,48 @@ function createWorkshopSlides() {{
 
 ---
 
-## 📊 1. Google Slides (구글 프레젠테이션) 사용 방법
+## 1. Google Slides (구글 프레젠테이션) Import Guide
 
-### 방법 A: PPTX 1초 가져오기 (가장 추천)
-1. **Google Slides ([slides.google.com](https://slides.google.com))** 접속
-2. **`새 프레젠테이션 시작`** 클릭
-3. 상단 메뉴에서 **`파일(File)` ➔ `슬라이드 가져오기(Import slides)`** 클릭
-4. **`업로드(Upload)`** 탭에서 **`output/slides/slides.pptx`** 파일을 드래그하여 업로드
-5. **`모든 슬라이드 선택(Select all slides)`** ➔ **`슬라이드 가져오기(Import slides)`** 클릭
-6. 16:9 와이드스크린 다크 테마의 완성된 구글 슬라이드가 즉시 생성됩니다!
+### Option A: Native PPTX Import (Recommended)
+1. Open **Google Slides ([slides.google.com](https://slides.google.com))**
+2. Click **Blank presentation (새 프레젠테이션 시작)**
+3. Select **File (파일) -> Import slides (슬라이드 가져오기)**
+4. In the **Upload (업로드)** tab, drag and drop **`output/slides/slides.pptx`**
+5. Click **Select all slides (모든 슬라이드 선택) -> Import slides (슬라이드 가져오기)**
+6. A 16:9 widescreen dark-theme presentation deck is ready immediately.
 
-### 방법 B: Google Apps Script 매크로로 자동 생성
-1. [script.google.com](https://script.google.com) 접속 후 **새 프로젝트** 생성
-2. `output/slides/create_google_slides.gs` 파일의 코드를 복사하여 붙여넣기
-3. 상단 메뉴의 **`실행(Run)`** 클릭
-4. 구글 드라이브 내에 새 구글 프레젠테이션이 자동 생성됩니다.
+### Option B: Google Apps Script Automation
+1. Visit [script.google.com](https://script.google.com) and create a **New project (새 프로젝트)**
+2. Copy and paste the contents of `output/slides/create_google_slides.gs`
+3. Click **Run (실행)** in the top toolbar
+4. A new Google Slides presentation will be created in your Google Drive automatically.
 
 ---
 
-## 🌐 2. 단독 웹 브라우저 프레젠테이션 (Zero-Setup)
+## 2. Standalone Web Presentation (Zero-Setup HTML)
 
-- 별도 도구 설치 없이 브라우저에서 바로 발표할 수 있습니다:
+Present directly in any web browser without installing external slide software:
 ```bash
 open output/slides/index.html
 ```
-- 단축키:
-  - `Space` / `→` : 다음 슬라이드
-  - `←` : 이전 슬라이드
-  - `F` : 전체화면 (Fullscreen)
-  - `Home` / `End` : 처음 / 마지막 슬라이드
+Keyboard shortcuts:
+- `Space` / `Right Arrow`: Next slide
+- `Left Arrow`: Previous slide
+- `F`: Toggle Fullscreen
+- `Home` / `End`: Jump to first / last slide
 
 ---
 
-## 📝 3. Marp Markdown & PDF 변환
+## 3. Marp Markdown & PDF Compilation
 
-- VS Code Marp 확장 프로그램을 통해 `slides.md`를 열어 발표 및 편집할 수 있습니다.
-- Marp CLI를 통한 PDF 컴파일:
+Open `slides.md` with the VS Code Marp extension or compile to PDF using Marp CLI:
 ```bash
 npx @marp-team/marp-cli@latest output/slides/slides.md --pdf -o output/slides/slides.pdf
 ```
 """
-    (out_path / "README.md").write_text(slides_readme, encoding="utf-8")
+    (out_path / "README.md").write_text(sanitize_no_em_dash(slides_readme), encoding="utf-8")
 
-    print(f"✨ Presentation Slides generated successfully at: {out_path}")
+    print(f"[OK] Presentation Slides generated successfully at: {out_path}")
     print(f"  - {marp_file.name} (Marp Markdown)")
     print(f"  - {html_file.name} (Interactive Web Presentation)")
     if has_pptx:
@@ -758,12 +783,13 @@ npx @marp-team/marp-cli@latest output/slides/slides.md --pdf -o output/slides/sl
 
     if export_pdf:
         if shutil.which("npx"):
-            print("📄 Compiling slides to PDF via Marp CLI...")
+            print("[INFO] Compiling slides to PDF via Marp CLI...")
             pdf_out = out_path / "slides.pdf"
             subprocess.run(["npx", "-y", "@marp-team/marp-cli@latest", str(marp_file), "--pdf", "-o", str(pdf_out)], check=False)
         else:
-            print("💡 npx not found. Open index.html in browser and press Print to PDF.")
+            print("[INFO] npx not found. Open index.html in browser and press Print to PDF.")
     return True
+
 
 def main():
     parser = argparse.ArgumentParser(description="Generate Workshop Presentation Slides (Google Slides, Marp & HTML)")
@@ -773,6 +799,7 @@ def main():
 
     args = parser.parse_args()
     generate_slides(args.target, args.output, args.export_pdf)
+
 
 if __name__ == "__main__":
     main()

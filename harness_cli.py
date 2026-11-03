@@ -377,10 +377,69 @@ def init_workshop(name: str, topic: str, target_dir: str = None, stack_str: str 
     os.chmod(project_dir / "workshop" / "01_starter" / "run.sh", 0o755)
     os.chmod(project_dir / "workshop" / "02_final" / "run.sh", 0o755)
 
-    # 3. Copy PDF Generator & pyproject.toml
+    # 3. Copy PDF Generator & Generate Workshop-Specific pyproject.toml / RUNBOOK.md
     pdf_templates = TEMPLATES_DIR / "pdf-templates"
     shutil.copy(pdf_templates / "generate_prep_pdf.py", project_dir / "scripts" / "generate_prep_pdf.py")
-    shutil.copy(HARNESS_ROOT / "pyproject.toml", project_dir / "pyproject.toml")
+
+    has_adk_stack = any(k in stack for k in ["adk", "agents-cli", "google-adk", "google-agents-cli"])
+    adk_dep_line = '    "google-adk>=2.0.0",\n' if has_adk_stack else ""
+    workshop_pyproject = f"""[project]
+name = "{name}"
+version = "0.1.0"
+description = "Hands-on Workshop: {topic}"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "google-genai>=2.30.1",
+    "pydantic>=2.0.0",
+    "requests>=2.31.0",
+{adk_dep_line}]
+
+[project.optional-dependencies]
+docs = [
+    "reportlab>=4.0.0",
+    "pymupdf>=1.23.0",
+    "pillow>=10.0.0",
+    "python-pptx>=1.0.2",
+]
+
+[tool.uv]
+package = false
+"""
+    (project_dir / "pyproject.toml").write_text(workshop_pyproject, encoding="utf-8")
+
+    runbook_md = f"""# Facilitator & TA Runbook: {name}
+
+- **Session Title**: {topic}
+- **Tech Stack**: `{stack_str}`
+- **Primary Cloud Model**: `{default_cloud_model}` | **Coordinator**: `gemini-4-argon` | **Local Model**: `{default_local_model}`
+- **Facilitator**: Workshop Lead Facilitator
+- **Teaching Assistants (TA)**: Roaming TA Team
+
+---
+
+## Session Timeline (60 Minutes)
+
+### 00m - 10m: Opening & Environment Verification
+- **Facilitator**: Walk through `gemma4-local-setup-guide.md`, architecture overview, and demo `./scripts/check_env.sh` execution.
+- **TA**: Provide 1:1 support for attendees with environment check errors; direct low-RAM or restricted laptops to `output/colab/workshop_starter.ipynb`.
+
+### 10m - 25m: Lab 01 - Environment Setup & Client Sanity Check
+- **Facilitator**: Explain `workshop/01_starter` code structure and demo `TODO: [Lab 01]` completion.
+- **TA**: Help attendees configure `GEMINI_API_KEY` in `.env` or start the local LLM server (`ollama serve` on port `11434`).
+
+### 25m - 45m: Lab 02 - Structured Outputs, Tool Calling & Agent Routing
+- **Facilitator**: Demo typed Output Schema definition (`prompt-pack/README.md`) and sub-agent/tool integration.
+- **TA**: Assist attendees with schema validation or port conflict errors.
+
+### 45m - 55m: Lab 03 - End-to-End Pipeline & Verification
+- **Facilitator**: Share and demo the `workshop/02_final` reference solution and run `python3 scripts/verify_workshop.py .`.
+- **TA**: Verify attendee completion checkpoints.
+
+### 55m - 60m: Q&A & Feedback Survey
+- **Facilitator**: Session retrospective, share PDF handouts (`output/pdf/`), and collect attendee feedback survey responses.
+"""
+    (project_dir / "RUNBOOK.md").write_text(runbook_md, encoding="utf-8")
 
     # 4. Create .env.sample, .gitignore, Intel Mac fallback guide & ELI5 cheat sheet
     with open(project_dir / ".env.sample", "w", encoding="utf-8") as f:
@@ -1320,6 +1379,9 @@ import androidx.compose.ui.Modifier
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // TODO [Lab 01]: Initialize Google GenAI Kotlin client with BuildConfig.GEMINI_API_KEY (gemini-3.8-flash)
+        // TODO [Lab 02]: Connect ChatViewModel StateFlow for reactive UDF and Structured Outputs
+        // TODO [Lab 03]: Integrate CameraX multimodal capture and AppFunctions on-device shortcut
         setContent {
             MaterialTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
@@ -2627,8 +2689,8 @@ export const rootAgent = new LlmAgent({{
 }});
 ''')
 
-        with open(labs_dir / "README.md", "w", encoding="utf-8") as f:
-            f.write(f"""# {topic} - Hands-on Lab Session Guide
+            with open(labs_dir / "README.md", "w", encoding="utf-8") as f:
+                f.write(f"""# {topic} - Hands-on Lab Session Guide
 
 This guide outlines the session schedule and step-by-step objectives for the **{topic}** workshop.
 Write your code in `workshop/01_starter`. If you get stuck, refer to the completed reference solution in `workshop/02_final`.
@@ -2651,8 +2713,8 @@ Write your code in `workshop/01_starter`. If you get stuck, refer to the complet
 2. **[Lab 02: Multi-Agent Hierarchy, Sub-Agent Delegation & Structured Outputs](./02_lab_structured_outputs.md)**
 3. **[Lab 03: Trajectory Evaluation (adk eval), ADLC Optimization & Deployment](./03_lab_end_to_end_pipeline.md)**
 """)
-        with open(labs_dir / "01_lab_environment_and_client.md", "w", encoding="utf-8") as f:
-            f.write(f"""# Lab 01: Environment Verification, ADK Scaffolding & Custom Tools
+            with open(labs_dir / "01_lab_environment_and_client.md", "w", encoding="utf-8") as f:
+                f.write(f"""# Lab 01: Environment Verification, ADK Scaffolding & Custom Tools
 
 ## Objective
 Verify your local environment using `./scripts/check_env.sh` and initialize your ADK agent using Google Agent Development Kit (`google-adk` / `google.golang.org/adk/v2` / `com.google.adk:google-adk` / `@google/adk`) with `{default_cloud_model}`.
@@ -2676,8 +2738,8 @@ Verify your local environment using `./scripts/check_env.sh` and initialize your
    python3 workshop/01_starter/main.py
    ```
 """)
-        with open(labs_dir / "02_lab_structured_outputs.md", "w", encoding="utf-8") as f:
-            f.write(f"""# Lab 02: Multi-Agent Hierarchy, Sub-Agent Delegation & Structured Outputs
+            with open(labs_dir / "02_lab_structured_outputs.md", "w", encoding="utf-8") as f:
+                f.write(f"""# Lab 02: Multi-Agent Hierarchy, Sub-Agent Delegation & Structured Outputs
 
 ## Objective
 Wire specialized sub-agents (`slo_specialist`, `report_specialist`) under a root coordinator (`root_agent` running `gemini-4-argon`) and enforce deterministic JSON schema outputs.
@@ -2691,8 +2753,8 @@ Wire specialized sub-agents (`slo_specialist`, `report_specialist`) under a root
    cd workshop/02_final && adk web
    ```
 """)
-        with open(labs_dir / "03_lab_end_to_end_pipeline.md", "w", encoding="utf-8") as f:
-            f.write(f"""# Lab 03: Trajectory Evaluation (adk eval), ADLC Optimization & Deployment
+            with open(labs_dir / "03_lab_end_to_end_pipeline.md", "w", encoding="utf-8") as f:
+                f.write(f"""# Lab 03: Trajectory Evaluation (adk eval), ADLC Optimization & Deployment
 
 ## Objective
 Evaluate multi-agent tool trajectories against `evalset.json` (`adk eval` / `agents-cli eval`), run `InMemoryRunner` tests, and prepare for Cloud Run / Vertex AI Agent Engine deployment.
@@ -2706,6 +2768,74 @@ Evaluate multi-agent tool trajectories against `evalset.json` (`adk eval` / `age
    ```bash
    adk eval workshop/02_final/sre_agent workshop/02_final/evalset.json
    ```
+3. Run the automated workshop integrity verifier:
+   ```bash
+   python3 scripts/verify_workshop.py .
+   ```
+""")
+        else:
+            with open(labs_dir / "README.md", "w", encoding="utf-8") as f:
+                f.write(f"""# {topic} - Hands-on Lab Session Guide
+
+This guide outlines the session schedule and step-by-step objectives for the **{topic}** workshop.
+Write your code in `workshop/01_starter/main.py`. If you get stuck, refer to the completed reference solution in `workshop/02_final/main.py`.
+
+---
+
+## Session Schedule (60 minutes total)
+
+- **00m - 10m**: Workshop overview & environment verification (`./scripts/check_env.sh`)
+- **10m - 25m**: **Lab 01** - Environment Verification & AI Client Sanity Check (`01_lab_environment_and_client.md`)
+- **25m - 45m**: **Lab 02** - Structured Outputs & JSON Schema Validation (`02_lab_structured_outputs.md`)
+- **45m - 55m**: **Lab 03** - End-to-End Pipeline & Automated Verification (`03_lab_end_to_end_pipeline.md`)
+- **55m - 60m**: Q&A and wrap-up
+
+---
+
+## Step-by-Step Labs
+
+1. **[Lab 01: Environment Verification & AI Client Sanity Check](./01_lab_environment_and_client.md)**
+2. **[Lab 02: Structured Outputs & JSON Schema Validation](./02_lab_structured_outputs.md)**
+3. **[Lab 03: End-to-End Pipeline & Automated Verification](./03_lab_end_to_end_pipeline.md)**
+""")
+            with open(labs_dir / "01_lab_environment_and_client.md", "w", encoding="utf-8") as f:
+                f.write(f"""# Lab 01: Environment Verification & AI Client Sanity Check
+
+## Objective
+Verify your local and cloud development environment using `./scripts/check_env.sh` and connect `workshop/01_starter/main.py` to Google GenAI (`{default_cloud_model}`) or Local Ollama (`{default_local_model}`).
+
+## Instructions
+1. Run `./scripts/check_env.sh` (or `.\\scripts\\check_env.ps1` on Windows) to verify Python, `uv`, and local port readiness.
+2. Open `workshop/01_starter/main.py` and inspect `TODO: [Lab 01 - Exercise]` inside `lab1_sanity_check()`.
+3. Configure `GEMINI_API_KEY` in `.env` or start your local Ollama runtime (`ollama serve` with `{default_local_model}`).
+4. Run the starter script to verify connectivity:
+   ```bash
+   python3 workshop/01_starter/main.py
+   ```
+""")
+            with open(labs_dir / "02_lab_structured_outputs.md", "w", encoding="utf-8") as f:
+                f.write(f"""# Lab 02: Structured Outputs & JSON Schema Validation
+
+## Objective
+Enforce deterministic, type-safe JSON responses matching the `WorkshopTaskResult` schema (`status`, `model_used`, `summary`, `action_items`).
+
+## Instructions
+1. Review `prompt-pack/README.md` for the system prompt and target JSON Schema definition.
+2. Open `workshop/01_starter/main.py` and complete `TODO: [Lab 02 - Exercise]` inside `lab2_structured_output()`.
+3. Verify that the output serializes cleanly to JSON without markdown code-fence artifacts.
+""")
+            with open(labs_dir / "03_lab_end_to_end_pipeline.md", "w", encoding="utf-8") as f:
+                f.write(f"""# Lab 03: End-to-End Pipeline & Automated Verification
+
+## Objective
+Run the complete reference pipeline in `workshop/02_final/main.py` with automatic local/cloud fallback and verify all workshop quality gates.
+
+## Instructions
+1. Execute the completed reference solution:
+   ```bash
+   python3 workshop/02_final/main.py
+   ```
+2. Compare your implementation in `workshop/01_starter/main.py` against `workshop/02_final/main.py`.
 3. Run the automated workshop integrity verifier:
    ```bash
    python3 scripts/verify_workshop.py .
@@ -2801,6 +2931,29 @@ def audit_compatibility(stack_str: str, target_dir: str = None):
             print(f"    🚨 Risk: {item['risk']}")
             print(f"    💡 Fallback Action: {item['fallback']}")
             print()
+
+    if target_dir and issues:
+        matrix_path = Path(target_dir).resolve() / "docs" / "00-architecture-compatibility-matrix.md"
+        if matrix_path.exists():
+            existing = matrix_path.read_text(encoding="utf-8", errors="ignore")
+            section_header = "## Stack-Specific Architecture & Risk Audit"
+            if section_header not in existing:
+                rows = "\n".join(
+                    f"| **{it['tool']}** | {it['target']} | {it['risk']} | {it['fallback']} |"
+                    for it in issues
+                )
+                extra_md = f"""
+
+---
+
+{section_header} (`{stack_str}`)
+
+| Tool / Component | Target Environment | Identified Risk | Mandatory Fallback Path |
+| :--- | :--- | :--- | :--- |
+{rows}
+"""
+                matrix_path.write_text(sanitize_no_em_dash(existing.rstrip() + extra_md + "\n"), encoding="utf-8")
+
     print("-" * 60)
     return issues
 
@@ -2821,16 +2974,20 @@ def audit_persona_loop(topic: str, target_dir: str = None):
         target = Path(target_dir).resolve()
         if target.exists():
             metrics["has_check_env"] = (target / "scripts" / "check_env.sh").exists()
-            starter_py = target / "workshop" / "01_starter" / "main.py"
-            starter_dart = target / "workshop" / "01_starter" / "lib" / "main.dart"
-            if starter_py.exists() and "TODO" in starter_py.read_text(encoding="utf-8", errors="ignore"):
-                metrics["has_starter_todos"] = True
-            elif starter_dart.exists() and "TODO" in starter_dart.read_text(encoding="utf-8", errors="ignore"):
-                metrics["has_starter_todos"] = True
+            starter_dir = target / "workshop" / "01_starter"
+            if starter_dir.exists():
+                for src_file in starter_dir.rglob("*"):
+                    if src_file.is_file() and src_file.suffix in {".py", ".dart", ".ts", ".go", ".java", ".kt"}:
+                        if "TODO" in src_file.read_text(encoding="utf-8", errors="ignore"):
+                            metrics["has_starter_todos"] = True
+                            break
 
-            final_py = target / "workshop" / "02_final" / "main.py"
-            if final_py.exists():
-                metrics["has_final_solution"] = True
+            final_dir = target / "workshop" / "02_final"
+            if final_dir.exists():
+                for src_file in final_dir.rglob("*"):
+                    if src_file.is_file() and src_file.suffix in {".py", ".dart", ".ts", ".go", ".java", ".kt"}:
+                        metrics["has_final_solution"] = True
+                        break
 
             if (target / "scripts" / "bundle_offline_assets.sh").exists() or (target / "scripts" / "export_colab.py").exists():
                 metrics["has_colab_or_offline"] = True
@@ -2852,7 +3009,7 @@ This document applies the **Loop Engineering** methodology to audit the workshop
 - **Readiness Status**: PASS
 - **Evaluation**:
   - Plain-language architectural overview and zero-setup Google Colab fallback (`output/colab/workshop_starter.ipynb`) allow participation without local terminal friction.
-  - Key AI concepts (Quantization, Structured Outputs, RAG, Agent Delegation) are paired with intuitive analogies.
+  - Key AI concepts (Quantization, Structured Outputs, RAG, Agent Delegation) are paired with intuitive analogies in `docs/eli5-concept-cheat-sheet.md`.
 
 ---
 
@@ -2910,7 +3067,7 @@ def test_workshop(target_dir: str) -> bool:
     print(f"🔍 Running Workshop Integrity Audit on '{target}'...")
     return _run_python_script([str(script), str(target)]) == 0
 
-def build_pdf(target_dir: str):
+def build_pdf(target_dir: str) -> bool:
     ensure_uv_dependencies()
     target = Path(target_dir).resolve()
     docs_dir = target / "docs"
@@ -2920,12 +3077,12 @@ def build_pdf(target_dir: str):
 
     if not script.exists():
         print(f"❌ Error: Script '{script}' not found.")
-        return
+        return False
 
     print(f"📄 Building PDF for {target.name}...")
-    _run_python_script([str(script), str(docs_dir), str(output_pdf), str(preview_dir)])
+    return _run_python_script([str(script), str(docs_dir), str(output_pdf), str(preview_dir)]) == 0
 
-def export_codelab(target_dir: str, output_dir: str = None, push: bool = False):
+def export_codelab(target_dir: str, output_dir: str = None, push: bool = False) -> bool:
     target = Path(target_dir).resolve()
     script = target / "scripts" / "export_open_codelabs.py"
     if not script.exists():
@@ -2938,9 +3095,9 @@ def export_codelab(target_dir: str, output_dir: str = None, push: bool = False):
     if push:
         cmd.append("--push")
 
-    _run_python_script(cmd)
+    return _run_python_script(cmd) == 0
 
-def export_colab(target_dir: str, output_dir: str = None, repo: str = None, test: bool = False):
+def export_colab(target_dir: str, output_dir: str = None, repo: str = None, test: bool = False) -> bool:
     target = Path(target_dir).resolve()
     script = target / "scripts" / "export_colab.py"
     if not script.exists():
@@ -2955,18 +3112,18 @@ def export_colab(target_dir: str, output_dir: str = None, repo: str = None, test
     if test:
         cmd.append("--test")
 
-    _run_python_script(cmd)
+    return _run_python_script(cmd) == 0
 
-def test_colab(target_dir: str):
+def test_colab(target_dir: str) -> bool:
     target = Path(target_dir).resolve()
     script = target / "scripts" / "export_colab.py"
     if not script.exists():
         script = HARNESS_ROOT / "scripts" / "export_colab.py"
 
     print(f"🧪 Testing Google Colab Notebooks via Colab CLI for '{target.name}'...")
-    _run_python_script([str(script), "--target", str(target), "--test"])
+    return _run_python_script([str(script), "--target", str(target), "--test"]) == 0
 
-def build_slides(target_dir: str, output_dir: str = None, export_pdf: bool = False):
+def build_slides(target_dir: str, output_dir: str = None, export_pdf: bool = False) -> bool:
     ensure_uv_dependencies()
     target = Path(target_dir).resolve()
     script = target / "scripts" / "build_slides.py"
@@ -2980,7 +3137,7 @@ def build_slides(target_dir: str, output_dir: str = None, export_pdf: bool = Fal
     if export_pdf:
         cmd.append("--export-pdf")
 
-    _run_python_script(cmd)
+    return _run_python_script(cmd) == 0
 
 def generate_all(name: str, topic: str, stack_str: str, target_dir: str = None, model_name: str = None):
     print("=" * 70)
@@ -3006,25 +3163,26 @@ def generate_all(name: str, topic: str, stack_str: str, target_dir: str = None, 
     print("\n[Step 4/9] Running Loop Engineering 4-Persona Review...")
     audit_persona_loop(topic, str(proj_dir))
 
-    # 5. Test Integrity & Smoke Code Execution
-    print("\n[Step 5/9] Testing Workshop Code & Link Integrity...")
-    test_workshop(str(proj_dir))
-
-    # 6. Build PDF Handout & Previews
-    print("\n[Step 6/9] Building Publication PDF Handouts & Previews...")
+    # 5. Build PDF Handout & Previews
+    print("\n[Step 5/9] Building Publication PDF Handouts & Previews...")
     build_pdf(str(proj_dir))
 
-    # 7. Export Open Codelabs Bundle & Manifest
-    print("\n[Step 7/9] Exporting Open Codelabs Interactive Bundle & Manifest...")
+    # 6. Export Open Codelabs Bundle & Manifest
+    print("\n[Step 6/9] Exporting Open Codelabs Interactive Bundle & Manifest...")
     export_codelab(str(proj_dir))
 
-    # 8. Export Google Colab Notebooks (.ipynb) & Badges
-    print("\n[Step 8/9] Exporting Google Colab Interactive Notebooks & Badges...")
+    # 7. Export Google Colab Notebooks (.ipynb) & Badges
+    print("\n[Step 7/9] Exporting Google Colab Interactive Notebooks & Badges...")
     export_colab(str(proj_dir))
 
-    # 9. Build Presentation Slide Deck (Marp & Web HTML)
-    print("\n[Step 9/9] Building Presentation Slide Decks (Marp & Web HTML)...")
+    # 8. Build Presentation Slide Deck (Marp, PPTX & Web HTML)
+    print("\n[Step 8/9] Building Presentation Slide Decks (Marp, PPTX & Web HTML)...")
     build_slides(str(proj_dir))
+
+    # 9. Final Integrity, Artifact, Link & Smoke Code Execution Gate
+    print("\n[Step 9/9] Running Final Workshop Code, Bundle & Link Integrity Verification...")
+    if not test_workshop(str(proj_dir)):
+        sys.exit(1)
 
     print("\n" + "=" * 70)
     print(f"🎉 SUCCESS! Complete Workshop Package '{name}' generated in ONE-CLICK via uv!")

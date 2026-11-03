@@ -43,5 +43,51 @@ if command -v git &> /dev/null; then
     echo -e "${GREEN}[OK] Git is installed:${NC} $(git --version)"
 fi
 
+# 5. Check Flutter & Dart (Optional for Mobile Labs)
+if command -v flutter &> /dev/null; then
+    echo -e "${GREEN}[OK] Flutter SDK:${NC} $(flutter --version | head -n 1)"
+    echo -e "     ${GREEN}-> Tip: Discover bundled AI skills via: dart run skills@ get${NC}"
+elif command -v dart &> /dev/null; then
+    echo -e "${GREEN}[OK] Dart SDK:${NC} $(dart --version)"
+    echo -e "     ${GREEN}-> Tip: Discover bundled AI skills via: dart run skills@ get${NC}"
+else
+    echo -e "${YELLOW}[INFO] Flutter/Dart not detected in PATH (Required only for Flutter/GenUI/A2UI labs).${NC}"
+fi
+
+# 6. Check Java & Android SDK (Optional for Android Labs)
+if command -v java &> /dev/null; then
+    java_ver=$(java -version 2>&1 | head -n 1)
+    echo -e "${GREEN}[OK] Java Runtime:${NC} $java_ver"
+else
+    echo -e "${YELLOW}[INFO] Java JDK not detected in PATH (Required for Android/Compose labs).${NC}"
+fi
+
+# 7. Check Google Android CLI & Skills (Optional for Android Labs)
+if command -v android &> /dev/null; then
+    echo -e "${GREEN}[OK] Google Android CLI:${NC} $(android --version 2>&1 | head -n 1)"
+else
+    echo -e "${YELLOW}[INFO] Google Android CLI not detected. (Install: curl -fsSL https://dl.google.com/android/cli/latest/darwin_arm64/install.sh | bash)${NC}"
+fi
+
+# 8. Check Google ADK CLI & Google Agents CLI (Optional for Agentic Labs)
+if command -v adk &> /dev/null; then
+    echo -e "${GREEN}[OK] Google ADK CLI (adk):${NC} $(adk --version 2>&1 | head -n 1)"
+else
+    echo -e "${YELLOW}[INFO] Google ADK CLI not detected in PATH (Install via: uv add google-adk).${NC}"
+fi
+
+if command -v agents-cli &> /dev/null; then
+    echo -e "${GREEN}[OK] Google Agents CLI (agents-cli):${NC} detected"
+else
+    echo -e "${YELLOW}[INFO] Google Agents CLI not detected in PATH (Run: uvx google-agents-cli setup).${NC}"
+fi
+
+# 9. Check Go (Optional for Go ADK Labs)
+if command -v go &> /dev/null; then
+    echo -e "${GREEN}[OK] Go Toolchain:${NC} $(go version)"
+fi
+
 echo ""
 echo "=== Check Completed! ==="
+
+

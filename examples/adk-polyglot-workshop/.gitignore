@@ -1,0 +1,16 @@
+# Environment & Secrets (Never commit API keys)
+.env
+*.env
+!.env.sample
+*service-account*.json
+local.properties
+config.json
+
+# Build & Runtime Artifacts
+.venv/
+__pycache__/
+node_modules/
+.dart_tool/
+.gradle/
+build/
+tmp/

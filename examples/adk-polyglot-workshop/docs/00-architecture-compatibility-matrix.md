@@ -27,3 +27,13 @@ When preparing workshop sessions, always verify the tool recommendations and fal
    ollama pull gemma4:e4b
    ```
 3. **Verify local API host**: Ollama automatically binds to `http://localhost:11434` on startup.
+
+---
+
+## Stack-Specific Architecture & Risk Audit (`adk,polyglot,agents-cli`)
+
+| Tool / Component | Target Environment | Identified Risk | Mandatory Fallback Path |
+| :--- | :--- | :--- | :--- |
+| **Google Agent Development Kit (ADK & adk web)** | Port 8000 Conflict & Multi-Agent Delegation Loops | Local port 8000 collisions prevent 'adk web' / 'adk api_server' startup; missing 'root_agent' symbol in agent.py breaks discovery. | Ensure top-level orchestrator is named 'root_agent' in agent.py, use 'adk web --port 8080' on port conflict, and assign gemini-3.8-flash to sub_agents. |
+| **Google Agents CLI (google-agents-cli)** | Python < 3.11 / Missing uvx or GCP Application Default Credentials | 'uvx google-agents-cli setup' requires Python 3.11+ and Astral uv; 'agents-cli deploy' fails without active GCP ADC credentials. | Install uv first, run 'uvx google-agents-cli setup' (or 'npx skills add google/agents-cli'), and run 'gcloud auth application-default login' before Lab 03. |
+

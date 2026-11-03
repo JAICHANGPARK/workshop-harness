@@ -21,17 +21,21 @@ echo "--------------------------------------------------"
 if [ "$OS_TYPE" = "Darwin" ]; then
     if [ "$ARCH_TYPE" = "arm64" ]; then
         echo -e "${GREEN}[RECOMMENDED] Apple Silicon Mac (M1/M2/M3/M4)${NC}"
-        echo "  - Recommended Tool: LM Studio (GUI) or Ollama"
-        echo "  - Recommended Model: gemma4:e4b (16GB RAM) / gemma4:e2b (8GB RAM)"
+        echo "  - LLM Runtime: LM Studio (GUI) or Ollama"
+        echo "  - Android Labs: Use ARM64 AVD system image for fast hardware virtualization"
+        echo "  - Flutter/GenUI Labs: Supports iOS Simulator, macOS Desktop, and Flutter Web"
     elif [ "$ARCH_TYPE" = "x86_64" ]; then
         echo -e "${YELLOW}[ATTENTION] Intel Mac detected${NC}"
         echo "  - ⚠️ WARNING: LM Studio has known performance & stability issues on Intel Mac."
         echo -e "  - ${GREEN}👉 MUST USE: Ollama CLI (ollama serve)${NC} instead of LM Studio."
-        echo "  - Recommended Model: gemma4:e4b or gemma4:e2b"
+        echo "  - Android Labs: Use x86_64 AVD image or connect physical device via USB"
+        echo "  - Flutter/GenUI Labs: Use Flutter Web (flutter run -d chrome) for fastest execution"
     fi
 elif [ "$OS_TYPE" = "Linux" ]; then
     echo -e "${GREEN}[RECOMMENDED] Linux Workstation ($ARCH_TYPE)${NC}"
-    echo "  - Recommended Tool: Ollama CLI"
-    echo "  - Install via: curl -fsSL https://ollama.com/install.sh | sh"
+    echo "  - LLM Runtime: Ollama CLI (curl -fsSL https://ollama.com/install.sh | sh)"
+    echo "  - Android Labs: Ensure KVM permissions (sudo usermod -aG kvm \$USER)"
+    echo "  - Flutter/GenUI Labs: Use Flutter Web or Linux Desktop target"
 fi
 echo "--------------------------------------------------"
+

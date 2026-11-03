@@ -4,42 +4,41 @@
 
 ---
 
-## 📊 1. Google Slides (구글 프레젠테이션) 사용 방법
+## 1. Google Slides (구글 프레젠테이션) Import Guide
 
-### 방법 A: PPTX 1초 가져오기 (가장 추천)
-1. **Google Slides ([slides.google.com](https://slides.google.com))** 접속
-2. **`새 프레젠테이션 시작`** 클릭
-3. 상단 메뉴에서 **`파일(File)` ➔ `슬라이드 가져오기(Import slides)`** 클릭
-4. **`업로드(Upload)`** 탭에서 **`output/slides/slides.pptx`** 파일을 드래그하여 업로드
-5. **`모든 슬라이드 선택(Select all slides)`** ➔ **`슬라이드 가져오기(Import slides)`** 클릭
-6. 16:9 와이드스크린 다크 테마의 완성된 구글 슬라이드가 즉시 생성됩니다!
+### Option A: Native PPTX Import (Recommended)
+1. Open **Google Slides ([slides.google.com](https://slides.google.com))**
+2. Click **Blank presentation (새 프레젠테이션 시작)**
+3. Select **File (파일) -> Import slides (슬라이드 가져오기)**
+4. In the **Upload (업로드)** tab, drag and drop **`output/slides/slides.pptx`**
+5. Click **Select all slides (모든 슬라이드 선택) -> Import slides (슬라이드 가져오기)**
+6. A 16:9 widescreen dark-theme presentation deck is ready immediately.
 
-### 방법 B: Google Apps Script 매크로로 자동 생성
-1. [script.google.com](https://script.google.com) 접속 후 **새 프로젝트** 생성
-2. `output/slides/create_google_slides.gs` 파일의 코드를 복사하여 붙여넣기
-3. 상단 메뉴의 **`실행(Run)`** 클릭
-4. 구글 드라이브 내에 새 구글 프레젠테이션이 자동 생성됩니다.
+### Option B: Google Apps Script Automation
+1. Visit [script.google.com](https://script.google.com) and create a **New project (새 프로젝트)**
+2. Copy and paste the contents of `output/slides/create_google_slides.gs`
+3. Click **Run (실행)** in the top toolbar
+4. A new Google Slides presentation will be created in your Google Drive automatically.
 
 ---
 
-## 🌐 2. 단독 웹 브라우저 프레젠테이션 (Zero-Setup)
+## 2. Standalone Web Presentation (Zero-Setup HTML)
 
-- 별도 도구 설치 없이 브라우저에서 바로 발표할 수 있습니다:
+Present directly in any web browser without installing external slide software:
 ```bash
 open output/slides/index.html
 ```
-- 단축키:
-  - `Space` / `→` : 다음 슬라이드
-  - `←` : 이전 슬라이드
-  - `F` : 전체화면 (Fullscreen)
-  - `Home` / `End` : 처음 / 마지막 슬라이드
+Keyboard shortcuts:
+- `Space` / `Right Arrow`: Next slide
+- `Left Arrow`: Previous slide
+- `F`: Toggle Fullscreen
+- `Home` / `End`: Jump to first / last slide
 
 ---
 
-## 📝 3. Marp Markdown & PDF 변환
+## 3. Marp Markdown & PDF Compilation
 
-- VS Code Marp 확장 프로그램을 통해 `slides.md`를 열어 발표 및 편집할 수 있습니다.
-- Marp CLI를 통한 PDF 컴파일:
+Open `slides.md` with the VS Code Marp extension or compile to PDF using Marp CLI:
 ```bash
 npx @marp-team/marp-cli@latest output/slides/slides.md --pdf -o output/slides/slides.pdf
 ```

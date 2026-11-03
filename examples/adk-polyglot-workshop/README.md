@@ -20,6 +20,8 @@ This repository contains pre-event preparation documents and hands-on lab code f
 
 ```text
 .
+├── AGENTS.md                     # AI Agent & Typography rules (No Em Dash rule)
+├── CLAUDE.md                     # Claude Code instructions
 ├── RUNBOOK.md                    # Facilitator & TA execution runbook
 ├── gemma4-local-setup-guide.md   # Unified preparation guide
 ├── pyproject.toml                # Astral uv dependency file

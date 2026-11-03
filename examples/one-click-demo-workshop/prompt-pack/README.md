@@ -1,10 +1,10 @@
-# 📦 핸즈온 프롬프트 팩 (Prompt Pack)
+# Hands-on Prompt Pack
 
-이 문서는 실습 진행 중 코드 및 LLM 호출 부분에 직접 복사-붙여넣기(`Copy-Paste`)하여 활용할 수 있는 프롬프트 모음입니다.
+This document contains a collection of copy-paste ready prompts for use during the workshop labs, covering system prompts, structured output schemas, and LLM invocation patterns.
 
 ---
 
-## 1. System Prompt (역할 및 제약 사항 정의)
+## 1. System Prompt (Role & Constraint Definition)
 
 ```text
 You are an expert AI Assistant participating in the Build with AI Workshop.

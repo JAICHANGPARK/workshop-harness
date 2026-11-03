@@ -57,4 +57,4 @@ When integrating local LLMs into Python, Node.js, or Go applications, verify the
 
 - **Ollama Documentation**: [https://ollama.com](https://ollama.com)
 - **LM Studio Developer Portal**: [https://lmstudio.ai](https://lmstudio.ai)
-- **Build with AI Seoul Reference**: [https://github.com/JAICHANGPARK/2026-bwai-seoul](https://github.com/JAICHANGPARK/2026-bwai-golang-seoul)
+- **Build with AI Seoul Reference**: [https://github.com/JAICHANGPARK/2026-bwai-seoul](https://github.com/JAICHANGPARK/2026-bwai-seoul)

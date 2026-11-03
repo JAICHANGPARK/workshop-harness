@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [v2026.11.03] - 2026-11-03
+
+### Fixed & Improved
+
+- **Workshop Scaffolding & Curriculum Generator (`harness_cli.py`)**:
+  - Generated a dedicated, lightweight workshop `pyproject.toml` (`[tool.uv] package = false`, `google-genai>=2.30.1`, `pydantic>=2.0.0`, `requests>=2.31.0`, plus `google-adk>=2.0.0` for ADK stacks) instead of copying `workshop-harness`'s own packaging manifest into scaffolded projects.
+  - Separated ADK-specific vs. standard Python/Ollama 3-stage lab guides (`workshop/03_labs/01_lab_*.md`, `02_lab_*.md`, `03_lab_*.md`) so non-ADK Python workshops match `workshop/01_starter/main.py` and `workshop/02_final/main.py`.
+  - Customized `RUNBOOK.md` with workshop-specific metadata (`name`, `topic`, `stack`, and 2026 cloud/local model tags) during `init` and `generate-all`.
+  - Updated `audit_compatibility` to dynamically append a `Stack-Specific Architecture & Risk Audit` table to `<target>/docs/00-architecture-compatibility-matrix.md` when `--target` is provided.
+  - Enhanced `audit_persona_loop` to detect `TODO` markers and reference solutions across all supported source extensions (`.py`, `.dart`, `.ts`, `.go`, `.java`, `.kt`) and added explicit `TODO` lab markers to Android starter `MainActivity.kt`.
+  - Moved the final `test_workshop` verification gate to Step 9/9 of `generate-all` so exported Open Codelabs, Colab notebooks, and Slide Decks are audited as part of the one-click pipeline.
+- **Presentation Slide & Bundle Exporters (`scripts/build_slides.py`, `scripts/export_colab.py`, `scripts/export_open_codelabs.py`)**:
+  - Fixed `index.html` lab slide title extraction (`^#{1,2}\s+`) and stripped fenced code blocks prior to summary extraction so code lines no longer leak into slide body paragraphs.
+  - Converted relative repository links into inline code references across exported Open Codelabs (`guide.md`, `steps/step_*.md`) and Colab notebooks (`.ipynb`).
+  - Removed default emojis across generated slide decks (`slides.md`, `index.html`, `README.md`), Colab notebooks, and starter runner scripts (`run_starter.sh`, `run_starter.ps1`).
+- **Comprehensive Workshop Verifier (`templates/script-templates/verify_workshop.py`)**:
+  - Added automated verification for ADK `agent.py` (`root_agent` symbol check), `evalset.json` schema validity, Colab `.ipynb` JSON & Python code cell syntax, Open Codelabs bundle completeness, and presentation slide deck outputs.
+  - Added API Key leak scanning (`AIzaSy...` pattern detection excluding sample placeholders).
+  - Fixed path filtering (`rel_md.parts`) so workshops located inside `/tmp` or `tmp/` directories are audited without skipping markdown files.
+
+---
+
 ## [v2026.10.31] - 2026-10-31
 
 ### Added

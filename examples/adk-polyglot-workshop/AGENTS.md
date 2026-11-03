@@ -1,7 +1,7 @@
 # Agent Instructions, Developer Terminology & Typography Rules for adk-polyglot-workshop
 
-> Workshop Example: **adk-polyglot-workshop**
-> Primary Cloud Model: `gemini-3.8-flash` | Flagship Reasoning: `gemini-4-argon` | Local Model: `gemma4:e4b`
+> Topic: **Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript)**
+> Tech Stack: `adk,polyglot,agents-cli` | Primary Cloud Model: `gemini-3.8-flash` | Local Model: `gemma4:e4b`
 
 ## Mandatory Rules for AI Coding Agents
 

@@ -181,7 +181,7 @@
           <h1 class="slide-title">adk-polyglot-workshop</h1>
           <h3 class="slide-subtitle">Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript)</h3>
           <div class="slide-body">
-            <p style='margin-top:20px; font-size:1.2rem; color:#94a3b8;'>Welcome to the session! Press <strong>Right Arrow</strong> or <strong>Space</strong> to advance.</p>
+            <p style='margin-top:20px; font-size:1.2rem; color:#94a3b8;'>Welcome to the session. Press <strong>Right Arrow</strong> or <strong>Space</strong> to advance.</p>
           </div>
         </div>
         
@@ -190,10 +190,10 @@
             <span class="slide-badge">Schedule</span>
             <span class="slide-number">2 / 8</span>
           </div>
-          <h1 class="slide-title">📋 Session Agenda & Timeline</h1>
+          <h1 class="slide-title">Session Agenda & Timeline</h1>
           <h3 class="slide-subtitle">Minute-by-minute session flow</h3>
           <div class="slide-body">
-            <ul><li><strong>00:00 - 00:10</strong> (10m) ➔ Welcome & Architecture Overview</li><li><strong>00:10 - 00:20</strong> (10m) ➔ Environment & Hardware Check</li><li><strong>00:20 - 00:45</strong> (25m) ➔ <strong>Lab 01 & 02 Hands-on</strong></li><li><strong>00:45 - 01:10</strong> (25m) ➔ <strong>Lab 03 Pipeline & Challenge</strong></li><li><strong>01:10 - 01:20</strong> (10m) ➔ Wrap-up, Q&A & Survey</li></ul>
+            <ul><li><strong>00:00 - 00:10</strong> (10m) -&gt; Welcome &amp; Architecture Overview</li><li><strong>00:10 - 00:20</strong> (10m) -&gt; Environment &amp; Hardware Check</li><li><strong>00:20 - 00:45</strong> (25m) -&gt; <strong>Lab 01 &amp; 02 Hands-on</strong></li><li><strong>00:45 - 01:10</strong> (25m) -&gt; <strong>Lab 03 Pipeline &amp; Challenge</strong></li><li><strong>01:10 - 01:20</strong> (10m) -&gt; Wrap-up, Q&amp;A &amp; Survey</li></ul>
           </div>
         </div>
         
@@ -202,7 +202,7 @@
             <span class="slide-badge">Setup</span>
             <span class="slide-number">3 / 8</span>
           </div>
-          <h1 class="slide-title">⚡ Prerequisites & Environment Check</h1>
+          <h1 class="slide-title">Prerequisites & Environment Check</h1>
           <h3 class="slide-subtitle">Ensure zero-setup local & cloud readiness</h3>
           <div class="slide-body">
             <ul><li>Run verification script: <code>./scripts/check_env.sh</code></li><li>Google Colab Cloud GPU Fallback: <code>output/colab/workshop_starter.ipynb</code></li><li>Set credentials: <code>export GEMINI_API_KEY=...</code></li></ul>
@@ -214,13 +214,10 @@
             <span class="slide-badge">Lab 01</span>
             <span class="slide-number">4 / 8</span>
           </div>
-          <h1 class="slide-title">🚀 Lab 01</h1>
+          <h1 class="slide-title">Lab 01: Environment Verification, ADK Scaffolding &amp; Custom Tools</h1>
           <h3 class="slide-subtitle">Hands-on Lab Step 1</h3>
           <div class="slide-body">
-            <p># Lab 01: Environment Verification, ADK Scaffolding & Custom Tools
-
-
-Verify your local environment using `./scripts/check_env.sh` and initialize your ADK agent using Google Agent Development Kit (`google-adk` / `google.golang.org/adk/v2` / `com.google.adk:google-adk` / `@google/adk`) with `gemini-3....</p><pre><code># Test command:
+            <ul><li><strong>Objective</strong></li><li>Verify your local environment using <code>./scripts/check_env.sh</code> and initialize your ADK agent using Google Agent Development Kit (<code>google-adk</code> / <code>google.golang.org/adk/v2</code> / <code>com.google.adk:google-adk</code> / <code>@google/adk</code>) with <code>gemini-3.8-flash</code>.</li><li><strong>Official Multi-Language ADK Entry Points</strong></li><li><strong>Python (<code>google-adk</code>)</strong>: <code>workshop/01_starter/sre_agent/agent.py</code> exposing <code>root_agent = LlmAgent(...)</code></li></ul><pre><code># Test command:
 python3 workshop/01_starter/main.py</code></pre>
           </div>
         </div>
@@ -230,16 +227,10 @@ python3 workshop/01_starter/main.py</code></pre>
             <span class="slide-badge">Lab 02</span>
             <span class="slide-number">5 / 8</span>
           </div>
-          <h1 class="slide-title">🚀 Lab 02</h1>
+          <h1 class="slide-title">Lab 02: Multi-Agent Hierarchy, Sub-Agent Delegation &amp; Structured Outputs</h1>
           <h3 class="slide-subtitle">Hands-on Lab Step 2</h3>
           <div class="slide-body">
-            <p># Lab 02: Multi-Agent Hierarchy, Sub-Agent Delegation & Structured Outputs
-
-
-Wire specialized sub-agents (`slo_specialist`, `report_specialist`) under a root coordinator (`root_agent` running `gemini-4-argon`) and enforce deterministic JSON schema outputs.
-
-
-1. Review `prompt-pack/README.md` for the...</p><pre><code># Test command:
+            <ul><li><strong>Objective</strong></li><li>Wire specialized sub-agents (<code>slo_specialist</code>, <code>report_specialist</code>) under a root coordinator (<code>root_agent</code> running <code>gemini-4-argon</code>) and enforce deterministic JSON schema outputs.</li><li><strong>Instructions</strong></li><li>Review <code>prompt-pack/README.md</code> for the target JSON Schema.</li></ul><pre><code># Test command:
 python3 workshop/01_starter/main.py</code></pre>
           </div>
         </div>
@@ -249,17 +240,10 @@ python3 workshop/01_starter/main.py</code></pre>
             <span class="slide-badge">Lab 03</span>
             <span class="slide-number">6 / 8</span>
           </div>
-          <h1 class="slide-title">🚀 Lab 03</h1>
+          <h1 class="slide-title">Lab 03: Trajectory Evaluation (adk eval), ADLC Optimization &amp; Deployment</h1>
           <h3 class="slide-subtitle">Hands-on Lab Step 3</h3>
           <div class="slide-body">
-            <p># Lab 03: Trajectory Evaluation (adk eval), ADLC Optimization & Deployment
-
-
-Evaluate multi-agent tool trajectories against `evalset.json` (`adk eval` / `agents-cli eval`), run `InMemoryRunner` tests, and prepare for Cloud Run / Vertex AI Agent Engine deployment.
-
-
-1. Run the reference solution:
-   ...</p><pre><code># Test command:
+            <ul><li><strong>Objective</strong></li><li>Evaluate multi-agent tool trajectories against <code>evalset.json</code> (<code>adk eval</code> / <code>agents-cli eval</code>), run <code>InMemoryRunner</code> tests, and prepare for Cloud Run / Vertex AI Agent Engine deployment.</li><li><strong>Instructions</strong></li><li>Run the reference solution:</li></ul><pre><code># Test command:
 python3 workshop/01_starter/main.py</code></pre>
           </div>
         </div>
@@ -269,10 +253,10 @@ python3 workshop/01_starter/main.py</code></pre>
             <span class="slide-badge">Troubleshooting</span>
             <span class="slide-number">7 / 8</span>
           </div>
-          <h1 class="slide-title">🚨 Live Troubleshooting & Hotfixes</h1>
+          <h1 class="slide-title">Live Troubleshooting & Hotfixes</h1>
           <h3 class="slide-subtitle">Quick resolution for common errors</h3>
           <div class="slide-body">
-            <table style='width:100%; border-collapse:collapse; margin-top:15px;'><tr><th style='text-align:left; border-bottom:1px solid #334155; padding:8px;'>Issue</th><th style='text-align:left; border-bottom:1px solid #334155; padding:8px;'>Quick Hotfix</th></tr><tr><td style='padding:8px;'>Port 11434 Busy</td><td style='padding:8px;'><code>pkill ollama && ollama serve &</code></td></tr><tr><td style='padding:8px;'>Low RAM / Crash</td><td style='padding:8px;'>Switch to Google Colab Notebook</td></tr><tr><td style='padding:8px;'>API Key Missing</td><td style='padding:8px;'><code>export GEMINI_API_KEY=...</code></td></tr></table>
+            <table style='width:100%; border-collapse:collapse; margin-top:15px;'><tr><th style='text-align:left; border-bottom:1px solid #334155; padding:8px;'>Issue</th><th style='text-align:left; border-bottom:1px solid #334155; padding:8px;'>Quick Hotfix</th></tr><tr><td style='padding:8px;'>Port 11434 Busy</td><td style='padding:8px;'><code>pkill ollama &amp;&amp; ollama serve &amp;</code></td></tr><tr><td style='padding:8px;'>Low RAM / Crash</td><td style='padding:8px;'>Switch to Google Colab Notebook</td></tr><tr><td style='padding:8px;'>API Key Missing</td><td style='padding:8px;'><code>export GEMINI_API_KEY=...</code></td></tr></table>
           </div>
         </div>
         
@@ -281,10 +265,10 @@ python3 workshop/01_starter/main.py</code></pre>
             <span class="slide-badge">Complete</span>
             <span class="slide-number">8 / 8</span>
           </div>
-          <h1 class="slide-title">🎉 Congratulations & Wrap-up!</h1>
-          <h3 class="slide-subtitle">You've completed all workshop milestones</h3>
+          <h1 class="slide-title">Congratulations & Wrap-up</h1>
+          <h3 class="slide-subtitle">You have completed all workshop milestones</h3>
           <div class="slide-body">
-            <p style='font-size:1.2rem; line-height:1.8;'>Thank you for participating! Check out the generated PDF handout and Colab interactive notebooks in your repo.</p>
+            <p style='font-size:1.2rem; line-height:1.8;'>Thank you for participating. Check out the generated PDF handout and Colab interactive notebooks in your repository.</p>
           </div>
         </div>
         
@@ -300,9 +284,9 @@ python3 workshop/01_starter/main.py</code></pre>
     </div>
 
     <div class="controls-right">
-      <button class="btn-ctrl" onclick="prevSlide()">◀ Prev (Left)</button>
-      <button class="btn-ctrl" onclick="nextSlide()">Next (Right) ▶</button>
-      <button class="btn-ctrl" onclick="toggleFullScreen()">⛶ Fullscreen (F)</button>
+      <button class="btn-ctrl" onclick="prevSlide()">Prev (Left)</button>
+      <button class="btn-ctrl" onclick="nextSlide()">Next (Right)</button>
+      <button class="btn-ctrl" onclick="toggleFullScreen()">Fullscreen (F)</button>
     </div>
   </div>
 

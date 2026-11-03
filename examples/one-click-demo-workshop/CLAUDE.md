@@ -1,7 +1,7 @@
 # Agent Instructions, Developer Terminology & Typography Rules for one-click-demo-workshop
 
-> Workshop Example: **one-click-demo-workshop**
-> Primary Cloud Model: `gemini-3.8-flash` | Flagship Reasoning: `gemini-4-argon` | Local Model: `gemma4:e4b`
+> Topic: **Flutter and Gemma 4 AI Agent**
+> Tech Stack: `python,ollama` | Primary Cloud Model: `gemini-3.8-flash` | Local Model: `gemma4:e4b`
 
 ## Mandatory Rules for AI Coding Agents
 

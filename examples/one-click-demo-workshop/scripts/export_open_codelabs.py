@@ -20,10 +20,17 @@ def sanitize_no_em_dash(text: str) -> str:
     return text.replace("\u2014", "-")
 
 
+def sanitize_codelab_markdown(text: str) -> str:
+    """Sanitize em-dashes and convert relative local links into inline code references so exported steps have zero broken links."""
+    text = sanitize_no_em_dash(text)
+    text = re.sub(r"\[([^\]]+)\]\((?!https?://|mailto:|#)([^)]+)\)", r"**\1** (`\2`)", text)
+    return text
+
+
 def export_to_open_codelabs(target_dir: str, output_dir: str = None, push: bool = False):
     target = Path(target_dir).resolve()
     if not target.exists():
-        print(f"❌ Error: Workshop directory '{target}' does not exist.")
+        print(f"[ERROR] Workshop directory '{target}' does not exist.")
         return False
 
     out_path = Path(output_dir).resolve() if output_dir else target / "output" / "open-codelabs"
@@ -60,9 +67,9 @@ def export_to_open_codelabs(target_dir: str, output_dir: str = None, push: bool 
             guide_content += env_doc.read_text(encoding="utf-8")
 
     if not guide_content:
-        guide_content = f"# Preparation Guide for {title}\n\nWelcome to {title}! Please follow facilitator instructions."
+        guide_content = f"# Preparation Guide for {title}\n\nWelcome to {title}. Please follow facilitator instructions."
 
-    (out_path / "guide.md").write_text(sanitize_no_em_dash(guide_content), encoding="utf-8")
+    (out_path / "guide.md").write_text(sanitize_codelab_markdown(guide_content), encoding="utf-8")
 
     # Build steps from workshop/03_labs/01_lab_*.md or workshop/03_labs/README.md
     labs_dir = target / "workshop" / "03_labs"
@@ -72,14 +79,14 @@ def export_to_open_codelabs(target_dir: str, output_dir: str = None, push: bool 
     lab_step_files = sorted(labs_dir.glob("[0-9][0-9]_lab_*.md")) if labs_dir.exists() else []
     if lab_step_files:
         for step_idx, lf in enumerate(lab_step_files, 1):
-            sec = sanitize_no_em_dash(lf.read_text(encoding="utf-8").strip())
+            sec = sanitize_codelab_markdown(lf.read_text(encoding="utf-8").strip())
             header_match = re.match(r"^#\s+(.+)$", sec, re.MULTILINE)
             step_title = header_match.group(1).strip() if header_match else lf.stem
             filename = f"step_{step_idx:02d}.md"
             (steps_path / filename).write_text(sec, encoding="utf-8")
             steps_meta.append({"title": step_title, "file": f"steps/{filename}"})
     elif labs_file.exists():
-        labs_content = sanitize_no_em_dash(labs_file.read_text(encoding="utf-8"))
+        labs_content = sanitize_codelab_markdown(labs_file.read_text(encoding="utf-8"))
         # Split by level 2 headings "## Lab ..." or "## Step ..."
         sections = re.split(r"(?=\n##\s+)", "\n" + labs_content)
         step_idx = 1
@@ -99,7 +106,7 @@ def export_to_open_codelabs(target_dir: str, output_dir: str = None, push: bool 
         # Default placeholder step if labs file not parsed
         step_filename = "step_01.md"
         (steps_path / step_filename).write_text(
-            f"# Lab 01: Getting Started\n\nOpen `workshop/01_starter` and inspect main code.",
+            "# Lab 01: Getting Started\n\nOpen `workshop/01_starter` and inspect main code.",
             encoding="utf-8"
         )
         steps_meta.append({"title": "Lab 01: Getting Started", "file": f"steps/{step_filename}"})
@@ -131,29 +138,30 @@ def export_to_open_codelabs(target_dir: str, output_dir: str = None, push: bool 
 
     manifest_content = "\n".join(manifest_lines) + "\n"
     manifest_path = out_path / "codelab.yaml"
-    manifest_path.write_text(manifest_content, encoding="utf-8")
+    manifest_path.write_text(sanitize_no_em_dash(manifest_content), encoding="utf-8")
 
-    print(f"✅ Exported Open Codelabs Bundle to: {out_path}")
-    print(f"   📄 Manifest: {manifest_path}")
-    print(f"   📑 Guide: {out_path / 'guide.md'}")
-    print(f"   🚀 Steps: {len(steps_meta)} step files created in {steps_path}")
+    print(f"[OK] Exported Open Codelabs Bundle to: {out_path}")
+    print(f"   Manifest: {manifest_path}")
+    print(f"   Guide: {out_path / 'guide.md'}")
+    print(f"   Steps: {len(steps_meta)} step files created in {steps_path}")
 
     if push:
         oc_bin = shutil.which("oc")
         if not oc_bin:
-            print("⚠️ Warning: `oc` CLI tool not found in PATH. Skipping push.")
-            print("💡 Install `oc` CLI via `cargo install --path backend --bin oc` inside open-codelabs repo.")
+            print("[WARN] `oc` CLI tool not found in PATH. Skipping push.")
+            print("Install `oc` CLI via `cargo install --path backend --bin oc` inside open-codelabs repo.")
             return True
 
-        print(f"🚀 Pushing manifest bundle to Open Codelabs via `oc codelab push`...")
+        print("[INFO] Pushing manifest bundle to Open Codelabs via `oc codelab push`...")
         cmd = [oc_bin, "codelab", "push", "--manifest", str(manifest_path)]
         res = subprocess.run(cmd, check=False)
         if res.returncode == 0:
-            print("🎉 Open Codelabs push completed successfully!")
+            print("[OK] Open Codelabs push completed successfully.")
         else:
-            print(f"❌ `oc codelab push` failed with exit code {res.returncode}")
+            print(f"[ERROR] `oc codelab push` failed with exit code {res.returncode}")
 
     return True
+
 
 def main():
     parser = argparse.ArgumentParser(description="Export Workshop Harness project to Open Codelabs bundle")
@@ -163,6 +171,7 @@ def main():
 
     args = parser.parse_args()
     export_to_open_codelabs(args.target, args.output, args.push)
+
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,22 @@
+[project]
+name = "one-click-demo-workshop"
+version = "0.1.0"
+description = "Hands-on Workshop: Flutter and Gemma 4 AI Agent"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "google-genai>=2.30.1",
+    "pydantic>=2.0.0",
+    "requests>=2.31.0",
+]
+
+[project.optional-dependencies]
+docs = [
+    "reportlab>=4.0.0",
+    "pymupdf>=1.23.0",
+    "pillow>=10.0.0",
+    "python-pptx>=1.0.2",
+]
+
+[tool.uv]
+package = false

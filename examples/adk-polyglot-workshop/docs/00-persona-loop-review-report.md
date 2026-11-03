@@ -1,7 +1,7 @@
 # [Loop Engineering] 4-Persona Attendee Review & Audit Report
 
 > Workshop Topic: **Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript)**
-> Verified On: 2026-10-30
+> Verified On: 2026-11-03
 
 This document applies the **Loop Engineering** methodology to audit the workshop curriculum, starter/final code, and environment setup across four distinct attendee personas.
 
@@ -11,7 +11,7 @@ This document applies the **Loop Engineering** methodology to audit the workshop
 - **Readiness Status**: PASS
 - **Evaluation**:
   - Plain-language architectural overview and zero-setup Google Colab fallback (`output/colab/workshop_starter.ipynb`) allow participation without local terminal friction.
-  - Key AI concepts (Quantization, Structured Outputs, RAG, Agent Delegation) are paired with intuitive analogies.
+  - Key AI concepts (Quantization, Structured Outputs, RAG, Agent Delegation) are paired with intuitive analogies in `docs/eli5-concept-cheat-sheet.md`.
 
 ---
 

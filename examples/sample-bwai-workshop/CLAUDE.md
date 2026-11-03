@@ -1,7 +1,7 @@
 # Agent Instructions, Developer Terminology & Typography Rules for sample-bwai-workshop
 
-> Workshop Example: **sample-bwai-workshop**
-> Primary Cloud Model: `gemini-3.8-flash` | Flagship Reasoning: `gemini-4-argon` | Local Model: `gemma4:e4b`
+> Topic: **Testing Workshop Harness**
+> Tech Stack: `python,ollama` | Primary Cloud Model: `gemini-3.8-flash` | Local Model: `gemma4:e4b`
 
 ## Mandatory Rules for AI Coding Agents
 

@@ -12,6 +12,7 @@
 | `init` | `--name`, `--topic`, `--stack`, `--model`, `--dir` | Scaffolds repository structure, multi-language starter/final code, & script templates |
 | `list-models` | `--provider` | Displays the verified 2026 Frontier & Open-Weight Model Catalog |
 | `audit-models` | `--target`, `--fix` | Audits and auto-upgrades deprecated model tags and legacy SDK imports |
+| `audit-typography` | `--target`, `--fix` | Audits and auto-sanitizes forbidden em dashes (`\u2014`) and awkward literal translations |
 | `audit-compat` | `--stack`, `--target` | Audits tech stack cross-architecture risks across hardware chipsets |
 | `audit-loop` | `--topic`, `--target` | Loop engineering 4-persona review (Non-Coder, Novice, Intermediate, Senior) |
 | `test` | `--target` | Runs code smoke tests, model currency checks, & audits relative markdown broken links |

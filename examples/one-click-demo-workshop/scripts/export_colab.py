@@ -13,6 +13,7 @@ import shutil
 import subprocess
 from pathlib import Path
 
+
 def sanitize_no_em_dash(text: str) -> str:
     """Replace forbidden em-dash characters (\\u2014) with standard hyphens (' - ' or '-')."""
     if "\u2014" not in text:
@@ -21,10 +22,17 @@ def sanitize_no_em_dash(text: str) -> str:
     return text.replace("\u2014", "-")
 
 
+def sanitize_colab_markdown(text: str) -> str:
+    """Sanitize em-dashes and convert relative repo links into inline code references for Colab notebooks."""
+    text = sanitize_no_em_dash(text)
+    text = re.sub(r"\[([^\]]+)\]\((?!https?://|mailto:|#)([^)]+)\)", r"**\1** (`\2`)", text)
+    return text
+
+
 def create_notebook_cell(cell_type: str, source: str):
     """Create a standard Jupyter Notebook cell dictionary."""
     if cell_type == "markdown":
-        source = sanitize_no_em_dash(source)
+        source = sanitize_colab_markdown(source)
     lines = [line + "\n" for line in source.split("\n")]
     if lines and lines[-1] == "\n":
         lines[-1] = ""
@@ -45,6 +53,7 @@ def create_notebook_cell(cell_type: str, source: str):
             "outputs": [],
             "source": lines
         }
+
 
 def build_ipynb(cells, title="Workshop Notebook"):
     """Wrap cells into standard Jupyter Notebook JSON format."""
@@ -67,10 +76,11 @@ def build_ipynb(cells, title="Workshop Notebook"):
         "nbformat_minor": 0
     }
 
+
 def export_to_colab(target_dir: str, output_dir: str = None, repo_name: str = None):
     target = Path(target_dir).resolve()
     if not target.exists():
-        print(f"❌ Error: Workshop directory '{target}' does not exist.")
+        print(f"[ERROR] Workshop directory '{target}' does not exist.")
         return False
 
     out_path = Path(output_dir).resolve() if output_dir else target / "output" / "colab"
@@ -95,7 +105,7 @@ def export_to_colab(target_dir: str, output_dir: str = None, repo_name: str = No
     badge_starter_url = f"https://colab.research.google.com/github/{repo}/blob/main/output/colab/workshop_starter.ipynb"
     badge_solution_url = f"https://colab.research.google.com/github/{repo}/blob/main/output/colab/workshop_solution.ipynb"
 
-    print(f"📦 Generating Google Colab Notebooks for '{title}'...")
+    print(f"[INFO] Generating Google Colab Notebooks for '{title}'...")
 
     # Read starter and solution code
     starter_code_file = target / "workshop" / "01_starter" / "main.py"
@@ -144,11 +154,11 @@ try:
     from google.colab import userdata
     GEMINI_API_KEY = userdata.get('GEMINI_API_KEY')
     os.environ['GEMINI_API_KEY'] = GEMINI_API_KEY
-    print("✅ GEMINI_API_KEY loaded securely from Colab Secrets.")
+    print("[OK] GEMINI_API_KEY loaded securely from Colab Secrets.")
 except Exception:
     GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
     if not GEMINI_API_KEY:
-        print("⚠️ GEMINI_API_KEY not found in Secrets. Please set it or enter manually.")
+        print("[WARN] GEMINI_API_KEY not found in Secrets. Please set it or enter manually.")
 """
 
     # 1. Build Starter Notebook
@@ -156,7 +166,7 @@ except Exception:
         create_notebook_cell("markdown", f"# {title} - Hands-on Starter Notebook\n\n"
                                          f"[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)]({badge_starter_url})\n\n"
                                          f"> **Topic**: {topic}\n\n"
-                                         f"Welcome to the hands-on lab! Run each cell sequentially and fill in the `TODO` sections."),
+                                         f"Welcome to the hands-on lab. Run each cell sequentially and fill in the `TODO` sections."),
         create_notebook_cell("code", env_setup_code),
         create_notebook_cell("code", secrets_code),
     ]
@@ -198,14 +208,14 @@ except Exception:
 
 > Topic: {topic}
 
-## 🚀 One-Click Open in Colab
+## One-Click Open in Colab
 
 | Notebook | Description | Open in Colab |
 | :--- | :--- | :--- |
 | **Starter Lab** | Attendee hands-on guide with TODOs | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)]({badge_starter_url}) |
 | **Reference Solution** | Facilitator complete solution | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)]({badge_solution_url}) |
 
-## 🧪 Testing with Google Colab CLI (`colab-cli`)
+## Smoke Testing with Google Colab CLI (`colab-cli`)
 
 You can run automated smoke tests on these notebooks using the official [Google Colab CLI](https://github.com/googlecolab/google-colab-cli):
 
@@ -217,31 +227,32 @@ colab run output/colab/workshop_solution.ipynb
     (out_path / "README.md").write_text(sanitize_no_em_dash(colab_readme), encoding="utf-8")
 
     # 4. Create Colab Test Shell Script
-    test_script_content = f"""#!/usr/bin/env bash
+    test_script_content = """#!/usr/bin/env bash
 # Headless Smoke Test via Google Colab CLI
 set -e
 
-echo "🔍 Checking Google Colab CLI installation..."
+echo "[INFO] Checking Google Colab CLI installation..."
 if command -v colab &> /dev/null; then
-    echo "⚡ Running Colab Headless Test on workshop_solution.ipynb..."
+    echo "[INFO] Running Colab Headless Test on workshop_solution.ipynb..."
     colab run workshop_solution.ipynb
-    echo "✅ Colab notebook verified successfully!"
+    echo "[OK] Colab notebook verified successfully."
 else
-    echo "💡 Google Colab CLI (colab) not found."
-    echo "👉 Install with: pip install google-colab-cli"
-    echo "👉 Repo: https://github.com/googlecolab/google-colab-cli"
+    echo "[INFO] Google Colab CLI (colab) not found."
+    echo "Install with: pip install google-colab-cli"
+    echo "Repository: https://github.com/googlecolab/google-colab-cli"
 fi
 """
     test_script_path = out_path / "test_colab_run.sh"
     test_script_path.write_text(test_script_content, encoding="utf-8")
     os.chmod(test_script_path, 0o755)
 
-    print(f"✨ Colab Bundle successfully created at: {out_path}")
+    print(f"[OK] Colab Bundle successfully created at: {out_path}")
     print(f"  - {starter_path.name}")
     print(f"  - {solution_path.name}")
     print(f"  - README.md (with badges)")
     print(f"  - test_colab_run.sh")
     return True
+
 
 def test_colab(target_dir: str):
     target = Path(target_dir).resolve()
@@ -249,22 +260,23 @@ def test_colab(target_dir: str):
     solution_nb = colab_dir / "workshop_solution.ipynb"
 
     if not solution_nb.exists():
-        print(f"⚠️ Colab bundle not found at {colab_dir}. Generating now...")
+        print(f"[WARN] Colab bundle not found at {colab_dir}. Generating now...")
         export_to_colab(str(target))
 
-    print(f"🧪 Testing Colab Notebook via Google Colab CLI...")
+    print("[INFO] Testing Colab Notebook via Google Colab CLI...")
     if shutil.which("colab"):
         cmd = ["colab", "run", str(solution_nb)]
-        print(f"🚀 Executing: {' '.join(cmd)}")
+        print(f"[INFO] Executing: {' '.join(cmd)}")
         res = subprocess.run(cmd)
         if res.returncode == 0:
-            print("✅ Google Colab CLI execution passed!")
+            print("[OK] Google Colab CLI execution passed.")
         else:
-            print("⚠️ Google Colab CLI reported an error during execution.")
+            print("[WARN] Google Colab CLI reported an error during execution.")
     else:
-        print("💡 Google Colab CLI ('colab') is not installed in the local PATH.")
+        print("[INFO] Google Colab CLI ('colab') is not installed in the local PATH.")
         print("   To install: pip install google-colab-cli")
         print("   To test manually: Open workshop_starter.ipynb in Google Colab.")
+
 
 def main():
     parser = argparse.ArgumentParser(description="Export Workshop to Google Colab Notebooks (.ipynb)")
@@ -278,6 +290,7 @@ def main():
     export_to_colab(args.target, args.output, args.repo)
     if args.test:
         test_colab(args.target)
+
 
 if __name__ == "__main__":
     main()

@@ -1,27 +1,30 @@
-# 🎤 세션 진행자 & TA 전용 런북 (Facilitator Runbook)
+# Facilitator & TA Runbook: one-click-demo-workshop
 
-- **세션명**: Workshop Title
-- **발표자**: Facilitator Name
-- **보조 진행자(TA)**: TA Team
+- **Session Title**: Flutter and Gemma 4 AI Agent
+- **Tech Stack**: `python,ollama`
+- **Primary Cloud Model**: `gemini-3.8-flash` | **Coordinator**: `gemini-4-argon` | **Local Model**: `gemma4:e4b`
+- **Facilitator**: Workshop Lead Facilitator
+- **Teaching Assistants (TA)**: Roaming TA Team
 
 ---
 
-## ⏱️ 진행 타임라인
+## Session Timeline (60 Minutes)
 
-### 00m ~ 10m: 오프닝 & 사전 환경 검증
-- **발표자**: `gemma4-local-setup-guide.md` 안내 및 `./scripts/check_env.sh` 실행 시연
-- **TA**: 환경 체크 에러 참가자 1:1 지원 및 오프라인 USB 안내
+### 00m - 10m: Opening & Environment Verification
+- **Facilitator**: Walk through `gemma4-local-setup-guide.md`, architecture overview, and demo `./scripts/check_env.sh` execution.
+- **TA**: Provide 1:1 support for attendees with environment check errors; direct low-RAM or restricted laptops to `output/colab/workshop_starter.ipynb`.
 
-### 10m ~ 25m: Lab 01 - Hello World & API 연동
-- **발표자**: `workshop/01_starter` 코드 구조 및 `TODO: [Lab 1]` 시연
-- **TA**: 로컬 LLM 서버 미실행자 `ollama serve` 명령어 조치
+### 10m - 25m: Lab 01 - Environment Setup & Client Sanity Check
+- **Facilitator**: Explain `workshop/01_starter` code structure and demo `TODO: [Lab 01]` completion.
+- **TA**: Help attendees configure `GEMINI_API_KEY` in `.env` or start the local LLM server (`ollama serve` on port `11434`).
 
-### 25m ~ 45m: Lab 02 - Structured Output & Tool Call
-- **발표자**: Pydantic / Output Schema 정의 및 System Prompt 적용 시연
-- **TA**: JSON 파싱 에러 가이드
+### 25m - 45m: Lab 02 - Structured Outputs, Tool Calling & Agent Routing
+- **Facilitator**: Demo typed Output Schema definition (`prompt-pack/README.md`) and sub-agent/tool integration.
+- **TA**: Assist attendees with schema validation or port conflict errors.
 
-### 45m ~ 55m: Lab 03 - 전체 앱 완주
-- **발표자**: `workshop/02_final` 정답 예시 코드 공유 및 시연
+### 45m - 55m: Lab 03 - End-to-End Pipeline & Verification
+- **Facilitator**: Share and demo the `workshop/02_final` reference solution and run `python3 scripts/verify_workshop.py .`.
+- **TA**: Verify attendee completion checkpoints.
 
-### 55m ~ 60m: Q&A 및 피드백 설문
-- **발표자**: 세션 회고 및 참가자 설문 링크 안내
+### 55m - 60m: Q&A & Feedback Survey
+- **Facilitator**: Session retrospective, share PDF handouts (`output/pdf/`), and collect attendee feedback survey responses.

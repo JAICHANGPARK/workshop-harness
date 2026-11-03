@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 """
 verify_workshop.py - Workshop Integrity & Link Auditor
-Automatically verifies markdown relative path links, image file existence, and code execution
-status as a comprehensive harness verification tool.
+Automatically verifies markdown relative path links, image file existence, code execution,
+bundle artifacts (Colab, Open Codelabs, Slides), 2026 model currency, typography, and API key hygiene.
 """
 
 import os
 import sys
 import re
-import glob
+import json
 import subprocess
 from pathlib import Path
+
 
 def _strip_code_blocks_and_spans(markdown_text: str) -> str:
     """Remove fenced code blocks and inline code spans so example links inside code are not flagged."""
@@ -29,8 +30,9 @@ def audit_markdown_links(target_dir: Path):
     is_harness_root = (target_dir / "harness_cli.py").exists() and (target_dir / "templates").exists()
 
     for md_file in md_files:
-        rel_md_str = str(md_file.relative_to(target_dir))
-        if ".venv" in rel_md_str or "node_modules" in rel_md_str or "site/" in rel_md_str:
+        rel_md = md_file.relative_to(target_dir)
+        rel_md_str = str(rel_md)
+        if any(part in rel_md.parts for part in [".git", ".venv", "node_modules", "site", "tmp"]):
             continue
         # Skip raw doc-templates when auditing the harness root itself (paths resolve after scaffolding)
         if is_harness_root and rel_md_str.startswith("templates/doc-templates/"):
@@ -74,8 +76,9 @@ def audit_markdown_links(target_dir: Path):
 
     return len(broken_links) == 0
 
+
 def test_code_execution(target_dir: Path):
-    print("\n🔍 Running Code Smoke Tests...")
+    print("\n🔍 Running Code & Artifact Smoke Tests...")
     starter = target_dir / "workshop" / "01_starter" / "main.py"
     final = target_dir / "workshop" / "02_final" / "main.py"
 
@@ -94,6 +97,80 @@ def test_code_execution(target_dir: Path):
             print("✅ workshop/02_final execution test: PASSED")
         else:
             print(f"❌ workshop/02_final execution test: FAILED ({res.stderr.strip()})")
+            passed = False
+
+    # Verify ADK agent.py modules if present
+    for stage in ["01_starter", "02_final"]:
+        agent_py = target_dir / "workshop" / stage / "agent.py"
+        if agent_py.exists():
+            check_cmd = [
+                sys.executable,
+                "-c",
+                f"import importlib.util; spec = importlib.util.spec_from_file_location('agent', r'{agent_py}'); "
+                f"mod = importlib.util.module_from_spec(spec); spec.loader.exec_module(mod); "
+                f"assert hasattr(mod, 'root_agent'), 'Missing root_agent symbol'",
+            ]
+            res = subprocess.run(check_cmd, capture_output=True, text=True)
+            if res.returncode == 0:
+                print(f"✅ workshop/{stage}/agent.py root_agent check: PASSED")
+            else:
+                print(f"❌ workshop/{stage}/agent.py root_agent check: FAILED ({res.stderr.strip()})")
+                passed = False
+
+    # Verify evalset.json if present
+    evalset = target_dir / "workshop" / "02_final" / "evalset.json"
+    if evalset.exists():
+        try:
+            data = json.loads(evalset.read_text(encoding="utf-8"))
+            if isinstance(data, list) and len(data) > 0:
+                print("✅ workshop/02_final/evalset.json schema check: PASSED")
+            else:
+                print("❌ workshop/02_final/evalset.json schema check: FAILED (Empty evalset)")
+                passed = False
+        except Exception as exc:
+            print(f"❌ workshop/02_final/evalset.json JSON check: FAILED ({exc})")
+            passed = False
+
+    # Verify exported Google Colab notebooks if present
+    colab_dir = target_dir / "output" / "colab"
+    if colab_dir.exists():
+        for nb_name in ["workshop_starter.ipynb", "workshop_solution.ipynb"]:
+            nb_path = colab_dir / nb_name
+            if nb_path.exists():
+                try:
+                    nb_json = json.loads(nb_path.read_text(encoding="utf-8"))
+                    assert nb_json.get("nbformat") == 4 and isinstance(nb_json.get("cells"), list)
+                    for cell in nb_json["cells"]:
+                        if cell.get("cell_type") == "code":
+                            src_lines = [
+                                ln for ln in "".join(cell.get("source", [])).splitlines()
+                                if not ln.strip().startswith("!")
+                            ]
+                            compile("\n".join(src_lines), str(nb_path), "exec")
+                    print(f"✅ output/colab/{nb_name} notebook syntax check: PASSED")
+                except Exception as exc:
+                    print(f"❌ output/colab/{nb_name} notebook syntax check: FAILED ({exc})")
+                    passed = False
+
+    # Verify exported Open Codelabs bundle if present
+    codelab_yaml = target_dir / "output" / "open-codelabs" / "codelab.yaml"
+    if codelab_yaml.exists():
+        codelab_dir = codelab_yaml.parent
+        guide_md = codelab_dir / "guide.md"
+        steps_dir = codelab_dir / "steps"
+        if guide_md.exists() and steps_dir.exists() and list(steps_dir.glob("step_*.md")):
+            print("✅ output/open-codelabs bundle check: PASSED")
+        else:
+            print("❌ output/open-codelabs bundle check: FAILED (Missing guide.md or step files)")
+            passed = False
+
+    # Verify exported presentation slides if present
+    slides_dir = target_dir / "output" / "slides"
+    if slides_dir.exists():
+        if (slides_dir / "slides.md").exists() and (slides_dir / "index.html").exists():
+            print("✅ output/slides presentation deck check: PASSED")
+        else:
+            print("❌ output/slides presentation deck check: FAILED (Missing slides.md or index.html)")
             passed = False
 
     return passed
@@ -150,6 +227,8 @@ def audit_typography_and_security(target_dir: Path):
     md_files = list(target_dir.glob("**/*.md"))
     em_dash_findings = []
     literal_findings = []
+    leaked_key_findings = []
+
     awkward_literals = {
         "손으로 하는 실험실": "핸즈온 랩 (Hands-on Lab)",
         "달리는 책": "런북 (Runbook)",
@@ -171,12 +250,15 @@ def audit_typography_and_security(target_dir: Path):
         "기억 장치 넘침": "메모리 부족 에러 (OOM, Out-Of-Memory)",
     }
     ignore_literal_files = {"harness_cli.py", "verify_workshop.py", "terminology-and-style-guide.md"}
+    api_key_pattern = re.compile(r"AIzaSy[A-Za-z0-9_-]{25,}")
+    safe_placeholders = {"AIzaSyYourGeminiApiKeyHere", "AIzaSyYourGeneratedApiKeyHere"}
 
     for md_file in md_files:
-        if any(part in md_file.parts for part in [".git", ".venv", "node_modules", "tmp"]):
+        rel_md = md_file.relative_to(target_dir)
+        if any(part in rel_md.parts for part in [".git", ".venv", "node_modules", "tmp", "site"]):
             continue
         content = md_file.read_text(encoding="utf-8", errors="ignore")
-        rel_path = str(md_file.relative_to(target_dir))
+        rel_path = str(rel_md)
         if "\u2014" in content:
             for line_no, line in enumerate(content.splitlines(), 1):
                 if "\u2014" in line:
@@ -189,16 +271,36 @@ def audit_typography_and_security(target_dir: Path):
                     if bad_lit in line:
                         literal_findings.append(f"{rel_path}:{line_no} ('{bad_lit}' -> '{good_term}')")
 
-    if em_dash_findings or literal_findings:
+    # Scan for accidental hardcoded Google API keys
+    ignore_dirs = {".git", ".venv", "node_modules", "__pycache__", ".dart_tool", "build", "tmp", "site"}
+    for root, dirs, files in os.walk(target_dir):
+        dirs[:] = [d for d in dirs if d not in ignore_dirs]
+        for fname in files:
+            fpath = Path(root) / fname
+            if fpath.suffix not in {".py", ".ts", ".js", ".go", ".kt", ".dart", ".java", ".md", ".json", ".yaml", ".yml", ".env"}:
+                continue
+            try:
+                text = fpath.read_text(encoding="utf-8", errors="ignore")
+            except Exception:
+                continue
+            for line_no, line in enumerate(text.splitlines(), 1):
+                for match in api_key_pattern.findall(line):
+                    if match not in safe_placeholders and "Your" not in match and "Example" not in match:
+                        rel_p = str(fpath.relative_to(target_dir))
+                        leaked_key_findings.append(f"{rel_p}:{line_no}")
+
+    if em_dash_findings or literal_findings or leaked_key_findings:
         if em_dash_findings:
             print(f"❌ Em dash (\\u2014) detected in {len(em_dash_findings)} location(s): {', '.join(em_dash_findings[:10])}")
             print("💡 Rule violation: Never use em dashes (\\u2014) in documentation or .md files. Use '-', ':', or '()' instead.")
         if literal_findings:
             print(f"❌ Awkward literal translation detected in {len(literal_findings)} location(s): {', '.join(literal_findings[:5])}")
             print("💡 Rule violation: Use developer-friendly terminology paired with the English original term in parentheses.")
+        if leaked_key_findings:
+            print(f"❌ Potential exposed API Key detected in: {', '.join(leaked_key_findings[:5])}")
         return False
     else:
-        print("✅ Typography & Developer Terminology check PASSED (Zero forbidden em dashes or awkward literal translations).")
+        print("✅ Typography, Developer Terminology & API Key Hygiene check PASSED (Zero forbidden em dashes, literal translations, or leaked keys).")
         return True
 
 
@@ -220,6 +322,6 @@ def main():
         print("❌ Integrity tests FAILED. Please fix the reported errors.")
         sys.exit(1)
 
+
 if __name__ == "__main__":
     main()
-

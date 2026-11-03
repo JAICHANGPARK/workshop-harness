@@ -1,29 +1,43 @@
 # sample-bwai-workshop
 
 > Topic: Testing Workshop Harness
+> Tech Stack: python,ollama
 
-이 저장소는 **Testing Workshop Harness** 워크숍을 위한 사전 준비 문서와 핸즈온 실습 코드 저장소입니다.
+This repository contains pre-event preparation documents and hands-on lab code for the **Testing Workshop Harness** workshop.
 
-## 🚀 빠른 시작
+## Quick Start
 
-1. **사전 준비 가이드**: [gemma4-local-setup-guide.md](./gemma4-local-setup-guide.md)
-2. **사전 점검 스크립트 실행**: `./scripts/check_env.sh` (Windows: `.\scripts\check_env.ps1`)
-3. **당일 핸즈온**:
-   - 실습 순서: [workshop/03_labs/README.md](./workshop/03_labs/README.md)
-   - 실습 코드: [workshop/01_starter](./workshop/01_starter)
-   - 정답 코드: [workshop/02_final](./workshop/02_final)
+1. **Preparation Guide**: [gemma4-local-setup-guide.md](./gemma4-local-setup-guide.md)
+2. **Architecture Compatibility Check**: `./scripts/check_architecture_compat.sh` (Windows: `.\scripts\check_architecture_compat.ps1`)
+3. **Environment Verification Script**: `./scripts/check_env.sh` (Windows: `.\scripts\check_env.ps1`)
+4. **Day-of Hands-on Labs**:
+   - Lab Guide: [workshop/03_labs/README.md](./workshop/03_labs/README.md)
+   - Starter Code: [workshop/01_starter](./workshop/01_starter)
+   - Reference Solution: [workshop/02_final](./workshop/02_final)
+5. **Facilitator & TA Runbook**: [RUNBOOK.md](./RUNBOOK.md)
 
-## 📂 저장소 구조
+## Repository Structure
 
 ```text
 .
-├── gemma4-local-setup-guide.md   # 통합 사전 준비 가이드
-├── docs/                        # 상세 주제별 가이드 문서
-├── workshop/                    # 당일 핸즈온 실습
-│   ├── 01_starter/              # 시작 코드
-│   ├── 02_final/                # 최종 참고 코드
-│   └── 03_labs/                 # Step-by-Step 실습 문서
-├── prompt-pack/                 # 핸즈온 프롬프트 팩
-├── scripts/                     # 유틸리티 및 빌드 스크립트
-└── output/                      # 산출물 (PDF 등)
+├── AGENTS.md                     # AI Agent & Typography rules (No Em Dash rule)
+├── CLAUDE.md                     # Claude Code instructions
+├── RUNBOOK.md                    # Facilitator & TA execution runbook
+├── gemma4-local-setup-guide.md   # Unified preparation guide
+├── pyproject.toml                # Astral uv dependency file
+├── docs/                        # Detailed topic docs, architecture compatibility & persona review reports
+│   ├── 00-architecture-compatibility-matrix.md
+│   └── 00-persona-loop-review-report.md
+├── workshop/                    # Day-of hands-on labs
+│   ├── 01_starter/              # Starter code
+│   ├── 02_final/                # Reference solution code
+│   └── 03_labs/                 # Step-by-step lab guides
+├── prompt-pack/                 # Hands-on prompt pack
+├── scripts/                     # Cross-architecture checks & offline bundling scripts
+└── output/                      # Build artifacts (PDF, etc.)
 ```
+
+## References
+- [Build with AI Seoul 2026](https://github.com/JAICHANGPARK/2026-bwai-seoul)
+- [Build with AI Golang Korea 2026](https://github.com/JAICHANGPARK/2026-bwai-golang-korea)
+- [Build with AI Mongo 2026](https://github.com/JAICHANGPARK/2026-bwai-mongo)
