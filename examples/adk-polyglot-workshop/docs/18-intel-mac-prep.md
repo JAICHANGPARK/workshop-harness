@@ -1,6 +1,6 @@
 # Intel Mac (x86_64) Dedicated Preparation & Fallback Guide
 
-> Workshop Topic: **Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript)**
+> Workshop Topic: **Multi-Language Google ADK & Agents CLI ADLC Workshop**
 
 LM Studio lacks Metal GPU acceleration on Intel CPU-based Macs (`x86_64`) and can freeze during model loading. If you are using an Intel Mac, follow the **Ollama CLI** or **Google Colab Cloud GPU** workflow below.
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 harness_cli.py - Workshop Harness Command Line Tool (uv Powered)
 CLI that automates BWAI and tech workshop project creation, prerequisites, architecture
@@ -208,6 +209,7 @@ def sanitize_no_em_dash(text: str) -> str:
 
 
 AWKWARD_LITERAL_TRANSLATION_REPLACEMENTS = {
+    # Korean (KO) prohibited literal terms & translationese grammar
     "손으로 하는 실험실": "Hands-on Lab (핸즈온 랩)",
     "달리는 책": "Runbook (런북)",
     "발판 설치": "Scaffolding (스캐폴딩)",
@@ -241,6 +243,34 @@ AWKWARD_LITERAL_TRANSLATION_REPLACEMENTS = {
     "체제 지시문": "System Instruction (시스템 프롬프트)",
     "인간 고리 안": "Human-in-the-Loop (HITL, 사용자 승인 체크포인트)",
     "사람을 루프에": "Human-in-the-Loop (HITL, 사용자 승인 체크포인트)",
+    "생성되어집니다": "생성됩니다",
+    "실행되어집니다": "실행됩니다",
+    "설정되어집니다": "설정됩니다",
+    "호출되어집니다": "호출됩니다",
+    "전달되어집니다": "전달됩니다",
+    # Japanese (JA) prohibited literal terms
+    "手で触る実験室": "Hands-on Lab (ハンズオンラボ)",
+    "走る本": "Runbook (ランブック)",
+    "足場作り": "Scaffolding (スキャフォールディング)",
+    "骨組みコード": "Starter / Boilerplate Code (スターターコード)",
+    "思考の予算": "Thinking Budget (推論バジェット)",
+    "道具を呼ぶ": "Tool Calling (ツール呼び出し)",
+    "代理人開発キット": "ADK (Agent Development Kit)",
+    "煙の試験": "Smoke Test (スモークテスト)",
+    "後退経路": "Fallback (フォールバック)",
+    "冷たい開始": "Cold Start (コールドスタート)",
+    # Chinese (ZH) prohibited literal terms
+    "手把手的实验室": "Hands-on Lab (实战工作坊)",
+    "奔跑的书": "Runbook (演练手册)",
+    "搭架子工程": "Scaffolding (脚手架)",
+    "骨架代码": "Starter / Boilerplate Code (Starter 初始代码)",
+    "骨架/参考代码": "Starter 初始代码 / Reference 参考实现",
+    "思考预算": "Thinking Budget (推理预算)",
+    "工具呼叫": "Tool Calling (工具调用)",
+    "代理人开发套件": "ADK (Agent 开发套件)",
+    "烟雾测试": "Smoke Test (冒烟测试)",
+    "后退路径": "Fallback (回退策略)",
+    "冰冷启动": "Cold Start (冷启动)",
 }
 
 
@@ -551,18 +581,21 @@ This cheat sheet translates core AI engineering concepts into intuitive everyday
 """)
 
     # 5. Create AGENTS.md, CLAUDE.md, and README.md
-    agent_rules_md = f"""# Agent Instructions, Developer Terminology & Typography Rules for {name}
+    agent_rules_header = f"""# Agent Instructions, Developer Terminology & Typography Rules for {name}
 
 > Topic: **{topic}**
 > Tech Stack: `{stack_str}` | Primary Cloud Model: `{default_cloud_model}` | Local Model: `{default_local_model}`
-
+"""
+    agent_rules_body = """
 ## Mandatory Rules for AI Coding Agents
 
-1. **Original Technical Term First & Real-World Developer Terminology (기술 용어 원어 우선 표기, 실무 개발자 용어 사용 & 직역 금지)**:
-   - When authoring or localizing documentation, `.md` files, slide decks, setup guides, runbooks, or **code comments** into Korean (KR), Japanese (JA), or Chinese (ZH), **NEVER perform awkward literal / word-for-word machine translations**.
-   - **For technical terms, use the original English term first and append the developer-friendly translation in parentheses (`English Original (개발자 친화적 용어)`), or pair established developer vernacular with the English original**:
-     - Examples: **Hands-on Lab (핸즈온 랩)**, **Scaffolding (스캐폴딩)**, **Runbook (런북)**, **Starter / Boilerplate Code (스타터 / 보일러플레이트 코드)**, **Prompt Engineering (프롬프트 엔지니어링)**, **Structured Outputs (구조화 출력 / JSON Schema)**, **Tool Calling / Function Calling (툴 콜링 / 함수 호출)**, **RAG (Retrieval-Augmented Generation, 검색 증강 생성)**, **Embedding (임베딩)**, **Quantization (양자화)**, **Thinking Budget (추론 예산)**, **Multi-Agent Orchestration (멀티 에이전트 오케스트레이션)**, **Sub-Agent Delegation (서브 에이전트 위임)**, **Trajectory Evaluation (궤적 평가)**, **Dependency Injection (의존성 주입)**, **Fallback (폴백)**, **Breaking Changes (브레이킹 체인지)**.
-     - Prohibited literal translations: never write awkward literal phrases such as "손으로 하는 실험실", "달리는 책", "발판 설치", "뼈대 코드", "생각 예산", "도구 부르기", "대리인 개발 키트", "문맥 창문", or "기억 장치 넘침".
+1. **Original Technical Term First, Real-World Developer Terminology & Natural Developer Grammar (기술 용어 원어 우선 표기, 실무 개발자 용어/문법 사용 & 직역·번역투 금지)**:
+   - **English (EN)**: Write in clear, idiomatic, direct technical English.
+   - **Korean (KO), Japanese (JA), and Chinese (ZH) Requests**: Whenever a user requests documentation, `.md` files, slide decks, setup guides, runbooks, or **code comments** in Korean, Japanese, or Chinese, **NEVER perform awkward literal / word-for-word machine translations or unnatural translationese grammar (번역투 문법, 不自然な直訳調, 生硬的机翻腔)**.
+   - **For technical terms, use the original English term first and append the developer-friendly translation in parentheses (`English Original (개발자 친화적 용어)`), and write in natural sentence structures used by local software engineers**:
+     - **Korean (KO)**: **Hands-on Lab (핸즈온 랩)**, **Scaffolding (스캐폴딩)**, **Runbook (런북)**, **Starter / Boilerplate Code (스타터 / 보일러플레이트 코드)**, **Prompt Engineering (프롬프트 엔지니어링)**, **Structured Outputs (구조화 출력 / JSON Schema)**, **Tool Calling / Function Calling (툴 콜링 / 함수 호출)**, **RAG (Retrieval-Augmented Generation, 검색 증강 생성)**, **Embedding (임베딩)**, **Quantization (양자화)**, **Thinking Budget (추론 예산)**, **Multi-Agent Orchestration (멀티 에이전트 오케스트레이션)**, **Sub-Agent Delegation (서브 에이전트 위임)**, **Trajectory Evaluation (궤적 평가)**, **Dependency Injection (의존성 주입)**, **Fallback (폴백)**, **Breaking Changes (브레이킹 체인지)**. Avoid double passives (`~되어집니다` -> `~됩니다`) and awkward literal phrases ("손으로 하는 실험실", "달리는 책", "발판 설치", "뼈대 코드", "생각 예산", "도구 부르기", "대리인 개발 키트").
+     - **Japanese (JA)**: 「Hands-on Lab (ハンズオンラボ)」, 「Scaffolding (スキャフォールディング)」, 「Starter / Boilerplate Code (スターターコード)」, 「Structured Outputs (構造化出力)」, 「Thinking Budget (推論バジェット)」, 「Runbook (ランブック)」, 「Smoke Test (スモークテスト)」.
+     - **Chinese (ZH)**: 「Hands-on Lab (实战工作坊)」, 「Scaffolding (脚手架)」, 「Starter / Boilerplate Code (Starter 初始代码 / 样板代码)」, 「Structured Outputs (结构化输出)」, 「Thinking Budget (推理预算)」, 「Runbook (演练手册)」, 「Smoke Test (冒烟测试)」.
    - **Code Comments & Identifiers**: Keep all SDK symbols, class/function names, and CLI flags in their exact English form (`root_agent`, `LlmAgent`, `FunctionTool`, `thinking_budget`, `response_schema`), and write comments using original English technical terms paired with developer-friendly explanations.
 
 2. **Typography Rule (No Em Dash in Markdown or Documentation)**:
@@ -572,7 +605,8 @@ This cheat sheet translates core AI engineering concepts into intuitive everyday
 
 3. **No Emojis in Documentation by Default**:
    - Do not include emojis in generated documentation, slide decks, setup guides, or runbooks unless explicitly requested.
-
+"""
+    agent_rules_footer = f"""
 4. **2026 Frontier Model & SDK Currency**:
    - Use `google-genai >= 2.30.1` (`from google import genai`) and 2026 model tags (`{default_cloud_model}`, `gemini-4-argon`, `{default_local_model}`).
    - Never use deprecated `google-generativeai` or retired `gemini-1.5-*` / `gemini-2.0-*` / `gemini-2.5-*` tags.
@@ -581,6 +615,7 @@ This cheat sheet translates core AI engineering concepts into intuitive everyday
 - [Workshop Harness Repository](https://github.com/JAICHANGPARK/workshop-harness)
 - [Google Gemini API Documentation](https://ai.google.dev/gemini-api/docs)
 """
+    agent_rules_md = agent_rules_header + agent_rules_body + agent_rules_footer
     (project_dir / "AGENTS.md").write_text(agent_rules_md, encoding="utf-8")
     (project_dir / "CLAUDE.md").write_text(agent_rules_md, encoding="utf-8")
 
@@ -2244,6 +2279,7 @@ Run the Kotlin ADK hierarchy locally with `InMemoryRunner` and verify determinis
     else:
         # Default Python 3-Lab Hands-on Pipeline (Supports Cloud Gemini 3.8/4 Argon, Local Ollama Gemma 4, & Offline Mock Fallback)
         starter_main = f'''#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Starter Code for {topic}
 Primary Cloud Model: {default_cloud_model} | Local Ollama Model: {default_local_model}
@@ -2299,6 +2335,7 @@ if __name__ == "__main__":
             f.write(starter_main)
 
         final_main = f'''#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Final Completed Reference Solution for {topic}
 Primary Cloud Model: {default_cloud_model} | Flagship Reasoning: gemini-4-argon | Local Model: {default_local_model}

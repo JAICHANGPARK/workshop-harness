@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-Starter Code for Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript)
+Starter Code for Multi-Language Google ADK & Agents CLI ADLC Workshop
 Primary Cloud Model: gemini-3.8-flash | Local Ollama Model: gemma4:e4b
 """
 
@@ -40,10 +41,10 @@ def lab2_structured_output(topic_name: str) -> WorkshopTaskResult:
 
 
 def main():
-    print("Welcome to the Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript) Workshop! Open workshop/03_labs/README.md to begin.")
+    print("Welcome to the Multi-Language Google ADK & Agents CLI ADLC Workshop Workshop! Open workshop/03_labs/README.md to begin.")
     msg = lab1_sanity_check("Hello from adk-polyglot-workshop")
     print(msg)
-    result = lab2_structured_output("Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript)")
+    result = lab2_structured_output("Multi-Language Google ADK & Agents CLI ADLC Workshop")
     print(json.dumps(asdict(result), indent=2, ensure_ascii=False))
 
 

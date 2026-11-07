@@ -1,7 +1,7 @@
 [project]
 name = "adk-polyglot-workshop"
 version = "0.1.0"
-description = "Hands-on Workshop: Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript)"
+description = "Hands-on Workshop: Multi-Language Google ADK & Agents CLI ADLC Workshop"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [

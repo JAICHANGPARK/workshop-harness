@@ -27,6 +27,7 @@ Adhering to the [AGENTS.md open specification](https://agents.md/), this harness
 - **Cross-Architecture Audit**: Automatically diagnoses hardware & GPU compatibility risks across Apple Silicon (M1~M4), Intel Mac (x86_64), Windows (x64/Snapdragon ARM64), and Linux/ChromeOS environments with mandatory fallback guidance.
 - **Open Codelabs Platform Integration**: Exports standard Open Codelabs bundles (`codelab.yaml`) and pushes directly via `oc` CLI & stdio MCP server (`oc mcp serve`).
 - **Publication-Ready PDF Handouts**: Generates printable PDF preparation guides and thumbnail contact sheets via ReportLab and PyMuPDF engines.
+- **Multilingual Developer Terminology & Natural Grammar (`EN` / `KO` / `JA` / `ZH`)**: English docs use idiomatic technical English; when Korean, Japanese, or Chinese users request localized materials, the harness enforces **Original English Technical Term + Real-World Developer Terminology (`English Original (Developer Term)`)** and natural local engineer sentence grammar (`audit-typography` & [`docs/agents-spec/terminology-and-style-guide.md`](agents-spec/terminology-and-style-guide.md)).
 
 ---
 

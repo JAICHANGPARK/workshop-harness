@@ -257,6 +257,7 @@ def audit_typography_and_security(target_dir: Path):
     leaked_key_findings = []
 
     awkward_literals = {
+        # Korean (KO) prohibited literal terms & translationese grammar
         "손으로 하는 실험실": "Hands-on Lab (핸즈온 랩)",
         "달리는 책": "Runbook (런북)",
         "발판 설치": "Scaffolding (스캐폴딩)",
@@ -290,6 +291,34 @@ def audit_typography_and_security(target_dir: Path):
         "체제 지시문": "System Instruction (시스템 프롬프트)",
         "인간 고리 안": "Human-in-the-Loop (HITL, 사용자 승인 체크포인트)",
         "사람을 루프에": "Human-in-the-Loop (HITL, 사용자 승인 체크포인트)",
+        "생성되어집니다": "생성됩니다",
+        "실행되어집니다": "실행됩니다",
+        "설정되어집니다": "설정됩니다",
+        "호출되어집니다": "호출됩니다",
+        "전달되어집니다": "전달됩니다",
+        # Japanese (JA) prohibited literal terms
+        "手で触る実験室": "Hands-on Lab (ハンズオンラボ)",
+        "走る本": "Runbook (ランブック)",
+        "足場作り": "Scaffolding (スキャフォールディング)",
+        "骨組みコード": "Starter / Boilerplate Code (スターターコード)",
+        "思考の予算": "Thinking Budget (推論バジェット)",
+        "道具を呼ぶ": "Tool Calling (ツール呼び出し)",
+        "代理人開発キット": "ADK (Agent Development Kit)",
+        "煙の試験": "Smoke Test (スモークテスト)",
+        "後退経路": "Fallback (フォールバック)",
+        "冷たい開始": "Cold Start (コールドスタート)",
+        # Chinese (ZH) prohibited literal terms
+        "手把手的实验室": "Hands-on Lab (实战工作坊)",
+        "奔跑的书": "Runbook (演练手册)",
+        "搭架子工程": "Scaffolding (脚手架)",
+        "骨架代码": "Starter / Boilerplate Code (Starter 初始代码)",
+        "骨架/参考代码": "Starter 初始代码 / Reference 参考实现",
+        "思考预算": "Thinking Budget (推理预算)",
+        "工具呼叫": "Tool Calling (工具调用)",
+        "代理人开发套件": "ADK (Agent 开发套件)",
+        "烟雾测试": "Smoke Test (冒烟测试)",
+        "后退路径": "Fallback (回退策略)",
+        "冰冷启动": "Cold Start (冷启动)",
     }
     ignore_literal_files = {"harness_cli.py", "verify_workshop.py", "terminology-and-style-guide.md", "test_harness.py"}
     api_key_pattern = re.compile(r"AIzaSy[A-Za-z0-9_-]{25,}")

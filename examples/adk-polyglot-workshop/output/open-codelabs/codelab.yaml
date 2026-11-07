@@ -1,6 +1,6 @@
 version: 1
 title: "adk-polyglot-workshop"
-description: "Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript)"
+description: "Multi-Language Google ADK & Agents CLI ADLC Workshop"
 author: "Workshop Facilitator"
 is_public: true
 quiz_enabled: false

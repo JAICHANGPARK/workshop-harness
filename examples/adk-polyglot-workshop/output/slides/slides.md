@@ -44,7 +44,7 @@ style: |
 <!-- _paginate: false -->
 # adk-polyglot-workshop
 
-### Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript)
+### Multi-Language Google ADK & Agents CLI ADLC Workshop
 
 <span class="badge">Hands-on Technical Lab</span>
 

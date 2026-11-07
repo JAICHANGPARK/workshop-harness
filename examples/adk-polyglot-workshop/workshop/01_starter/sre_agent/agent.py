@@ -30,7 +30,7 @@ def lookup_service_slo(service_name: str) -> dict:
 root_agent = LlmAgent(
     name="adk_starter_coordinator",
     model="gemini-3.8-flash",
-    description="Starter ADK root_agent entry point for Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript).",
+    description="Starter ADK root_agent entry point for Multi-Language Google ADK & Agents CLI ADLC Workshop.",
     instruction="Use lookup_service_slo to answer questions about microservice SLOs.",
     tools=[lookup_service_slo],
 )

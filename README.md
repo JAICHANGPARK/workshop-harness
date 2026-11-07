@@ -110,6 +110,7 @@ Workshop Harness adopts the open **[AGENTS.md specification](https://agents.md/)
 - **Anthropic Claude (Claude Code CLI & Desktop)**: [`CLAUDE.md`](./CLAUDE.md)
 - **Google Antigravity & Gemini CLI**: Native `.gemini/skills/` integration
 - **OpenAI Codex, ChatGPT, Aider & Cursor**: Supported via [`AGENTS.md`](./AGENTS.md)
+- **Multilingual Developer Terminology & Natural Grammar (`EN` / `KO` / `JA` / `ZH`)**: English docs use idiomatic technical English; when Korean, Japanese, or Chinese users request localized docs, labs, slides, or code comments, the harness enforces **Original English Technical Term + Real-World Developer Terminology (`English Original (Developer Term)`)** and **natural local engineer sentence grammar** (blocking awkward word-for-word literal translations and translationese grammar via `audit-typography` & [`docs/agents-spec/terminology-and-style-guide.md`](./docs/agents-spec/terminology-and-style-guide.md)).
 - **Full Guide**: [`docs/ai-agent-interoperability-guide.md`](./docs/ai-agent-interoperability-guide.md)
 
 ---

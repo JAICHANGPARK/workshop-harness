@@ -1,6 +1,6 @@
-# Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript) - Hands-on Lab Session Guide
+# Multi-Language Google ADK & Agents CLI ADLC Workshop - Hands-on Lab Session Guide
 
-This guide outlines the session schedule and step-by-step objectives for the **Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript)** workshop.
+This guide outlines the session schedule and step-by-step objectives for the **Multi-Language Google ADK & Agents CLI ADLC Workshop** workshop.
 Write your code in `workshop/01_starter`. If you get stuck, refer to the completed reference solution in `workshop/02_final`.
 
 ---

@@ -14,7 +14,7 @@
 
 **Workshop Harness** 是专为技术工作坊（Build with AI、DevFest、社区开发者实验室）组织者、讲师和助教（TA）打造的一键式 AI Agent 编排工具包。
 
-遵循 [AGENTS.md 开放规范](https://agents.md/)，该工具包与 **Google Antigravity**、**Gemini CLI**、**Anthropic Claude Code**、**OpenAI Codex / ChatGPT**、**Cursor** 及 **Aider** 等所有 AI 编程 Agent 原生兼容。
+遵循 [AGENTS.md 开放规范](https://agents.md/)，该工具包与 **Google Antigravity**、**Gemini CLI**、**Anthropic Claude Code**、**OpenAI Codex / ChatGPT**、**Cursor** 及 **Aider** 等所有 AI 编程 Agent 原生兼容。当中文、韩文或日文用户请求生成文档时，系统严禁生硬的逐字机翻与欧化翻译腔，强制使用 **英文原词优先 + 一线开发者常用术语 (`English Original (开发者术语)`)** 与自然流畅的工程师表达习惯（参阅[开发者术语与语法规范](agents-spec/terminology-and-style-guide.md)）。
 
 ---
 
@@ -37,10 +37,10 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 
 ## 21 项 Agent 技能索引
 
-- `workshop-scaffolder`: 自动化标准仓库结构脚手架
-- `cross-architecture-checker`: 芯片与 OS 兼容性诊断及替代方案 (`docs/18-intel-mac-prep.md`)
+- `workshop-scaffolder`: 自动化标准仓库结构脚手架 (Scaffolding)
+- `cross-architecture-checker`: 芯片与 OS 兼容性诊断及回退策略 (`docs/18-intel-mac-prep.md`)
 - `prerequisite-checker`: 准备工作指南与环境自动检查脚本生成
-- `hands-on-curriculum-builder`: 循序渐进 Lab 指南与骨架/参考代码生成
+- `hands-on-curriculum-builder`: 循序渐进 Lab 指南与 Starter 初始代码 / Reference 参考实现生成
 - `pdf-handout-generator`: 基于 ReportLab 的出版级 PDF 讲义与缩略图生成
 - `workshop-troubleshooter`: 按内存规格与系统构建排错矩阵与 FAQ
 - `workshop-runbook-generator`: 按分钟规划的讲师与助教演练手册 (`RUNBOOK.md`)

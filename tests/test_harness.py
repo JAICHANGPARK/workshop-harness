@@ -32,11 +32,14 @@ class TestWorkshopHarness(unittest.TestCase):
         self.assertEqual(harness_cli.sanitize_no_em_dash("clean-text"), "clean-text")
 
     def test_02_audit_typography_and_terminology_fix(self):
-        """Verify audit_typography detects and auto-fixes em dashes and awkward literal translations."""
+        """Verify audit_typography detects and auto-fixes em dashes and KO/JA/ZH awkward literal translations."""
         em = chr(0x2014)
         sample_md = self.temp_dir / "guide.md"
         sample_md.write_text(
-            f"# Title{em}Subtitle\n이 문서는 손으로 하는 실험실과 생각 예산을 설명합니다.\n",
+            f"# Title{em}Subtitle\n"
+            "KO: 손으로 하는 실험실과 생각 예산이 생성되어집니다.\n"
+            "JA: 手で触る実験室と走る本を用意します。\n"
+            "ZH: 手把手的实验室与骨架代码。\n",
             encoding="utf-8",
         )
         # Should fail before fix
@@ -47,6 +50,11 @@ class TestWorkshopHarness(unittest.TestCase):
         self.assertNotIn(em, fixed_text)
         self.assertIn("Hands-on Lab (핸즈온 랩)", fixed_text)
         self.assertIn("Thinking Budget (추론 예산)", fixed_text)
+        self.assertIn("생성됩니다", fixed_text)
+        self.assertIn("Hands-on Lab (ハンズオンラボ)", fixed_text)
+        self.assertIn("Runbook (ランブック)", fixed_text)
+        self.assertIn("Hands-on Lab (实战工作坊)", fixed_text)
+        self.assertIn("Starter / Boilerplate Code (Starter 初始代码)", fixed_text)
         self.assertTrue(harness_cli.audit_typography(str(self.temp_dir), fix=False))
 
     def test_03_audit_models_detection_and_fix(self):

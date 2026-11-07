@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-Final Completed Reference Solution for Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript)
+Final Completed Reference Solution for Multi-Language Google ADK & Agents CLI ADLC Workshop
 Primary Cloud Model: gemini-3.8-flash | Flagship Reasoning: gemini-4-argon | Local Model: gemma4:e4b
 """
 
@@ -66,11 +67,11 @@ def run_lab2_structured_output(topic_name: str) -> WorkshopTaskResult:
 
 def main():
     print("[Lab 01] Running Environment & Client Sanity Check...")
-    sanity_output = run_lab1_client_check("Verify Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript) workshop readiness.")
+    sanity_output = run_lab1_client_check("Verify Multi-Language Google ADK & Agents CLI ADLC Workshop workshop readiness.")
     print(sanity_output)
 
     print("\n[Lab 02 & Lab 03] Running Structured Output & Agentic Pipeline...")
-    result = run_lab2_structured_output("Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript)")
+    result = run_lab2_structured_output("Multi-Language Google ADK & Agents CLI ADLC Workshop")
     print(json.dumps(asdict(result), indent=2, ensure_ascii=False))
     from agent import root_agent, lookup_service_slo, verify_release_gate
     gate = verify_release_gate("checkout-api", 210)

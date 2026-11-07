@@ -1,6 +1,6 @@
 # Google Colab Interactive Notebooks for adk-polyglot-workshop
 
-> Topic: Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript)
+> Topic: Multi-Language Google ADK & Agents CLI ADLC Workshop
 
 ## One-Click Open in Colab
 

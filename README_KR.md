@@ -106,6 +106,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 - **Anthropic Claude (Claude Code CLI & Desktop)**: [`CLAUDE.md`](./CLAUDE.md)
 - **Google Antigravity & Gemini CLI**: `.gemini/skills/` 표준 네이티브 스킬 지원
 - **OpenAI Codex, ChatGPT, Aider & Cursor**: [`AGENTS.md`](./AGENTS.md) 지침 지원
+- **다국어 실무 개발자 용어 및 자연스러운 문법 원칙 (`EN` / `KO` / `JA` / `ZH`)**: 영문 문서는 자연스러운 기술 영어로 작성하며, 한국어·일본어·중국어 사용자가 문서를 요청할 때는 어색한 기계 번역식 직역이나 번역투 문법(`~되어집니다`, `~하는 것이 가능합니다` 등)을 배제하고 **기술 용어 영어 원문 우선 표기 + 현업 개발자 용어 병기 (`English Original (개발자 용어)`)** 및 현지 개발자 문법을 강제합니다 (`audit-typography` 및 [`docs/agents-spec/terminology-and-style-guide.md`](./docs/agents-spec/terminology-and-style-guide.md) 참조).
 - **전체 통합 가이드**: [`docs/ai-agent-interoperability-guide.md`](./docs/ai-agent-interoperability-guide.md)
 
 ---

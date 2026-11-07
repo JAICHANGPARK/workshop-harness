@@ -1,6 +1,6 @@
 # ELI5 (Explain Like I'm 5) AI Concept Cheat Sheet
 
-> Workshop Topic: **Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript)**
+> Workshop Topic: **Multi-Language Google ADK & Agents CLI ADLC Workshop**
 > Primary Cloud Model: `gemini-3.8-flash` | Flagship Reasoning: `gemini-4-argon` | Local Model: `gemma4:e4b`
 
 This cheat sheet translates core AI engineering concepts into intuitive everyday analogies across a 3-tier framework (Analogy -> Technical Mechanism -> Hands-on Action).

@@ -14,7 +14,7 @@
 
 **Workshop Harness**は、ハンズオンワークショップ（Build with AI、DevFest、コミュニティハンズオン）を開催する主催者、スピーカー、ファシリテーター、TAのためのワンクリックAIエージェントオーケストレーションツールキットです。
 
-[AGENTS.md標準仕様](https://agents.md/)に準拠し、**Google Antigravity**、**Gemini CLI**、**Anthropic Claude Code**、**OpenAI Codex / ChatGPT**、**Cursor**、**Aider**など、すべてのAIコーディングエージェントと完全に互換性があります。
+[AGENTS.md標準仕様](https://agents.md/)に準拠し、**Google Antigravity**、**Gemini CLI**、**Anthropic Claude Code**、**OpenAI Codex / ChatGPT**、**Cursor**、**Aider**など、すべてのAIコーディングエージェントと完全に互換性があります。また、日本語・韓国語・中国語でドキュメントを生成する際は、不自然な直訳や機械翻訳調の文法を排除し、**英語原語の技術用語 + 現場のソフトウェアエンジニアが実際に使う開発用語 (`English Original (開発用語)`)** と自然な技術文書スタイルを徹底します（[開発者用語・スタイルガイド](agents-spec/terminology-and-style-guide.md)）。
 
 ---
 
