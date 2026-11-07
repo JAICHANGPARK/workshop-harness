@@ -798,7 +798,8 @@ def main():
     parser.add_argument("--export-pdf", action="store_true", help="Export to PDF using Marp CLI")
 
     args = parser.parse_args()
-    generate_slides(args.target, args.output, args.export_pdf)
+    if not generate_slides(args.target, args.output, args.export_pdf):
+        sys.exit(1)
 
 
 if __name__ == "__main__":

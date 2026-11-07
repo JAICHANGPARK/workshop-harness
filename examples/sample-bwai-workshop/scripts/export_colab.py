@@ -287,7 +287,8 @@ def main():
 
     args = parser.parse_args()
 
-    export_to_colab(args.target, args.output, args.repo)
+    if not export_to_colab(args.target, args.output, args.repo):
+        sys.exit(1)
     if args.test:
         test_colab(args.target)
 

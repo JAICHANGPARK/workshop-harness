@@ -158,10 +158,12 @@ def test_code_execution(target_dir: Path):
         codelab_dir = codelab_yaml.parent
         guide_md = codelab_dir / "guide.md"
         steps_dir = codelab_dir / "steps"
-        if guide_md.exists() and steps_dir.exists() and list(steps_dir.glob("step_*.md")):
+        manifest_text = codelab_yaml.read_text(encoding="utf-8", errors="ignore")
+        has_required_keys = all(k in manifest_text for k in ["version:", "title:", "guide_markdown:", "steps:"])
+        if guide_md.exists() and steps_dir.exists() and list(steps_dir.glob("step_*.md")) and has_required_keys:
             print("✅ output/open-codelabs bundle check: PASSED")
         else:
-            print("❌ output/open-codelabs bundle check: FAILED (Missing guide.md or step files)")
+            print("❌ output/open-codelabs bundle check: FAILED (Missing guide.md, step files, or required manifest keys)")
             passed = False
 
     # Verify exported presentation slides if present
@@ -182,17 +184,27 @@ def audit_model_and_sdk_currency(target_dir: Path):
         "gemini-1.5-flash": "gemini-3.8-flash",
         "gemini-1.5-pro": "gemini-4-argon",
         "gemini-2.0-flash": "gemini-3.8-flash",
+        "gemini-2.0-flash-live": "gemini-3.8-live",
         "gemini-2.5-flash": "gemini-3.8-flash",
         "gemini-2.5-pro": "gemini-4-argon",
+        "gemini-2.5-flash-lite": "gemini-3.5-flash-lite",
         "gemini-3.1-flash": "gemini-3.8-flash",
+        "gemini-3.1-pro": "gemini-4-argon",
         "gemini-3.1-flash-live-preview": "gemini-3.8-live",
+        "gemini-2.5-flash-preview-tts": "gemini-3.8-flash-tts",
+        "gemini-3.1-flash-image-preview": "gemini-nano-banana-2.1",
         "gpt-4o-mini": "gpt-6-luna",
+        "gpt-4o": "gpt-6.1-sol",
+        "gpt-5.4-mini": "gpt-6-luna",
         "claude-3-5-sonnet": "claude-sonnet-5.5",
+        "claude-3-7-sonnet": "claude-sonnet-5.5",
+        "claude-opus-4": "claude-opus-5.5",
         "google.generativeai": "from google import genai (google-genai >= 2.30.1)",
+        "google-generativeai": "google-genai (>= 2.30.1)",
     }
     scan_exts = {".py", ".ts", ".js", ".go", ".kt", ".dart", ".md"}
     ignore_dirs = {".git", ".venv", "node_modules", "__pycache__", ".dart_tool", "build", "tmp", "site"}
-    ignore_files = {"verify_workshop.py", "harness_cli.py", "CHANGELOG.md"}
+    ignore_files = {"verify_workshop.py", "harness_cli.py", "CHANGELOG.md", "test_harness.py"}
     warnings = []
 
     for root, dirs, files in os.walk(target_dir):
@@ -249,7 +261,7 @@ def audit_typography_and_security(target_dir: Path):
         "차가운 시작": "콜드 스타트 (Cold Start)",
         "기억 장치 넘침": "메모리 부족 에러 (OOM, Out-Of-Memory)",
     }
-    ignore_literal_files = {"harness_cli.py", "verify_workshop.py", "terminology-and-style-guide.md"}
+    ignore_literal_files = {"harness_cli.py", "verify_workshop.py", "terminology-and-style-guide.md", "test_harness.py"}
     api_key_pattern = re.compile(r"AIzaSy[A-Za-z0-9_-]{25,}")
     safe_placeholders = {"AIzaSyYourGeminiApiKeyHere", "AIzaSyYourGeneratedApiKeyHere"}
 

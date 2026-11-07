@@ -170,7 +170,8 @@ def main():
     parser.add_argument("--push", action="store_true", help="Automatically push bundle via `oc codelab push`")
 
     args = parser.parse_args()
-    export_to_open_codelabs(args.target, args.output, args.push)
+    if not export_to_open_codelabs(args.target, args.output, args.push):
+        sys.exit(1)
 
 
 if __name__ == "__main__":

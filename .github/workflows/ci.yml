@@ -33,6 +33,7 @@ jobs:
 
       - name: Audit 2026 Model, SDK Currency & Typography
         run: |
+          python3 -m unittest discover -v
           python3 harness_cli.py audit-models --target .
           python3 harness_cli.py audit-typography --target .
           python3 harness_cli.py test --target .

@@ -132,7 +132,7 @@ def audit_models(target_dir: str, fix: bool = False) -> bool:
     print(f"🔍 Auditing Model & SDK Currency in '{target.name}'...")
     scan_extensions = {".py", ".ts", ".js", ".go", ".kt", ".dart", ".md", ".yaml", ".yml", ".json", ".ipynb"}
     ignore_dirs = {".git", ".venv", "node_modules", "__pycache__", ".dart_tool", "build", "tmp"}
-    ignore_files = {"harness_cli.py", "verify_workshop.py", "CHANGELOG.md"}
+    ignore_files = {"harness_cli.py", "verify_workshop.py", "CHANGELOG.md", "test_harness.py"}
 
     findings = []
     files_fixed = 0
@@ -240,7 +240,7 @@ def audit_typography(target_dir: str, fix: bool = False) -> bool:
     scan_extensions = {".md", ".txt", ".yaml", ".yml", ".ipynb", ".py", ".ts", ".js", ".go", ".kt", ".dart", ".java"}
     doc_extensions = {".md", ".txt", ".yaml", ".yml", ".ipynb"}
     ignore_dirs = {".git", ".venv", "node_modules", "__pycache__", ".dart_tool", "build", "tmp"}
-    ignore_files = {"harness_cli.py", "verify_workshop.py", "terminology-and-style-guide.md"}
+    ignore_files = {"harness_cli.py", "verify_workshop.py", "terminology-and-style-guide.md", "test_harness.py"}
 
     findings = []
     literal_findings = []
@@ -312,7 +312,9 @@ def audit_typography(target_dir: str, fix: bool = False) -> bool:
 
 
 def init_workshop(name: str, topic: str, target_dir: str = None, stack_str: str = "python", model_name: str = None):
-    project_dir = Path(target_dir) / name if target_dir else Path.cwd() / name
+    raw_path = Path(target_dir) / name if target_dir else Path(name)
+    project_dir = raw_path if raw_path.is_absolute() else (Path.cwd() / raw_path)
+    name = re.sub(r"[^a-zA-Z0-9_-]", "-", project_dir.name).strip("-") or "workshop"
     stack = [s.strip().lower() for s in stack_str.split(",")] if stack_str else ["python"]
     default_cloud_model = model_name or MODEL_REGISTRY["google-gemini"]["default_workhorse"]
     default_local_model = MODEL_REGISTRY["google-gemma"]["local_16gb_ram"]
@@ -3060,6 +3062,9 @@ def _run_python_script(args_list) -> int:
 
 def test_workshop(target_dir: str) -> bool:
     target = Path(target_dir).resolve()
+    if not target.exists():
+        print(f"❌ Error: Target directory '{target}' does not exist.")
+        return False
     script = target / "scripts" / "verify_workshop.py"
     if not script.exists():
         script = TEMPLATES_DIR / "script-templates" / "verify_workshop.py"
@@ -3068,8 +3073,11 @@ def test_workshop(target_dir: str) -> bool:
     return _run_python_script([str(script), str(target)]) == 0
 
 def build_pdf(target_dir: str) -> bool:
-    ensure_uv_dependencies()
     target = Path(target_dir).resolve()
+    if not target.exists():
+        print(f"❌ Error: Target directory '{target}' does not exist.")
+        return False
+    ensure_uv_dependencies()
     docs_dir = target / "docs"
     script = target / "scripts" / "generate_prep_pdf.py"
     output_pdf = target / "output" / "pdf" / f"{target.name}-prep-guide.pdf"
@@ -3084,6 +3092,9 @@ def build_pdf(target_dir: str) -> bool:
 
 def export_codelab(target_dir: str, output_dir: str = None, push: bool = False) -> bool:
     target = Path(target_dir).resolve()
+    if not target.exists():
+        print(f"❌ Error: Target directory '{target}' does not exist.")
+        return False
     script = target / "scripts" / "export_open_codelabs.py"
     if not script.exists():
         script = HARNESS_ROOT / "scripts" / "export_open_codelabs.py"
@@ -3099,6 +3110,9 @@ def export_codelab(target_dir: str, output_dir: str = None, push: bool = False) 
 
 def export_colab(target_dir: str, output_dir: str = None, repo: str = None, test: bool = False) -> bool:
     target = Path(target_dir).resolve()
+    if not target.exists():
+        print(f"❌ Error: Target directory '{target}' does not exist.")
+        return False
     script = target / "scripts" / "export_colab.py"
     if not script.exists():
         script = HARNESS_ROOT / "scripts" / "export_colab.py"
@@ -3116,6 +3130,9 @@ def export_colab(target_dir: str, output_dir: str = None, repo: str = None, test
 
 def test_colab(target_dir: str) -> bool:
     target = Path(target_dir).resolve()
+    if not target.exists():
+        print(f"❌ Error: Target directory '{target}' does not exist.")
+        return False
     script = target / "scripts" / "export_colab.py"
     if not script.exists():
         script = HARNESS_ROOT / "scripts" / "export_colab.py"
@@ -3124,8 +3141,11 @@ def test_colab(target_dir: str) -> bool:
     return _run_python_script([str(script), "--target", str(target), "--test"]) == 0
 
 def build_slides(target_dir: str, output_dir: str = None, export_pdf: bool = False) -> bool:
-    ensure_uv_dependencies()
     target = Path(target_dir).resolve()
+    if not target.exists():
+        print(f"❌ Error: Target directory '{target}' does not exist.")
+        return False
+    ensure_uv_dependencies()
     script = target / "scripts" / "build_slides.py"
     if not script.exists():
         script = HARNESS_ROOT / "scripts" / "build_slides.py"
@@ -3165,19 +3185,23 @@ def generate_all(name: str, topic: str, stack_str: str, target_dir: str = None, 
 
     # 5. Build PDF Handout & Previews
     print("\n[Step 5/9] Building Publication PDF Handouts & Previews...")
-    build_pdf(str(proj_dir))
+    if not build_pdf(str(proj_dir)):
+        sys.exit(1)
 
     # 6. Export Open Codelabs Bundle & Manifest
     print("\n[Step 6/9] Exporting Open Codelabs Interactive Bundle & Manifest...")
-    export_codelab(str(proj_dir))
+    if not export_codelab(str(proj_dir)):
+        sys.exit(1)
 
     # 7. Export Google Colab Notebooks (.ipynb) & Badges
     print("\n[Step 7/9] Exporting Google Colab Interactive Notebooks & Badges...")
-    export_colab(str(proj_dir))
+    if not export_colab(str(proj_dir)):
+        sys.exit(1)
 
     # 8. Build Presentation Slide Deck (Marp, PPTX & Web HTML)
     print("\n[Step 8/9] Building Presentation Slide Decks (Marp, PPTX & Web HTML)...")
-    build_slides(str(proj_dir))
+    if not build_slides(str(proj_dir)):
+        sys.exit(1)
 
     # 9. Final Integrity, Artifact, Link & Smoke Code Execution Gate
     print("\n[Step 9/9] Running Final Workshop Code, Bundle & Link Integrity Verification...")
@@ -3185,7 +3209,7 @@ def generate_all(name: str, topic: str, stack_str: str, target_dir: str = None, 
         sys.exit(1)
 
     print("\n" + "=" * 70)
-    print(f"🎉 SUCCESS! Complete Workshop Package '{name}' generated in ONE-CLICK via uv!")
+    print(f"🎉 SUCCESS! Complete Workshop Package '{proj_dir.name}' generated in ONE-CLICK via uv!")
     print(f"📁 Path: {proj_dir}")
     print("=" * 70)
 
@@ -3286,15 +3310,20 @@ def main():
         if not test_workshop(args.target):
             sys.exit(1)
     elif args.command == "build-pdf":
-        build_pdf(args.target)
+        if not build_pdf(args.target):
+            sys.exit(1)
     elif args.command == "export-codelab":
-        export_codelab(args.target, args.output, args.push)
+        if not export_codelab(args.target, args.output, args.push):
+            sys.exit(1)
     elif args.command == "export-colab":
-        export_colab(args.target, args.output, args.repo, args.test)
+        if not export_colab(args.target, args.output, args.repo, args.test):
+            sys.exit(1)
     elif args.command == "test-colab":
-        test_colab(args.target)
+        if not test_colab(args.target):
+            sys.exit(1)
     elif args.command == "build-slides":
-        build_slides(args.target, args.output, args.export_pdf)
+        if not build_slides(args.target, args.output, args.export_pdf):
+            sys.exit(1)
     else:
         parser.print_help()
 
