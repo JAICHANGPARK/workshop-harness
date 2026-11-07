@@ -12,7 +12,7 @@
 
 ## 개요
 
-**Workshop Harness**는 기술 워크숍(Build with AI, DevFest, 커뮤니티 개발자 랩)을 주최하는 오거나이저, 발표자, 퍼실리테이터, 그리고 기술 조교(TA)를 위한 **원클릭 AI 에이전트 오케스트레이션 툴킷**입니다.
+**Workshop Harness**는 기술 워크숍(Build with AI, DevFest, 커뮤니티 개발자 랩)을 주최하는 오거나이저, 발표자, 퍼실리테이터, 그리고 TA (Teaching Assistant, 실습 코치)를 위한 **원클릭 AI 에이전트 오케스트레이션 (Multi-Agent Orchestration) 툴킷**입니다.
 
 [AGENTS.md 표준 명세](https://agents.md/)를 준수하여 **Google Antigravity**, **Gemini CLI**, **Anthropic Claude Code**, **OpenAI Codex / ChatGPT**, **Cursor**, **Aider** 등 모든 AI 코딩 에이전트와 네이티브 상호운용성을 제공합니다.
 
@@ -21,7 +21,7 @@
 ## Quickstart Guide
 
 ```bash
-# 1. 저장소 복제
+# 1. 리포지토리 클론 (Repository Clone)
 git clone https://github.com/JAICHANGPARK/workshop-harness.git
 cd workshop-harness
 

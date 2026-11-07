@@ -133,7 +133,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 | 1 | [`workshop-scaffolder`](skills/workshop-scaffolder/SKILL.md) | 워크숍 이름 & 주제 | `docs/`, `workshop/`, `prompt-pack/`, `scripts/` | 표준 워크숍 리포지토리 전체 구조 스캐폴딩 |
 | 2 | [`cross-architecture-checker`](skills/cross-architecture-checker/SKILL.md) | 사용 기술 스택 | `docs/00-architecture-compatibility-matrix.md`, 감지 스크립트 | Apple Silicon, Intel Mac, Win, Linux 칩셋 호환성 진단 & 우회 가이드 생성 |
 | 3 | [`prerequisite-checker`](skills/prerequisite-checker/SKILL.md) | 워크숍 준비물 목록 | `gemma4-local-setup-guide.md`, `check_env.sh/ps1` | OS별 사전 준비 가이드 및 환경 자동 점검 스크립트 생성 |
-| 4 | [`hands-on-curriculum-builder`](skills/hands-on-curriculum-builder/SKILL.md) | 실습 목표 & 시간 | `03_labs/README.md`, `prompt-pack/`, `starter`/`final` 코드 | 단계별 실습 커리큘럼, 뼈대/정답 코드 및 프롬프트 팩 작성 |
+| 4 | [`hands-on-curriculum-builder`](skills/hands-on-curriculum-builder/SKILL.md) | 실습 목표 & 시간 | `03_labs/README.md`, `prompt-pack/`, `starter`/`final` 코드 | 단계별 실습 커리큘럼, Starter / Reference Solution (스타터/솔루션 코드) 및 프롬프트 팩 작성 |
 | 5 | [`pdf-handout-generator`](skills/pdf-handout-generator/SKILL.md) | `docs/` 마크다운 폴더 | `output/pdf/*.pdf`, `tmp/pdfs/contact_sheet.png` | ReportLab + PyMuPDF 기반 PDF 핸드아웃 및 렌더링 미리보기 생성 |
 | 6 | [`workshop-troubleshooter`](skills/workshop-troubleshooter/SKILL.md) | 장비 사양 및 OS | `docs/troubleshooting.md`, `docs/20-faq.md` | RAM 사양별(8G/16G/32G+), OS별 트러블슈팅 매트릭스 작성 |
 | 7 | [`workshop-runbook-generator`](skills/workshop-runbook-generator/SKILL.md) | 세션 시간 & TA 인원 | `RUNBOOK.md` | 발표자 & TA 전용 분단위 진행 타임라인 런북 & 큐카드 작성 |
@@ -248,9 +248,9 @@ my-workshop-repo/
 │   ├── 20-faq.md                       # 참석자용 트러블슈팅 & FAQ
 │   └── eli5-concept-cheat-sheet.md     # 3단계 ELI5 AI 핵심 개념 치트시트
 ├── workshop/                           # 당일 핸즈온 실습
-│   ├── 01_starter/                     # 참가자용 시작 코드 (sre_agent/, polyglot/ 등)
-│   ├── 02_final/                       # 정답 참고 코드 및 evalset.json
-│   └── 03_labs/                        # Step-by-Step 실습 문서 (Lab 01~03)
+│   ├── 01_starter/                     # Starter Code (스타터 코드: sre_agent/, polyglot/ 등)
+│   ├── 02_final/                       # Reference Solution (레퍼런스 솔루션 코드 및 evalset.json)
+│   └── 03_labs/                        # Step-by-Step Hands-on Lab 가이드 (Lab 01~03)
 ├── prompt-pack/                        # 핸즈온 프롬프트 팩
 ├── scripts/                            # 아키텍처 점검 및 오프라인 번들링 스크립트
 │   ├── check_architecture_compat.sh    # 아키텍처 감지 (Mac/Linux)

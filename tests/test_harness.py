@@ -45,8 +45,8 @@ class TestWorkshopHarness(unittest.TestCase):
         self.assertTrue(harness_cli.audit_typography(str(self.temp_dir), fix=True))
         fixed_text = sample_md.read_text(encoding="utf-8")
         self.assertNotIn(em, fixed_text)
-        self.assertIn("핸즈온 랩 (Hands-on Lab)", fixed_text)
-        self.assertIn("추론 예산 (Thinking Budget)", fixed_text)
+        self.assertIn("Hands-on Lab (핸즈온 랩)", fixed_text)
+        self.assertIn("Thinking Budget (추론 예산)", fixed_text)
         self.assertTrue(harness_cli.audit_typography(str(self.temp_dir), fix=False))
 
     def test_03_audit_models_detection_and_fix(self):

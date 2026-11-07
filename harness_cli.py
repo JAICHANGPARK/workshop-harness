@@ -208,24 +208,39 @@ def sanitize_no_em_dash(text: str) -> str:
 
 
 AWKWARD_LITERAL_TRANSLATION_REPLACEMENTS = {
-    "손으로 하는 실험실": "핸즈온 랩 (Hands-on Lab)",
-    "달리는 책": "런북 (Runbook)",
-    "발판 설치": "스캐폴딩 (Scaffolding)",
-    "생각 예산": "추론 예산 (Thinking Budget)",
-    "구조화된 출력물": "구조화 출력 (Structured Outputs)",
-    "도구 부르기": "툴 콜링 (Tool Calling)",
-    "검색 증강된 생성": "검색 증강 생성 (RAG, Retrieval-Augmented Generation)",
-    "끼워넣기 벡터": "임베딩 (Embedding)",
-    "미세 조정하기": "파인튜닝 (Fine-tuning)",
-    "다중 대리인 지휘": "멀티 에이전트 오케스트레이션 (Multi-Agent Orchestration)",
-    "하위 대리인 넘기기": "서브 에이전트 위임 (Sub-Agent Delegation)",
-    "궤도 채점": "궤적 평가 (Trajectory Evaluation)",
-    "연기 시험": "스모크 테스트 (Smoke Test)",
-    "후퇴 경로": "폴백 (Fallback)",
-    "상투적인 판박이 코드": "보일러플레이트 코드 (Boilerplate Code)",
-    "의존성 주사": "의존성 주입 (Dependency Injection)",
-    "차가운 시작": "콜드 스타트 (Cold Start)",
-    "기억 장치 넘침": "메모리 부족 에러 (OOM, Out-Of-Memory)",
+    "손으로 하는 실험실": "Hands-on Lab (핸즈온 랩)",
+    "달리는 책": "Runbook (런북)",
+    "발판 설치": "Scaffolding (스캐폴딩)",
+    "뼈대 공사": "Scaffolding (스캐폴딩)",
+    "뼈대 코드": "Starter / Boilerplate Code (스타터 / 보일러플레이트 코드)",
+    "생각 예산": "Thinking Budget (추론 예산)",
+    "사고 예산": "Thinking Budget (추론 예산)",
+    "구조화된 출력물": "Structured Outputs (구조화 출력)",
+    "도구 부르기": "Tool Calling (툴 콜링)",
+    "함수 부르기": "Function Calling (함수 호출)",
+    "검색 증강된 생성": "RAG (Retrieval-Augmented Generation, 검색 증강 생성)",
+    "끼워넣기 벡터": "Embedding (임베딩)",
+    "미세 조정하기": "Fine-tuning (파인튜닝)",
+    "다중 대리인 지휘": "Multi-Agent Orchestration (멀티 에이전트 오케스트레이션)",
+    "하위 대리인 넘기기": "Sub-Agent Delegation (서브 에이전트 위임)",
+    "대리인 개발 키트": "ADK (Agent Development Kit, 에이전트 개발 키트)",
+    "궤도 채점": "Trajectory Evaluation (궤적 평가)",
+    "경로 채점": "Trajectory Evaluation (궤적 평가)",
+    "연기 시험": "Smoke Test (스모크 테스트)",
+    "후퇴 경로": "Fallback (폴백)",
+    "비상 후퇴": "Fallback (폴백)",
+    "상투적인 판박이 코드": "Boilerplate Code (보일러플레이트 코드)",
+    "의존성 주사": "Dependency Injection (의존성 주입)",
+    "차가운 시작": "Cold Start (콜드 스타트)",
+    "기억 장치 넘침": "OOM (Out-Of-Memory, 메모리 부족 에러)",
+    "부서지는 변경": "Breaking Changes (브레이킹 체인지)",
+    "깨지는 변경": "Breaking Changes (브레이킹 체인지)",
+    "속도 제한 걸림": "Rate Limit (레이트 리밋)",
+    "맥락 창문": "Context Window (컨텍스트 윈도우)",
+    "문맥 창문": "Context Window (컨텍스트 윈도우)",
+    "체제 지시문": "System Instruction (시스템 프롬프트)",
+    "인간 고리 안": "Human-in-the-Loop (HITL, 사용자 승인 체크포인트)",
+    "사람을 루프에": "Human-in-the-Loop (HITL, 사용자 승인 체크포인트)",
 }
 
 
@@ -543,12 +558,12 @@ This cheat sheet translates core AI engineering concepts into intuitive everyday
 
 ## Mandatory Rules for AI Coding Agents
 
-1. **Developer-Friendly Terminology & Bilingual Technical Term Notation (영어 원문 병기 & 직역 금지)**:
+1. **Original Technical Term First & Real-World Developer Terminology (기술 용어 원어 우선 표기, 실무 개발자 용어 사용 & 직역 금지)**:
    - When authoring or localizing documentation, `.md` files, slide decks, setup guides, runbooks, or **code comments** into Korean (KR), Japanese (JA), or Chinese (ZH), **NEVER perform awkward literal / word-for-word machine translations**.
-   - **Always use real-world developer terminology AND include the original English technical term alongside it in parentheses (`개발자 친화적 용어 (English Original)`)**:
-     - Examples: **핸즈온 랩 (Hands-on Lab)**, **스캐폴딩 (Scaffolding)**, **런북 (Runbook)**, **프롬프트 엔지니어링 (Prompt Engineering)**, **구조화 출력 (Structured Outputs / JSON Schema)**, **툴 콜링 / 함수 호출 (Tool Calling / Function Calling)**, **검색 증강 생성 (RAG, Retrieval-Augmented Generation)**, **임베딩 (Embedding)**, **양자화 (Quantization)**, **추론 예산 (Thinking Budget)**, **멀티 에이전트 오케스트레이션 (Multi-Agent Orchestration)**, **서브 에이전트 위임 (Sub-Agent Delegation)**, **궤적 평가 (Trajectory Evaluation)**, **의존성 주입 (Dependency Injection)**, **폴백 (Fallback)**.
-     - Prohibited literal translations: never write awkward literal phrases such as "손으로 하는 실험실", "달리는 책", "발판 설치", "생각 예산", "도구 부르기", or "기억 장치 넘침".
-   - **Code Comments & Identifiers**: Keep all SDK symbols, class/function names, and CLI flags in their exact English form (`root_agent`, `LlmAgent`, `FunctionTool`, `thinking_budget`, `response_schema`), and write comments using developer-friendly terminology with English terms in parentheses.
+   - **For technical terms, use the original English term first and append the developer-friendly translation in parentheses (`English Original (개발자 친화적 용어)`), or pair established developer vernacular with the English original**:
+     - Examples: **Hands-on Lab (핸즈온 랩)**, **Scaffolding (스캐폴딩)**, **Runbook (런북)**, **Starter / Boilerplate Code (스타터 / 보일러플레이트 코드)**, **Prompt Engineering (프롬프트 엔지니어링)**, **Structured Outputs (구조화 출력 / JSON Schema)**, **Tool Calling / Function Calling (툴 콜링 / 함수 호출)**, **RAG (Retrieval-Augmented Generation, 검색 증강 생성)**, **Embedding (임베딩)**, **Quantization (양자화)**, **Thinking Budget (추론 예산)**, **Multi-Agent Orchestration (멀티 에이전트 오케스트레이션)**, **Sub-Agent Delegation (서브 에이전트 위임)**, **Trajectory Evaluation (궤적 평가)**, **Dependency Injection (의존성 주입)**, **Fallback (폴백)**, **Breaking Changes (브레이킹 체인지)**.
+     - Prohibited literal translations: never write awkward literal phrases such as "손으로 하는 실험실", "달리는 책", "발판 설치", "뼈대 코드", "생각 예산", "도구 부르기", "대리인 개발 키트", "문맥 창문", or "기억 장치 넘침".
+   - **Code Comments & Identifiers**: Keep all SDK symbols, class/function names, and CLI flags in their exact English form (`root_agent`, `LlmAgent`, `FunctionTool`, `thinking_budget`, `response_schema`), and write comments using original English technical terms paired with developer-friendly explanations.
 
 2. **Typography Rule (No Em Dash in Markdown or Documentation)**:
    - **NEVER generate em dash characters (`\\u2014`)** in any generated documentation, markdown (`.md`) files, slide decks, setup guides, code comments, or runbooks.
