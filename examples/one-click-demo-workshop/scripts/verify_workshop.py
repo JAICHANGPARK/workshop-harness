@@ -131,6 +131,21 @@ def test_code_execution(target_dir: Path):
             print(f"❌ workshop/02_final/evalset.json JSON check: FAILED ({exc})")
             passed = False
 
+    # Verify Polyglot ADK language tracks if present
+    polyglot_final = target_dir / "workshop" / "02_final" / "polyglot"
+    if polyglot_final.exists():
+        expected_polyglot = [
+            polyglot_final / "go" / "main.go",
+            polyglot_final / "java" / "src" / "main" / "java" / "com" / "example" / "adk" / "SreAdkJavaApp.java",
+            polyglot_final / "kotlin" / "src" / "main" / "kotlin" / "com" / "example" / "adk" / "SreAdkKotlinApp.kt",
+            polyglot_final / "typescript" / "src" / "agent.ts",
+        ]
+        if all(p.exists() and p.stat().st_size > 0 for p in expected_polyglot):
+            print("✅ workshop/02_final/polyglot (Go, Java, Kotlin, TypeScript ADK) check: PASSED")
+        else:
+            print("❌ workshop/02_final/polyglot check: FAILED (Missing language track files)")
+            passed = False
+
     # Verify exported Google Colab notebooks if present
     colab_dir = target_dir / "output" / "colab"
     if colab_dir.exists():

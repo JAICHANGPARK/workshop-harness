@@ -1,7 +1,7 @@
 # Facilitator & TA Runbook: adk-polyglot-workshop
 
 - **Session Title**: Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript)
-- **Tech Stack**: `adk,polyglot,agents-cli`
+- **Tech Stack**: `python,typescript,go,java,kotlin,adk,agents-cli`
 - **Primary Cloud Model**: `gemini-3.8-flash` | **Coordinator**: `gemini-4-argon` | **Local Model**: `gemma4:e4b`
 - **Facilitator**: Workshop Lead Facilitator
 - **Teaching Assistants (TA)**: Roaming TA Team

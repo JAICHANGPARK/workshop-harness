@@ -1,7 +1,7 @@
 # adk-polyglot-workshop
 
 > Topic: Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript)
-> Tech Stack: adk,polyglot,agents-cli
+> Tech Stack: python,typescript,go,java,kotlin,adk,agents-cli
 
 This repository contains pre-event preparation documents and hands-on lab code for the **Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript)** workshop.
 

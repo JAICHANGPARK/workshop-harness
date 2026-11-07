@@ -110,9 +110,13 @@ def export_to_colab(target_dir: str, output_dir: str = None, repo_name: str = No
     # Read starter and solution code
     starter_code_file = target / "workshop" / "01_starter" / "main.py"
     solution_code_file = target / "workshop" / "02_final" / "main.py"
+    starter_agent_file = target / "workshop" / "01_starter" / "agent.py"
+    solution_agent_file = target / "workshop" / "02_final" / "agent.py"
 
     starter_code = starter_code_file.read_text(encoding="utf-8") if starter_code_file.exists() else "# Starter code placeholder\nprint('Starting workshop...')"
     solution_code = solution_code_file.read_text(encoding="utf-8") if solution_code_file.exists() else "# Solution code placeholder\nprint('Completed workshop!')"
+    starter_agent_code = starter_agent_file.read_text(encoding="utf-8") if starter_agent_file.exists() else None
+    solution_agent_code = solution_agent_file.read_text(encoding="utf-8") if solution_agent_file.exists() else None
 
     # Read lab markdown
     labs_dir = target / "workshop" / "03_labs"
@@ -175,6 +179,8 @@ except Exception:
         starter_cells.append(create_notebook_cell("markdown", lab_sec))
         if idx == 1:
             starter_cells.append(create_notebook_cell("code", starter_code))
+        elif idx == 2 and starter_agent_code:
+            starter_cells.append(create_notebook_cell("code", starter_agent_code))
         else:
             starter_cells.append(create_notebook_cell("code", f"# TODO [Lab {idx:02d}]: Implement your code below\n"))
 
@@ -194,8 +200,23 @@ except Exception:
 
     for idx, lab_sec in enumerate(lab_sections, 1):
         solution_cells.append(create_notebook_cell("markdown", lab_sec))
-        if idx == len(lab_sections) or idx == 1:
+        if idx == 1:
             solution_cells.append(create_notebook_cell("code", solution_code))
+        elif idx == 2 and solution_agent_code:
+            solution_cells.append(create_notebook_cell("code", solution_agent_code))
+        elif idx == len(lab_sections):
+            if solution_agent_code:
+                eval_cell = (
+                    "# Lab 03: ADK Multi-Agent Trajectory & Release Gate Evaluation\n"
+                    "slo_info = lookup_service_slo('checkout-api')\n"
+                    "gate_result = verify_release_gate('checkout-api', 210)\n"
+                    "print('SLO Telemetry:', slo_info)\n"
+                    "print('Release Gate Decision:', gate_result)\n"
+                    "assert gate_result['gate_decision'] == 'APPROVE_DEPLOY'\n"
+                )
+                solution_cells.append(create_notebook_cell("code", eval_cell))
+            else:
+                solution_cells.append(create_notebook_cell("code", solution_code))
         else:
             solution_cells.append(create_notebook_cell("code", f"# Solution for Lab {idx:02d}\n# Reference implementation\n"))
 

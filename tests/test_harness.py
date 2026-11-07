@@ -83,12 +83,24 @@ class TestWorkshopHarness(unittest.TestCase):
         proj_dir = harness_cli.init_workshop(
             name=str(target_path),
             topic="Gemma 4 & ADK Multi-Agent Lab",
-            stack_str="python,adk,agents-cli,ollama",
+            stack_str="python,adk,agents-cli,polyglot,ollama",
         )
         self.assertEqual(proj_dir.resolve(), target_path.resolve())
         pyproject_text = (proj_dir / "pyproject.toml").read_text(encoding="utf-8")
         self.assertIn('name = "path-based-workshop"', pyproject_text)
         self.assertNotIn(str(self.temp_dir), pyproject_text)
+
+        # Verify all 5 ADK language tracks exist (Python + Go, Java, Kotlin, TypeScript)
+        self.assertTrue((proj_dir / "workshop" / "02_final" / "agent.py").exists())
+        self.assertTrue((proj_dir / "workshop" / "02_final" / "sre_agent" / "agent.py").exists())
+        self.assertTrue((proj_dir / "workshop" / "02_final" / "polyglot" / "go" / "main.go").exists())
+        self.assertTrue(
+            (proj_dir / "workshop" / "02_final" / "polyglot" / "java" / "src" / "main" / "java" / "com" / "example" / "adk" / "SreAdkJavaApp.java").exists()
+        )
+        self.assertTrue(
+            (proj_dir / "workshop" / "02_final" / "polyglot" / "kotlin" / "src" / "main" / "kotlin" / "com" / "example" / "adk" / "SreAdkKotlinApp.kt").exists()
+        )
+        self.assertTrue((proj_dir / "workshop" / "02_final" / "polyglot" / "typescript" / "src" / "agent.ts").exists())
 
         # Verify compatibility audit, persona loop review, codelab, colab, slides, and test_workshop
         issues = harness_cli.audit_compatibility("python,adk,agents-cli,ollama", str(proj_dir))
@@ -102,6 +114,9 @@ class TestWorkshopHarness(unittest.TestCase):
         self.assertTrue(harness_cli.export_colab(str(proj_dir)))
         self.assertTrue((proj_dir / "output" / "colab" / "workshop_starter.ipynb").exists())
         self.assertTrue((proj_dir / "output" / "colab" / "workshop_solution.ipynb").exists())
+        sol_nb_text = (proj_dir / "output" / "colab" / "workshop_solution.ipynb").read_text(encoding="utf-8")
+        self.assertIn("adlc_root_coordinator", sol_nb_text)
+        self.assertIn("verify_release_gate", sol_nb_text)
 
         self.assertTrue(harness_cli.build_slides(str(proj_dir)))
         self.assertTrue((proj_dir / "output" / "slides" / "slides.md").exists())

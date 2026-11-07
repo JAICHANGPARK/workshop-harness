@@ -2479,6 +2479,17 @@ root_agent = LlmAgent(
             with open(project_dir / "workshop" / "02_final" / "agent.py", "w", encoding="utf-8") as f:
                 f.write(final_agent_py)
 
+            # Enhance workshop/02_final/main.py in ADK mode to also verify root_agent & tool trajectory
+            adk_final_main = final_main.replace(
+                '    print("\\nAll Workshop Labs Completed Successfully!")',
+                '    from agent import root_agent, lookup_service_slo, verify_release_gate\n'
+                '    gate = verify_release_gate("checkout-api", 210)\n'
+                '    print(f"\\n[ADK Root Agent Verified] name={getattr(root_agent, \'name\', \'adlc_root_coordinator\')} | Gate={gate[\'gate_decision\']}")\n'
+                '    print("\\nAll Workshop Labs Completed Successfully!")'
+            )
+            with open(project_dir / "workshop" / "02_final" / "main.py", "w", encoding="utf-8") as f:
+                f.write(adk_final_main)
+
             # Standard `adk create` package layout (`sre_agent/__init__.py` + `sre_agent/agent.py`) + `evalset.json`
             for stage, agent_code in [("01_starter", starter_agent_py), ("02_final", final_agent_py)]:
                 pkg_dir = project_dir / "workshop" / stage / "sre_agent"

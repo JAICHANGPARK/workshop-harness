@@ -30,7 +30,7 @@ When preparing workshop sessions, always verify the tool recommendations and fal
 
 ---
 
-## Stack-Specific Architecture & Risk Audit (`adk,polyglot,agents-cli`)
+## Stack-Specific Architecture & Risk Audit (`python,typescript,go,java,kotlin,adk,agents-cli`)
 
 | Tool / Component | Target Environment | Identified Risk | Mandatory Fallback Path |
 | :--- | :--- | :--- | :--- |

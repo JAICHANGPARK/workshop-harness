@@ -72,6 +72,9 @@ def main():
     print("\n[Lab 02 & Lab 03] Running Structured Output & Agentic Pipeline...")
     result = run_lab2_structured_output("Multi-Language Agent Systems with Google ADK (Python, Go, Java, Kotlin, TypeScript)")
     print(json.dumps(asdict(result), indent=2, ensure_ascii=False))
+    from agent import root_agent, lookup_service_slo, verify_release_gate
+    gate = verify_release_gate("checkout-api", 210)
+    print(f"\n[ADK Root Agent Verified] name={getattr(root_agent, 'name', 'adlc_root_coordinator')} | Gate={gate['gate_decision']}")
     print("\nAll Workshop Labs Completed Successfully!")
 
 
