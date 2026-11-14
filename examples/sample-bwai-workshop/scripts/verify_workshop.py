@@ -259,7 +259,7 @@ def audit_model_and_sdk_currency(target_dir: Path):
     }
     scan_exts = {".py", ".ts", ".js", ".go", ".kt", ".dart", ".md"}
     ignore_dirs = {".git", ".venv", "node_modules", "__pycache__", ".dart_tool", "build", "tmp", "site"}
-    ignore_files = {"verify_workshop.py", "harness_cli.py", "CHANGELOG.md", "test_harness.py"}
+    ignore_files = {"verify_workshop.py", "harness_cli.py", "registry.py", "auditors.py", "CHANGELOG.md", "test_harness.py"}
     warnings = []
 
     for root, dirs, files in os.walk(target_dir):
@@ -360,7 +360,7 @@ def audit_typography_and_security(target_dir: Path):
         "后退路径": "Fallback (回退策略)",
         "冰冷启动": "Cold Start (冷启动)",
     }
-    ignore_literal_files = {"harness_cli.py", "verify_workshop.py", "terminology-and-style-guide.md", "test_harness.py"}
+    ignore_literal_files = {"harness_cli.py", "registry.py", "verify_workshop.py", "terminology-and-style-guide.md", "test_harness.py"}
     api_key_pattern = re.compile(r"(?:AIzaSy[A-Za-z0-9_-]{25,}|sk-ant-[A-Za-z0-9_-]{32,}|sk-proj-[A-Za-z0-9_-]{32,})")
     safe_placeholders = {"AIzaSyYourGeminiApiKeyHere", "AIzaSyYourGeneratedApiKeyHere"}
 

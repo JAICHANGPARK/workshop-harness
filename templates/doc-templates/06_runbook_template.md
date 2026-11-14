@@ -9,7 +9,7 @@
 ## Session Timeline
 
 ### 00m - 10m: Opening & Environment Verification
-- **Facilitator**: Walk through `gemma4-local-setup-guide.md` and demo `./scripts/check_env.sh` execution
+- **Facilitator**: Walk through `SETUP_GUIDE.md` and demo `./scripts/check_env.sh` execution
 - **TA**: Provide 1:1 support for attendees with environment check errors; distribute offline USB if needed
 
 ### 10m - 25m: Lab 01 - Hello World & API Integration

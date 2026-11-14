@@ -137,7 +137,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 |---|---|---|---|---|
 | 1 | [`workshop-scaffolder`](skills/workshop-scaffolder/SKILL.md) | 워크숍 이름 & 주제 | `docs/`, `workshop/`, `prompt-pack/`, `scripts/` | 표준 워크숍 리포지토리 전체 구조 스캐폴딩 |
 | 2 | [`cross-architecture-checker`](skills/cross-architecture-checker/SKILL.md) | 사용 기술 스택 | `docs/00-architecture-compatibility-matrix.md`, 감지 스크립트 | Apple Silicon, Intel Mac, Win, Linux 칩셋 호환성 진단 & 우회 가이드 생성 |
-| 3 | [`prerequisite-checker`](skills/prerequisite-checker/SKILL.md) | 워크숍 준비물 목록 | `gemma4-local-setup-guide.md`, `check_env.sh/ps1` | OS별 사전 준비 가이드 및 환경 자동 점검 스크립트 생성 |
+| 3 | [`prerequisite-checker`](skills/prerequisite-checker/SKILL.md) | 워크숍 준비물 목록 | `SETUP_GUIDE.md`, `check_env.sh/ps1` | OS별 사전 준비 가이드 및 환경 자동 점검 스크립트 생성 |
 | 4 | [`hands-on-curriculum-builder`](skills/hands-on-curriculum-builder/SKILL.md) | 실습 목표 & 시간 | `03_labs/README.md`, `prompt-pack/`, `starter`/`final` 코드 | 단계별 실습 커리큘럼, Starter / Reference Solution (스타터/솔루션 코드) 및 프롬프트 팩 작성 |
 | 5 | [`pdf-handout-generator`](skills/pdf-handout-generator/SKILL.md) | `docs/` 마크다운 폴더 | `output/pdf/*.pdf`, `tmp/pdfs/contact_sheet.png` | ReportLab + PyMuPDF 기반 PDF 핸드아웃 및 렌더링 미리보기 생성 |
 | 6 | [`workshop-troubleshooter`](skills/workshop-troubleshooter/SKILL.md) | 장비 사양 및 OS | `docs/troubleshooting.md`, `docs/20-faq.md` | RAM 사양별(8G/16G/32G+), OS별 트러블슈팅 매트릭스 작성 |
@@ -248,7 +248,7 @@ my-workshop-repo/
 ├── pyproject.toml                      # Astral uv 의존성 명세 파일
 ├── .env.sample                         # 환경 변수 샘플 (GEMINI_API_KEY)
 ├── .gitignore                          # API 키 및 빌드 아티팩트 보안 규칙
-├── gemma4-local-setup-guide.md         # 행사 전 통합 사전 준비 가이드
+├── SETUP_GUIDE.md         # 행사 전 통합 사전 준비 가이드
 ├── docs/                               # 상세 가이드 문서 (00 ~ 20)
 │   ├── 00-architecture-compatibility-matrix.md # 크로스 아키텍처 대비 가이드
 │   ├── 00-persona-loop-review-report.md# 루프 엔지니어링 페르소나 리뷰 리포트

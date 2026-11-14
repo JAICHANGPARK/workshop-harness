@@ -1,6 +1,6 @@
 # CLAUDE.md - Claude Code Agent Instructions for Workshop Harness
 
-> Standard Claude Code Context & Instructions for Workshop Harness (21 Agent Skills)
+> Standard Claude Code Context & Instructions for Workshop Harness (22 Agent Skills)
 
 This repository provides native compatibility with **Anthropic Claude Code CLI**, **Claude Fable 5.2 / Claude Opus 5.5 / Claude Sonnet 5.5 / Claude Haiku 5.5**, and **Claude Desktop**.
 
@@ -28,9 +28,9 @@ This repository provides native compatibility with **Anthropic Claude Code CLI**
 4. **🚫 No Emojis in Documentation (Default: Clean Professional Text)**:
    - **Do NOT use emojis in generated documentation, slide decks, setup guides, code comments, or runbooks by default.**
    - Emojis may only be used if the user explicitly requests them in their prompt.
-5. **Natural Language Prompt ➔ Zero-Question Instant Generation**:
+5. **Natural Language Prompt ➔ 3-Step Autonomous Generation & Domain/Language Tailoring**:
    - **Users communicate using natural language prompts. Do NOT ask users to execute Python CLI commands directly or ask unnecessary flag questions.**
-   - When a user requests a workshop in natural language (e.g. *"Claude 최신 모델로 멀티 에이전트 워크숍 만들어줘"*, *"OpenAI GPT로 구조화 출력 실습 만들어줘"*), **Claude Code must autonomously run a pre-flight web search and immediately execute `python3 harness_cli.py prompt "<user prompt>"` (or `generate-all`) to generate the complete end-to-end workshop package right away.**
+   - When a user requests a workshop in natural language (e.g. *"Claude 최신 모델로 멀티 에이전트 워크숍 만들어줘"*, *"Gemma 4와 EmbeddingGemma 2로 로컬 RAG 실습 만들어줘"*), **Claude Code must autonomously**: (1) run a pre-flight web search, (2) execute `python3 harness_cli.py prompt "<user prompt>"` to generate the deterministic 9-step package, and (3) when a specific domain or `KO`/`JA`/`ZH` language is requested, tailor `workshop/03_labs/*.md` and starter/solution examples in natural developer terminology, rebuild bundles (`build-pdf`, `export-colab`, `export-codelab`, `build-slides`), and re-run `python3 harness_cli.py test --target <dir>`.
 
 ---
 
@@ -55,7 +55,7 @@ This repository provides native compatibility with **Anthropic Claude Code CLI**
 
 ---
 
-## 📁 21 Specialized Agent Skills Index
+## 📁 22 Specialized Agent Skills Index
 
 Claude Code should inspect these Markdown skills whenever relevant:
 
@@ -80,6 +80,7 @@ Claude Code should inspect these Markdown skills whenever relevant:
 19. [`skills/flutter-workshop-builder/SKILL.md`](skills/flutter-workshop-builder/SKILL.md)
 20. [`skills/a2ui-workshop-builder/SKILL.md`](skills/a2ui-workshop-builder/SKILL.md)
 21. [`skills/agents-cli-workshop-builder/SKILL.md`](skills/agents-cli-workshop-builder/SKILL.md)
+22. [`skills/eli5/SKILL.md`](skills/eli5/SKILL.md)
 
 ---
 

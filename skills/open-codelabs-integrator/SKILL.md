@@ -14,7 +14,7 @@ Seamlessly bridges `workshop-harness` generated workshops with the **Open Codela
 ## 🚀 Key Integration Features
 
 1. **Manifest Auto-Generation (`codelab.yaml`)**:
-   - Parses `workshop/03_labs/README.md` and `gemma4-local-setup-guide.md` into standard Open Codelabs manifest specs (`version: 1`).
+   - Parses `workshop/03_labs/README.md` and `SETUP_GUIDE.md` into standard Open Codelabs manifest specs (`version: 1`).
    - Splits monolithic lab documentation into sequential step files (`steps/step_01.md`, `steps/step_02.md`, etc.).
    - Maps `docs/02-prerequisites.md` and repository links as Open Codelabs materials.
 

@@ -17,7 +17,7 @@ Generates a standardized, production-grade workshop repository structure in one 
 ├── README.md                           # Main workshop overview & quick start guide
 ├── RUNBOOK.md                          # Facilitator & TA execution runbook
 ├── AGENTS.md                           # AI Agent context specification
-├── gemma4-local-setup-guide.md          # Unified attendee preparation guide
+├── SETUP_GUIDE.md                       # Unified attendee preparation guide
 ├── pyproject.toml                       # Astral uv dependency declaration
 ├── .env.sample                          # Sample environment file template
 ├── docs/                               # Detailed technical documentation & reports

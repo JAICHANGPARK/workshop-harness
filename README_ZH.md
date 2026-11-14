@@ -133,7 +133,7 @@ Workshop Harness 全面遵循 **[AGENTS.md 开放规范](https://agents.md/)**�
 |---|---|---|---|---|
 | 1 | [`workshop-scaffolder`](skills/workshop-scaffolder/SKILL.md) | 工作坊名称与主题 | `docs/`, `workshop/`, `prompt-pack/`, `scripts/` | 生成标准工作坊目录脚手架 (Scaffolding) |
 | 2 | [`cross-architecture-checker`](skills/cross-architecture-checker/SKILL.md) | 技术栈列表 | `docs/00-architecture-compatibility-matrix.md` | 审计 Apple Silicon、Intel Mac、Win、Linux 兼容性与回退策略 (Fallback) |
-| 3 | [`prerequisite-checker`](skills/prerequisite-checker/SKILL.md) | 前置依赖清单 | `gemma4-local-setup-guide.md`, `check_env.sh/ps1` | 生成分操作系统安装指南与自动化环境检测脚本 |
+| 3 | [`prerequisite-checker`](skills/prerequisite-checker/SKILL.md) | 前置依赖清单 | `SETUP_GUIDE.md`, `check_env.sh/ps1` | 生成分操作系统安装指南与自动化环境检测脚本 |
 | 4 | [`hands-on-curriculum-builder`](skills/hands-on-curriculum-builder/SKILL.md) | 课程目标与时长 | `03_labs/README.md`, `prompt-pack/`, `starter`/`final` | 构建分步实验手册、Starter 初始代码 / Reference 参考实现及提示词包 |
 | 5 | [`pdf-handout-generator`](skills/pdf-handout-generator/SKILL.md) | `docs/` 文档目录 | `output/pdf/*.pdf`, `tmp/pdfs/contact_sheet.png` | 基于 ReportLab + PyMuPDF 生成印刷级 PDF 讲义与缩略预览图 |
 | 6 | [`workshop-troubleshooter`](skills/workshop-troubleshooter/SKILL.md) | 硬件配置与操作系统 | `docs/troubleshooting.md`, `docs/20-faq.md` | 按内存规格 (8G/16G/32G+) 与操作系统生成排障指南 |
@@ -233,7 +233,7 @@ my-workshop-repo/
 ├── pyproject.toml                      # Astral uv 项目依赖配置文件
 ├── .env.sample                         # 环境变量示例文件 (GEMINI_API_KEY)
 ├── .gitignore                          # 密钥防泄漏与构建产物忽略规则
-├── gemma4-local-setup-guide.md         # 课前环境准备综合指南
+├── SETUP_GUIDE.md         # 课前环境准备综合指南
 ├── docs/                               # 详细技术文档与报告 (00 至 20)
 │   ├── 00-architecture-compatibility-matrix.md # 跨架构兼容性与回退矩阵
 │   ├── 00-persona-loop-review-report.md# 四类学员画像 Loop Engineering 评估报告

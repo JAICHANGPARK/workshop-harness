@@ -276,7 +276,11 @@ class TestWorkshopHarness(unittest.TestCase):
             init_only=True,
         )
         self.assertTrue(built_dir.exists())
+        self.assertTrue((built_dir / "SETUP_GUIDE.md").exists())
+        self.assertFalse((built_dir / "gemma4-local-setup-guide.md").exists())
         self.assertIn("anthropic>=2.8.0", (built_dir / "pyproject.toml").read_text(encoding="utf-8"))
+        self.assertIn("Hands-on Lab (핸즈온 랩)", (built_dir / "README.md").read_text(encoding="utf-8"))
+        self.assertIn("Runbook (런북)", (built_dir / "RUNBOOK.md").read_text(encoding="utf-8"))
         self.assertTrue(harness_cli.test_workshop(str(built_dir)))
 
         gemma_dir = harness_cli.generate_from_prompt(
@@ -289,6 +293,21 @@ class TestWorkshopHarness(unittest.TestCase):
         self.assertIn("embed_with_embeddinggemma2", gemma_final)
         self.assertIn("embeddinggemma-2", gemma_final)
         self.assertTrue(harness_cli.test_workshop(str(gemma_dir)))
+
+    def test_10_modular_package_and_language_detection(self):
+        """Verify modular harness package structure, version sync, and KO/JA/ZH/EN prompt language detection."""
+        from harness import auditors, exporters, registry, router, scaffolder
+
+        self.assertTrue(hasattr(registry, "MODEL_REGISTRY"))
+        self.assertTrue(hasattr(router, "parse_natural_prompt"))
+        self.assertTrue(hasattr(scaffolder, "init_workshop"))
+        self.assertTrue(hasattr(auditors, "audit_models"))
+        self.assertTrue(hasattr(exporters, "generate_from_prompt"))
+
+        self.assertEqual(router.detect_prompt_language("클로드로 실습 만들어줘"), "ko")
+        self.assertEqual(router.detect_prompt_language("Claudeでハンズオンを作って"), "ja")
+        self.assertEqual(router.detect_prompt_language("用Claude创建工作坊"), "zh")
+        self.assertEqual(router.detect_prompt_language("Build a Claude agent workshop"), "en")
 
 
 if __name__ == "__main__":

@@ -7,7 +7,7 @@ This repository contains pre-event preparation documents and hands-on lab code f
 
 ## Quick Start
 
-1. **Preparation Guide**: [gemma4-local-setup-guide.md](./gemma4-local-setup-guide.md)
+1. **Preparation Guide**: [SETUP_GUIDE.md](./SETUP_GUIDE.md)
 2. **Architecture Compatibility Check**: `./scripts/check_architecture_compat.sh` (Windows: `.\scripts\check_architecture_compat.ps1`)
 3. **Environment Verification Script**: `./scripts/check_env.sh` (Windows: `.\scripts\check_env.ps1`)
 4. **Day-of Hands-on Labs**:
@@ -23,7 +23,7 @@ This repository contains pre-event preparation documents and hands-on lab code f
 ├── AGENTS.md                     # AI Agent & Typography rules (No Em Dash rule)
 ├── CLAUDE.md                     # Claude Code instructions
 ├── RUNBOOK.md                    # Facilitator & TA execution runbook
-├── gemma4-local-setup-guide.md   # Unified preparation guide
+├── SETUP_GUIDE.md                # Unified attendee preparation guide
 ├── pyproject.toml                # Astral uv dependency file
 ├── docs/                        # Detailed topic docs, architecture compatibility & persona review reports
 │   ├── 00-architecture-compatibility-matrix.md
@@ -34,7 +34,7 @@ This repository contains pre-event preparation documents and hands-on lab code f
 │   └── 03_labs/                 # Step-by-step lab guides
 ├── prompt-pack/                 # Hands-on prompt pack
 ├── scripts/                     # Cross-architecture checks & offline bundling scripts
-└── output/                      # Build artifacts (PDF, etc.)
+└── output/                      # Build artifacts (PDF, Colab, Open Codelabs, Slides)
 ```
 
 ## References

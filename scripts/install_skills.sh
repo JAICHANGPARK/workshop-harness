@@ -56,7 +56,7 @@ skills=(
 
 for target_dir in "${TARGET_DIRS[@]}"; do
     mkdir -p "$target_dir"
-    echo "Installing 21 Workshop Harness Skills to $target_dir..."
+    echo "Installing 22 Workshop Harness Skills to $target_dir..."
     for skill in "${skills[@]}"; do
         if [ -d "$SOURCE_DIR/$skill" ]; then
             dest="$target_dir/$skill"
@@ -66,4 +66,4 @@ for target_dir in "${TARGET_DIRS[@]}"; do
     done
 done
 
-echo "All 21 Workshop Harness skills & dependencies installed successfully across Gemini, Claude Code, and Codex agent environments!"
+echo "All 22 Workshop Harness skills & dependencies installed successfully across Gemini, Claude Code, and Codex agent environments!"

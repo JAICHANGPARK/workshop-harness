@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [v2026.11.14] - 2026-11-14
+
+### Changed & Improved
+
+- **Modular Core Package Architecture (`harness/` & `harness_cli.py`)**:
+  - Refactored the 4,200-line monolithic `harness_cli.py` into a modular `harness/` Python package (`harness/registry.py`, `harness/router.py`, `harness/scaffolder.py`, `harness/auditors.py`, `harness/exporters.py`) while keeping `harness_cli.py` (~180 lines) 100% backward-compatible with all public symbols and CLI subcommands.
+- **Prompt Language Auto-Detection (`KO`/`JA`/`ZH`/`EN`) & 3-Step Agent Tailoring Protocol**:
+  - Added `detect_prompt_language()` to `harness/router.py` (`parse_natural_prompt()["lang"]`) and `--lang` support on `init` / `generate-all`, generating localized `README.md` and `RUNBOOK.md` in natural developer terminology (`English Original (개발자 친화적 용어)`) for Korean, Japanese, and Chinese prompts.
+  - Updated `AGENTS.md`, `CLAUDE.md`, `.cursorrules`, and `.windsurfrules` with the explicit 3-Step Autonomous Loop (1. Pre-flight Web Search -> 2. 9-Step `harness_cli.py prompt` Build -> 3. Domain & Language Tailoring + Bundle Rebuild & `test`).
+- **Provider-Neutral Preparation Guide (`SETUP_GUIDE.md`) & 22-Skill Metadata Sync**:
+  - Generalized the scaffolded root preparation guide from `gemma4-local-setup-guide.md` to `SETUP_GUIDE.md` across all cloud and local tracks (retaining automatic fallback support in `export_open_codelabs.py`).
+  - Synchronized `pyproject.toml` (`version = "2026.11.14"`, wheel/sdist `harness` package inclusion) and aligned the 22-skill index (`eli5` included) across `AGENTS.md`, `CLAUDE.md`, and `scripts/install_skills.sh`.
+
+---
+
 ## [v2026.11.13] - 2026-11-13
 
 ### Added & Upgraded

@@ -139,7 +139,7 @@ Workshop Harness adopts the open **[AGENTS.md specification](https://agents.md/)
 |---|---|---|---|---|
 | 1 | [`workshop-scaffolder`](skills/workshop-scaffolder/SKILL.md) | Workshop name & topic | `docs/`, `workshop/`, `prompt-pack/`, `scripts/` | Scaffolds standard repository structure |
 | 2 | [`cross-architecture-checker`](skills/cross-architecture-checker/SKILL.md) | Tech stack list | `docs/00-architecture-compatibility-matrix.md` | Audits Apple Silicon, Intel Mac, Win, Linux compatibility & fallbacks |
-| 3 | [`prerequisite-checker`](skills/prerequisite-checker/SKILL.md) | Prerequisites list | `gemma4-local-setup-guide.md`, `check_env.sh/ps1` | Generates OS-specific setup guides & automated verification scripts |
+| 3 | [`prerequisite-checker`](skills/prerequisite-checker/SKILL.md) | Prerequisites list | `SETUP_GUIDE.md`, `check_env.sh/ps1` | Generates OS-specific setup guides & automated verification scripts |
 | 4 | [`hands-on-curriculum-builder`](skills/hands-on-curriculum-builder/SKILL.md) | Session goal & duration | `03_labs/README.md`, `prompt-pack/`, `starter`/`final` code | Builds step-by-step curriculum, starter vs final code, and prompt packs |
 | 5 | [`pdf-handout-generator`](skills/pdf-handout-generator/SKILL.md) | `docs/` markdown directory | `output/pdf/*.pdf`, `tmp/pdfs/contact_sheet.png` | Builds publication-ready PDF handouts & preview contact sheets via ReportLab |
 | 6 | [`workshop-troubleshooter`](skills/workshop-troubleshooter/SKILL.md) | Hardware specs & OS | `docs/troubleshooting.md`, `docs/20-faq.md` | Generates troubleshooting matrix by RAM (8G/16G/32G+) and OS |
@@ -239,7 +239,7 @@ my-workshop-repo/
 ├── pyproject.toml                      # Astral uv project dependency specification
 ├── .env.sample                         # Sample environment variables (GEMINI_API_KEY)
 ├── .gitignore                          # Credential & build artifact hygiene rules
-├── gemma4-local-setup-guide.md         # Integrated pre-workshop setup guide
+├── SETUP_GUIDE.md         # Integrated pre-workshop setup guide
 ├── docs/                               # Detailed documentation (00 to 20)
 │   ├── 00-architecture-compatibility-matrix.md # Architecture fallback matrix
 │   ├── 00-persona-loop-review-report.md# Multi-persona loop review report

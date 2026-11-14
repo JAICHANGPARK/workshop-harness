@@ -7,7 +7,7 @@ The **Open Codelabs Integrator** skill ([`skills/open-codelabs-integrator/SKILL.
 ## Key Capabilities
 
 1. **Automatic Bundle Export (`output/open-codelabs/`)**:
-   - Parses `workshop/03_labs/README.md` and `gemma4-local-setup-guide.md` into `codelab.yaml`, `guide.md`, and individual step markdown files (`steps/step_01.md`, `steps/step_02.md`).
+   - Parses `workshop/03_labs/README.md` and `SETUP_GUIDE.md` into `codelab.yaml`, `guide.md`, and individual step markdown files (`steps/step_01.md`, `steps/step_02.md`).
 2. **1-Click `oc` CLI Push**:
    - Executes `oc codelab push --manifest output/open-codelabs/codelab.yaml` to sync directly with local or remote Open Codelabs instances.
 3. **stdio MCP Interoperability (`oc mcp serve`)**:

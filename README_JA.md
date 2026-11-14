@@ -133,7 +133,7 @@ Workshop Harness はオープン標準仕様 **[AGENTS.md](https://agents.md/)**
 |---|---|---|---|---|
 | 1 | [`workshop-scaffolder`](skills/workshop-scaffolder/SKILL.md) | ワークショップ名 & トピック | `docs/`, `workshop/`, `prompt-pack/`, `scripts/` | 標準リポジトリ構造の Scaffolding (スキャフォールディング) |
 | 2 | [`cross-architecture-checker`](skills/cross-architecture-checker/SKILL.md) | 使用技術スタック | `docs/00-architecture-compatibility-matrix.md` | Apple Silicon, Intel Mac, Win, Linux の互換性診断と Fallback (フォールバック) 設計 |
-| 3 | [`prerequisite-checker`](skills/prerequisite-checker/SKILL.md) | 事前準備リスト | `gemma4-local-setup-guide.md`, `check_env.sh/ps1` | OS別セットアップガイドと環境検証スクリプトの自動生成 |
+| 3 | [`prerequisite-checker`](skills/prerequisite-checker/SKILL.md) | 事前準備リスト | `SETUP_GUIDE.md`, `check_env.sh/ps1` | OS別セットアップガイドと環境検証スクリプトの自動生成 |
 | 4 | [`hands-on-curriculum-builder`](skills/hands-on-curriculum-builder/SKILL.md) | 目標 & セッション時間 | `03_labs/README.md`, `prompt-pack/`, `starter`/`final` コード | ステップバイステップのカリキュラム、Starter / Reference コード、プロンプトパック作成 |
 | 5 | [`pdf-handout-generator`](skills/pdf-handout-generator/SKILL.md) | `docs/` ディレクトリ | `output/pdf/*.pdf`, `tmp/pdfs/contact_sheet.png` | ReportLab + PyMuPDF による配布用 PDF ハンドアウトとプレビュー画像の生成 |
 | 6 | [`workshop-troubleshooter`](skills/workshop-troubleshooter/SKILL.md) | ハードウェア仕様 & OS | `docs/troubleshooting.md`, `docs/20-faq.md` | RAM容量別 (8G/16G/32G+)・OS別トラブルシューティングガイドの作成 |
@@ -233,7 +233,7 @@ my-workshop-repo/
 ├── pyproject.toml                      # Astral uv 依存関係定義ファイル
 ├── .env.sample                         # 環境変数テンプレート (GEMINI_API_KEY)
 ├── .gitignore                          # 認証情報およびビルド生成物の除外ルール
-├── gemma4-local-setup-guide.md         # 事前環境構築ガイド
+├── SETUP_GUIDE.md         # 事前環境構築ガイド
 ├── docs/                               # 詳細ドキュメント (00〜20)
 │   ├── 00-architecture-compatibility-matrix.md # アーキテクチャ互換性マトリックス
 │   ├── 00-persona-loop-review-report.md# 4ペルソナ Loop Engineering レビューレポート

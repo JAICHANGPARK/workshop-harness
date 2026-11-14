@@ -10,8 +10,8 @@ This repository provides seamless integration for all AI Coding Agents including
 
 `workshop-harness` is an AI Agent Harness, Skill Suite, and CLI Automation Toolkit for technical workshops (Build with AI, DevFest, community coding labs).
 
-- **CLI Automation**: `python3 harness_cli.py`
-- **21 Agent Skills**: Located under `skills/*/SKILL.md`
+- **CLI Automation**: `python3 harness_cli.py` (backed by modular `harness/` core package)
+- **22 Agent Skills**: Located under `skills/*/SKILL.md`
 - **Document Templates**: Located under `templates/doc-templates/`
 
 ---
@@ -47,9 +47,12 @@ This repository provides seamless integration for all AI Coding Agents including
 >    - **Do NOT include emojis in generated documentation, slide decks, setup guides, code comments, or runbooks by default.**
 >    - Only use emojis if the user explicitly requests them in their prompt (e.g., "use emojis in headings").
 >
-> 5. **🗣️ Natural Language Prompt ➔ Zero-Question Instant Generation**:
->    - Users communicate via **natural language chat prompts** (e.g. *"Claude 최신 모델로 멀티 에이전트 워크숍 만들어줘"*, *"OpenAI GPT로 구조화 출력 실습 만들어줘"*, *"Gemini 4로 ADK 핸즈온 만들어줘"*). Do **NOT** instruct users to run Python commands themselves, and do **NOT** block on unnecessary flag/model questions when sensible 2026 defaults exist.
->    - When a user requests a workshop in natural language, you MUST autonomously: (1) execute a live web search (`workshop-web-researcher`) to verify latest SDKs/models, and (2) immediately run `python3 harness_cli.py prompt "<user prompt>"` (or `generate-all`) to generate the **complete end-to-end workshop package** (Starter/Final code, 3-stage Labs, Runbook, PDF Handout, Colab `.ipynb`, Open Codelabs bundle, and Slide Deck) right away.
+> 5. **🗣️ Natural Language Prompt ➔ 3-Step Autonomous Generation & Domain/Language Tailoring**:
+>    - Users communicate via **natural language chat prompts** (e.g. *"Claude 최신 모델로 멀티 에이전트 워크숍 만들어줘"*, *"OpenAI GPT로 구조화 출력 실습 만들어줘"*, *"Gemma 4와 EmbeddingGemma 2로 로컬 멀티모달 RAG 실습 만들어줘"*). Do **NOT** instruct users to run Python commands themselves, and do **NOT** block on unnecessary flag/model questions when sensible 2026 defaults exist.
+>    - When a user requests a workshop in natural language, you MUST autonomously execute this **3-Step Loop**:
+>      1. **Pre-Flight Web Search (`workshop-web-researcher`)**: Verify the latest SDK syntax and active 2026 model tags via `search_web`.
+>      2. **Instant 9-Step Scaffolding (`harness_cli.py prompt`)**: Run `python3 harness_cli.py prompt "<user prompt>"` to generate the deterministic workshop structure (`SETUP_GUIDE.md`, `README.md`, `RUNBOOK.md`, Starter/Final code, 3-stage Labs, PDF Handout, Colab `.ipynb`, Open Codelabs bundle, and Slide Deck).
+>      3. **Domain & Language Tailoring + Re-Verification**: When the user specifies a concrete domain scenario or requests Korean/Japanese/Chinese (`KO`/`JA`/`ZH`) materials, enrich `workshop/03_labs/*.md` and starter/solution examples in natural developer terminology (`English Original (개발자 용어)`), rebuild bundles (`build-pdf`, `export-colab`, `export-codelab`, `build-slides`), and re-run `python3 harness_cli.py test --target <dir>`.
 
 | User Chat Prompt Example | Triggered Agent Skill | Autonomous Agent Tool Call / Action |
 |:---|:---|:---|
@@ -162,7 +165,7 @@ python3 harness_cli.py build-slides --target my-bwai-workshop
 
 ---
 
-## 📁 21 Agent Skills Index
+## 📁 22 Agent Skills Index
 
 When handling user requests, reference the specific skill instructions in `skills/`:
 
@@ -187,6 +190,7 @@ When handling user requests, reference the specific skill instructions in `skill
 19. [`skills/flutter-workshop-builder/SKILL.md`](skills/flutter-workshop-builder/SKILL.md)
 20. [`skills/a2ui-workshop-builder/SKILL.md`](skills/a2ui-workshop-builder/SKILL.md)
 21. [`skills/agents-cli-workshop-builder/SKILL.md`](skills/agents-cli-workshop-builder/SKILL.md)
+22. [`skills/eli5/SKILL.md`](skills/eli5/SKILL.md)
 
 ---
 

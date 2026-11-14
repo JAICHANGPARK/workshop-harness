@@ -52,8 +52,12 @@ def export_to_open_codelabs(target_dir: str, output_dir: str = None, push: bool 
         if topic_match:
             description = topic_match.group(1).strip()
 
-    # Build guide.md from setup guide or docs
-    guide_file = target / "gemma4-local-setup-guide.md"
+    # Build guide.md from SETUP_GUIDE.md (with legacy gemma4-local-setup-guide.md fallback) or docs
+    guide_file = (
+        target / "SETUP_GUIDE.md"
+        if (target / "SETUP_GUIDE.md").exists()
+        else target / "gemma4-local-setup-guide.md"
+    )
     guide_content = ""
     if guide_file.exists():
         guide_content = guide_file.read_text(encoding="utf-8")
