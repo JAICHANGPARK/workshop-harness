@@ -1,7 +1,7 @@
 # Lab 01: Environment Verification & AI Client Sanity Check
 
 ## Objective
-Verify your local and cloud development environment using `./scripts/check_env.sh` and connect `workshop/01_starter/main.py` to Google GenAI (`gemini-3.8-flash`) or Local Ollama (`gemma4:e4b`).
+Verify your local and cloud development environment using `./scripts/check_env.sh` and connect `workshop/01_starter/main.py` to Google Gemma & GenAI (`gemma-4-26b-a4b-it`) or Local Ollama (`gemma4:e4b`).
 
 ## Instructions
 1. Run `./scripts/check_env.sh` (or `.\scripts\check_env.ps1` on Windows) to verify Python, `uv`, and local port readiness.

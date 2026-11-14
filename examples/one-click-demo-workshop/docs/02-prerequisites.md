@@ -26,6 +26,21 @@ Individual developers and workshop attendees can obtain a free Gemini API Key in
 
 ---
 
+## 1B. Anthropic Claude & OpenAI API Key Setup (Optional Multi-Provider Tracks)
+
+If your workshop track uses **Anthropic Claude** (`claude-fable-5-2`, `claude-opus-5-5`, `claude-sonnet-5-5`, `claude-haiku-5-5`) or **OpenAI** (`gpt-6-astra`, `gpt-6.1-sol`, `gpt-6.1-terra`, `gpt-6-luna`), configure the corresponding API key in `.env`:
+
+- **Anthropic Console**: Visit [https://console.anthropic.com](https://console.anthropic.com) > **API Keys** > Create Key:
+  ```bash
+  ANTHROPIC_API_KEY="YOUR_ANTHROPIC_API_KEY_HERE"
+  ```
+- **OpenAI Platform**: Visit [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys) > **Create new secret key**:
+  ```bash
+  OPENAI_API_KEY="YOUR_OPENAI_API_KEY_HERE"
+  ```
+
+---
+
 ## 2. Google Cloud Platform (GCP) Vertex AI Key Setup
 
 For enterprise or GCP-based workshops, connect via the Vertex AI API.
@@ -173,10 +188,12 @@ For autonomous agent and multi-agent workshops, install the official ADK SDK for
 
 ## Pre-Download Checklist
 
-1. **Download Ollama / LM Studio & pull models ahead of time**:
+1. **Download Ollama / LM Studio & pull Gemma 4 + EmbeddingGemma 2 models ahead of time**:
    ```bash
    ollama pull gemma4:e4b
+   ollama pull embeddinggemma-2
    ```
+   *(For 8GB RAM laptops, pull lightweight `ollama pull gemma4:e2b` and `ollama pull embeddinggemma-2:270m` instead.)*
 
 2. **Sync project dependencies in advance**:
    ```bash

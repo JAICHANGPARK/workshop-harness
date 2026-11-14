@@ -20,12 +20,13 @@ from pathlib import Path
 HARNESS_ROOT = Path(__file__).parent.resolve()
 TEMPLATES_DIR = HARNESS_ROOT / "templates"
 
-# 2026 Frontier & Open-Weight Model Registry (Verified October 2026)
+# 2026 Frontier & Open-Weight Model Registry (Verified November 2026)
 MODEL_REGISTRY = {
     "google-gemini": {
-        "flagship_reasoning": "gemini-4-argon",
-        "default_workhorse": "gemini-3.8-flash",
-        "coding_workhorse": "gemini-3.7-flash",
+        "flagship_reasoning": "gemini-4-carbon",
+        "default_workhorse": "gemini-4-hydrogen",
+        "enterprise_reasoning": "gemini-4-argon",
+        "fast_multimodal_flash": "gemini-3.8-flash",
         "high_throughput_lite": "gemini-3.5-flash-lite",
         "ultra_lite": "gemini-3.1-flash-lite",
         "live_multimodal": "gemini-3.8-live",
@@ -36,58 +37,111 @@ MODEL_REGISTRY = {
         "tts_lite": "gemini-3.8-flash-lite-tts",
         "image_default": "gemini-nano-banana-2.1",
         "image_pro": "gemini-3-pro-image",
-        "video_omni": "gemini-omni-1.1-flash",
+        "video_omni": "gemini-omni-1.2-flash",
         "embedding_multimodal": "gemini-embedding-2",
         "managed_agent": "antigravity-preview-09-2026",
     },
     "google-gemma": {
         "cloud_dense_31b": "gemma-4-31b-it",
         "cloud_moe_26b": "gemma-4-26b-a4b-it",
+        "cloud_dense_12b": "gemma-4-12b-it",
+        "cloud_edge_e4b": "gemma-4-e4b-it",
+        "cloud_edge_e2b": "gemma-4-e2b-it",
         "local_8gb_ram": "gemma4:e2b",
         "local_16gb_ram": "gemma4:e4b",
-        "local_32gb_ram": "gemma4:e12b",
-        "local_moe_26b": "gemma4:26b-a4b",
+        "local_dense_12b": "gemma4:12b",
+        "local_moe_26b": "gemma4:26b",
+        "local_dense_31b": "gemma4:31b",
+        "embedding_multimodal_740m": "embeddinggemma-2",
+        "embedding_audio_570m": "embeddinggemma-2:570m",
+        "embedding_vision_440m": "embeddinggemma-2:440m",
+        "embedding_text_270m": "embeddinggemma-2:270m",
+        "embedding_hf": "google/embeddinggemma-2",
+        "translate_multimodal": "translategemma",
+        "function_calling_edge": "functiongemma",
+        "medical_multimodal": "medgemma1.5",
+        "safety_classifier": "shieldgemma",
     },
     "anthropic-claude": {
-        "flagship_reasoning": "claude-opus-5.5",
-        "default_workhorse": "claude-sonnet-5.5",
-        "long_horizon_agent": "claude-fable-5.1",
-        "fast_haiku": "claude-haiku-5.5",
+        "apex_agentic": "claude-fable-5-2",
+        "flagship_reasoning": "claude-opus-5-5",
+        "default_workhorse": "claude-sonnet-5-5",
+        "fast_haiku": "claude-haiku-5-5",
     },
     "openai-gpt": {
         "flagship_reasoning": "gpt-6-astra",
         "default_workhorse": "gpt-6.1-sol",
+        "multimodal_computer_use": "gpt-6.1-terra",
         "fast_lite": "gpt-6-luna",
-        "extended_compute": "gpt-5.6-terra",
-        "computer_use": "gpt-5.4",
+        "image_default": "gpt-image-2.6-sunburst",
+        "image_fast": "gpt-image-2.6-flare",
     },
     "local-ollama": {
-        "8gb_tier": ["gemma4:e2b", "qwen3:8b", "deepseek-r1:8b"],
-        "16gb_tier": ["gemma4:e4b", "qwen3:14b", "deepseek-r1:14b"],
-        "32gb_tier": ["gemma4:26b-a4b", "gemma4:31b", "qwen3.6:27b", "qwen3-coder:30b", "llama4:scout"],
+        "8gb_tier": ["gemma4:e2b", "embeddinggemma-2:270m", "functiongemma", "qwen3:8b", "deepseek-r1:8b"],
+        "16gb_tier": ["gemma4:e4b", "gemma4:12b", "embeddinggemma-2", "translategemma", "qwen3:14b", "deepseek-r1:14b"],
+        "32gb_tier": ["gemma4:26b", "gemma4:31b", "medgemma1.5", "qwen3.6:27b", "qwen3-coder:30b", "llama4:scout"],
+        "embeddings": ["embeddinggemma-2", "embeddinggemma-2:440m", "embeddinggemma-2:270m"],
     },
 }
 
 # Deprecated / Retired Model & SDK Patterns -> 2026 Modern Replacements
 DEPRECATED_MODEL_REPLACEMENTS = {
-    "gemini-1.5-flash": "gemini-3.8-flash",
-    "gemini-1.5-pro": "gemini-4-argon",
-    "gemini-2.0-flash": "gemini-3.8-flash",
+    "gemini-1.5-flash": "gemini-4-hydrogen",
+    "gemini-1.5-pro": "gemini-4-carbon",
+    "gemini-2.0-flash": "gemini-4-hydrogen",
     "gemini-2.0-flash-live": "gemini-3.8-live",
-    "gemini-2.5-flash": "gemini-3.8-flash",
-    "gemini-2.5-pro": "gemini-4-argon",
+    "gemini-2.5-flash": "gemini-4-hydrogen",
+    "gemini-2.5-pro": "gemini-4-carbon",
     "gemini-2.5-flash-lite": "gemini-3.5-flash-lite",
-    "gemini-3.1-flash": "gemini-3.8-flash",
-    "gemini-3.1-pro": "gemini-4-argon",
+    "gemini-3.1-flash": "gemini-4-hydrogen",
+    "gemini-3.1-pro": "gemini-4-carbon",
+    "gemini-3.7-flash": "gemini-4-hydrogen",
+    "gemini-omni-1.1-flash": "gemini-omni-1.2-flash",
+    "gemini-embedding-2-preview": "gemini-embedding-2",
     "gemini-3.1-flash-live-preview": "gemini-3.8-live",
     "gemini-2.5-flash-preview-tts": "gemini-3.8-flash-tts",
     "gemini-3.1-flash-image-preview": "gemini-nano-banana-2.1",
+    "gemma:2b": "gemma4:e2b",
+    "gemma:7b": "gemma4:e4b",
+    "gemma2:2b": "gemma4:e2b",
+    "gemma2:9b": "gemma4:12b",
+    "gemma2:27b": "gemma4:26b",
+    "gemma3:1b": "gemma4:e2b",
+    "gemma3:4b": "gemma4:e4b",
+    "gemma3:12b": "gemma4:12b",
+    "gemma3:27b": "gemma4:26b",
+    "gemma4:e12b": "gemma4:12b",
+    "gemma4:26b-a4b": "gemma4:26b",
+    "gemma-2-9b-it": "gemma-4-12b-it",
+    "gemma-2-27b-it": "gemma-4-26b-a4b-it",
+    "gemma-3-12b-it": "gemma-4-12b-it",
+    "gemma-3-27b-it": "gemma-4-26b-a4b-it",
+    "embeddinggemma:300m": "embeddinggemma-2:270m",
+    "embeddinggemma:latest": "embeddinggemma-2",
+    "google/embeddinggemma-300m": "google/embeddinggemma-2",
     "gpt-4o-mini": "gpt-6-luna",
     "gpt-4o": "gpt-6.1-sol",
+    "gpt-4.1-mini": "gpt-6-luna",
+    "gpt-4.1": "gpt-6.1-sol",
     "gpt-5.4-mini": "gpt-6-luna",
-    "claude-3-5-sonnet": "claude-sonnet-5.5",
-    "claude-3-7-sonnet": "claude-sonnet-5.5",
-    "claude-opus-4": "claude-opus-5.5",
+    "gpt-5.4": "gpt-6.1-terra",
+    "gpt-5.6-terra": "gpt-6.1-terra",
+    "o1-mini": "gpt-6-luna",
+    "o1-preview": "gpt-6-astra",
+    "o3-mini": "gpt-6.1-sol",
+    "o4-mini": "gpt-6.1-terra",
+    "claude-3-5-sonnet": "claude-sonnet-5-5",
+    "claude-3-7-sonnet": "claude-sonnet-5-5",
+    "claude-3-5-haiku": "claude-haiku-5-5",
+    "claude-sonnet-4": "claude-sonnet-5-5",
+    "claude-sonnet-4-5": "claude-sonnet-5-5",
+    "claude-opus-4": "claude-opus-5-5",
+    "claude-opus-4-5": "claude-opus-5-5",
+    "claude-fable-5.1": "claude-fable-5-2",
+    "claude-fable-5-1": "claude-fable-5-2",
+    "claude-sonnet-5.5": "claude-sonnet-5-5",
+    "claude-opus-5.5": "claude-opus-5-5",
+    "claude-haiku-5.5": "claude-haiku-5-5",
 }
 
 
@@ -166,7 +220,7 @@ def audit_models(target_dir: str, fix: bool = False) -> bool:
                         file_has_findings = True
                 if "google.generativeai" in line or "google-generativeai" in line:
                     rel_path = fpath.relative_to(target)
-                    findings.append((str(rel_path), line_idx, "google-generativeai (Legacy SDK)", "google-genai (>=2.30.1)"))
+                    findings.append((str(rel_path), line_idx, "google-generativeai (Legacy SDK)", "google-genai (>=3.0.0)"))
 
             if fix and file_has_findings:
                 new_lines = []
@@ -356,14 +410,437 @@ def audit_typography(target_dir: str, fix: bool = False) -> bool:
         return False
 
 
+def _resolve_provider_config(stack: list, model_name: str = None) -> dict:
+    """Resolve primary AI provider, default workhorse/flagship models, SDK packages, and API key env vars."""
+    normalized_model = DEPRECATED_MODEL_REPLACEMENTS.get(model_name, model_name) if model_name else None
+    model_lower = (normalized_model or "").lower()
+
+    wants_claude = (
+        any(k in stack for k in ["claude", "anthropic", "claude-agent-sdk"])
+        or model_lower.startswith("claude-")
+    )
+    wants_openai = (
+        any(k in stack for k in ["openai", "gpt", "openai-agents"])
+        or model_lower.startswith(("gpt-", "o1-", "o3-", "o4-"))
+    )
+    wants_gemini = (
+        any(k in stack for k in [
+            "gemini", "google-genai", "adk", "agents-cli",
+            "google-adk", "google-agents-cli", "android", "flutter", "genui", "a2ui",
+        ])
+        or model_lower.startswith("gemini-")
+        or (not wants_claude and not wants_openai)
+    )
+
+    if model_lower.startswith("claude-"):
+        primary_provider = "anthropic"
+    elif model_lower.startswith("gpt-"):
+        primary_provider = "openai"
+    elif model_lower.startswith("gemini-"):
+        primary_provider = "gemini"
+    elif wants_claude and not wants_openai and "gemini" not in stack:
+        primary_provider = "anthropic"
+    elif wants_openai and not wants_claude and "gemini" not in stack:
+        primary_provider = "openai"
+    else:
+        primary_provider = "gemini"
+
+    local_ollama_gemma_tags = {
+        "gemma4:e2b", "gemma4:e4b", "gemma4:12b", "gemma4:26b", "gemma4:31b",
+        "translategemma", "functiongemma", "medgemma1.5", "shieldgemma",
+    }
+    is_local_embedding_gemma = model_lower.startswith("embeddinggemma-2") or model_lower == "google/embeddinggemma-2"
+    is_local_gemma_tag = model_lower in local_ollama_gemma_tags or is_local_embedding_gemma
+    is_cloud_gemma_tag = model_lower.startswith("gemma-4-")
+
+    local_model = MODEL_REGISTRY["google-gemma"]["local_16gb_ram"]
+    local_embedding_model = MODEL_REGISTRY["google-gemma"]["embedding_multimodal_740m"]
+    if is_local_embedding_gemma:
+        local_embedding_model = "embeddinggemma-2" if model_lower == "google/embeddinggemma-2" else normalized_model
+    elif model_lower in local_ollama_gemma_tags:
+        local_model = normalized_model
+
+    if primary_provider == "anthropic":
+        cloud_model = normalized_model or MODEL_REGISTRY["anthropic-claude"]["default_workhorse"]
+        flagship_model = (
+            MODEL_REGISTRY["anthropic-claude"]["apex_agentic"]
+            if cloud_model == MODEL_REGISTRY["anthropic-claude"]["flagship_reasoning"]
+            else MODEL_REGISTRY["anthropic-claude"]["flagship_reasoning"]
+        )
+        api_key_env = "ANTHROPIC_API_KEY"
+        provider_label = "Anthropic Claude"
+    elif primary_provider == "openai":
+        cloud_model = normalized_model or MODEL_REGISTRY["openai-gpt"]["default_workhorse"]
+        flagship_model = MODEL_REGISTRY["openai-gpt"]["flagship_reasoning"]
+        api_key_env = "OPENAI_API_KEY"
+        provider_label = "OpenAI"
+    else:
+        has_adk_or_ui = any(k in stack for k in ["adk", "agents-cli", "google-adk", "google-agents-cli", "flutter", "android", "genui", "a2ui"])
+        if is_local_gemma_tag:
+            if has_adk_or_ui:
+                cloud_model = MODEL_REGISTRY["google-gemini"]["default_workhorse"]
+            elif "31b" in model_lower:
+                cloud_model = MODEL_REGISTRY["google-gemma"]["cloud_dense_31b"]
+            elif "12b" in model_lower:
+                cloud_model = MODEL_REGISTRY["google-gemma"]["cloud_dense_12b"]
+            elif "e2b" in model_lower:
+                cloud_model = MODEL_REGISTRY["google-gemma"]["cloud_edge_e2b"]
+            else:
+                cloud_model = MODEL_REGISTRY["google-gemma"]["cloud_moe_26b"]
+            flagship_model = MODEL_REGISTRY["google-gemma"]["cloud_dense_31b"] if not has_adk_or_ui else MODEL_REGISTRY["google-gemini"]["flagship_reasoning"]
+            provider_label = "Google Gemma & GenAI"
+        elif is_cloud_gemma_tag:
+            cloud_model = normalized_model
+            flagship_model = MODEL_REGISTRY["google-gemma"]["cloud_dense_31b"]
+            provider_label = "Google Gemma & GenAI"
+        else:
+            cloud_model = normalized_model or MODEL_REGISTRY["google-gemini"]["default_workhorse"]
+            flagship_model = MODEL_REGISTRY["google-gemini"]["flagship_reasoning"]
+            provider_label = "Google GenAI"
+        api_key_env = "GEMINI_API_KEY"
+
+    return {
+        "primary_provider": primary_provider,
+        "provider_label": provider_label,
+        "default_cloud_model": cloud_model,
+        "default_flagship_model": flagship_model,
+        "default_local_model": local_model,
+        "default_local_embedding_model": local_embedding_model,
+        "primary_api_key_env": api_key_env,
+        "wants_gemini": wants_gemini,
+        "wants_claude": wants_claude,
+        "wants_openai": wants_openai,
+    }
+
+
+def parse_natural_prompt(prompt: str) -> dict:
+    """Parse a natural language prompt (KO/EN/JA/ZH) into name, topic, stack, and canonical 2026 model."""
+    raw = (prompt or "").strip()
+    lower = raw.lower()
+
+    # 1. Detect explicit active or deprecated model tag in prompt
+    detected_model = None
+    explicit_provider = None
+
+    all_active_models = []
+    for prov_key, entries in MODEL_REGISTRY.items():
+        for val in entries.values():
+            if isinstance(val, str):
+                all_active_models.append((val, prov_key))
+    for tag, prov_key in sorted(all_active_models, key=lambda x: len(x[0]), reverse=True):
+        if re.search(rf"(?<![a-z0-9._-]){re.escape(tag.lower())}(?![a-z0-9._-])", lower):
+            detected_model = tag
+            explicit_provider = prov_key
+            break
+
+    if not detected_model:
+        for old_tag, new_tag in sorted(DEPRECATED_MODEL_REPLACEMENTS.items(), key=lambda x: len(x[0]), reverse=True):
+            if re.search(rf"(?<![a-z0-9._-]){re.escape(old_tag.lower())}(?![a-z0-9._-])", lower):
+                print(f"🔄 Auto-upgraded requested model '{old_tag}' -> '{new_tag}'")
+                detected_model = new_tag
+                break
+
+    # 2. Detect provider & tier intent from natural language (KO/EN/JA/ZH, handling attached CJK particles like 'Claude로')
+    def _has_ascii_kw(pattern_inner: str) -> bool:
+        return bool(re.search(rf"(?<![a-z0-9])({pattern_inner})(?![a-z0-9])", lower))
+
+    has_claude = (
+        explicit_provider == "anthropic-claude"
+        or (detected_model or "").startswith("claude-")
+        or _has_ascii_kw("claude|anthropic|fable|opus|sonnet|haiku")
+        or any(k in lower for k in ["클로드", "앤트로픽", "앤쓰로픽", "페이블", "오퍼스", "소넷", "소네트", "하이쿠", "クロード", "ソネット", "オーパス", "克劳德"])
+    )
+    has_openai = (
+        explicit_provider == "openai-gpt"
+        or (detected_model or "").startswith("gpt-")
+        or _has_ascii_kw("openai|chatgpt|gpt|astra|terra|luna|sunburst")
+        or any(k in lower for k in ["오픈ai", "오픈에이아이", "챗gpt", "챗지피티", "지피티", "아스트라", "테라", "루나"])
+    )
+    has_gemini = (
+        explicit_provider == "google-gemini"
+        or (detected_model or "").startswith("gemini-")
+        or _has_ascii_kw("gemini|carbon|hydrogen|argon")
+        or any(k in lower for k in ["제미나이", "카본", "하이드로젠", "아르곤", "나노 바나나", "nano banana"])
+    )
+    has_embedding_gemma = (
+        (detected_model or "").startswith("embeddinggemma-2")
+        or _has_ascii_kw("embeddinggemma|embeddinggemma-2")
+        or bool(re.search(r"embedding\s*gemma", lower))
+        or any(k in lower for k in ["임베딩젬마", "임베딩 젬마"])
+    )
+    has_gemma_or_local = (
+        explicit_provider == "google-gemma"
+        or has_embedding_gemma
+        or _has_ascii_kw("gemma|gemma4|translategemma|functiongemma|medgemma|shieldgemma|ollama|vllm|mlx")
+        or any(k in lower for k in [
+            "젬마", "트랜슬레이트젬마", "펑션젬마", "메드젬마", "실드젬마",
+            "올라마", "로컬 llm", "local llm", "local rag", "로컬 rag", "lm studio", "lmstudio",
+        ])
+    )
+
+    # Pick specific tier model if not already set via exact tag
+    if not detected_model:
+        if has_claude and not has_openai:
+            if _has_ascii_kw("fable") or "페이블" in lower:
+                detected_model = MODEL_REGISTRY["anthropic-claude"]["apex_agentic"]
+            elif _has_ascii_kw("opus") or "오퍼스" in lower:
+                detected_model = MODEL_REGISTRY["anthropic-claude"]["flagship_reasoning"]
+            elif _has_ascii_kw("haiku") or "하이쿠" in lower:
+                detected_model = MODEL_REGISTRY["anthropic-claude"]["fast_haiku"]
+            else:
+                detected_model = MODEL_REGISTRY["anthropic-claude"]["default_workhorse"]
+        elif has_openai and not has_claude:
+            if _has_ascii_kw("astra") or "아스트라" in lower:
+                detected_model = MODEL_REGISTRY["openai-gpt"]["flagship_reasoning"]
+            elif _has_ascii_kw("terra") or "테라" in lower or "computer use" in lower or "컴퓨터 유즈" in lower:
+                detected_model = MODEL_REGISTRY["openai-gpt"]["multimodal_computer_use"]
+            elif _has_ascii_kw("luna") or "루나" in lower:
+                detected_model = MODEL_REGISTRY["openai-gpt"]["fast_lite"]
+            elif "sunburst" in lower or "gpt-image" in lower:
+                detected_model = MODEL_REGISTRY["openai-gpt"]["image_default"]
+            else:
+                detected_model = MODEL_REGISTRY["openai-gpt"]["default_workhorse"]
+        elif (_has_ascii_kw("gemma|gemma4|translategemma|functiongemma|medgemma|shieldgemma") or "젬마" in lower or has_embedding_gemma) and not has_gemini:
+            if _has_ascii_kw("translategemma") or "트랜슬레이트젬마" in lower or ("번역" in lower and ("gemma" in lower or "젬마" in lower)):
+                detected_model = MODEL_REGISTRY["google-gemma"]["translate_multimodal"]
+            elif _has_ascii_kw("functiongemma") or "펑션젬마" in lower:
+                detected_model = MODEL_REGISTRY["google-gemma"]["function_calling_edge"]
+            elif _has_ascii_kw("medgemma") or "메드젬마" in lower:
+                detected_model = MODEL_REGISTRY["google-gemma"]["medical_multimodal"]
+            elif _has_ascii_kw("shieldgemma") or "실드젬마" in lower:
+                detected_model = MODEL_REGISTRY["google-gemma"]["safety_classifier"]
+            elif has_embedding_gemma and not (_has_ascii_kw("gemma4") or "gemma 4" in lower or "젬마 4" in lower):
+                detected_model = MODEL_REGISTRY["google-gemma"]["embedding_multimodal_740m"]
+            elif _has_ascii_kw("31b"):
+                detected_model = MODEL_REGISTRY["google-gemma"]["local_dense_31b"]
+            elif _has_ascii_kw("26b"):
+                detected_model = MODEL_REGISTRY["google-gemma"]["local_moe_26b"]
+            elif _has_ascii_kw("12b"):
+                detected_model = MODEL_REGISTRY["google-gemma"]["local_dense_12b"]
+            elif _has_ascii_kw("e2b"):
+                detected_model = MODEL_REGISTRY["google-gemma"]["local_8gb_ram"]
+            else:
+                detected_model = MODEL_REGISTRY["google-gemma"]["local_16gb_ram"]
+        else:
+            if _has_ascii_kw("carbon") or "카본" in lower:
+                detected_model = MODEL_REGISTRY["google-gemini"]["flagship_reasoning"]
+            elif _has_ascii_kw("argon") or "아르곤" in lower:
+                detected_model = MODEL_REGISTRY["google-gemini"]["enterprise_reasoning"]
+            elif "live api" in lower or "라이브 api" in lower or "gemini-live" in lower or "실시간 음성" in lower:
+                detected_model = MODEL_REGISTRY["google-gemini"]["live_multimodal"]
+            elif "omni" in lower or "비디오 생성" in lower:
+                detected_model = MODEL_REGISTRY["google-gemini"]["video_omni"]
+            elif "nano banana" in lower or "나노 바나나" in lower:
+                detected_model = MODEL_REGISTRY["google-gemini"]["image_default"]
+            else:
+                detected_model = MODEL_REGISTRY["google-gemini"]["default_workhorse"]
+
+    # 3. Detect stack components
+    stack_items = []
+    is_flutter = _has_ascii_kw("flutter|dart|genui|a2ui") or any(k in lower for k in ["플러터", "동적 ui"])
+    is_android = _has_ascii_kw("android") or bool(re.search(r"jetpack\s*compose", lower)) or any(k in lower for k in ["안드로이드", "젯팩 컴포즈", "컴포즈"])
+    is_adk = _has_ascii_kw("adk|google-adk|agents-cli|adlc") or "에이전트 개발 키트" in lower
+    is_ts = _has_ascii_kw("typescript|nodejs") or "node.js" in lower or "타입스크립트" in lower
+    is_go = _has_ascii_kw("golang") or bool(re.search(r"(?<![a-z0-9])go\s+(?:lang|adk|agent|sdk|workshop|lab)(?![a-z0-9])", lower)) or any(k in lower for k in ["고랭", "go 언어", "go로"])
+    is_kotlin = (_has_ascii_kw("kotlin") or "코틀린" in lower) and not is_android
+    is_java = (bool(re.search(r"(?<![a-z0-9])java(?![a-z0-9])(?!\s*script)", lower)) or ("자바" in lower and "자바스크립트" not in lower)) and not is_android
+
+    if is_flutter:
+        stack_items.append("flutter")
+        if "genui" in lower or "동적 ui" in lower or "a2ui" in lower:
+            stack_items.append("genui")
+        if "a2ui" in lower:
+            stack_items.append("a2ui")
+    elif is_android:
+        stack_items.append("android")
+    else:
+        if is_ts:
+            stack_items.append("typescript")
+        elif is_go:
+            stack_items.append("go")
+        elif is_kotlin:
+            stack_items.append("kotlin")
+        elif is_java:
+            stack_items.append("java")
+        else:
+            stack_items.append("python")
+
+        if is_adk:
+            stack_items.append("adk")
+            if "agents-cli" in lower or "adlc" in lower:
+                stack_items.append("agents-cli")
+            if "polyglot" in lower or "폴리글랏" in lower or "다중 언어" in lower:
+                stack_items.append("polyglot")
+
+        if has_claude:
+            stack_items.append("claude")
+            if "claude-agent-sdk" in lower:
+                stack_items.append("claude-agent-sdk")
+        if has_openai:
+            stack_items.append("openai")
+            if "openai-agents" in lower:
+                stack_items.append("openai-agents")
+        if has_gemini and not is_adk and not has_claude and not has_openai:
+            stack_items.append("gemini")
+
+    if has_gemma_or_local:
+        stack_items.append("gemma")
+        stack_items.append("ollama")
+    if has_embedding_gemma:
+        stack_items.append("embeddinggemma")
+    if "lm studio" in lower or "lmstudio" in lower:
+        stack_items.append("lmstudio")
+    if "docker" in lower or "도커" in lower:
+        stack_items.append("docker")
+    if "mlx" in lower:
+        stack_items.append("mlx")
+    if "live api" in lower or "라이브 api" in lower or "gemini-live" in lower or "실시간 음성" in lower:
+        stack_items.append("gemini-live")
+
+    # Deduplicate stack preserving order
+    seen_stack = []
+    for s in stack_items:
+        if s not in seen_stack:
+            seen_stack.append(s)
+
+    # 4. Clean topic string (strip conversational request wrappers while keeping language intact)
+    clean_topic = raw
+    clean_topic = re.sub(
+        r"^(?:please\s+)?(?:create|build|generate|make|scaffold)\s+(?:a\s+|an\s+)?(?:complete\s+|full\s+)?(?:\d+\s*[- ]?(?:hour|hr|min|minute)s?\s+)?(?:hands[- ]on\s+)?(?:workshop|lab|tutorial)?\s*(?:on|for|about|using|with)?\s*",
+        "",
+        clean_topic,
+        flags=re.IGNORECASE,
+    ).strip()
+    clean_topic = re.sub(
+        r"(?:을|를)?\s*(?:바로\s*|즉시\s*|한번에\s*)?(?:만들어\s*줘요?|만들어\s*주세요|생성해\s*줘요?|생성해\s*주세요|빌드해\s*줘요?|구성해\s*줘요?|작성해\s*줘요?|짜\s*줘요?|부탁해\s*요?)[.!?]*$",
+        "",
+        clean_topic,
+    ).strip()
+    clean_topic = re.sub(
+        r"(?:を)?(?:すぐ|今すぐ)?(?:作って(?:ください)?|作成して(?:ください)?|生成して(?:ください)?)[。！!]*$",
+        "",
+        clean_topic,
+    ).strip()
+    clean_topic = re.sub(r"^(?:请|帮我)?(?:立即|马上|直接)?(?:创建一个?|生成一个?|构建一个?)", "", clean_topic).strip()
+    if not clean_topic:
+        clean_topic = raw or "AI Hands-on Workshop"
+
+    # 5. Build deterministic filesystem-safe project slug
+    slug_parts = []
+    if is_flutter:
+        slug_parts.append("flutter")
+        if "genui" in seen_stack:
+            slug_parts.append("genui")
+        if "a2ui" in seen_stack:
+            slug_parts.append("a2ui")
+    elif is_android:
+        slug_parts.append("android")
+    elif has_claude and is_adk:
+        slug_parts.extend(["adk", "claude"])
+    elif has_openai and is_adk:
+        slug_parts.extend(["adk", "openai"])
+    elif has_claude:
+        slug_parts.append("claude")
+        if "fable" in detected_model:
+            slug_parts.append("fable")
+        elif "opus" in detected_model:
+            slug_parts.append("opus")
+    elif has_openai:
+        slug_parts.append("openai")
+        if "astra" in detected_model:
+            slug_parts.append("astra")
+        elif "terra" in detected_model:
+            slug_parts.append("terra")
+    elif is_adk:
+        slug_parts.append("adk")
+    elif has_gemma_or_local:
+        if has_embedding_gemma and not (_has_ascii_kw("gemma4") or "gemma 4" in lower or "젬마 4" in lower):
+            slug_parts.append("embeddinggemma2")
+        else:
+            slug_parts.append("gemma4")
+            if has_embedding_gemma:
+                slug_parts.append("embeddinggemma2")
+    else:
+        slug_parts.append("gemini")
+
+    if any(k in lower for k in ["multi-agent", "멀티 에이전트", "멀티에이전트", "다중 에이전트", "マルチエージェント", "多智能体"]):
+        slug_parts.append("multi-agent")
+    elif any(k in lower for k in ["agent", "에이전트", "エージェント", "智能体"]):
+        slug_parts.append("agent")
+    if any(k in lower for k in ["rag", "검색 증강"]):
+        slug_parts.append("rag")
+    if any(k in lower for k in ["structured", "구조화"]):
+        slug_parts.append("structured")
+    if any(k in lower for k in ["mcp"]):
+        slug_parts.append("mcp")
+
+    stop_words = {
+        "create", "build", "generate", "make", "scaffold", "please", "complete", "full",
+        "workshop", "workshops", "lab", "labs", "hands", "on", "with", "using", "for", "about",
+        "the", "and", "or", "in", "to", "of", "a", "an", "hour", "hr", "min", "minute", "minutes",
+        "latest", "new", "model", "models", "python", "claude", "anthropic", "openai", "gpt",
+        "chatgpt", "gemini", "gemma", "gemma4", "embeddinggemma", "translategemma", "functiongemma",
+        "medgemma", "shieldgemma", "google", "adk", "flutter", "android", "genui", "a2ui",
+        "sonnet", "opus", "fable", "haiku", "sol", "astra", "terra", "luna", "carbon", "hydrogen", "argon",
+    }
+    ascii_tokens = re.findall(r"[a-zA-Z][a-zA-Z0-9]{2,}", lower)
+    extra_added = 0
+    for tok in ascii_tokens:
+        if tok not in stop_words and tok not in slug_parts:
+            slug_parts.append(tok)
+            extra_added += 1
+            if extra_added >= 2:
+                break
+
+    slug_parts.append("workshop")
+    dedup_slug = []
+    for p in slug_parts:
+        if p and p not in dedup_slug:
+            dedup_slug.append(p)
+    project_name = "-".join(dedup_slug)[:48].strip("-")
+
+    return {
+        "name": project_name,
+        "topic": clean_topic,
+        "stack": ",".join(seen_stack),
+        "model": detected_model,
+    }
+
+
 def init_workshop(name: str, topic: str, target_dir: str = None, stack_str: str = "python", model_name: str = None):
     raw_path = Path(target_dir) / name if target_dir else Path(name)
     project_dir = raw_path if raw_path.is_absolute() else (Path.cwd() / raw_path)
     name = re.sub(r"[^a-zA-Z0-9_-]", "-", project_dir.name).strip("-") or "workshop"
-    stack = [s.strip().lower() for s in stack_str.split(",")] if stack_str else ["python"]
-    default_cloud_model = model_name or MODEL_REGISTRY["google-gemini"]["default_workhorse"]
-    default_local_model = MODEL_REGISTRY["google-gemma"]["local_16gb_ram"]
-    print(f"🚀 Initializing new workshop project: '{name}' at {project_dir} (Primary Model: {default_cloud_model})")
+    stack = [s.strip().lower() for s in stack_str.split(",") if s.strip()] if stack_str else ["python"]
+
+    # Auto-infer Claude / OpenAI / EmbeddingGemma 2 / specific model from topic when caller left default stack and model_name unset
+    if model_name is None and not any(k in stack for k in ["claude", "anthropic", "openai", "gpt", "gemini"]):
+        inferred = parse_natural_prompt(topic)
+        inferred_stack = inferred["stack"].split(",")
+        if "embeddinggemma" in inferred_stack and "embeddinggemma" not in stack:
+            stack.append("embeddinggemma")
+            stack_str = ",".join(stack)
+        if any(k in inferred_stack for k in ["claude", "openai"]):
+            for extra_k in ["claude", "openai"]:
+                if extra_k in inferred_stack and extra_k not in stack:
+                    stack.append(extra_k)
+            stack_str = ",".join(stack)
+            model_name = inferred["model"]
+        elif inferred["model"] != MODEL_REGISTRY["google-gemini"]["default_workhorse"]:
+            model_name = inferred["model"]
+
+    prov_cfg = _resolve_provider_config(stack, model_name)
+    primary_provider = prov_cfg["primary_provider"]
+    provider_label = prov_cfg["provider_label"]
+    default_cloud_model = prov_cfg["default_cloud_model"]
+    default_flagship_model = prov_cfg["default_flagship_model"]
+    primary_api_key_env = prov_cfg["primary_api_key_env"]
+    wants_gemini = prov_cfg["wants_gemini"]
+    wants_claude = prov_cfg["wants_claude"]
+    wants_openai = prov_cfg["wants_openai"]
+    default_local_model = prov_cfg["default_local_model"]
+    default_local_embedding_model = prov_cfg["default_local_embedding_model"]
+    print(f"🚀 Initializing new workshop project: '{name}' at {project_dir} (Provider: {provider_label} | Cloud: {default_cloud_model} | Local: {default_local_model} / {default_local_embedding_model})")
 
     # Create directory structure
     dirs = [
@@ -429,7 +906,24 @@ def init_workshop(name: str, topic: str, target_dir: str = None, stack_str: str 
     shutil.copy(pdf_templates / "generate_prep_pdf.py", project_dir / "scripts" / "generate_prep_pdf.py")
 
     has_adk_stack = any(k in stack for k in ["adk", "agents-cli", "google-adk", "google-agents-cli"])
-    adk_dep_line = '    "google-adk>=2.0.0",\n' if has_adk_stack else ""
+    py_deps = []
+    if wants_gemini:
+        py_deps.append('    "google-genai>=3.0.0",')
+    if wants_claude:
+        py_deps.append('    "anthropic>=2.8.0",')
+        if "claude-agent-sdk" in stack:
+            py_deps.append('    "claude-agent-sdk>=0.2.181",')
+    if wants_openai:
+        py_deps.append('    "openai>=3.50.0",')
+        if "openai-agents" in stack:
+            py_deps.append('    "openai-agents>=0.24.0",')
+    py_deps.append('    "pydantic>=2.0.0",')
+    py_deps.append('    "requests>=2.31.0",')
+    if has_adk_stack:
+        py_deps.append('    "google-adk>=2.14.0",')
+        if wants_claude or wants_openai:
+            py_deps.append('    "litellm>=1.84.0",')
+    py_deps_block = "\n".join(py_deps) + "\n"
     workshop_pyproject = f"""[project]
 name = "{name}"
 version = "0.1.0"
@@ -437,10 +931,7 @@ description = "Hands-on Workshop: {topic}"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "google-genai>=2.30.1",
-    "pydantic>=2.0.0",
-    "requests>=2.31.0",
-{adk_dep_line}]
+{py_deps_block}]
 
 [project.optional-dependencies]
 docs = [
@@ -459,7 +950,8 @@ package = false
 
 - **Session Title**: {topic}
 - **Tech Stack**: `{stack_str}`
-- **Primary Cloud Model**: `{default_cloud_model}` | **Coordinator**: `gemini-4-argon` | **Local Model**: `{default_local_model}`
+- **Primary Cloud Provider**: {provider_label} (`{primary_api_key_env}`)
+- **Primary Cloud Model**: `{default_cloud_model}` | **Coordinator**: `{default_flagship_model}` | **Local Model**: `{default_local_model}` | **Local Multimodal Embedding**: `{default_local_embedding_model}`
 - **Facilitator**: Workshop Lead Facilitator
 - **Teaching Assistants (TA)**: Roaming TA Team
 
@@ -473,7 +965,7 @@ package = false
 
 ### 10m - 25m: Lab 01 - Environment Setup & Client Sanity Check
 - **Facilitator**: Explain `workshop/01_starter` code structure and demo `TODO: [Lab 01]` completion.
-- **TA**: Help attendees configure `GEMINI_API_KEY` in `.env` or start the local LLM server (`ollama serve` on port `11434`).
+- **TA**: Help attendees configure `{primary_api_key_env}` in `.env` or start the local LLM server (`ollama serve` on port `11434`).
 
 ### 25m - 45m: Lab 02 - Structured Outputs, Tool Calling & Agent Routing
 - **Facilitator**: Demo typed Output Schema definition (`prompt-pack/README.md`) and sub-agent/tool integration.
@@ -489,8 +981,15 @@ package = false
     (project_dir / "RUNBOOK.md").write_text(runbook_md, encoding="utf-8")
 
     # 4. Create .env.sample, .gitignore, Intel Mac fallback guide & ELI5 cheat sheet
+    env_lines = ["# Sample Environment Variables"]
+    if wants_gemini:
+        env_lines.append("GEMINI_API_KEY=YOUR_GEMINI_API_KEY_HERE")
+    if wants_claude:
+        env_lines.append("ANTHROPIC_API_KEY=YOUR_ANTHROPIC_API_KEY_HERE")
+    if wants_openai:
+        env_lines.append("OPENAI_API_KEY=YOUR_OPENAI_API_KEY_HERE")
     with open(project_dir / ".env.sample", "w", encoding="utf-8") as f:
-        f.write("# Sample Environment Variables\nGEMINI_API_KEY=YOUR_GEMINI_API_KEY_HERE\n")
+        f.write("\n".join(env_lines) + "\n")
 
     with open(project_dir / ".gitignore", "w", encoding="utf-8") as f:
         f.write(
@@ -527,14 +1026,16 @@ LM Studio lacks Metal GPU acceleration on Intel CPU-based Macs (`x86_64`) and ca
    ```bash
    ollama serve
    ```
-3. **Pull a Lightweight Quantized Model** (in a second terminal tab):
+3. **Pull a Lightweight Quantized Model & Multimodal Embedding Model** (in a second terminal tab):
    - **8GB RAM Intel Mac**:
      ```bash
      ollama pull gemma4:e2b
+     ollama pull embeddinggemma-2:270m
      ```
    - **16GB+ RAM Intel Mac**:
      ```bash
      ollama pull {default_local_model}
+     ollama pull {default_local_embedding_model}
      ```
 4. **Verify Local API Endpoint**:
    ```bash
@@ -547,19 +1048,21 @@ LM Studio lacks Metal GPU acceleration on Intel CPU-based Macs (`x86_64`) and ca
 
 If your Intel Mac experiences thermal throttling or high CPU load:
 1. Open `output/colab/workshop_starter.ipynb` in **Google Colab**.
-2. Add your `GEMINI_API_KEY` (`{default_cloud_model}`) in Colab Secrets (left sidebar key icon).
+2. Add your `{primary_api_key_env}` (`{default_cloud_model}`) in Colab Secrets (left sidebar key icon).
 3. Run all lab exercises on cloud GPUs with zero local CPU/RAM overhead.
 
 ## References
 - [Ollama Official Documentation](https://ollama.com)
 - [Google AI Studio API Key Setup](https://aistudio.google.com)
+- [Anthropic Console API Keys](https://console.anthropic.com)
+- [OpenAI Platform API Keys](https://platform.openai.com/api-keys)
 """)
 
     with open(project_dir / "docs" / "eli5-concept-cheat-sheet.md", "w", encoding="utf-8") as f:
         f.write(f"""# ELI5 (Explain Like I'm 5) AI Concept Cheat Sheet
 
 > Workshop Topic: **{topic}**
-> Primary Cloud Model: `{default_cloud_model}` | Flagship Reasoning: `gemini-4-argon` | Local Model: `{default_local_model}`
+> Primary Cloud Model: `{default_cloud_model}` | Flagship Reasoning: `{default_flagship_model}` | Local Model: `{default_local_model}`
 
 This cheat sheet translates core AI engineering concepts into intuitive everyday analogies across a 3-tier framework (Analogy -> Technical Mechanism -> Hands-on Action).
 
@@ -572,11 +1075,13 @@ This cheat sheet translates core AI engineering concepts into intuitive everyday
 | **Local LLM (`{default_local_model}`)** | Having a personal librarian inside your laptop who works even with Wi-Fi turned off | Quantized model weights executing on local GPU/CPU and serving HTTP on `localhost:11434` | Run `ollama serve` and query local endpoints without cloud latency |
 | **Model Quantization (4-bit)** | Packing a winter jacket into a vacuum-sealed travel bag so it fits in a carry-on | Compressing 16-bit floating-point weights into 4-bit integers to reduce RAM usage by ~70% | Use `gemma4:e2b` on 8GB RAM laptops to prevent Out-Of-Memory (OOM) errors |
 | **Structured Outputs (JSON Schema)** | Handing someone a tax form with strict boxes instead of a blank sheet of paper | Constraining token sampling to match a typed schema (Pydantic / Zod / Data Class) | Parse LLM responses deterministically in `Lab 02` without regex |
-| **RAG (Retrieval-Augmented Generation)** | Taking an open-book exam where you look up the exact page before answering | Retrieving relevant document chunks via embeddings (`gemini-embedding-2`) and injecting them into the prompt | Ground model answers on verified workshop data |
-| **Multi-Agent Orchestration (ADK)** | A head chef (`gemini-4-argon`) delegating prep and plating to line cooks (`{default_cloud_model}`) | `root_agent` routing tasks to specialized `sub_agents` and FunctionTools | Inspect sub-agent delegation and trajectory evaluation in `Lab 02 & Lab 03` |
+| **RAG (Retrieval-Augmented Generation)** | Taking an open-book exam where you look up the exact page before answering | Retrieving relevant document chunks via multimodal embeddings (`gemini-embedding-2` cloud / `{default_local_embedding_model}` local 768d MRL) and injecting them into the prompt | Ground model answers on verified workshop data |
+| **Multi-Agent Orchestration** | A head chef (`{default_flagship_model}`) delegating prep and plating to line cooks (`{default_cloud_model}`) | Coordinator routing tasks to specialized sub-agents and FunctionTools | Inspect sub-agent delegation and trajectory evaluation in `Lab 02 & Lab 03` |
 
 ## References
 - [Google Gemini API Documentation](https://ai.google.dev/gemini-api/docs)
+- [Anthropic Claude Documentation](https://docs.anthropic.com)
+- [OpenAI Platform Documentation](https://platform.openai.com/docs)
 - [Google Agent Development Kit (ADK)](https://adk.dev)
 """)
 
@@ -608,12 +1113,14 @@ This cheat sheet translates core AI engineering concepts into intuitive everyday
 """
     agent_rules_footer = f"""
 4. **2026 Frontier Model & SDK Currency**:
-   - Use `google-genai >= 2.30.1` (`from google import genai`) and 2026 model tags (`{default_cloud_model}`, `gemini-4-argon`, `{default_local_model}`).
-   - Never use deprecated `google-generativeai` or retired `gemini-1.5-*` / `gemini-2.0-*` / `gemini-2.5-*` tags.
+   - Use verified 2026 SDKs (`google-genai >= 3.0.0`, `anthropic >= 2.8.0`, `openai >= 3.50.0`, `google-adk >= 2.14.0`) and active model tags (`{default_cloud_model}`, `{default_flagship_model}`, `gemini-4-hydrogen`, `gemini-4-carbon`, `claude-fable-5-2`, `claude-opus-5-5`, `claude-sonnet-5-5`, `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6.1-terra`, `{default_local_model}`).
+   - Never use deprecated `google-generativeai` or retired legacy model tags.
 
 ## References
 - [Workshop Harness Repository](https://github.com/JAICHANGPARK/workshop-harness)
 - [Google Gemini API Documentation](https://ai.google.dev/gemini-api/docs)
+- [Anthropic Claude Documentation](https://docs.anthropic.com)
+- [OpenAI Platform Documentation](https://platform.openai.com/docs)
 """
     agent_rules_md = agent_rules_header + agent_rules_body + agent_rules_footer
     (project_dir / "AGENTS.md").write_text(agent_rules_md, encoding="utf-8")
@@ -961,7 +1468,7 @@ class _GenUIWorkshopPageState extends State<GenUIWorkshopPage> {
   void initState() {
     super.initState();
     _model = GenerativeModel(
-      model: 'gemini-3.8-flash',
+      model: 'gemini-4-hydrogen',
       apiKey: _apiKey.isNotEmpty ? _apiKey : 'DEMO_KEY',
       systemInstruction: Content.system(
         'You are an A2UI (Agent-to-User Interface) generator. When users request recommendations, '
@@ -1192,7 +1699,7 @@ Initialize the Flutter project with `google_generative_ai` and configure API key
 2. Initialize `GenerativeModel` in `lib/main.dart`:
    ```dart
    const apiKey = String.fromEnvironment('GEMINI_API_KEY');
-   final model = GenerativeModel(model: 'gemini-3.8-flash', apiKey: apiKey);
+   final model = GenerativeModel(model: 'gemini-4-hydrogen', apiKey: apiKey);
    ```
 3. Run the app on Flutter Web (or connected device):
    ```bash
@@ -1288,9 +1795,9 @@ When the user asks for recommendations, items, or summaries, output a JSON objec
 
         # Keep Python fallback for test runner
         with open(project_dir / "workshop" / "01_starter" / "main.py", "w", encoding="utf-8") as f:
-            f.write('print("Flutter GenAI & GenUI Workshop Starter (gemini-3.8-flash)")\n')
+            f.write(f'print("Flutter GenAI & GenUI Workshop Starter ({default_cloud_model})")\n')
         with open(project_dir / "workshop" / "02_final" / "main.py", "w", encoding="utf-8") as f:
-            f.write('print("Flutter GenAI & GenUI Workshop Final (gemini-3.8-flash)")\n')
+            f.write(f'print("Flutter GenAI & GenUI Workshop Final ({default_cloud_model})")\n')
 
 
     elif is_android:
@@ -1384,7 +1891,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation("com.google.genai:google-genai-kotlin-android:0.4.0")
+    implementation("com.google.genai:google-genai-kotlin-android:1.8.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.4")
 }
 """
@@ -1431,7 +1938,7 @@ import androidx.compose.ui.Modifier
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // TODO [Lab 01]: Initialize Google GenAI Kotlin client with BuildConfig.GEMINI_API_KEY (gemini-3.8-flash)
+        // TODO [Lab 01]: Initialize Google GenAI Kotlin client with BuildConfig.GEMINI_API_KEY (gemini-4-hydrogen)
         // TODO [Lab 02]: Connect ChatViewModel StateFlow for reactive UDF and Structured Outputs
         // TODO [Lab 03]: Integrate CameraX multimodal capture and AppFunctions on-device shortcut
         setContent {
@@ -1464,7 +1971,7 @@ class MainActivity : ComponentActivity() {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text("Android GenAI & Jetpack Compose Final Solution", style = MaterialTheme.typography.headlineSmall)
                         Spacer(modifier = Modifier.height(12.dp))
-                        Text("Connected to Google GenAI SDK (gemini-3.8-flash)")
+                        Text("Connected to Google GenAI SDK (gemini-4-hydrogen)")
                     }
                 }
             }
@@ -1518,7 +2025,7 @@ Implement reactive unidirectional data flow (UDF) using Android ViewModel and St
 ## Instructions
 1. Create `ChatViewModel.kt` with `StateFlow<ChatUiState>`.
 2. Connect `ChatViewModel` to `MainActivity.kt` via Compose `viewModel()`.
-3. Configure `gemini-3.8-flash` with JSON output schema for structured response parsing.
+3. Configure `gemini-4-hydrogen` (or `gemini-3.8-flash`) with JSON output schema for structured response parsing.
 
 > Fast-Forward Checkpoint:
 > `git checkout lab-02-complete`
@@ -1546,7 +2053,25 @@ Capture image frames using CameraX and feed them to Gemini multimodal API, expos
 
 
     elif is_ts and not is_polyglot_adk:
-        pkg_json = '{\n  "name": "' + name + '",\n  "version": "1.0.0",\n  "type": "module",\n  "scripts": {\n    "start": "tsx src/index.ts"\n  },\n  "dependencies": {\n    "@google/adk": "^0.5.0",\n    "@google/genai": "^2.29.1",\n    "dotenv": "^16.4.5",\n    "zod": "^3.23.8"\n  },\n  "devDependencies": {\n    "tsx": "^4.19.0",\n    "typescript": "^5.5.4"\n  }\n}\n'
+        ts_deps = {
+            "@google/adk": "^0.5.0",
+            "@google/genai": "^3.0.0",
+            "dotenv": "^16.4.5",
+            "zod": "^3.23.8",
+        }
+        if wants_claude:
+            ts_deps["@anthropic-ai/sdk"] = "^1.7.0"
+        if wants_openai:
+            ts_deps["openai"] = "^7.55.0"
+        pkg_obj = {
+            "name": name,
+            "version": "1.0.0",
+            "type": "module",
+            "scripts": {"start": "tsx src/index.ts"},
+            "dependencies": ts_deps,
+            "devDependencies": {"tsx": "^4.19.0", "typescript": "^5.5.4"},
+        }
+        pkg_json = json.dumps(pkg_obj, indent=2) + "\n"
         with open(project_dir / "workshop" / "01_starter" / "package.json", "w", encoding="utf-8") as f:
             f.write(pkg_json)
         with open(project_dir / "workshop" / "02_final" / "package.json", "w", encoding="utf-8") as f:
@@ -1614,24 +2139,72 @@ export const reportWriter = new LlmAgent({{
 
 export const rootAgent = new LlmAgent({{
   name: "sre_coordinator",
-  model: "gemini-4-argon",
+  model: "{default_flagship_model}",
   description: "Root ADK TypeScript orchestrator that delegates telemetry and reporting.",
   instruction: "Delegate SLO inspection to ops_specialist and summary drafting to report_writer.",
   subAgents: [opsSpecialist, reportWriter],
 }});
 """
-        starter_ts = f"""// TypeScript / Node.js ADK Starter Runner ({default_cloud_model})
+        starter_ts = f"""// TypeScript / Node.js Starter Runner ({provider_label} - {default_cloud_model})
 import "dotenv/config";
 import {{ rootAgent }} from "./agent.js";
 
 async function main() {{
-  console.log("Welcome to the TypeScript Google ADK Workshop! Open workshop/03_labs/README.md to begin.");
+  console.log("Welcome to the TypeScript Workshop ({provider_label} - {default_cloud_model})! Open workshop/03_labs/README.md to begin.");
   console.log("Initialized rootAgent:", rootAgent.name);
 }}
 
 main().catch(console.error);
 """
-        final_ts = f"""// TypeScript / Node.js ADK Final Solution Runner ({default_cloud_model})
+        if primary_provider == "anthropic":
+            final_ts = f"""// TypeScript / Node.js Final Solution Runner (Anthropic Claude - {default_cloud_model})
+import "dotenv/config";
+import Anthropic from "@anthropic-ai/sdk";
+import {{ rootAgent }} from "./agent.js";
+
+async function main() {{
+  const apiKey = process.env.ANTHROPIC_API_KEY || "";
+  if (apiKey && apiKey !== "YOUR_ANTHROPIC_API_KEY_HERE") {{
+    const client = new Anthropic({{ apiKey }});
+    const response = await client.messages.create({{
+      model: "{default_cloud_model}",
+      max_tokens: 1024,
+      thinking: {{ type: "adaptive" }},
+      messages: [{{ role: "user", content: "Summarize 3 key benefits of agentic coding with {default_cloud_model} in TypeScript." }}],
+    }});
+    console.log(response.content);
+  }} else {{
+    console.log(`[Offline Demo Mode] All TypeScript Claude Workshop Labs Completed! Root Agent: ${{rootAgent.name}} (Model: {default_cloud_model})`);
+  }}
+}}
+
+main().catch(console.error);
+"""
+        elif primary_provider == "openai":
+            final_ts = f"""// TypeScript / Node.js Final Solution Runner (OpenAI - {default_cloud_model})
+import "dotenv/config";
+import OpenAI from "openai";
+import {{ rootAgent }} from "./agent.js";
+
+async function main() {{
+  const apiKey = process.env.OPENAI_API_KEY || "";
+  if (apiKey && apiKey !== "YOUR_OPENAI_API_KEY_HERE") {{
+    const client = new OpenAI({{ apiKey }});
+    const response = await client.responses.create({{
+      model: "{default_cloud_model}",
+      reasoning: {{ effort: "medium" }},
+      input: "Summarize 3 key benefits of OpenAI Responses API structured outputs with {default_cloud_model} in TypeScript.",
+    }});
+    console.log(response.output_text);
+  }} else {{
+    console.log(`[Offline Demo Mode] All TypeScript OpenAI Workshop Labs Completed! Root Agent: ${{rootAgent.name}} (Model: {default_cloud_model})`);
+  }}
+}}
+
+main().catch(console.error);
+"""
+        else:
+            final_ts = f"""// TypeScript / Node.js ADK Final Solution Runner ({default_cloud_model})
 import "dotenv/config";
 import {{ GoogleGenAI }} from "@google/genai";
 import {{ rootAgent }} from "./agent.js";
@@ -1691,7 +2264,7 @@ Initialize `@google/adk` with Zod-typed `FunctionTool` definitions and configure
             f.write(f"""# Lab 02: Multi-Agent Delegation with subAgents
 
 ## Objective
-Create specialist `LlmAgent` instances (`opsSpecialist`, `reportWriter`) and register them under `subAgents` on `rootAgent` (`gemini-4-argon`).
+Create specialist `LlmAgent` instances (`opsSpecialist`, `reportWriter`) and register them under `subAgents` on `rootAgent` (`{default_flagship_model}`).
 
 ## Instructions
 1. Define `opsSpecialist` and `reportWriter` in `workshop/01_starter/src/agent.ts`.
@@ -1837,7 +2410,7 @@ func main() {{
 \t}}
 \tpayload, _ := json.MarshalIndent(res, "", "  ")
 \tfmt.Println(string(payload))
-\tfmt.Println("All Go ADK Workshop Labs Completed Successfully! (Model: {default_cloud_model} / Root Coordinator: gemini-4-argon)")
+\tfmt.Println("All Go ADK Workshop Labs Completed Successfully! (Model: {default_cloud_model} / Root Coordinator: {default_flagship_model})")
 }}
 """
         with open(project_dir / "workshop" / "01_starter" / "main.go", "w", encoding="utf-8") as f:
@@ -1878,7 +2451,7 @@ Initialize a Go ADK agent using `google.golang.org/adk/v2/model/gemini` (`{defau
             f.write(f"""# Lab 02: Multi-Agent Delegation with llmagent SubAgents
 
 ## Objective
-Construct a specialized sub-agent (`ops_specialist` running `{default_cloud_model}`) and attach it to a root coordinator (`sre_coordinator` running `gemini-4-argon`) via `SubAgents: []llmagent.Agent{{opsSubAgent}}`.
+Construct a specialized sub-agent (`ops_specialist` running `{default_cloud_model}`) and attach it to a root coordinator (`sre_coordinator` running `{default_flagship_model}`) via `SubAgents: []llmagent.Agent{{opsSubAgent}}`.
 
 ## Instructions
 1. Initialize `opsSubAgent` using `llmagent.New(llmagent.Config{{...}})`.
@@ -1931,7 +2504,7 @@ Execute the multi-agent hierarchy using `runner.New`, `session.InMemoryService()
         <dependency>
             <groupId>com.google.genai</groupId>
             <artifactId>google-genai</artifactId>
-            <version>1.10.0</version>
+            <version>2.1.0</version>
         </dependency>
     </dependencies>
 </project>
@@ -1953,7 +2526,7 @@ java {
 
 dependencies {
     implementation 'com.google.adk:google-adk:0.5.0'
-    implementation 'com.google.genai:google-genai:1.10.0'
+    implementation 'com.google.genai:google-genai:2.1.0'
 }
 
 application {
@@ -1972,7 +2545,7 @@ import java.util.Map;
 
 /**
  * Google ADK for Java (com.google.adk:google-adk) Starter Application.
- * Primary Workhorse Model: {default_cloud_model} | Root Coordinator: gemini-4-argon
+ * Primary Workhorse Model: {default_cloud_model} | Root Coordinator: {default_flagship_model}
  */
 public final class AdkWorkshopApp {{
 
@@ -2045,7 +2618,7 @@ public final class AdkWorkshopApp {{
     public static void main(String[] args) {{
         Map<String, Object> result = lookupServiceSlo("checkout-api");
         System.out.println("[Java ADK Telemetry Output] " + result);
-        System.out.println("All Java ADK Workshop Labs Completed Successfully! (Model: {default_cloud_model} / Root Coordinator: gemini-4-argon)");
+        System.out.println("All Java ADK Workshop Labs Completed Successfully! (Model: {default_cloud_model} / Root Coordinator: {default_flagship_model})");
     }}
 }}
 """
@@ -2188,7 +2761,7 @@ val reportSpecialist = LlmAgent(
 
 val rootAgent = LlmAgent.builder()
     .name("sre_coordinator")
-    .model("gemini-4-argon")
+    .model("{default_flagship_model}")
     .description("Root Kotlin ADK coordinator agent.")
     .instruction("Delegate SLO checks to ops_specialist and summary drafting to report_specialist.")
     .subAgents(listOf(opsSpecialist, reportSpecialist))
@@ -2214,7 +2787,7 @@ fun lookupServiceSlo(serviceName: String): ServiceSLOResult {{
 fun main() {{
     val metrics = lookupServiceSlo("checkout-api")
     println("[Kotlin ADK Telemetry] $metrics")
-    println("All Kotlin ADK Workshop Labs Completed Successfully! (Model: {default_cloud_model} / Root Coordinator: gemini-4-argon)")
+    println("All Kotlin ADK Workshop Labs Completed Successfully! (Model: {default_cloud_model} / Root Coordinator: {default_flagship_model})")
 }}
 """
         with open(project_dir / "workshop" / "01_starter" / "src" / "main" / "kotlin" / "com" / "example" / "adk" / "AdkWorkshopApp.kt", "w", encoding="utf-8") as f:
@@ -2250,10 +2823,10 @@ Initialize `LlmAgent` using Kotlin idiomatic constructor parameters (`Gemini("{d
 3. Configure `opsSpecialist` with `Gemini("{default_cloud_model}")` and `FunctionTool.create(::lookupServiceSlo)`.
 """)
         with open(labs_dir / "02_lab_kotlin_multi_agent_orchestration.md", "w", encoding="utf-8") as f:
-            f.write("""# Lab 02: Multi-Agent Hierarchy & Sub-Agent Delegation
+            f.write(f"""# Lab 02: Multi-Agent Hierarchy & Sub-Agent Delegation
 
 ## Objective
-Wire `opsSpecialist` and `reportSpecialist` under `rootAgent` (`gemini-4-argon`) using `.subAgents(listOf(opsSpecialist, reportSpecialist))`.
+Wire `opsSpecialist` and `reportSpecialist` under `rootAgent` (`{default_flagship_model}`) using `.subAgents(listOf(opsSpecialist, reportSpecialist))`.
 
 ## Instructions
 1. Define `reportSpecialist` to format telemetry findings into an actionable SRE checklist.
@@ -2277,11 +2850,12 @@ Run the Kotlin ADK hierarchy locally with `InMemoryRunner` and verify determinis
             f.write(f'print("Kotlin ADK Workshop Final ({default_cloud_model})")\n')
 
     else:
-        # Default Python 3-Lab Hands-on Pipeline (Supports Cloud Gemini 3.8/4 Argon, Local Ollama Gemma 4, & Offline Mock Fallback)
+        # Default Python 3-Lab Hands-on Pipeline (Supports Google Gemini, Anthropic Claude, OpenAI Responses API, Local Ollama, & Offline Fallback)
         starter_main = f'''#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Starter Code for {topic}
+Primary Cloud Provider: {provider_label} ({primary_api_key_env})
 Primary Cloud Model: {default_cloud_model} | Local Ollama Model: {default_local_model}
 """
 
@@ -2301,7 +2875,7 @@ class WorkshopTaskResult:
 
 # =========================================================================
 # TODO: [Lab 01 - Exercise] Initialize AI Client & Run Sanity Check
-# Hint: Connect to Google GenAI ({default_cloud_model}) or Local Ollama ({default_local_model})
+# Hint: Connect to {provider_label} ({default_cloud_model} via {primary_api_key_env}) or Local Ollama ({default_local_model})
 # =========================================================================
 def lab1_sanity_check(prompt: str) -> str:
     return f"[Starter Lab 01 Placeholder] Received prompt: {{prompt}}"
@@ -2334,18 +2908,24 @@ if __name__ == "__main__":
         with open(project_dir / "workshop" / "01_starter" / "main.py", "w", encoding="utf-8") as f:
             f.write(starter_main)
 
+        provider_order_literal = (
+            '["anthropic", "gemini", "openai"]'
+            if primary_provider == "anthropic"
+            else ('["openai", "gemini", "anthropic"]' if primary_provider == "openai" else '["gemini", "anthropic", "openai"]')
+        )
         final_main = f'''#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Final Completed Reference Solution for {topic}
-Primary Cloud Model: {default_cloud_model} | Flagship Reasoning: gemini-4-argon | Local Model: {default_local_model}
+Primary Cloud Provider: {provider_label} ({primary_api_key_env})
+Primary Cloud Model: {default_cloud_model} | Flagship Reasoning: {default_flagship_model} | Local Model: {default_local_model}
 """
 
 import os
 import json
 import urllib.request
 from dataclasses import dataclass, asdict
-from typing import List
+from typing import List, Optional
 
 
 @dataclass
@@ -2366,20 +2946,87 @@ def check_local_ollama(base_url: str = "http://localhost:11434") -> bool:
         return False
 
 
-def run_lab1_client_check(prompt: str) -> str:
-    """Lab 01: Connect to Google GenAI ({default_cloud_model}) or Local Ollama ({default_local_model}) with offline fallback."""
-    api_key = os.environ.get("GEMINI_API_KEY", "").strip()
-    if api_key and api_key != "YOUR_GEMINI_API_KEY_HERE":
+def embed_with_embeddinggemma2(
+    text: str,
+    model_tag: str = "{default_local_embedding_model}",
+    dimensions: int = 256,
+    base_url: str = "http://localhost:11434",
+) -> List[float]:
+    """Generate Matryoshka (MRL) embeddings via EmbeddingGemma 2 on Ollama (/api/embed) with offline fallback."""
+    if check_local_ollama(base_url):
         try:
-            from google import genai
-            client = genai.Client(api_key=api_key)
-            interaction = client.interactions.create(
-                model="{default_cloud_model}",
-                input=prompt,
+            payload = json.dumps({{"model": model_tag, "input": text, "dimensions": dimensions}}).encode("utf-8")
+            req = urllib.request.Request(
+                f"{{base_url}}/api/embed",
+                data=payload,
+                headers={{"Content-Type": "application/json"}},
+                method="POST",
             )
-            return interaction.output_text or "Connected to Gemini API."
-        except Exception as exc:
-            return f"[Cloud Fallback] Gemini client initialized ({{exc}})"
+            with urllib.request.urlopen(req, timeout=3.0) as resp:
+                body = json.loads(resp.read().decode("utf-8"))
+                embeddings = body.get("embeddings") or []
+                if embeddings:
+                    return embeddings[0][:dimensions]
+        except Exception:
+            pass
+    # Deterministic normalized fallback vector (MRL truncated from 768d) for offline smoke tests
+    return [round(((idx + len(text)) % 17) / 17.0, 4) for idx in range(min(dimensions, 8))]
+
+
+def _try_cloud_provider(provider: str, prompt: str) -> Optional[str]:
+    """Attempt inference against the requested cloud provider if its API key is configured."""
+    if provider == "gemini":
+        api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+        if api_key and api_key != "YOUR_GEMINI_API_KEY_HERE":
+            model_tag = "{default_cloud_model}" if "{primary_provider}" == "gemini" else "gemini-4-hydrogen"
+            try:
+                from google import genai
+                client = genai.Client(api_key=api_key)
+                interaction = client.interactions.create(model=model_tag, input=prompt)
+                return interaction.output_text or f"Connected to Google Gemini API ({{model_tag}})."
+            except Exception as exc:
+                return f"[Cloud Fallback] Gemini client initialized ({{exc}})"
+    elif provider == "anthropic":
+        api_key = os.environ.get("ANTHROPIC_API_KEY", "").strip()
+        if api_key and api_key != "YOUR_ANTHROPIC_API_KEY_HERE":
+            model_tag = "{default_cloud_model}" if "{primary_provider}" == "anthropic" else "claude-sonnet-5-5"
+            try:
+                from anthropic import Anthropic
+                client = Anthropic(api_key=api_key)
+                resp = client.messages.create(
+                    model=model_tag,
+                    max_tokens=1024,
+                    thinking={{"type": "adaptive"}},
+                    messages=[{{"role": "user", "content": prompt}}],
+                )
+                text_blocks = [b.text for b in getattr(resp, "content", []) if getattr(b, "type", "") == "text"]
+                return "\\n".join(text_blocks) or f"Connected to Anthropic Claude API ({{model_tag}})."
+            except Exception as exc:
+                return f"[Cloud Fallback] Anthropic Claude client initialized ({{exc}})"
+    elif provider == "openai":
+        api_key = os.environ.get("OPENAI_API_KEY", "").strip()
+        if api_key and api_key != "YOUR_OPENAI_API_KEY_HERE":
+            model_tag = "{default_cloud_model}" if "{primary_provider}" == "openai" else "gpt-6.1-sol"
+            try:
+                from openai import OpenAI
+                client = OpenAI(api_key=api_key)
+                resp = client.responses.create(
+                    model=model_tag,
+                    reasoning={{"effort": "medium"}},
+                    input=prompt,
+                )
+                return getattr(resp, "output_text", "") or f"Connected to OpenAI Responses API ({{model_tag}})."
+            except Exception as exc:
+                return f"[Cloud Fallback] OpenAI client initialized ({{exc}})"
+    return None
+
+
+def run_lab1_client_check(prompt: str) -> str:
+    """Lab 01: Connect to {provider_label} ({default_cloud_model}), alternate cloud APIs, or Local Ollama ({default_local_model})."""
+    for provider in {provider_order_literal}:
+        cloud_res = _try_cloud_provider(provider, prompt)
+        if cloud_res is not None:
+            return cloud_res
 
     if check_local_ollama():
         return f"[Local Ollama Active] Connected to http://localhost:11434 ({default_local_model}) for prompt: {{prompt}}"
@@ -2407,6 +3054,8 @@ def main():
     print(sanity_output)
 
     print("\\n[Lab 02 & Lab 03] Running Structured Output & Agentic Pipeline...")
+    sample_vec = embed_with_embeddinggemma2("{topic}")
+    print(f"[EmbeddingGemma 2 MRL Preview] model={default_local_embedding_model} sample_dims={{sample_vec[:4]}}")
     result = run_lab2_structured_output("{topic}")
     print(json.dumps(asdict(result), indent=2, ensure_ascii=False))
     print("\\nAll Workshop Labs Completed Successfully!")
@@ -2421,8 +3070,25 @@ if __name__ == "__main__":
         # Also create modular lab files in workshop/03_labs/
         labs_dir = project_dir / "workshop" / "03_labs"
         if is_adk:
+            if primary_provider in ("anthropic", "openai"):
+                adk_litellm_import = (
+                    "try:\n"
+                    "    from google.adk.models.lite_llm import LiteLlm\n"
+                    "except ImportError:\n"
+                    "    class LiteLlm:  # Offline fallback stub when litellm is not yet installed\n"
+                    "        def __init__(self, **kwargs):\n"
+                    "            self.__dict__.update(kwargs)\n\n"
+                )
+                adk_workhorse_expr = f'LiteLlm(model="{primary_provider}/{default_cloud_model}")'
+                adk_flagship_expr = f'LiteLlm(model="{primary_provider}/{default_flagship_model}")'
+            else:
+                adk_litellm_import = ""
+                adk_workhorse_expr = f'"{default_cloud_model}"'
+                adk_flagship_expr = f'"{default_flagship_model}"'
+
             starter_agent_py = f'''"""
 ADK & Google Agents CLI (google-agents-cli) Starter Agent (`agent.py`)
+Primary Provider: {provider_label} ({default_cloud_model})
 Compatible with:
   - `adk web` / `adk run` / `adk eval`
   - `uvx google-agents-cli setup`
@@ -2435,8 +3101,7 @@ except ImportError:
         def __init__(self, **kwargs):
             self.__dict__.update(kwargs)
 
-
-def lookup_service_slo(service_name: str) -> dict:
+{adk_litellm_import}def lookup_service_slo(service_name: str) -> dict:
     """Returns target SLO latency and remaining error budget for a production microservice.
 
     Args:
@@ -2450,9 +3115,10 @@ def lookup_service_slo(service_name: str) -> dict:
 
 
 # TODO [Lab 01]: Define specialist sub-agents and register them under `sub_agents=[...]` on `root_agent`
+# Tip: For Anthropic Claude or OpenAI models in ADK, wrap with LiteLlm(model="anthropic/claude-sonnet-5-5") or LiteLlm(model="openai/gpt-6.1-sol")
 root_agent = LlmAgent(
     name="adk_starter_coordinator",
-    model="{default_cloud_model}",
+    model={adk_workhorse_expr},
     description="Starter ADK root_agent entry point for {topic}.",
     instruction="Use lookup_service_slo to answer questions about microservice SLOs.",
     tools=[lookup_service_slo],
@@ -2460,6 +3126,7 @@ root_agent = LlmAgent(
 '''
             final_agent_py = f'''"""
 ADK & Google Agents CLI (google-agents-cli) Reference Solution (`agent.py`)
+Primary Provider: {provider_label} (Workhorse: {default_cloud_model} | Coordinator: {default_flagship_model})
 Compatible with:
   - `adk web` / `adk run` / `adk api_server` / `adk eval`
   - `agents-cli eval dataset synthesize` -> `eval run` -> `eval grade` -> `eval optimize`
@@ -2472,8 +3139,7 @@ except ImportError:
         def __init__(self, **kwargs):
             self.__dict__.update(kwargs)
 
-
-def lookup_service_slo(service_name: str) -> dict:
+{adk_litellm_import}def lookup_service_slo(service_name: str) -> dict:
     """Returns target SLO latency and remaining error budget for a production microservice.
 
     Args:
@@ -2505,7 +3171,7 @@ def verify_release_gate(service_name: str, current_p99_ms: int) -> dict:
 
 slo_specialist = LlmAgent(
     name="slo_specialist",
-    model="{default_cloud_model}",
+    model={adk_workhorse_expr},
     description="Audits microservice SLO metrics and evaluates release readiness gates.",
     instruction="Call lookup_service_slo and verify_release_gate to inspect staging telemetry.",
     tools=[lookup_service_slo, verify_release_gate],
@@ -2513,14 +3179,14 @@ slo_specialist = LlmAgent(
 
 report_specialist = LlmAgent(
     name="report_specialist",
-    model="{default_cloud_model}",
+    model={adk_workhorse_expr},
     description="Drafts structured SRE deployment gate reports for Gemini Enterprise.",
     instruction="Summarize the release gate decision from slo_specialist into an executive checklist.",
 )
 
 root_agent = LlmAgent(
     name="adlc_root_coordinator",
-    model="gemini-4-argon",
+    model={adk_flagship_expr},
     description="Root ADK & agents-cli orchestrator that delegates SLO checks and release reporting.",
     instruction="Delegate telemetry checks to slo_specialist and final reporting to report_specialist.",
     sub_agents=[slo_specialist, report_specialist],
@@ -2716,7 +3382,7 @@ val opsSpecialist = LlmAgent(
 
 val rootAgent = LlmAgent.builder()
     .name("sre_coordinator")
-    .model("gemini-4-argon")
+    .model("{default_flagship_model}")
     .description("Root Kotlin ADK coordinator.")
     .instruction("Delegate SLO checks to ops_specialist.")
     .subAgents(listOf(opsSpecialist))
@@ -2747,7 +3413,7 @@ export const opsSpecialist = new LlmAgent({{
 
 export const rootAgent = new LlmAgent({{
   name: "sre_coordinator",
-  model: "gemini-4-argon",
+  model: "{default_flagship_model}",
   description: "Root TypeScript ADK coordinator.",
   instruction: "Delegate SLO inspection to ops_specialist.",
   subAgents: [opsSpecialist],
@@ -2807,7 +3473,7 @@ Verify your local environment using `./scripts/check_env.sh` and initialize your
                 f.write(f"""# Lab 02: Multi-Agent Hierarchy, Sub-Agent Delegation & Structured Outputs
 
 ## Objective
-Wire specialized sub-agents (`slo_specialist`, `report_specialist`) under a root coordinator (`root_agent` running `gemini-4-argon`) and enforce deterministic JSON schema outputs.
+Wire specialized sub-agents (`slo_specialist`, `report_specialist`) under a root coordinator (`root_agent` running `{default_flagship_model}`) and enforce deterministic JSON schema outputs.
 
 ## Instructions
 1. Review `prompt-pack/README.md` for the target JSON Schema.
@@ -2867,12 +3533,12 @@ Write your code in `workshop/01_starter/main.py`. If you get stuck, refer to the
                 f.write(f"""# Lab 01: Environment Verification & AI Client Sanity Check
 
 ## Objective
-Verify your local and cloud development environment using `./scripts/check_env.sh` and connect `workshop/01_starter/main.py` to Google GenAI (`{default_cloud_model}`) or Local Ollama (`{default_local_model}`).
+Verify your local and cloud development environment using `./scripts/check_env.sh` and connect `workshop/01_starter/main.py` to {provider_label} (`{default_cloud_model}`) or Local Ollama (`{default_local_model}`).
 
 ## Instructions
 1. Run `./scripts/check_env.sh` (or `.\\scripts\\check_env.ps1` on Windows) to verify Python, `uv`, and local port readiness.
 2. Open `workshop/01_starter/main.py` and inspect `TODO: [Lab 01 - Exercise]` inside `lab1_sanity_check()`.
-3. Configure `GEMINI_API_KEY` in `.env` or start your local Ollama runtime (`ollama serve` with `{default_local_model}`).
+3. Configure `{primary_api_key_env}` in `.env` or start your local Ollama runtime (`ollama serve` with `{default_local_model}`).
 4. Run the starter script to verify connectivity:
    ```bash
    python3 workshop/01_starter/main.py
@@ -2938,12 +3604,12 @@ def audit_compatibility(stack_str: str, target_dir: str = None):
             "risk": "LM Studio has known stability issues & missing Metal GPU acceleration on Intel Mac.",
             "fallback": "Provide Ollama CLI (ollama serve) as mandatory fallback in docs/18-intel-mac-prep.md"
         })
-    if "ollama" in stack:
+    if "ollama" in stack or "gemma" in stack or "embeddinggemma" in stack:
         issues.append({
-            "tool": "Ollama Local LLM Runtime",
+            "tool": "Ollama Local LLM & EmbeddingGemma 2 Runtime",
             "target": "8GB RAM Laptops / Intel Mac / Windows ARM64",
-            "risk": "Loading 12B+ parameter models on 8GB RAM laptops causes OOM crashes or severe swap thrashing.",
-            "fallback": "Enforce RAM-tiered model tags: 8GB -> gemma4:e2b / qwen3:8b, 16GB -> gemma4:e4b / deepseek-r1:14b, 32GB+ -> gemma4:26b-a4b / qwen3.6:27b."
+            "risk": "Loading 12B+ parameter models on 8GB RAM laptops causes OOM crashes or severe swap thrashing; full multimodal embeddinggemma-2:740m requires ~1.3GB.",
+            "fallback": "Enforce RAM-tiered model tags: 8GB -> gemma4:e2b + embeddinggemma-2:270m, 16GB -> gemma4:e4b / gemma4:12b + embeddinggemma-2, 32GB+ -> gemma4:26b / gemma4:31b."
         })
     if "docker" in stack:
         issues.append({
@@ -2978,7 +3644,7 @@ def audit_compatibility(stack_str: str, target_dir: str = None):
             "tool": "Google Agent Development Kit (ADK & adk web)",
             "target": "Port 8000 Conflict & Multi-Agent Delegation Loops",
             "risk": "Local port 8000 collisions prevent 'adk web' / 'adk api_server' startup; missing 'root_agent' symbol in agent.py breaks discovery.",
-            "fallback": "Ensure top-level orchestrator is named 'root_agent' in agent.py, use 'adk web --port 8080' on port conflict, and assign gemini-3.8-flash to sub_agents."
+            "fallback": "Ensure top-level orchestrator is named 'root_agent' in agent.py, use 'adk web --port 8080' on port conflict, and assign gemini-4-hydrogen (or gemini-3.8-flash) to sub_agents."
         })
     if any(k in stack for k in ["agents-cli", "google-agents-cli"]):
         issues.append({
@@ -2986,6 +3652,20 @@ def audit_compatibility(stack_str: str, target_dir: str = None):
             "target": "Python < 3.11 / Missing uvx or GCP Application Default Credentials",
             "risk": "'uvx google-agents-cli setup' requires Python 3.11+ and Astral uv; 'agents-cli deploy' fails without active GCP ADC credentials.",
             "fallback": "Install uv first, run 'uvx google-agents-cli setup' (or 'npx skills add google/agents-cli'), and run 'gcloud auth application-default login' before Lab 03."
+        })
+    if any(k in stack for k in ["claude", "anthropic", "claude-agent-sdk"]):
+        issues.append({
+            "tool": "Anthropic Claude Messages API & SDK v2 (anthropic >= 2.8.0)",
+            "target": "API Version 2026-10-21 Breaking Changes & Model ID Format",
+            "risk": "Passing legacy sampling parameters (temperature, top_p, top_k) returns HTTP 400 in API 2026-10-21; dot-notation tags (e.g. claude-sonnet-5.5) return HTTP 404.",
+            "fallback": "Use canonical hyphenated IDs (claude-fable-5-2, claude-opus-5-5, claude-sonnet-5-5, claude-haiku-5-5), Adaptive Thinking (thinking={'type': 'adaptive'}), and LiteLlm('anthropic/...') when routing via Google ADK."
+        })
+    if any(k in stack for k in ["openai", "gpt", "openai-agents"]):
+        issues.append({
+            "tool": "OpenAI Responses API & SDK v3 (openai >= 3.50.0)",
+            "target": "Retired o-Series Endpoints & Tier-1 Rate Limits",
+            "risk": "Legacy isolated o-series model endpoints (o1, o3, o4-mini) are retired; unverified orgs may hit RPM/TPM limits on flagship gpt-6-astra.",
+            "fallback": "Migrate to client.responses.create / client.responses.parse with gpt-6.1-sol or gpt-6.1-terra, tune reasoning={'effort': 'medium'}, and use LiteLlm('openai/...') for Google ADK integration."
         })
 
     if not issues:
@@ -3035,9 +3715,27 @@ def audit_persona_loop(topic: str, target_dir: str = None):
         "no_em_dash": True,
     }
 
+    workhorse_display = MODEL_REGISTRY["google-gemini"]["default_workhorse"]
+    flagship_display = MODEL_REGISTRY["google-gemini"]["flagship_reasoning"]
+    sdk_display = "google-genai >= 3.0.0, @google/genai >= 3.0.0"
+
     if target_dir:
         target = Path(target_dir).resolve()
         if target.exists():
+            runbook_file = target / "RUNBOOK.md"
+            if runbook_file.exists():
+                rb_text = runbook_file.read_text(encoding="utf-8", errors="ignore")
+                m_work = re.search(r"\*\*Primary Cloud Model\*\*:\s*`([^`]+)`", rb_text)
+                m_coord = re.search(r"\*\*Coordinator\*\*:\s*`([^`]+)`", rb_text)
+                if m_work:
+                    workhorse_display = m_work.group(1)
+                if m_coord:
+                    flagship_display = m_coord.group(1)
+                if workhorse_display.startswith("claude-"):
+                    sdk_display = "anthropic >= 2.8.0, @anthropic-ai/sdk >= 1.7.0"
+                elif workhorse_display.startswith("gpt-"):
+                    sdk_display = "openai >= 3.50.0, openai-agents >= 0.24.0"
+
             metrics["has_check_env"] = (target / "scripts" / "check_env.sh").exists()
             starter_dir = target / "workshop" / "01_starter"
             if starter_dir.exists():
@@ -3082,7 +3780,7 @@ This document applies the **Loop Engineering** methodology to audit the workshop
 - **Readiness Status**: {"PASS" if metrics["has_check_env"] else "WARN"}
 - **Evaluation**:
   - Automated prerequisite verification scripts (`./scripts/check_env.sh` and `.\\scripts\\check_env.ps1`) detect missing SDKs and port conflicts before coding begins.
-  - RAM-tiered model selection (`gemma4:e2b` for 8GB laptops, `gemma4:e4b` for 16GB laptops, `{MODEL_REGISTRY['google-gemini']['default_workhorse']}` for cloud API) prevents Out-Of-Memory crashes.
+  - RAM-tiered model selection (`gemma4:e2b` for 8GB laptops, `gemma4:e4b` for 16GB laptops, `{workhorse_display}` for cloud API) prevents Out-Of-Memory crashes.
 
 ---
 
@@ -3090,14 +3788,14 @@ This document applies the **Loop Engineering** methodology to audit the workshop
 - **Readiness Status**: {"PASS" if metrics["has_starter_todos"] and metrics["has_final_solution"] else "PASS (Template Ready)"}
 - **Evaluation**:
   - Clear `TODO` exercise boundaries in `workshop/01_starter` and complete, runnable reference solutions in `workshop/02_final`.
-  - Uses modern 2026 SDK patterns (`google-genai >= 2.30.1`, `@google/genai >= 2.29.1`, `{MODEL_REGISTRY['google-gemini']['default_workhorse']}`, `{MODEL_REGISTRY['google-gemini']['flagship_reasoning']}`) and type-safe JSON schema validation.
+  - Uses modern 2026 SDK patterns (`{sdk_display}`, `{workhorse_display}`, `{flagship_display}`) and type-safe JSON schema validation.
 
 ---
 
 ## 4. Senior / Staff Engineer Persona (Systems Architect)
 - **Readiness Status**: PASS
 - **Evaluation**:
-  - Includes multi-agent orchestration patterns (`gemini-4-argon` coordinator + `gemini-3.8-flash` workers), reasoning budget control (`thinking_config`), and offline/venue WiFi resilience (`bundle_offline_assets.sh`).
+  - Includes multi-agent orchestration patterns (`{flagship_display}` coordinator + `{workhorse_display}` workers), reasoning depth / adaptive thinking control, and offline/venue WiFi resilience (`bundle_offline_assets.sh`).
   - Zero deprecated API calls or hardcoded credentials.
 
 ---
@@ -3110,8 +3808,8 @@ This document applies the **Loop Engineering** methodology to audit the workshop
 
     print("🌱 [Persona 1 - Non-Coder]: Verified zero-setup Colab fallback & conceptual clarity.")
     print("🐣 [Persona 2 - Novice Dev]: Verified copy-paste installation guides, check_env scripts & 8GB RAM fallback (gemma4:e2b).")
-    print("🐥 [Persona 3 - Intermediate]: Verified 60-min TODO code bounds, Structured Output schema & 2026 SDK currency (gemini-3.8-flash).")
-    print("🦅 [Persona 4 - Senior Architect]: Verified Challenge Tasks, Multi-Agent orchestration (gemini-4-argon) & offline resilience.")
+    print(f"🐥 [Persona 3 - Intermediate]: Verified 60-min TODO code bounds, Structured Output schema & 2026 SDK currency ({workhorse_display}).")
+    print(f"🦅 [Persona 4 - Senior Architect]: Verified Challenge Tasks, Multi-Agent orchestration ({flagship_display}) & offline resilience.")
     print("-" * 60)
     print("✅ Loop Engineering 4-Persona Evaluation Completed! Report saved to docs/00-persona-loop-review-report.md")
 
@@ -3222,7 +3920,19 @@ def build_slides(target_dir: str, output_dir: str = None, export_pdf: bool = Fal
 
     return _run_python_script(cmd) == 0
 
-def generate_all(name: str, topic: str, stack_str: str, target_dir: str = None, model_name: str = None):
+def generate_all(name: str, topic: str, stack_str: str = None, target_dir: str = None, model_name: str = None):
+    if not stack_str:
+        inferred = parse_natural_prompt(topic or name or "")
+        inferred_list = inferred["stack"].split(",")
+        if any(k in inferred_list for k in ["claude", "openai", "adk", "flutter", "android", "typescript", "go", "java", "kotlin"]):
+            stack_str = inferred["stack"]
+            if not model_name:
+                model_name = inferred["model"]
+        else:
+            stack_str = "python,ollama,docker"
+            if not model_name and inferred["model"] != MODEL_REGISTRY["google-gemini"]["default_workhorse"]:
+                model_name = inferred["model"]
+
     print("=" * 70)
     print(f"⚡ [ONE-CLICK FULL ORCHESTRATOR - uv Powered] Building Workshop: '{name}'")
     print("=" * 70)
@@ -3275,25 +3985,82 @@ def generate_all(name: str, topic: str, stack_str: str, target_dir: str = None, 
     print(f"🎉 SUCCESS! Complete Workshop Package '{proj_dir.name}' generated in ONE-CLICK via uv!")
     print(f"📁 Path: {proj_dir}")
     print("=" * 70)
+    return proj_dir
+
+
+def generate_from_prompt(
+    prompt: str,
+    target_dir: str = None,
+    init_only: bool = False,
+    name_override: str = None,
+    stack_override: str = None,
+    model_override: str = None,
+) -> Path:
+    """Zero-config natural language prompt entrypoint: infers name, topic, stack, and 2026 model, then builds immediately."""
+    parsed = parse_natural_prompt(prompt)
+    final_name = name_override or parsed["name"]
+    final_topic = parsed["topic"]
+    final_stack = stack_override or parsed["stack"]
+    final_model = model_override or parsed["model"]
+
+    print("=" * 70)
+    print("🗣️  [NATURAL LANGUAGE PROMPT ROUTER] Resolved Workshop Spec:")
+    print(f"   • Prompt : {prompt}")
+    print(f"   • Name   : {final_name}")
+    print(f"   • Topic  : {final_topic}")
+    print(f"   • Stack  : {final_stack}")
+    print(f"   • Model  : {final_model}")
+    print("=" * 70)
+
+    if init_only:
+        return init_workshop(final_name, final_topic, target_dir, final_stack, final_model)
+    return generate_all(final_name, final_topic, final_stack, target_dir, final_model)
+
 
 def main():
+    known_commands = {
+        "prompt", "from-prompt", "init", "generate-all", "list-models",
+        "audit-models", "audit-typography", "audit-compat", "audit-loop",
+        "test", "build-pdf", "export-codelab", "export-colab", "test-colab", "build-slides",
+    }
+    # Allow direct bare natural language invocation: `python3 harness_cli.py "Claude 최신 모델로 워크숍 만들어줘"`
+    if len(sys.argv) > 1 and sys.argv[1] not in known_commands and not sys.argv[1].startswith("-"):
+        raw_prompt = " ".join(sys.argv[1:]).strip()
+        generate_from_prompt(raw_prompt)
+        return
+
     parser = argparse.ArgumentParser(description="Workshop Harness CLI (uv Powered)")
     subparsers = parser.add_subparsers(dest="command")
 
+    # prompt / from-prompt command (Zero-Config Natural Language One-Shot Generator)
+    prompt_parser = subparsers.add_parser(
+        "prompt",
+        aliases=["from-prompt"],
+        help="Instantly generate a complete workshop directly from a natural language prompt (KO/EN/JA/ZH)",
+    )
+    prompt_parser.add_argument("prompt_text", nargs="+", help="Natural language prompt describing the workshop")
+    prompt_parser.add_argument("--dir", "--target", dest="dir", default=None, help="Target parent directory")
+    prompt_parser.add_argument("--name", default=None, help="Optional project slug override")
+    prompt_parser.add_argument("--stack", default=None, help="Optional comma-separated stack override")
+    prompt_parser.add_argument("--model", default=None, help="Optional AI model override")
+    prompt_parser.add_argument("--init-only", action="store_true", help="Only scaffold repository without PDF/Colab/Slides build")
+
     # init command
     init_parser = subparsers.add_parser("init", help="Initialize a new workshop project")
-    init_parser.add_argument("--name", required=True, help="Workshop project name")
-    init_parser.add_argument("--topic", default="BWAI Hands-on Workshop", help="Workshop topic")
-    init_parser.add_argument("--stack", default="python", help="Tech stack (comma-separated, e.g. python, typescript, go, kotlin)")
-    init_parser.add_argument("--model", default=None, help="Primary AI model tag (default: gemini-3.8-flash)")
+    init_parser.add_argument("--name", default=None, help="Workshop project name (auto-inferred if --prompt is given)")
+    init_parser.add_argument("--prompt", default=None, help="Natural language prompt to auto-infer name, topic, stack, and model")
+    init_parser.add_argument("--topic", default=None, help="Workshop topic")
+    init_parser.add_argument("--stack", default=None, help="Tech stack (comma-separated, e.g. python, claude, openai, adk, typescript, go)")
+    init_parser.add_argument("--model", default=None, help="Primary AI model tag (e.g. gemini-4-hydrogen, claude-sonnet-5-5, claude-fable-5-2, gpt-6.1-sol)")
     init_parser.add_argument("--dir", "--target", dest="dir", default=None, help="Target parent directory")
 
     # generate-all (One-Click Full Orchestration)
     gen_all_parser = subparsers.add_parser("generate-all", help="One-Click full workshop generation across all skills")
-    gen_all_parser.add_argument("--name", required=True, help="Workshop project name")
-    gen_all_parser.add_argument("--topic", default="BWAI Hands-on Workshop", help="Workshop topic")
-    gen_all_parser.add_argument("--stack", default="python,ollama,docker", help="Tech stack (comma-separated)")
-    gen_all_parser.add_argument("--model", default=None, help="Primary AI model tag (default: gemini-3.8-flash)")
+    gen_all_parser.add_argument("--name", default=None, help="Workshop project name (auto-inferred if --prompt is given)")
+    gen_all_parser.add_argument("--prompt", default=None, help="Natural language prompt to auto-infer name, topic, stack, and model")
+    gen_all_parser.add_argument("--topic", default=None, help="Workshop topic")
+    gen_all_parser.add_argument("--stack", default=None, help="Tech stack (comma-separated, e.g. python, claude, openai, ollama)")
+    gen_all_parser.add_argument("--model", default=None, help="Primary AI model tag (e.g. gemini-4-hydrogen, claude-sonnet-5-5, gpt-6.1-sol)")
     gen_all_parser.add_argument("--dir", "--target", dest="dir", default=None, help="Target parent directory")
 
     # list-models command
@@ -3353,10 +4120,54 @@ def main():
 
     args = parser.parse_args()
 
-    if args.command == "init":
-        init_workshop(args.name, args.topic, args.dir, args.stack, args.model)
+    if args.command in ("prompt", "from-prompt"):
+        raw_prompt = " ".join(args.prompt_text).strip()
+        generate_from_prompt(
+            raw_prompt,
+            target_dir=args.dir,
+            init_only=args.init_only,
+            name_override=args.name,
+            stack_override=args.stack,
+            model_override=args.model,
+        )
+    elif args.command == "init":
+        if args.prompt:
+            generate_from_prompt(
+                args.prompt,
+                target_dir=args.dir,
+                init_only=True,
+                name_override=args.name,
+                stack_override=args.stack,
+                model_override=args.model,
+            )
+        else:
+            if not args.name and args.topic:
+                parsed = parse_natural_prompt(args.topic)
+                args.name = parsed["name"]
+                args.stack = args.stack or parsed["stack"]
+                args.model = args.model or parsed["model"]
+            elif not args.name:
+                init_parser.error("one of --name, --prompt, or --topic is required")
+            init_workshop(args.name, args.topic or "BWAI Hands-on Workshop", args.dir, args.stack or "python", args.model)
     elif args.command == "generate-all":
-        generate_all(args.name, args.topic, args.stack, args.dir, args.model)
+        if args.prompt:
+            generate_from_prompt(
+                args.prompt,
+                target_dir=args.dir,
+                init_only=False,
+                name_override=args.name,
+                stack_override=args.stack,
+                model_override=args.model,
+            )
+        else:
+            if not args.name and args.topic:
+                parsed = parse_natural_prompt(args.topic)
+                args.name = parsed["name"]
+                args.stack = args.stack or parsed["stack"]
+                args.model = args.model or parsed["model"]
+            elif not args.name:
+                gen_all_parser.error("one of --name, --prompt, or --topic is required")
+            generate_all(args.name, args.topic or "BWAI Hands-on Workshop", args.stack, args.dir, args.model)
     elif args.command == "list-models":
         list_models(args.provider)
     elif args.command == "audit-models":

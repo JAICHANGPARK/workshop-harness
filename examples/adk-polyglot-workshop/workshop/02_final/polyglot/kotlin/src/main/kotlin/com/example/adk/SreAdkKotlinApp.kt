@@ -12,7 +12,7 @@ fun lookupServiceSlo(serviceName: String): SloMetrics =
 
 val opsSpecialist = LlmAgent(
     name = "ops_specialist",
-    model = Gemini("gemini-3.8-flash"),
+    model = Gemini("gemini-4-hydrogen"),
     description = "Monitors service SLO budgets in Kotlin.",
     instruction = Instruction("Use lookupServiceSlo to inspect service health."),
     tools = listOf(FunctionTool.create(::lookupServiceSlo)),
@@ -20,7 +20,7 @@ val opsSpecialist = LlmAgent(
 
 val rootAgent = LlmAgent.builder()
     .name("sre_coordinator")
-    .model("gemini-4-argon")
+    .model("gemini-4-carbon")
     .description("Root Kotlin ADK coordinator.")
     .instruction("Delegate SLO checks to ops_specialist.")
     .subAgents(listOf(opsSpecialist))

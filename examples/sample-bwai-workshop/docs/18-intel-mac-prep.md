@@ -1,6 +1,6 @@
 # Intel Mac (x86_64) Dedicated Preparation & Fallback Guide
 
-> Workshop Topic: **Testing Workshop Harness**
+> Workshop Topic: **Local RAG with Gemma 4**
 
 LM Studio lacks Metal GPU acceleration on Intel CPU-based Macs (`x86_64`) and can freeze during model loading. If you are using an Intel Mac, follow the **Ollama CLI** or **Google Colab Cloud GPU** workflow below.
 
@@ -13,14 +13,16 @@ LM Studio lacks Metal GPU acceleration on Intel CPU-based Macs (`x86_64`) and ca
    ```bash
    ollama serve
    ```
-3. **Pull a Lightweight Quantized Model** (in a second terminal tab):
+3. **Pull a Lightweight Quantized Model & Multimodal Embedding Model** (in a second terminal tab):
    - **8GB RAM Intel Mac**:
      ```bash
      ollama pull gemma4:e2b
+     ollama pull embeddinggemma-2:270m
      ```
    - **16GB+ RAM Intel Mac**:
      ```bash
      ollama pull gemma4:e4b
+     ollama pull embeddinggemma-2
      ```
 4. **Verify Local API Endpoint**:
    ```bash
@@ -33,9 +35,11 @@ LM Studio lacks Metal GPU acceleration on Intel CPU-based Macs (`x86_64`) and ca
 
 If your Intel Mac experiences thermal throttling or high CPU load:
 1. Open `output/colab/workshop_starter.ipynb` in **Google Colab**.
-2. Add your `GEMINI_API_KEY` (`gemini-3.8-flash`) in Colab Secrets (left sidebar key icon).
+2. Add your `GEMINI_API_KEY` (`gemma-4-26b-a4b-it`) in Colab Secrets (left sidebar key icon).
 3. Run all lab exercises on cloud GPUs with zero local CPU/RAM overhead.
 
 ## References
 - [Ollama Official Documentation](https://ollama.com)
 - [Google AI Studio API Key Setup](https://aistudio.google.com)
+- [Anthropic Console API Keys](https://console.anthropic.com)
+- [OpenAI Platform API Keys](https://platform.openai.com/api-keys)

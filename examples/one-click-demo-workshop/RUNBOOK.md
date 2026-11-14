@@ -1,8 +1,9 @@
 # Facilitator & TA Runbook: one-click-demo-workshop
 
-- **Session Title**: Flutter and Gemma 4 AI Agent
-- **Tech Stack**: `python,ollama`
-- **Primary Cloud Model**: `gemini-3.8-flash` | **Coordinator**: `gemini-4-argon` | **Local Model**: `gemma4:e4b`
+- **Session Title**: Local RAG with Gemma 4
+- **Tech Stack**: `python,ollama,docker`
+- **Primary Cloud Provider**: Google Gemma & GenAI (`GEMINI_API_KEY`)
+- **Primary Cloud Model**: `gemma-4-26b-a4b-it` | **Coordinator**: `gemma-4-31b-it` | **Local Model**: `gemma4:e4b` | **Local Multimodal Embedding**: `embeddinggemma-2`
 - **Facilitator**: Workshop Lead Facilitator
 - **Teaching Assistants (TA)**: Roaming TA Team
 

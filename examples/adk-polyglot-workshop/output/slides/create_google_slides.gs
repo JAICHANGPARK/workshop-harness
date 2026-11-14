@@ -8,7 +8,7 @@
  */
 function createWorkshopSlides() {
   const title = "adk-polyglot-workshop";
-  const topic = "Multi-Language Google ADK & Agents CLI ADLC Workshop";
+  const topic = "Enterprise Multi-Agent SRE with Polyglot ADK";
   const deck = SlidesApp.create(title + " - Presentation");
 
   // Slide 1: Title

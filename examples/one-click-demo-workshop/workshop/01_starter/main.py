@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-Starter Code for Flutter and Gemma 4 AI Agent
-Primary Cloud Model: gemini-3.8-flash | Local Ollama Model: gemma4:e4b
+Starter Code for Local RAG with Gemma 4
+Primary Cloud Provider: Google Gemma & GenAI (GEMINI_API_KEY)
+Primary Cloud Model: gemma-4-26b-a4b-it | Local Ollama Model: gemma4:e4b
 """
 
 import os
@@ -20,7 +22,7 @@ class WorkshopTaskResult:
 
 # =========================================================================
 # TODO: [Lab 01 - Exercise] Initialize AI Client & Run Sanity Check
-# Hint: Connect to Google GenAI (gemini-3.8-flash) or Local Ollama (gemma4:e4b)
+# Hint: Connect to Google Gemma & GenAI (gemma-4-26b-a4b-it via GEMINI_API_KEY) or Local Ollama (gemma4:e4b)
 # =========================================================================
 def lab1_sanity_check(prompt: str) -> str:
     return f"[Starter Lab 01 Placeholder] Received prompt: {prompt}"
@@ -33,17 +35,17 @@ def lab1_sanity_check(prompt: str) -> str:
 def lab2_structured_output(topic_name: str) -> WorkshopTaskResult:
     return WorkshopTaskResult(
         status="pending",
-        model_used="gemini-3.8-flash",
+        model_used="gemma-4-26b-a4b-it",
         summary=f"Starter placeholder for {topic_name}",
         action_items=["Complete Lab 01", "Complete Lab 02", "Verify Lab 03 pipeline"],
     )
 
 
 def main():
-    print("Welcome to the Flutter and Gemma 4 AI Agent Workshop! Open workshop/03_labs/README.md to begin.")
+    print("Welcome to the Local RAG with Gemma 4 Workshop! Open workshop/03_labs/README.md to begin.")
     msg = lab1_sanity_check("Hello from one-click-demo-workshop")
     print(msg)
-    result = lab2_structured_output("Flutter and Gemma 4 AI Agent")
+    result = lab2_structured_output("Local RAG with Gemma 4")
     print(json.dumps(asdict(result), indent=2, ensure_ascii=False))
 
 

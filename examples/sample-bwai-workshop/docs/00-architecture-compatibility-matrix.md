@@ -30,9 +30,10 @@ When preparing workshop sessions, always verify the tool recommendations and fal
 
 ---
 
-## Stack-Specific Architecture & Risk Audit (`python,ollama`)
+## Stack-Specific Architecture & Risk Audit (`python,ollama,lmstudio`)
 
 | Tool / Component | Target Environment | Identified Risk | Mandatory Fallback Path |
 | :--- | :--- | :--- | :--- |
-| **Ollama Local LLM Runtime** | 8GB RAM Laptops / Intel Mac / Windows ARM64 | Loading 12B+ parameter models on 8GB RAM laptops causes OOM crashes or severe swap thrashing. | Enforce RAM-tiered model tags: 8GB -> gemma4:e2b / qwen3:8b, 16GB -> gemma4:e4b / deepseek-r1:14b, 32GB+ -> gemma4:26b-a4b / qwen3.6:27b. |
+| **LM Studio** | Intel Mac (x86_64) | LM Studio has known stability issues & missing Metal GPU acceleration on Intel Mac. | Provide Ollama CLI (ollama serve) as mandatory fallback in docs/18-intel-mac-prep.md |
+| **Ollama Local LLM & EmbeddingGemma 2 Runtime** | 8GB RAM Laptops / Intel Mac / Windows ARM64 | Loading 12B+ parameter models on 8GB RAM laptops causes OOM crashes or severe swap thrashing; full multimodal embeddinggemma-2:740m requires ~1.3GB. | Enforce RAM-tiered model tags: 8GB -> gemma4:e2b + embeddinggemma-2:270m, 16GB -> gemma4:e4b / gemma4:12b + embeddinggemma-2, 32GB+ -> gemma4:26b / gemma4:31b. |
 

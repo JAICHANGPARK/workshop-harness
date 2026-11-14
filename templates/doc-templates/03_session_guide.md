@@ -17,7 +17,7 @@ This guide outlines the session schedule and step-by-step objectives for the day
 ## Labs
 
 ### Lab 01: Environment & AI Client Integration
-- **Objective**: Verify your local or cloud AI environment (`gemini-3.8-flash` / `gemma4:e4b`) and run a basic sanity check
+- **Objective**: Verify your local or cloud AI environment (`gemini-4-hydrogen` / `gemini-3.8-flash` / `gemma4:e4b`) and run a basic sanity check
 - **Lab File**: `workshop/01_starter/main.py` (or `workshop/01_starter/agent.py` for ADK tracks)
 - **Key Code Marker**: Fill in the `TODO: [Lab 01]` sections
 

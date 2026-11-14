@@ -8,7 +8,7 @@
 [![uv Powered](https://img.shields.io/badge/python%20package%20manager-uv-de1f88.svg)](https://astral.sh/uv)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Antigravity Skills](https://img.shields.io/badge/Antigravity-21%20Agent%20Skills-purple.svg)](https://github.com/JAICHANGPARK)
-[![Release](https://img.shields.io/badge/release-v2026.10.31-green.svg)](https://github.com/JAICHANGPARK/workshop-harness/releases)
+[![Release](https://img.shields.io/badge/release-v2026.11.13-green.svg)](https://github.com/JAICHANGPARK/workshop-harness/releases)
 
 Languages: [English](./README.md) | [Korean](./README_KR.md) | [Japanese](./README_JA.md) | [Chinese](./README_ZH.md)
 
@@ -41,7 +41,11 @@ cd workshop-harness
 chmod +x scripts/install_skills.sh
 ./scripts/install_skills.sh
 
-# 3. 원클릭 종합 생성 명령어로 완벽한 워크숍 패키지 구축 (기본 모델: gemini-3.8-flash)
+# 3. 자연어 프롬프트 한 줄로 전체 워크숍 패키지 즉시 생성 (Gemini 4 / Claude / OpenAI 최신 모델 및 기술 스택 자동 추론!)
+uv run harness_cli.py prompt "Claude 최신 모델로 1시간짜리 멀티 에이전트 RAG 워크숍 만들어줘"
+uv run harness_cli.py prompt "OpenAI GPT로 구조화 출력 핸즈온 랩 만들어줘"
+
+# (또는 명시적 플래그 지정 방식)
 uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 ```
 
@@ -93,7 +97,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 
 ```bash
 # 21개 전체 스킬 원클릭 연속 생성 명령어 (uv 지원)
-uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker" --model "gemini-3.8-flash"
+uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker" --model "gemini-4-hydrogen"
 ```
 
 ---
@@ -176,7 +180,7 @@ Python 3.9+ 및 `uv` 환경에서 `harness_cli.py` 도구를 이용해 손쉽게
 
 ```bash
 # 1. 원클릭 전체 21개 스킬 파이프라인 워크숍 생성
-uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker" --model "gemini-3.8-flash"
+uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker" --model "gemini-4-hydrogen"
 
 # 2. 2026 Frontier & Open-Weight 모델 목록 조회, 구버전 모델 태그 자동 업그레이드 및 마크다운 Em Dash(\u2014) 자동 제거
 uv run harness_cli.py list-models
@@ -190,6 +194,11 @@ uv run harness_cli.py init --name "adk-java-lab" --topic "Java 21 Enterprise Age
 uv run harness_cli.py init --name "adk-kotlin-lab" --topic "Kotlin Multi-Agent Systems with Google ADK" --stack "kotlin,adk"
 uv run harness_cli.py init --name "adk-ts-lab" --topic "TypeScript Multi-Agent Systems with Google ADK" --stack "typescript,adk"
 uv run harness_cli.py init --name "adk-polyglot-lab" --topic "Polyglot Multi-Language Google ADK Workshop" --stack "adk,polyglot,agents-cli"
+
+# 3b. 멀티 프로바이더 Anthropic Claude (Sonnet 5.5 / Opus 5.5 / Fable 5.2) 및 OpenAI (GPT-6.1 Sol / GPT-6 Astra) 워크숍 초기화
+uv run harness_cli.py init --name "claude-agent-lab" --topic "Agentic Workflows with Claude Sonnet 5.5" --stack "python,claude" --model "claude-sonnet-5-5"
+uv run harness_cli.py init --name "openai-responses-lab" --topic "Structured Agents with OpenAI GPT-6.1 Sol" --stack "python,openai" --model "gpt-6.1-sol"
+uv run harness_cli.py init --name "adk-claude-lab" --topic "Multi-Provider ADK Agents with LiteLlm" --stack "python,adk,claude" --model "claude-sonnet-5-5"
 
 # 4. Android Jetpack Compose GenAI 워크숍 초기화
 uv run harness_cli.py init --name "android-gemini-lab" --topic "Android GenAI with Jetpack Compose" --stack "android"
@@ -282,7 +291,7 @@ my-workshop-repo/
 
 ## 변경 이력 (Changelog)
 
-전체 릴리스 및 변경 내역은 [CHANGELOG.md](./CHANGELOG.md)에서 확인할 수 있습니다 (최신 버전: `v2026.10.31`).
+전체 릴리스 및 변경 내역은 [CHANGELOG.md](./CHANGELOG.md)에서 확인할 수 있습니다 (최신 버전: `v2026.11.13`).
 
 ---
 

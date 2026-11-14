@@ -1,7 +1,7 @@
 # Agent Instructions, Developer Terminology & Typography Rules for adk-polyglot-workshop
 
-> Topic: **Multi-Language Google ADK & Agents CLI ADLC Workshop**
-> Tech Stack: `python,adk,agents-cli,polyglot` | Primary Cloud Model: `gemini-3.8-flash` | Local Model: `gemma4:e4b`
+> Topic: **Enterprise Multi-Agent SRE with Polyglot ADK**
+> Tech Stack: `adk,polyglot,python,go,java,kotlin,typescript` | Primary Cloud Model: `gemini-4-hydrogen` | Local Model: `gemma4:e4b`
 
 ## Mandatory Rules for AI Coding Agents
 
@@ -23,9 +23,11 @@
    - Do not include emojis in generated documentation, slide decks, setup guides, or runbooks unless explicitly requested.
 
 4. **2026 Frontier Model & SDK Currency**:
-   - Use `google-genai >= 2.30.1` (`from google import genai`) and 2026 model tags (`gemini-3.8-flash`, `gemini-4-argon`, `gemma4:e4b`).
-   - Never use deprecated `google-generativeai` or retired `gemini-1.5-*` / `gemini-2.0-*` / `gemini-2.5-*` tags.
+   - Use verified 2026 SDKs (`google-genai >= 3.0.0`, `anthropic >= 2.8.0`, `openai >= 3.50.0`, `google-adk >= 2.14.0`) and active model tags (`gemini-4-hydrogen`, `gemini-4-carbon`, `gemini-4-hydrogen`, `gemini-4-carbon`, `claude-fable-5-2`, `claude-opus-5-5`, `claude-sonnet-5-5`, `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6.1-terra`, `gemma4:e4b`).
+   - Never use deprecated `google-generativeai` or retired legacy model tags.
 
 ## References
 - [Workshop Harness Repository](https://github.com/JAICHANGPARK/workshop-harness)
 - [Google Gemini API Documentation](https://ai.google.dev/gemini-api/docs)
+- [Anthropic Claude Documentation](https://docs.anthropic.com)
+- [OpenAI Platform Documentation](https://platform.openai.com/docs)

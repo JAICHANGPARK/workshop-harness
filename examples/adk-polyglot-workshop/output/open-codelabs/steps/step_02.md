@@ -1,7 +1,7 @@
 # Lab 02: Multi-Agent Hierarchy, Sub-Agent Delegation & Structured Outputs
 
 ## Objective
-Wire specialized sub-agents (`slo_specialist`, `report_specialist`) under a root coordinator (`root_agent` running `gemini-4-argon`) and enforce deterministic JSON schema outputs.
+Wire specialized sub-agents (`slo_specialist`, `report_specialist`) under a root coordinator (`root_agent` running `gemini-4-carbon`) and enforce deterministic JSON schema outputs.
 
 ## Instructions
 1. Review `prompt-pack/README.md` for the target JSON Schema.

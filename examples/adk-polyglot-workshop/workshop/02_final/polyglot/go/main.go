@@ -27,7 +27,7 @@ func LookupSLO(_ tool.Context, args SLOArgs) (SLOResult, error) {
 }
 
 func BuildRootAgent(ctx context.Context) (llmagent.Agent, error) {
-	model, err := gemini.NewModel(ctx, "gemini-3.8-flash", &genai.ClientConfig{APIKey: os.Getenv("GEMINI_API_KEY")})
+	model, err := gemini.NewModel(ctx, "gemini-4-hydrogen", &genai.ClientConfig{APIKey: os.Getenv("GEMINI_API_KEY")})
 	if err != nil {
 		return nil, err
 	}

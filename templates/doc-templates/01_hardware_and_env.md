@@ -19,11 +19,20 @@ When integrating local LLMs into Python, Node.js, or Go applications, verify the
 
 | RAM | Recommended Model | Runtime Tool | Notes |
 | --- | --- | --- | --- |
-| **8GB** | `gemma4:e2b`, `qwen3:8b`, or `deepseek-r1:8b` | Ollama / LM Studio | Set context length to 2048 or below |
-| **16GB** | `gemma4:e4b`, `qwen3:14b`, or `deepseek-r1:14b` | LM Studio / Ollama | Recommended baseline spec for hands-on labs |
-| **32GB+** | `gemma4:26b-a4b`, `gemma4:31b`, `qwen3.6:27b`, `qwen3-coder:30b`, or `llama4:scout` | LM Studio / Ollama / MLX | Supports advanced pipelines and multi-agent labs |
+| **8GB** | `gemma4:e2b`, `embeddinggemma-2:270m`, `functiongemma`, `qwen3:8b`, or `deepseek-r1:8b` | Ollama / LM Studio | Set context length to 2048 or below |
+| **16GB** | `gemma4:e4b`, `gemma4:12b`, `embeddinggemma-2`, `translategemma`, `qwen3:14b`, or `deepseek-r1:14b` | LM Studio / Ollama | Recommended baseline spec for hands-on labs |
+| **32GB+** | `gemma4:26b`, `gemma4:31b`, `medgemma1.5`, `qwen3.6:27b`, `qwen3-coder:30b`, or `llama4:scout` | LM Studio / Ollama / MLX | Supports advanced pipelines and multi-agent labs |
 
 > **Note**: The 'B' in parameter count stands for Billion (1,000,000,000). This does not correspond 1:1 with file size in GB. Check the actual download size for 4-bit quantized (Q4_K_M) models.
+
+### Gemma 4, EmbeddingGemma 2 & Specialized Gemma Quick Reference
+
+| Model Family | Ollama Tag | Cloud / Hugging Face ID | Modalities & Footprint |
+| --- | --- | --- | --- |
+| **Gemma 4 Edge & Dense** | `gemma4:e2b`, `gemma4:e4b`, `gemma4:12b` | `gemma-4-e2b-it`, `gemma-4-e4b-it`, `gemma-4-12b-it` | Text + Image + Audio (128K - 256K context; 4.3 GB - 8.0 GB) |
+| **Gemma 4 MoE & Workstation** | `gemma4:26b` (4B active MoE), `gemma4:31b` | `gemma-4-26b-a4b-it`, `gemma-4-31b-it` | Text + Image + Native `<\|think\|>` Reasoning (256K context; 16 GB - 20 GB) |
+| **EmbeddingGemma 2** (Multimodal 768d MRL) | `embeddinggemma-2` (`740m`), `:570m`, `:440m`, `:270m` | `google/embeddinggemma-2` | Modular 8K ctx embeddings: `740m` full (~1.3 GB), `570m` text+audio, `440m` text+vision, `270m` text+code (~304 MB) |
+| **Specialized Gemma** | `translategemma`, `functiongemma`, `medgemma1.5`, `shieldgemma` | `google/translategemma-*`, `google/functiongemma-270m-it` | 55-lang translation, 270M on-device Function Calling, clinical imaging/EHR, safety policy guardrails |
 
 ---
 

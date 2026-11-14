@@ -30,9 +30,10 @@ When preparing workshop sessions, always verify the tool recommendations and fal
 
 ---
 
-## Stack-Specific Architecture & Risk Audit (`python,ollama`)
+## Stack-Specific Architecture & Risk Audit (`python,ollama,docker`)
 
 | Tool / Component | Target Environment | Identified Risk | Mandatory Fallback Path |
 | :--- | :--- | :--- | :--- |
-| **Ollama Local LLM Runtime** | 8GB RAM Laptops / Intel Mac / Windows ARM64 | Loading 12B+ parameter models on 8GB RAM laptops causes OOM crashes or severe swap thrashing. | Enforce RAM-tiered model tags: 8GB -> gemma4:e2b / qwen3:8b, 16GB -> gemma4:e4b / deepseek-r1:14b, 32GB+ -> gemma4:26b-a4b / qwen3.6:27b. |
+| **Ollama Local LLM & EmbeddingGemma 2 Runtime** | 8GB RAM Laptops / Intel Mac / Windows ARM64 | Loading 12B+ parameter models on 8GB RAM laptops causes OOM crashes or severe swap thrashing; full multimodal embeddinggemma-2:740m requires ~1.3GB. | Enforce RAM-tiered model tags: 8GB -> gemma4:e2b + embeddinggemma-2:270m, 16GB -> gemma4:e4b / gemma4:12b + embeddinggemma-2, 32GB+ -> gemma4:26b / gemma4:31b. |
+| **Docker Desktop** | Windows Home / ChromeOS / M1-M4 Mac | Hyper-V / WSL2 configuration failure or x86 container architecture mismatch. | Provide local python script fallback or Google Colab notebook execution. |
 

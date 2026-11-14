@@ -1,6 +1,6 @@
-# Testing Workshop Harness - Hands-on Lab Session Guide
+# Local RAG with Gemma 4 - Hands-on Lab Session Guide
 
-This guide outlines the session schedule and step-by-step objectives for the **Testing Workshop Harness** workshop.
+This guide outlines the session schedule and step-by-step objectives for the **Local RAG with Gemma 4** workshop.
 Write your code in `workshop/01_starter/main.py`. If you get stuck, refer to the completed reference solution in `workshop/02_final/main.py`.
 
 ---

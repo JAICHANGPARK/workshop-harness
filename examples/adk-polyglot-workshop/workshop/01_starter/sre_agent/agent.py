@@ -1,5 +1,6 @@
 """
 ADK & Google Agents CLI (google-agents-cli) Starter Agent (`agent.py`)
+Primary Provider: Google GenAI (gemini-4-hydrogen)
 Compatible with:
   - `adk web` / `adk run` / `adk eval`
   - `uvx google-agents-cli setup`
@@ -11,7 +12,6 @@ except ImportError:
     class LlmAgent:  # Offline fallback stub when google-adk is not yet installed
         def __init__(self, **kwargs):
             self.__dict__.update(kwargs)
-
 
 def lookup_service_slo(service_name: str) -> dict:
     """Returns target SLO latency and remaining error budget for a production microservice.
@@ -27,10 +27,11 @@ def lookup_service_slo(service_name: str) -> dict:
 
 
 # TODO [Lab 01]: Define specialist sub-agents and register them under `sub_agents=[...]` on `root_agent`
+# Tip: For Anthropic Claude or OpenAI models in ADK, wrap with LiteLlm(model="anthropic/claude-sonnet-5-5") or LiteLlm(model="openai/gpt-6.1-sol")
 root_agent = LlmAgent(
     name="adk_starter_coordinator",
-    model="gemini-3.8-flash",
-    description="Starter ADK root_agent entry point for Multi-Language Google ADK & Agents CLI ADLC Workshop.",
+    model="gemini-4-hydrogen",
+    description="Starter ADK root_agent entry point for Enterprise Multi-Agent SRE with Polyglot ADK.",
     instruction="Use lookup_service_slo to answer questions about microservice SLOs.",
     tools=[lookup_service_slo],
 )

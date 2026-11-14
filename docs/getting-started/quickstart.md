@@ -41,7 +41,7 @@ uv run harness_cli.py generate-all \
   --name "my-bwai-workshop" \
   --topic "Local RAG with Gemma 4" \
   --stack "python,ollama,docker" \
-  --model "gemini-3.8-flash"
+  --model "gemini-4-hydrogen"
 ```
 
 ### 9-Step Pipeline Execution:

@@ -10,7 +10,7 @@ description: Builds multi-language (Python, TypeScript, Go, Java/Kotlin) autonom
 Automates the end-to-end creation of technical hands-on workshops focused on **Google Agent Development Kit (ADK)** (`adk.dev` / `google/adk-python`) and autonomous multi-agent systems. It provides standardized, production-ready curriculum, CLI workflows (`adk create`, `adk web`, `adk run`, `adk api_server`, `adk eval`, `adk deploy`), and code skeletons across four major language tracks (**Python, TypeScript/JavaScript, Go, Java/Kotlin**), enforcing best practices for `root_agent` orchestration, sub-agent task delegation, Model Context Protocol (MCP) tool integration, and state persistence.
 
 > Pre-Flight Web Research Protocol:
-> Before generating workshop materials, execute live web searches to verify current ADK SDK package versions (`google-adk`, `@google/adk`, `google.golang.org/adk/v2`, `com.google.adk`), CLI flags, and Gemini model tags (`gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.5-flash-lite`).
+> Before generating workshop materials, execute live web searches to verify current ADK SDK package versions (`google-adk>=2.14.0`, `@google/adk`, `google.golang.org/adk/v2`, `com.google.adk`), CLI flags, Gemini model tags (`gemini-4-carbon`, `gemini-4-hydrogen`, `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.5-flash-lite`), and multi-provider `LiteLlm` model tags (`anthropic/claude-fable-5-2`, `anthropic/claude-opus-5-5`, `anthropic/claude-sonnet-5-5`, `openai/gpt-6-astra`, `openai/gpt-6.1-sol`, `openai/gpt-6.1-terra`).
 
 ---
 
@@ -19,6 +19,7 @@ Automates the end-to-end creation of technical hands-on workshops focused on **G
 | Language Track | Official Repository / Package | Dependency Installation | Required Entry Point | Harness CLI Command |
 |---|---|---|---|---|
 | **Python** | `google/adk-python` (`google-adk`) | `uv add google-adk google-genai pydantic` | `agent.py` exposing `root_agent` | `python3 harness_cli.py init --name "..." --stack "python,adk"` |
+| **Python + Claude / OpenAI (`LiteLlm`)** | `google-adk` + `litellm>=1.84.0` | `uv add google-adk litellm anthropic openai` | `agent.py` using `LiteLlm(model="...")` | `python3 harness_cli.py init --name "..." --stack "python,adk,claude"` |
 | **Go (Golang)** | `google/adk-go` (`google.golang.org/adk/v2`) | `go get google.golang.org/adk/v2@latest` | `main.go` | `python3 harness_cli.py init --name "..." --stack "go,adk"` |
 | **Java 21+** | `google/adk-java` (`com.google.adk:google-adk`) | `implementation 'com.google.adk:google-adk:0.5.0'` | `src/main/java/com/example/adk/AdkWorkshopApp.java` | `python3 harness_cli.py init --name "..." --stack "java,adk"` |
 | **Kotlin** | `google/adk-java` (`com.google.adk:google-adk-kotlin-core`) | `implementation("com.google.adk:google-adk-kotlin-core:0.5.0")` | `src/main/kotlin/com/example/adk/AdkWorkshopApp.kt` | `python3 harness_cli.py init --name "..." --stack "kotlin,adk"` |
@@ -52,9 +53,9 @@ When generating an ADK workshop, enforce the following four foundational archite
 
 ```mermaid
 flowchart TD
-    User["Attendee Prompt (adk web / adk run)"] --> RootAgent["root_agent: LlmAgent<br>(Model: gemini-4-argon)"]
-    RootAgent -->|"Delegates via description"| ResearchAgent["researcher: LlmAgent<br>(Model: gemini-3.8-flash)"]
-    RootAgent -->|"Delegates via description"| OpsAgent["ops_specialist: LlmAgent<br>(Model: gemini-3.8-flash)"]
+    User["Attendee Prompt (adk web / adk run)"] --> RootAgent["root_agent: LlmAgent<br>(Model: gemini-4-carbon)"]
+    RootAgent -->|"Delegates via description"| ResearchAgent["researcher: LlmAgent<br>(Model: gemini-4-hydrogen)"]
+    RootAgent -->|"Delegates via description"| OpsAgent["ops_specialist: LlmAgent<br>(Model: gemini-4-hydrogen)"]
     OpsAgent -->|"Tool Confirmation (HITL)"| ToolExec["Custom Function / MCP Tool"]
 ```
 
@@ -107,7 +108,7 @@ def fetch_system_metrics(host: str) -> dict:
 # 2. Define specialized Sub-Agents
 ops_specialist = LlmAgent(
     name="ops_specialist",
-    model="gemini-3.8-flash",
+    model="gemini-4-hydrogen",
     description="Monitors infrastructure hosts, fetches system metrics, and diagnoses server health.",
     instruction="Use fetch_system_metrics to inspect the requested host and report anomalies.",
     tools=[fetch_system_metrics],
@@ -115,7 +116,7 @@ ops_specialist = LlmAgent(
 
 report_writer = LlmAgent(
     name="report_writer",
-    model="gemini-3.8-flash",
+    model="gemini-4-hydrogen",
     description="Drafts concise SRE incident summaries and scaling recommendations.",
     instruction="Summarize telemetry findings from ops_specialist into an actionable SRE checklist.",
 )
@@ -123,7 +124,7 @@ report_writer = LlmAgent(
 # 3. Define mandatory root_agent entry point for `adk web` and `adk run`
 root_agent = LlmAgent(
     name="sre_coordinator",
-    model="gemini-4-argon",
+    model="gemini-4-carbon",
     description="Root SRE orchestrator that delegates monitoring and reporting across sub-agents.",
     instruction=(
         "You are the lead SRE Coordinator. "
@@ -157,7 +158,7 @@ const fetchMetricsTool = new FunctionTool({
 
 const opsSpecialist = new LlmAgent({
   name: 'ops_specialist',
-  model: 'gemini-3.8-flash',
+  model: 'gemini-4-hydrogen',
   description: 'Monitors infrastructure hosts and diagnoses server health.',
   instruction: 'Call fetch_system_metrics for the requested host and return the status.',
   tools: [fetchMetricsTool],
@@ -165,7 +166,7 @@ const opsSpecialist = new LlmAgent({
 
 export const rootAgent = new LlmAgent({
   name: 'sre_coordinator',
-  model: 'gemini-4-argon',
+  model: 'gemini-4-carbon',
   description: 'Root SRE orchestrator that coordinates sub-agents.',
   instruction: 'Delegate telemetry checks to ops_specialist and synthesize the final answer.',
   subAgents: [opsSpecialist],
@@ -217,7 +218,7 @@ func FetchSystemMetrics(_ tool.Context, args ServerMetricsArgs) (ServerMetricsRe
 func main() {
 	ctx := context.Background()
 
-	model, err := gemini.NewModel(ctx, "gemini-3.8-flash", &genai.ClientConfig{
+	model, err := gemini.NewModel(ctx, "gemini-4-hydrogen", &genai.ClientConfig{
 		APIKey: os.Getenv("GEMINI_API_KEY"),
 	})
 	if err != nil {
@@ -298,7 +299,7 @@ public final class SreAdkJavaApp {
 
     public static final BaseAgent opsAgent = LlmAgent.builder()
             .name("ops_specialist")
-            .model("gemini-3.8-flash")
+            .model("gemini-4-hydrogen")
             .description("Monitors infrastructure hosts and fetches system metrics.")
             .instruction("Call fetchSystemMetrics for the target host and store output.")
             .tools(FunctionTool.create(SreAdkJavaApp.class, "fetchSystemMetrics"))
@@ -307,7 +308,7 @@ public final class SreAdkJavaApp {
 
     public static final BaseAgent reportAgent = LlmAgent.builder()
             .name("report_writer")
-            .model("gemini-3.8-flash")
+            .model("gemini-4-hydrogen")
             .description("Drafts SRE deployment gate reports.")
             .instruction("Summarize {telemetry_result} into an executive checklist.")
             .build();
@@ -347,7 +348,7 @@ fun fetchSystemMetrics(host: String): ServerMetrics {
 fun main() {
     val opsAgent = LlmAgent(
         name = "ops_specialist",
-        model = Gemini("gemini-3.8-flash"),
+        model = Gemini("gemini-4-hydrogen"),
         description = "Monitors infrastructure hosts and fetches system metrics.",
         instruction = Instruction("Analyze system metrics and recommend scaling actions."),
         tools = listOf(FunctionTool.create(::fetchSystemMetrics)),
@@ -355,7 +356,7 @@ fun main() {
 
     val rootAgent = LlmAgent.builder()
         .name("sre_coordinator")
-        .model("gemini-4-argon")
+        .model("gemini-4-carbon")
         .description("Root SRE coordinator agent.")
         .instruction("Coordinate infrastructure tasks and delegate to ops_specialist.")
         .subAgents(listOf(opsAgent))

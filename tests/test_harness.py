@@ -61,15 +61,33 @@ class TestWorkshopHarness(unittest.TestCase):
         """Verify audit_models detects deprecated model tags and auto-upgrades them to 2026 standards."""
         sample_py = self.temp_dir / "app.py"
         sample_py.write_text(
-            'MODEL_A = "gemini-1.5-flash"\nMODEL_B = "gemini-2.5-pro"\nMODEL_C = "gpt-4o-mini"\n',
+            'MODEL_A = "gemini-1.5-flash"\n'
+            'MODEL_B = "gemini-2.5-pro"\n'
+            'MODEL_C = "gpt-4o-mini"\n'
+            'MODEL_D = "gemini-3.7-flash"\n'
+            'MODEL_E = "gemini-omni-1.1-flash"\n'
+            'MODEL_F = "gemini-embedding-2-preview"\n'
+            'MODEL_G = "claude-fable-5.1"\n'
+            'MODEL_H = "claude-sonnet-5.5"\n'
+            'MODEL_I = "gpt-5.6-terra"\n'
+            'MODEL_J = "gemma2:9b"\n'
+            'MODEL_K = "gemma4:e12b"\n'
+            'MODEL_L = "embeddinggemma:300m"\n',
             encoding="utf-8",
         )
         self.assertFalse(harness_cli.audit_models(str(self.temp_dir), fix=False))
         self.assertTrue(harness_cli.audit_models(str(self.temp_dir), fix=True))
         updated_text = sample_py.read_text(encoding="utf-8")
-        self.assertIn("gemini-3.8-flash", updated_text)
-        self.assertIn("gemini-4-argon", updated_text)
+        self.assertIn("gemini-4-hydrogen", updated_text)
+        self.assertIn("gemini-4-carbon", updated_text)
         self.assertIn("gpt-6-luna", updated_text)
+        self.assertIn("gemini-omni-1.2-flash", updated_text)
+        self.assertIn("gemini-embedding-2", updated_text)
+        self.assertIn("claude-fable-5-2", updated_text)
+        self.assertIn("claude-sonnet-5-5", updated_text)
+        self.assertIn("gpt-6.1-terra", updated_text)
+        self.assertIn("gemma4:12b", updated_text)
+        self.assertIn("embeddinggemma-2:270m", updated_text)
         self.assertTrue(harness_cli.audit_models(str(self.temp_dir), fix=False))
 
     def test_04_skills_yaml_frontmatter_integrity(self):
@@ -160,6 +178,117 @@ class TestWorkshopHarness(unittest.TestCase):
         self.assertFalse(harness_cli.export_codelab(missing))
         self.assertFalse(harness_cli.export_colab(missing))
         self.assertFalse(harness_cli.build_slides(missing))
+
+    def test_08_multi_provider_claude_and_openai_scaffolding(self):
+        """Verify Anthropic Claude, OpenAI Responses API, and ADK LiteLlm multi-provider scaffolding."""
+        claude_dir = harness_cli.init_workshop(
+            name="claude-agent-lab",
+            topic="Agentic Workflows with Claude Sonnet 5.5",
+            target_dir=str(self.temp_dir),
+            stack_str="python,claude",
+        )
+        claude_pyproject = (claude_dir / "pyproject.toml").read_text(encoding="utf-8")
+        claude_env = (claude_dir / ".env.sample").read_text(encoding="utf-8")
+        claude_final = (claude_dir / "workshop" / "02_final" / "main.py").read_text(encoding="utf-8")
+        self.assertIn("anthropic>=2.8.0", claude_pyproject)
+        self.assertIn("ANTHROPIC_API_KEY", claude_env)
+        self.assertIn("claude-sonnet-5-5", claude_final)
+        self.assertTrue(harness_cli.export_colab(str(claude_dir)))
+        self.assertTrue(harness_cli.test_workshop(str(claude_dir)))
+
+        openai_dir = harness_cli.init_workshop(
+            name="openai-responses-lab",
+            topic="Structured Agents with OpenAI GPT-6.1 Sol",
+            target_dir=str(self.temp_dir),
+            stack_str="python,openai",
+        )
+        openai_pyproject = (openai_dir / "pyproject.toml").read_text(encoding="utf-8")
+        openai_env = (openai_dir / ".env.sample").read_text(encoding="utf-8")
+        openai_final = (openai_dir / "workshop" / "02_final" / "main.py").read_text(encoding="utf-8")
+        self.assertIn("openai>=3.50.0", openai_pyproject)
+        self.assertIn("OPENAI_API_KEY", openai_env)
+        self.assertIn("gpt-6.1-sol", openai_final)
+        self.assertTrue(harness_cli.export_colab(str(openai_dir)))
+        self.assertTrue(harness_cli.test_workshop(str(openai_dir)))
+
+        adk_claude_dir = harness_cli.init_workshop(
+            name="adk-claude-lab",
+            topic="Multi-Provider ADK Agents with LiteLlm",
+            target_dir=str(self.temp_dir),
+            stack_str="python,adk,claude",
+        )
+        adk_pyproject = (adk_claude_dir / "pyproject.toml").read_text(encoding="utf-8")
+        adk_agent = (adk_claude_dir / "workshop" / "02_final" / "agent.py").read_text(encoding="utf-8")
+        self.assertIn("litellm>=1.84.0", adk_pyproject)
+        self.assertIn('LiteLlm(model="anthropic/claude-sonnet-5-5")', adk_agent)
+        self.assertTrue(harness_cli.test_workshop(str(adk_claude_dir)))
+
+        ts_openai_dir = harness_cli.init_workshop(
+            name="ts-openai-lab",
+            topic="TypeScript OpenAI Responses Workshop",
+            target_dir=str(self.temp_dir),
+            stack_str="typescript,openai",
+        )
+        ts_pkg = (ts_openai_dir / "workshop" / "02_final" / "package.json").read_text(encoding="utf-8")
+        ts_agent = (ts_openai_dir / "workshop" / "02_final" / "src" / "agent.ts").read_text(encoding="utf-8")
+        self.assertIn('"openai": "^7.55.0"', ts_pkg)
+        self.assertIn("gpt-6.1-sol", ts_agent)
+        self.assertTrue(harness_cli.test_workshop(str(ts_openai_dir)))
+
+    def test_09_natural_language_prompt_instant_generation(self):
+        """Verify natural language prompts (KO/EN) auto-infer provider, 2026 model, stack, and slug, and generate immediately."""
+        p_claude = harness_cli.parse_natural_prompt("클로드 최신 모델로 1시간짜리 멀티 에이전트 RAG 워크숍 만들어줘")
+        self.assertEqual(p_claude["model"], "claude-sonnet-5-5")
+        self.assertIn("claude", p_claude["stack"].split(","))
+        self.assertTrue(p_claude["name"].startswith("claude-multi-agent-rag"))
+        self.assertNotIn("만들어줘", p_claude["topic"])
+
+        p_fable = harness_cli.parse_natural_prompt("Build a Claude Fable enterprise coding workshop")
+        self.assertEqual(p_fable["model"], "claude-fable-5-2")
+        self.assertIn("claude", p_fable["stack"].split(","))
+
+        p_openai = harness_cli.parse_natural_prompt("OpenAI GPT 최신 모델로 구조화 출력 핸즈온 랩 만들어줘")
+        self.assertEqual(p_openai["model"], "gpt-6.1-sol")
+        self.assertIn("openai", p_openai["stack"].split(","))
+
+        p_legacy = harness_cli.parse_natural_prompt("gpt-4o로 데이터 분석 에이전트 만들어줘")
+        self.assertEqual(p_legacy["model"], "gpt-6.1-sol")
+        self.assertIn("openai", p_legacy["stack"].split(","))
+
+        p_adk_claude = harness_cli.parse_natural_prompt("Google ADK랑 Claude로 멀티 에이전트 실습 만들어줘")
+        self.assertEqual(p_adk_claude["model"], "claude-sonnet-5-5")
+        self.assertIn("adk", p_adk_claude["stack"].split(","))
+        self.assertIn("claude", p_adk_claude["stack"].split(","))
+
+        p_gemma_emb = harness_cli.parse_natural_prompt("Gemma 4와 EmbeddingGemma 2로 로컬 멀티모달 RAG 워크숍 만들어줘")
+        self.assertIn("gemma", p_gemma_emb["stack"].split(","))
+        self.assertIn("embeddinggemma", p_gemma_emb["stack"].split(","))
+        self.assertEqual(p_gemma_emb["model"], "gemma4:e4b")
+
+        p_translate = harness_cli.parse_natural_prompt("TranslateGemma로 다국어 번역 핸즈온 만들어줘")
+        self.assertEqual(p_translate["model"], "translategemma")
+        self.assertIn("gemma", p_translate["stack"].split(","))
+
+        # End-to-end prompt generation check (Claude + Gemma 4 / EmbeddingGemma 2)
+        built_dir = harness_cli.generate_from_prompt(
+            "클로드 최신 모델로 멀티 에이전트 워크숍 만들어줘",
+            target_dir=str(self.temp_dir),
+            init_only=True,
+        )
+        self.assertTrue(built_dir.exists())
+        self.assertIn("anthropic>=2.8.0", (built_dir / "pyproject.toml").read_text(encoding="utf-8"))
+        self.assertTrue(harness_cli.test_workshop(str(built_dir)))
+
+        gemma_dir = harness_cli.generate_from_prompt(
+            "Gemma 4와 EmbeddingGemma 2로 로컬 멀티모달 RAG 워크숍 만들어줘",
+            target_dir=str(self.temp_dir),
+            init_only=True,
+        )
+        self.assertTrue(gemma_dir.exists())
+        gemma_final = (gemma_dir / "workshop" / "02_final" / "main.py").read_text(encoding="utf-8")
+        self.assertIn("embed_with_embeddinggemma2", gemma_final)
+        self.assertIn("embeddinggemma-2", gemma_final)
+        self.assertTrue(harness_cli.test_workshop(str(gemma_dir)))
 
 
 if __name__ == "__main__":

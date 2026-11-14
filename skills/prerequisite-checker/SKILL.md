@@ -9,7 +9,7 @@ description: Generates OS-specific (macOS Apple Silicon/Intel, Windows PowerShel
 Prevents attendees from getting blocked on workshop day due to missing programming languages, SDKs, AI models, local LLM server port misconfigurations, or missing **Google AI Studio / GCP Gemini API Keys** by generating comprehensive OS-specific setup documentation and automated verification scripts.
 
 > **Mandatory Autonomous Pre-Flight Web Search**:
-> Before generating setup guides, execute live web search (`search_web`) to verify current download URLs, CLI installer flags, and active model tags (e.g. `gemma4`, `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.8-live`, `claude-sonnet-5.5`, `gpt-6-astra`, `gpt-6.1-sol`).
+> Before generating setup guides, execute live web search (`search_web`) to verify current download URLs, CLI installer flags, and active model tags (e.g. `gemma4`, `gemini-4-carbon`, `gemini-4-hydrogen`, `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.8-live`, `claude-fable-5-2`, `claude-opus-5-5`, `claude-sonnet-5-5`, `claude-haiku-5-5`, `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6.1-terra`).
 >
 > **Developer-Idiomatic Localization Protocol**:
 > When generating setup guides in Korean, Japanese, or Chinese, use authentic developer jargon and standard IT terminology. Never use awkward literal machine translations.
@@ -58,7 +58,11 @@ print(response.choices[0].message.content)
 - **Steps**: Enable Vertex AI API (`gcloud services enable aiplatform.googleapis.com`) > Create Service Account with `Vertex AI User` role > Download JSON key.
 - **Environment variable**: `export GOOGLE_APPLICATION_CREDENTIALS="/path/to/key.json"`
 
-### 3. Security Guidelines
+### 3. Anthropic Claude & OpenAI API Keys (Multi-Provider Cloud Tracks)
+- **Anthropic Console (`ANTHROPIC_API_KEY`)**: [https://console.anthropic.com](https://console.anthropic.com) > **API Keys** > Create Key (`sk-ant-...`) for `claude-fable-5-2`, `claude-opus-5-5`, `claude-sonnet-5-5`, `claude-haiku-5-5`.
+- **OpenAI Platform (`OPENAI_API_KEY`)**: [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys) > **Create new secret key** (`sk-proj-...`) for `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6.1-terra`, `gpt-6-luna`.
+
+### 4. Security Guidelines
 - `.env` and `*.json` key files must **never** be committed to Git repositories. The skill enforces `.env.sample` and `.gitignore` inclusion automatically.
 
 ---
@@ -70,8 +74,8 @@ print(response.choices[0].message.content)
 - **Windows**: `winget install Python.Python.3.11` and `powershell -c "irm https://astral.sh/uv/install.ps1 | iex"`
 - **Linux**: `sudo apt update && sudo apt install -y python3 python3-pip python3-venv`
 
-### 2. Node.js (18+) & npm / pnpm
-- **macOS / Linux**: `curl -fsSL https://fnm.vercel.app/install | bash && fnm install 20`
+### 2. Node.js (22+ for `@google/genai >= 3.0.0`) & npm / pnpm
+- **macOS / Linux**: `curl -fsSL https://fnm.vercel.app/install | bash && fnm install 22`
 - **Windows**: `winget install OpenJS.NodeJS.LTS`
 
 ### 3. Go (1.21+)

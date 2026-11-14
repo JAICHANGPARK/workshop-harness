@@ -87,6 +87,31 @@ if command -v go &> /dev/null; then
     echo -e "${GREEN}[OK] Go Toolchain:${NC} $(go version)"
 fi
 
+# 10. Check Cloud AI Provider API Keys (Gemini / Anthropic Claude / OpenAI)
+if [ -f ".env" ]; then
+    set -a
+    # shellcheck disable=SC1091
+    source .env 2>/dev/null || true
+    set +a
+fi
+
+FOUND_CLOUD_KEY=0
+if [ -n "${GEMINI_API_KEY:-}" ] && [ "${GEMINI_API_KEY}" != "YOUR_GEMINI_API_KEY_HERE" ]; then
+    echo -e "${GREEN}[OK] GEMINI_API_KEY:${NC} configured"
+    FOUND_CLOUD_KEY=1
+fi
+if [ -n "${ANTHROPIC_API_KEY:-}" ] && [ "${ANTHROPIC_API_KEY}" != "YOUR_ANTHROPIC_API_KEY_HERE" ]; then
+    echo -e "${GREEN}[OK] ANTHROPIC_API_KEY:${NC} configured"
+    FOUND_CLOUD_KEY=1
+fi
+if [ -n "${OPENAI_API_KEY:-}" ] && [ "${OPENAI_API_KEY}" != "YOUR_OPENAI_API_KEY_HERE" ]; then
+    echo -e "${GREEN}[OK] OPENAI_API_KEY:${NC} configured"
+    FOUND_CLOUD_KEY=1
+fi
+if [ "$FOUND_CLOUD_KEY" -eq 0 ]; then
+    echo -e "${YELLOW}[INFO] No cloud API key detected in env/.env (Set GEMINI_API_KEY, ANTHROPIC_API_KEY, or OPENAI_API_KEY if running cloud labs).${NC}"
+fi
+
 echo ""
 echo "=== Check Completed! ==="
 

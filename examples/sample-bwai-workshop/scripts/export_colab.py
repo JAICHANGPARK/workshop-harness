@@ -143,26 +143,52 @@ def export_to_colab(target_dir: str, output_dir: str = None, repo_name: str = No
             "## Lab 03: Final Verification\nTest edge cases and complete the workshop challenge."
         ]
 
-    # Common setup cells
+    # Common setup cells (multi-provider aware: Google GenAI, Anthropic Claude, OpenAI, Google ADK)
     has_adk = (target / "workshop" / "01_starter" / "agent.py").exists()
-    pip_pkgs = "google-genai google-adk pydantic requests" if has_adk else "google-genai pydantic requests"
+    pyproject_text = (target / "pyproject.toml").read_text(encoding="utf-8", errors="ignore") if (target / "pyproject.toml").exists() else ""
+    env_sample_text = (target / ".env.sample").read_text(encoding="utf-8", errors="ignore") if (target / ".env.sample").exists() else ""
+
+    pip_list = []
+    if "google-genai" in pyproject_text or not pyproject_text:
+        pip_list.append("google-genai")
+    if "anthropic" in pyproject_text or "ANTHROPIC_API_KEY" in env_sample_text:
+        pip_list.append("anthropic")
+    if "openai" in pyproject_text or "OPENAI_API_KEY" in env_sample_text:
+        pip_list.append("openai")
+    if has_adk:
+        pip_list.append("google-adk")
+        if "litellm" in pyproject_text:
+            pip_list.append("litellm")
+    pip_list.extend(["pydantic", "requests"])
+    pip_pkgs = " ".join(pip_list)
+
     env_setup_code = f"""# [Step 0] Environment Setup & Dependencies Installation
 !pip install -q {pip_pkgs}
 !nvidia-smi || echo "Running on CPU runtime"
 """
 
-    secrets_code = """# [Step 0-1] Secure Credential Configuration (Colab Secrets / Userdata)
-# Add your GEMINI_API_KEY in Colab's left sidebar 'Secrets' (Key icon)
+    secret_keys = []
+    if "GEMINI_API_KEY" in env_sample_text or not env_sample_text:
+        secret_keys.append("GEMINI_API_KEY")
+    if "ANTHROPIC_API_KEY" in env_sample_text or "anthropic" in pyproject_text:
+        secret_keys.append("ANTHROPIC_API_KEY")
+    if "OPENAI_API_KEY" in env_sample_text or "openai" in pyproject_text:
+        secret_keys.append("OPENAI_API_KEY")
+    secret_keys_repr = repr(secret_keys)
+
+    secrets_code = f"""# [Step 0-1] Secure Credential Configuration (Colab Secrets / Userdata)
+# Add your API key(s) ({', '.join(secret_keys)}) in Colab's left sidebar 'Secrets' (Key icon)
 import os
-try:
-    from google.colab import userdata
-    GEMINI_API_KEY = userdata.get('GEMINI_API_KEY')
-    os.environ['GEMINI_API_KEY'] = GEMINI_API_KEY
-    print("[OK] GEMINI_API_KEY loaded securely from Colab Secrets.")
-except Exception:
-    GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
-    if not GEMINI_API_KEY:
-        print("[WARN] GEMINI_API_KEY not found in Secrets. Please set it or enter manually.")
+for _key_name in {secret_keys_repr}:
+    try:
+        from google.colab import userdata
+        _val = userdata.get(_key_name)
+        if _val:
+            os.environ[_key_name] = _val
+            print(f"[OK] {{_key_name}} loaded securely from Colab Secrets.")
+    except Exception:
+        if not os.environ.get(_key_name):
+            print(f"[INFO] {{_key_name}} not found in Colab Secrets (running in offline/fallback mode unless set).")
 """
 
     # 1. Build Starter Notebook

@@ -10,7 +10,7 @@ export const lookupServiceSloTool = new FunctionTool({
 
 export const opsSpecialist = new LlmAgent({
   name: "ops_specialist",
-  model: "gemini-3.8-flash",
+  model: "gemini-4-hydrogen",
   description: "Audits microservice SLO metrics in TypeScript.",
   instruction: "Call lookup_service_slo and return gate decision.",
   tools: [lookupServiceSloTool],
@@ -18,7 +18,7 @@ export const opsSpecialist = new LlmAgent({
 
 export const rootAgent = new LlmAgent({
   name: "sre_coordinator",
-  model: "gemini-4-argon",
+  model: "gemini-4-carbon",
   description: "Root TypeScript ADK coordinator.",
   instruction: "Delegate SLO inspection to ops_specialist.",
   subAgents: [opsSpecialist],

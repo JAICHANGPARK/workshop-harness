@@ -1,5 +1,6 @@
 """
 ADK & Google Agents CLI (google-agents-cli) Reference Solution (`agent.py`)
+Primary Provider: Google GenAI (Workhorse: gemini-4-hydrogen | Coordinator: gemini-4-carbon)
 Compatible with:
   - `adk web` / `adk run` / `adk api_server` / `adk eval`
   - `agents-cli eval dataset synthesize` -> `eval run` -> `eval grade` -> `eval optimize`
@@ -11,7 +12,6 @@ except ImportError:
     class LlmAgent:  # Offline fallback stub when google-adk is not yet installed
         def __init__(self, **kwargs):
             self.__dict__.update(kwargs)
-
 
 def lookup_service_slo(service_name: str) -> dict:
     """Returns target SLO latency and remaining error budget for a production microservice.
@@ -45,7 +45,7 @@ def verify_release_gate(service_name: str, current_p99_ms: int) -> dict:
 
 slo_specialist = LlmAgent(
     name="slo_specialist",
-    model="gemini-3.8-flash",
+    model="gemini-4-hydrogen",
     description="Audits microservice SLO metrics and evaluates release readiness gates.",
     instruction="Call lookup_service_slo and verify_release_gate to inspect staging telemetry.",
     tools=[lookup_service_slo, verify_release_gate],
@@ -53,14 +53,14 @@ slo_specialist = LlmAgent(
 
 report_specialist = LlmAgent(
     name="report_specialist",
-    model="gemini-3.8-flash",
+    model="gemini-4-hydrogen",
     description="Drafts structured SRE deployment gate reports for Gemini Enterprise.",
     instruction="Summarize the release gate decision from slo_specialist into an executive checklist.",
 )
 
 root_agent = LlmAgent(
     name="adlc_root_coordinator",
-    model="gemini-4-argon",
+    model="gemini-4-carbon",
     description="Root ADK & agents-cli orchestrator that delegates SLO checks and release reporting.",
     instruction="Delegate telemetry checks to slo_specialist and final reporting to report_specialist.",
     sub_agents=[slo_specialist, report_specialist],

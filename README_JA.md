@@ -8,7 +8,7 @@
 [![uv Powered](https://img.shields.io/badge/python%20package%20manager-uv-de1f88.svg)](https://astral.sh/uv)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Antigravity Skills](https://img.shields.io/badge/Antigravity-21%20Agent%20Skills-purple.svg)](https://github.com/JAICHANGPARK)
-[![Release](https://img.shields.io/badge/release-v2026.10.31-green.svg)](https://github.com/JAICHANGPARK/workshop-harness/releases)
+[![Release](https://img.shields.io/badge/release-v2026.11.13-green.svg)](https://github.com/JAICHANGPARK/workshop-harness/releases)
 
 Languages: [English](./README.md) | [Korean](./README_KR.md) | [Japanese](./README_JA.md) | [Chinese](./README_ZH.md)
 
@@ -41,7 +41,7 @@ cd workshop-harness
 chmod +x scripts/install_skills.sh
 ./scripts/install_skills.sh
 
-# 3. ワンクリックでワークショップパッケージ一式を自動生成 (デフォルトモデル: gemini-3.8-flash)
+# 3. ワンクリックでワークショップパッケージ一式を自動生成 (デフォルトモデル: gemini-4-hydrogen)
 uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 ```
 
@@ -97,7 +97,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 
 ```bash
 # 全21スキルを横断するワンクリック生成
-uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker" --model "gemini-3.8-flash"
+uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker" --model "gemini-4-hydrogen"
 ```
 
 ---
@@ -176,7 +176,7 @@ Python 3.9+ と `uv` を使用して、以下のコマンドでワークショ�
 
 ```bash
 # 1. 全21スキルを連携させたワンクリック生成
-uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker" --model "gemini-3.8-flash"
+uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker" --model "gemini-4-hydrogen"
 
 # 2. 2026年最新モデルの確認、旧モデルタグの自動アップグレード、Markdown タイポグラフィ監査 (Em Dash 除去 & 用語チェック)
 uv run harness_cli.py list-models
@@ -190,6 +190,11 @@ uv run harness_cli.py init --name "adk-java-lab" --topic "Java 21 Enterprise Age
 uv run harness_cli.py init --name "adk-kotlin-lab" --topic "Kotlin Multi-Agent Systems with Google ADK" --stack "kotlin,adk"
 uv run harness_cli.py init --name "adk-ts-lab" --topic "TypeScript Multi-Agent Systems with Google ADK" --stack "typescript,adk"
 uv run harness_cli.py init --name "adk-polyglot-lab" --topic "Polyglot Multi-Language Google ADK Workshop" --stack "adk,polyglot,agents-cli"
+
+# 3b. マルチプロバイダー Anthropic Claude (Sonnet 5.5 / Opus 5.5 / Fable 5.2) & OpenAI (GPT-6.1 Sol / GPT-6 Astra) ワークショップの初期化
+uv run harness_cli.py init --name "claude-agent-lab" --topic "Agentic Workflows with Claude Sonnet 5.5" --stack "python,claude" --model "claude-sonnet-5-5"
+uv run harness_cli.py init --name "openai-responses-lab" --topic "Structured Agents with OpenAI GPT-6.1 Sol" --stack "python,openai" --model "gpt-6.1-sol"
+uv run harness_cli.py init --name "adk-claude-lab" --topic "Multi-Provider ADK Agents with LiteLlm" --stack "python,adk,claude" --model "claude-sonnet-5-5"
 
 # 4. Android Jetpack Compose GenAI ワークショップの初期化
 uv run harness_cli.py init --name "android-gemini-lab" --topic "Android GenAI with Jetpack Compose" --stack "android"
@@ -271,7 +276,7 @@ my-workshop-repo/
 
 ## 変更履歴 (Changelog)
 
-すべてのリリース履歴は [CHANGELOG.md](./CHANGELOG.md) を参照してください (最新リリース: `v2026.10.31`)。
+すべてのリリース履歴は [CHANGELOG.md](./CHANGELOG.md) を参照してください (最新リリース: `v2026.11.13`)。
 
 ---
 

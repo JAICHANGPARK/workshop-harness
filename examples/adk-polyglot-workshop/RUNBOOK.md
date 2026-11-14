@@ -1,8 +1,9 @@
 # Facilitator & TA Runbook: adk-polyglot-workshop
 
-- **Session Title**: Multi-Language Google ADK & Agents CLI ADLC Workshop
-- **Tech Stack**: `python,adk,agents-cli,polyglot`
-- **Primary Cloud Model**: `gemini-3.8-flash` | **Coordinator**: `gemini-4-argon` | **Local Model**: `gemma4:e4b`
+- **Session Title**: Enterprise Multi-Agent SRE with Polyglot ADK
+- **Tech Stack**: `adk,polyglot,python,go,java,kotlin,typescript`
+- **Primary Cloud Provider**: Google GenAI (`GEMINI_API_KEY`)
+- **Primary Cloud Model**: `gemini-4-hydrogen` | **Coordinator**: `gemini-4-carbon` | **Local Model**: `gemma4:e4b` | **Local Multimodal Embedding**: `embeddinggemma-2`
 - **Facilitator**: Workshop Lead Facilitator
 - **Teaching Assistants (TA)**: Roaming TA Team
 

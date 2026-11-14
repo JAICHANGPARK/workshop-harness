@@ -44,7 +44,7 @@ style: |
 <!-- _paginate: false -->
 # adk-polyglot-workshop
 
-### Multi-Language Google ADK & Agents CLI ADLC Workshop
+### Enterprise Multi-Agent SRE with Polyglot ADK
 
 <span class="badge">Hands-on Technical Lab</span>
 
@@ -98,7 +98,7 @@ style: |
 ## Lab 01: Environment Verification, ADK Scaffolding & Custom Tools
 
 - **Objective**
-Verify your local environment using `./scripts/check_env.sh` and initialize your ADK agent using Google Agent Development Kit (`google-adk` / `google.golang.org/adk/v2` / `com.google.adk:google-adk` / `@google/adk`) with `gemini-3.8-flash`.
+Verify your local environment using `./scripts/check_env.sh` and initialize your ADK agent using Google Agent Development Kit (`google-adk` / `google.golang.org/adk/v2` / `com.google.adk:google-adk` / `@google/adk`) with `gemini-4-hydrogen`.
 - **Official Multi-Language ADK Entry Points**
 - **Python (`google-adk`)**: `workshop/01_starter/sre_agent/agent.py` exposing `root_agent = LlmAgent(...)`
 - **Go (`google.golang.org/adk/v2`)**: `llmagent.New`, `functiontool.New`, and `gemini.NewModel`
@@ -117,7 +117,7 @@ python3 workshop/01_starter/main.py
 ## Lab 02: Multi-Agent Hierarchy, Sub-Agent Delegation & Structured Outputs
 
 - **Objective**
-Wire specialized sub-agents (`slo_specialist`, `report_specialist`) under a root coordinator (`root_agent` running `gemini-4-argon`) and enforce deterministic JSON schema outputs.
+Wire specialized sub-agents (`slo_specialist`, `report_specialist`) under a root coordinator (`root_agent` running `gemini-4-carbon`) and enforce deterministic JSON schema outputs.
 - **Instructions**
 1. Review `prompt-pack/README.md` for the target JSON Schema.
 2. In Python (`workshop/01_starter/agent.py`), attach `sub_agents=[slo_specialist, report_specialist]` to `root_agent`.

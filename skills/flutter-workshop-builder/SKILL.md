@@ -57,9 +57,9 @@ The Dart/Flutter MCP server provides real-time access to live IDE diagnostics:
 
 | Layer | Component | Recommended Package / Version | File Location |
 |---|---|---|---|
-| **Framework & Language** | Flutter & Dart | Flutter 3.24+ / Dart 3.5+ | `pubspec.yaml` |
+| **Framework & Language** | Flutter & Dart | Flutter 3.38+ / Dart 3.10+ | `pubspec.yaml` |
 | **GenAI SDK** | Google Generative AI Dart | `google_generative_ai: ^0.4.6` | `pubspec.yaml` |
-| **Generative UI** | Flutter GenUI | `genui: ^0.1.0` | `pubspec.yaml` |
+| **Generative UI & A2UI** | Flutter GenUI & A2UI | `genui: ^0.1.0` (`a2ui_flutter: ^0.1.0`, `a2ui_core: ^0.5.0`) | `pubspec.yaml` |
 | **Design System** | Flutter Material 3 | `useMaterial3: true` | `lib/main.dart` |
 | **Image & Multimodal** | Image Picker | `image_picker: ^1.1.2` | `pubspec.yaml` |
 | **Environment Variables** | Flutter Dotenv | `flutter_dotenv: ^5.2.1` | `pubspec.yaml` |
@@ -92,7 +92,7 @@ class GeminiService {
   final GenerativeModel _model;
   ChatSession? _chatSession;
 
-  GeminiService({required String apiKey, String modelName = 'gemini-3.8-flash'})
+  GeminiService({required String apiKey, String modelName = 'gemini-4-hydrogen'})
       : _model = GenerativeModel(
           model: modelName,
           apiKey: apiKey,

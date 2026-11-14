@@ -1,6 +1,6 @@
 # Google Colab Interactive Notebooks for adk-polyglot-workshop
 
-> Topic: Multi-Language Google ADK & Agents CLI ADLC Workshop
+> Topic: Enterprise Multi-Agent SRE with Polyglot ADK
 
 ## One-Click Open in Colab
 

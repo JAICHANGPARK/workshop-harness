@@ -78,7 +78,7 @@ When authoring modular hands-on lab tracks, delegate specialized implementation 
 | **Language & Toolchain** | Kotlin | 2.0.0+ | `build.gradle.kts` |
 | **Build System** | Android Gradle Plugin (AGP) | 8.5.0+ / 9.0.0+ | `build.gradle.kts` |
 | **UI Framework** | Jetpack Compose BOM | 2024.09.00+ (Material 3) | `app/build.gradle.kts` |
-| **GenAI SDK** | Google GenAI Kotlin | `com.google.genai:google-genai-kotlin-android:0.4.0` | `app/build.gradle.kts` |
+| **GenAI SDK** | Google GenAI Kotlin | `com.google.genai:google-genai-kotlin-android:1.8.0` | `app/build.gradle.kts` |
 | **Reactive State** | Android Lifecycle ViewModel | `androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0` | `app/build.gradle.kts` |
 | **Coroutines** | Kotlinx Coroutines Android | `org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0` | `app/build.gradle.kts` |
 
@@ -136,7 +136,7 @@ class ChatViewModel : ViewModel() {
             _uiState.value = ChatUiState.Loading
             try {
                 val response = aiClient.models.generateContent(
-                    model = "gemini-3.8-flash",
+                    model = "gemini-4-hydrogen",
                     prompt = prompt
                 )
                 _uiState.value = ChatUiState.Success(response.text ?: "No response")

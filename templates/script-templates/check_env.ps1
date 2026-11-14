@@ -1,4 +1,4 @@
-# ==============================================================================
+﻿# ==============================================================================
 # BWAI Workshop Environment Verification Script (Windows PowerShell)
 # ==============================================================================
 
@@ -88,6 +88,31 @@ $goCmd = Get-Command go -ErrorAction SilentlyContinue
 if ($goCmd) {
     $goVer = go version
     Write-Host "[OK] Go Toolchain: $goVer" -ForegroundColor Green
+}
+
+# 9. Check Cloud AI Provider API Keys (Gemini / Anthropic Claude / OpenAI)
+if (Test-Path ".env") {
+    Get-Content ".env" | ForEach-Object {
+        if ($_ -match "^([^#=]+)=(.*)$") {
+            [System.Environment]::SetEnvironmentVariable($matches[1].Trim(), $matches[2].Trim().Trim('"'))
+        }
+    }
+}
+$foundCloudKey = $false
+if ($env:GEMINI_API_KEY -and $env:GEMINI_API_KEY -ne "YOUR_GEMINI_API_KEY_HERE") {
+    Write-Host "[OK] GEMINI_API_KEY: configured" -ForegroundColor Green
+    $foundCloudKey = $true
+}
+if ($env:ANTHROPIC_API_KEY -and $env:ANTHROPIC_API_KEY -ne "YOUR_ANTHROPIC_API_KEY_HERE") {
+    Write-Host "[OK] ANTHROPIC_API_KEY: configured" -ForegroundColor Green
+    $foundCloudKey = $true
+}
+if ($env:OPENAI_API_KEY -and $env:OPENAI_API_KEY -ne "YOUR_OPENAI_API_KEY_HERE") {
+    Write-Host "[OK] OPENAI_API_KEY: configured" -ForegroundColor Green
+    $foundCloudKey = $true
+}
+if (-not $foundCloudKey) {
+    Write-Host "[INFO] No cloud API key detected in env/.env (Set GEMINI_API_KEY, ANTHROPIC_API_KEY, or OPENAI_API_KEY if running cloud labs)." -ForegroundColor DarkGray
 }
 
 Write-Host ""

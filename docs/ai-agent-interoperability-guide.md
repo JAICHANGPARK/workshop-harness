@@ -28,9 +28,11 @@
 ---
 
 ### 4. CLI 도구 직접 실행 (모든 에이전트 공통)
-- 에이전트가 어떤 LLM 모델(Gemini 4 Argon, Gemini 3.8 Flash, Claude Sonnet 5.5, GPT-6.1 Sol 등)이든 관계없이 터미널 실행 권한이 있다면 아래 명령어를 통해 모든 기능을 실행할 수 있습니다:
+- 에이전트가 어떤 LLM 모델(Gemini 4 Carbon/Hydrogen, Claude Fable 5.2 / Sonnet 5.5, GPT-6 Astra / GPT-6.1 Sol 등)이든 관계없이 터미널 실행 권한이 있다면 아래 명령어를 통해 모든 기능을 실행할 수 있습니다:
   ```bash
   python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
+  python3 harness_cli.py init --name "claude-agent-lab" --topic "Agentic Workflows with Claude Sonnet 5.5" --stack "python,claude"
+  python3 harness_cli.py init --name "openai-responses-lab" --topic "Structured Agents with OpenAI GPT-6.1 Sol" --stack "python,openai"
   ```
 
 ---

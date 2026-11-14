@@ -36,9 +36,9 @@ When auditing a workshop tech stack string (e.g. `lmstudio,docker,mlx,python`), 
 3. **`docker` in stack**:
    - *Risk*: Windows Home users without WSL2 or hypervisor enabled will fail to start Docker Desktop.
    - *Fix*: Provide local native executable setup or cloud sandbox alternatives.
-4. **`ollama` in stack**:
-   - *Risk*: High RAM model selection (`12B+`) crashes 8GB RAM laptops.
-   - *Fix*: Provide model quantization tiers (`gemma4:e2b` for 8GB, `gemma4:e4b` for 16GB, `gemma4:e12b` for 32GB+).
+4. **`ollama` / `gemma` / `embeddinggemma` in stack**:
+   - *Risk*: High RAM model selection (`12B+` / `26B`) crashes 8GB RAM laptops.
+   - *Fix*: Provide model quantization & modular memory tiers (`gemma4:e2b` + `embeddinggemma-2:270m` for 8GB, `gemma4:e4b` / `gemma4:12b` + `embeddinggemma-2` for 16GB, `gemma4:26b` / `gemma4:31b` for 32GB+).
 5. **`gemini-live` / `audio` in stack (Real-time Streaming & Flutter `gemini_live`)**:
    - *Risk*: Acoustic echo causes Voice Activity Detection (VAD) self-interruption loop; OS mic privacy permissions blocked.
    - *Fix*: Mandate headphones/earphones in `RUNBOOK.md` and verify OS microphone permissions (macOS Privacy Settings, Windows App Permissions, Flutter `RECORD_AUDIO`).

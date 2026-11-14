@@ -1,6 +1,6 @@
 version: 1
 title: "adk-polyglot-workshop"
-description: "Multi-Language Google ADK & Agents CLI ADLC Workshop"
+description: "Enterprise Multi-Agent SRE with Polyglot ADK"
 author: "Workshop Facilitator"
 is_public: true
 quiz_enabled: false

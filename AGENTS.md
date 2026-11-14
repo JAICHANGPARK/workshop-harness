@@ -22,7 +22,7 @@ This repository provides seamless integration for all AI Coding Agents including
 >
 > 1. **🌐 Mandatory Autonomous Pre-Flight Web Search (`workshop-web-researcher`)**:
 >    - **NEVER rely solely on LLM internal parametric training data** when generating workshop curriculum, code samples, Colab notebooks, or setup guides. Parametric weights contain outdated/deprecated APIs and retired model tags.
->    - **You MUST AUTONOMOUSLY execute live web searches (`search_web` / web search)** BEFORE writing any code or documentation to verify the newest SDK syntax (e.g. `google-genai >= 2.30.1` SDK, `@google/genai >= 2.29.1`, `google-adk`, `google-agents-cli`, `com.google.genai:google-genai-kotlin-android`, `google_generative_ai`, `genui`), current model tags (e.g. `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.8-live`, `gemini-nano-banana-2.1`, `gemini-omni-1.1-flash`, `claude-sonnet-5.5`, `claude-opus-5.5`, `gpt-6-astra`, `gpt-6.1-sol`, `gemma4`, `qwen3.6`), and breaking changes.
+>    - **You MUST AUTONOMOUSLY execute live web searches (`search_web` / web search)** BEFORE writing any code or documentation to verify the newest SDK syntax (e.g. `google-genai >= 3.0.0` SDK, `@google/genai >= 3.0.0`, `anthropic >= 2.8.0`, `@anthropic-ai/sdk >= 1.7.0`, `openai >= 3.50.0` Responses API, `google-adk >= 2.14.0`, `litellm >= 1.84.0`, `google-agents-cli >= 1.4.1`, `com.google.genai:google-genai-kotlin-android:1.8.0`, `google_generative_ai`, `genui`, `a2ui_flutter`), current model tags (e.g. `gemini-4-carbon`, `gemini-4-hydrogen`, `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.8-live`, `gemini-nano-banana-2.1`, `gemini-omni-1.2-flash`, `claude-fable-5-2`, `claude-opus-5-5`, `claude-sonnet-5-5`, `claude-haiku-5-5`, `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6.1-terra`, `gpt-6-luna`, `gemma4:e4b`, `gemma4:12b`, `gemma4:26b`, `embeddinggemma-2`, `translategemma`, `functiongemma`, `medgemma1.5`, `qwen3.6`), and breaking changes.
 >
 > 2. **🌍 Original Technical Term First, Real-World Developer Terminology & Natural Developer Grammar (기술 용어 원어 우선 표기, 실무 개발자 용어/문법 사용 & 직역·번역투 금지)**:
 >    - **English (EN)**: Write in clear, idiomatic, direct technical English.
@@ -47,16 +47,17 @@ This repository provides seamless integration for all AI Coding Agents including
 >    - **Do NOT include emojis in generated documentation, slide decks, setup guides, code comments, or runbooks by default.**
 >    - Only use emojis if the user explicitly requests them in their prompt (e.g., "use emojis in headings").
 >
-> 5. **🗣️ Natural Language Autonomy**:
->    - Users communicate via **natural language chat prompts**. Do **NOT** instruct users to run Python commands themselves.
->    - When a user requests a task, you MUST autonomously read the relevant `skills/*/SKILL.md` and execute the appropriate harness CLI command or generate the code artifacts on behalf of the user.
+> 5. **🗣️ Natural Language Prompt ➔ Zero-Question Instant Generation**:
+>    - Users communicate via **natural language chat prompts** (e.g. *"Claude 최신 모델로 멀티 에이전트 워크숍 만들어줘"*, *"OpenAI GPT로 구조화 출력 실습 만들어줘"*, *"Gemini 4로 ADK 핸즈온 만들어줘"*). Do **NOT** instruct users to run Python commands themselves, and do **NOT** block on unnecessary flag/model questions when sensible 2026 defaults exist.
+>    - When a user requests a workshop in natural language, you MUST autonomously: (1) execute a live web search (`workshop-web-researcher`) to verify latest SDKs/models, and (2) immediately run `python3 harness_cli.py prompt "<user prompt>"` (or `generate-all`) to generate the **complete end-to-end workshop package** (Starter/Final code, 3-stage Labs, Runbook, PDF Handout, Colab `.ipynb`, Open Codelabs bundle, and Slide Deck) right away.
 
 | User Chat Prompt Example | Triggered Agent Skill | Autonomous Agent Tool Call / Action |
 |:---|:---|:---|
-| *"Create a 1-hour hands-on workshop on Gemma 4 Local RAG"* | `workshop-web-researcher` ➔ `workshop-scaffolder` + All Skills | 1. Web search latest Gemma 4 & Ollama/vLLM APIs<br>2. `python3 harness_cli.py generate-all --name "..." --topic "..."` |
-| *"Build Google ADK & agents-cli multi-agent lifecycle workshop"* | `workshop-web-researcher` ➔ `adk-workshop-builder` + `agents-cli-workshop-builder` | 1. Web search latest `google-adk` & `google-agents-cli`<br>2. `python3 harness_cli.py init --name "..." --stack "python,adk,agents-cli"` |
-| *"Build Android Jetpack Compose GenAI workshop with android CLI"* | `workshop-web-researcher` ➔ `android-workshop-builder` | 1. Web search latest `com.google.genai` SDK & `android` CLI<br>2. `python3 harness_cli.py init --name "..." --stack "android"` |
-| *"Build Flutter GenUI and A2UI dynamic surface workshop"* | `workshop-web-researcher` ➔ `flutter-workshop-builder` + `a2ui-workshop-builder` | 1. Web search latest Flutter `genui` & `google_generative_ai`<br>2. `python3 harness_cli.py init --name "..." --stack "flutter,genui,a2ui"` |
+| *"Create a 1-hour hands-on workshop on Gemma 4 Local RAG"* | `workshop-web-researcher` ➔ `workshop-scaffolder` + All Skills | 1. Web search latest Gemma 4 & Ollama/vLLM APIs<br>2. `python3 harness_cli.py prompt "Create a 1-hour hands-on workshop on Gemma 4 Local RAG"` |
+| *"Claude 최신 모델로 멀티 에이전트 워크숍 만들어줘"* / *"OpenAI GPT로 실습 만들어줘"* | `workshop-web-researcher` ➔ `workshop-scaffolder` + All Skills | 1. Web search latest `anthropic` / `openai` SDKs<br>2. `python3 harness_cli.py prompt "<user prompt>"` (auto-infers `claude-sonnet-5-5` / `claude-fable-5-2` / `gpt-6.1-sol` + full 9-step build) |
+| *"Build Google ADK & agents-cli multi-agent lifecycle workshop"* | `workshop-web-researcher` ➔ `adk-workshop-builder` + `agents-cli-workshop-builder` | 1. Web search latest `google-adk` & `google-agents-cli`<br>2. `python3 harness_cli.py prompt "Build Google ADK & agents-cli multi-agent lifecycle workshop"` |
+| *"Build Android Jetpack Compose GenAI workshop with android CLI"* | `workshop-web-researcher` ➔ `android-workshop-builder` | 1. Web search latest `com.google.genai` SDK & `android` CLI<br>2. `python3 harness_cli.py prompt "Build Android Jetpack Compose GenAI workshop"` |
+| *"Build Flutter GenUI and A2UI dynamic surface workshop"* | `workshop-web-researcher` ➔ `flutter-workshop-builder` + `a2ui-workshop-builder` | 1. Web search latest Flutter `genui` & `google_generative_ai`<br>2. `python3 harness_cli.py prompt "Build Flutter GenUI and A2UI dynamic surface workshop"` |
 | *"List or audit workshop AI models and upgrade legacy tags"* | `workshop-web-researcher` | `python3 harness_cli.py list-models` / `python3 harness_cli.py audit-models --target <dir> --fix` |
 | *"Audit and strip forbidden em dashes from markdown docs"* | `workshop-tester` | `python3 harness_cli.py audit-typography --target <dir> --fix` |
 | *"Build presentation slides and Google Slides deck"* | `workshop-slide-generator` | `python3 harness_cli.py build-slides --target <dir>` |
@@ -71,10 +72,18 @@ This repository provides seamless integration for all AI Coding Agents including
 
 ## ⚡ Quick Agent Commands & Workflows (Under-the-Hood)
 
-### 1. One-Click Full Workshop Generation Across Skills
-Execute the full orchestration pipeline:
+### 1. Zero-Config Natural Language Prompt Generation (Recommended)
+Pass any natural language prompt (KO/EN/JA/ZH) to auto-infer `name`, `topic`, `stack`, and the latest 2026 `model` (`gemini-4-hydrogen`, `gemini-4-carbon`, `claude-sonnet-5-5`, `claude-fable-5-2`, `gpt-6.1-sol`, `gpt-6-astra`) and execute the full 9-step orchestration pipeline:
 ```bash
-python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker" --model "gemini-3.8-flash"
+python3 harness_cli.py prompt "Claude 최신 모델로 1시간짜리 멀티 에이전트 RAG 워크숍 만들어줘"
+python3 harness_cli.py prompt "OpenAI GPT로 구조화 출력 핸즈온 랩 만들어줘"
+python3 harness_cli.py prompt "Gemini 4 Carbon과 Google ADK로 엔터프라이즈 에이전트 워크숍 만들어줘"
+```
+
+### 1b. Explicit One-Click Full Workshop Generation (`generate-all`)
+Execute the full orchestration pipeline with explicit flags:
+```bash
+python3 harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker" --model "gemini-4-hydrogen"
 ```
 
 ### 2. List & Audit 2026 Frontier Models & Markdown Typography (No Em Dash)
@@ -88,6 +97,14 @@ python3 harness_cli.py audit-typography --target my-bwai-workshop --fix
 ### 3. Google ADK & Agents CLI (`google-agents-cli`) Workshop Initialization
 ```bash
 python3 harness_cli.py init --name "adk-agents-cli-lab" --topic "Multi-Agent ADLC with Google ADK and agents-cli" --stack "python,adk,agents-cli"
+```
+
+### 3b. Anthropic Claude & OpenAI Multi-Provider Workshop Initialization
+Scaffold workshops powered by Anthropic Claude (`claude-sonnet-5-5`, `claude-opus-5-5`, `claude-fable-5-2`), OpenAI (`gpt-6.1-sol`, `gpt-6-astra`, `gpt-6.1-terra`), or Google ADK via `LiteLlm`:
+```bash
+python3 harness_cli.py init --name "claude-agent-lab" --topic "Agentic Workflows with Claude Sonnet 5.5" --stack "python,claude" --model "claude-sonnet-5-5"
+python3 harness_cli.py init --name "openai-responses-lab" --topic "Structured Agents with OpenAI GPT-6.1 Sol" --stack "python,openai" --model "gpt-6.1-sol"
+python3 harness_cli.py init --name "adk-claude-lab" --topic "Multi-Provider ADK Agents with LiteLlm" --stack "python,adk,claude" --model "claude-sonnet-5-5"
 ```
 
 ### 4. Android Hands-on Workshop Initialization

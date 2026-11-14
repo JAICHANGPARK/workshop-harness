@@ -1,7 +1,7 @@
 # [Loop Engineering] 4-Persona Attendee Review & Audit Report
 
-> Workshop Topic: **Multi-Language Google ADK & Agents CLI ADLC Workshop**
-> Verified On: 2026-11-07
+> Workshop Topic: **Enterprise Multi-Agent SRE with Polyglot ADK**
+> Verified On: 2026-11-14
 
 This document applies the **Loop Engineering** methodology to audit the workshop curriculum, starter/final code, and environment setup across four distinct attendee personas.
 
@@ -19,7 +19,7 @@ This document applies the **Loop Engineering** methodology to audit the workshop
 - **Readiness Status**: PASS
 - **Evaluation**:
   - Automated prerequisite verification scripts (`./scripts/check_env.sh` and `.\scripts\check_env.ps1`) detect missing SDKs and port conflicts before coding begins.
-  - RAM-tiered model selection (`gemma4:e2b` for 8GB laptops, `gemma4:e4b` for 16GB laptops, `gemini-3.8-flash` for cloud API) prevents Out-Of-Memory crashes.
+  - RAM-tiered model selection (`gemma4:e2b` for 8GB laptops, `gemma4:e4b` for 16GB laptops, `gemini-4-hydrogen` for cloud API) prevents Out-Of-Memory crashes.
 
 ---
 
@@ -27,14 +27,14 @@ This document applies the **Loop Engineering** methodology to audit the workshop
 - **Readiness Status**: PASS
 - **Evaluation**:
   - Clear `TODO` exercise boundaries in `workshop/01_starter` and complete, runnable reference solutions in `workshop/02_final`.
-  - Uses modern 2026 SDK patterns (`google-genai >= 2.30.1`, `@google/genai >= 2.29.1`, `gemini-3.8-flash`, `gemini-4-argon`) and type-safe JSON schema validation.
+  - Uses modern 2026 SDK patterns (`google-genai >= 3.0.0, @google/genai >= 3.0.0`, `gemini-4-hydrogen`, `gemini-4-carbon`) and type-safe JSON schema validation.
 
 ---
 
 ## 4. Senior / Staff Engineer Persona (Systems Architect)
 - **Readiness Status**: PASS
 - **Evaluation**:
-  - Includes multi-agent orchestration patterns (`gemini-4-argon` coordinator + `gemini-3.8-flash` workers), reasoning budget control (`thinking_config`), and offline/venue WiFi resilience (`bundle_offline_assets.sh`).
+  - Includes multi-agent orchestration patterns (`gemini-4-carbon` coordinator + `gemini-4-hydrogen` workers), reasoning depth / adaptive thinking control, and offline/venue WiFi resilience (`bundle_offline_assets.sh`).
   - Zero deprecated API calls or hardcoded credentials.
 
 ---

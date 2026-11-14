@@ -2,7 +2,7 @@
 
 > Standard Claude Code Context & Instructions for Workshop Harness (21 Agent Skills)
 
-This repository provides native compatibility with **Anthropic Claude Code CLI**, **Claude Sonnet 5.5 / Claude Opus 5.5 / Claude Fable 5.1**, and **Claude Desktop**.
+This repository provides native compatibility with **Anthropic Claude Code CLI**, **Claude Fable 5.2 / Claude Opus 5.5 / Claude Sonnet 5.5 / Claude Haiku 5.5**, and **Claude Desktop**.
 
 ---
 
@@ -13,7 +13,7 @@ This repository provides native compatibility with **Anthropic Claude Code CLI**
 ### 🤖 CRITICAL RULES FOR CLAUDE CODE:
 1. **🌐 Mandatory Autonomous Pre-Flight Web Search (`workshop-web-researcher`)**:
    - **Never rely on static model training data.** AI training weights contain obsolete/deprecated APIs and retired model tags.
-   - **Claude Code MUST AUTONOMOUSLY execute live web searches** (`search_web` / web search) before generating any workshop code, Colab notebooks, or curriculum to verify current SDK methods, modern imports, and active model tags (e.g. `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.8-live`, `claude-sonnet-5.5`, `claude-opus-5.5`, `gpt-6-astra`, `gpt-6.1-sol`, `gemma4`, `google-genai`, `google-adk`, `google-agents-cli`, `com.google.genai`, `genui`).
+   - **Claude Code MUST AUTONOMOUSLY execute live web searches** (`search_web` / web search) before generating any workshop code, Colab notebooks, or curriculum to verify current SDK methods, modern imports, and active model tags (e.g. `gemini-4-carbon`, `gemini-4-hydrogen`, `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.8-live`, `gemini-omni-1.2-flash`, `claude-fable-5-2`, `claude-opus-5-5`, `claude-sonnet-5-5`, `claude-haiku-5-5`, `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6.1-terra`, `gpt-6-luna`, `gemma4:e4b`, `gemma4:12b`, `gemma4:26b`, `embeddinggemma-2`, `translategemma`, `functiongemma`, `medgemma1.5`, `google-genai >= 3.0.0`, `anthropic >= 2.8.0`, `@anthropic-ai/sdk >= 1.7.0`, `openai >= 3.50.0`, `google-adk >= 2.14.0`, `litellm >= 1.84.0`, `google-agents-cli >= 1.4.1`, `com.google.genai`, `genui`, `a2ui_flutter`).
 2. **🌍 Original Technical Term First, Real-World Developer Terminology & Natural Developer Grammar (기술 용어 원어 우선 표기, 실무 개발자 용어/문법 사용 & 직역·번역투 금지)**:
    - **English (EN)**: Write in clear, idiomatic, direct technical English.
    - **Korean (KO), Japanese (JA), and Chinese (ZH) Requests**: When generating or localizing documentation, `.md` files, presentation slides, runbooks, setup guides, or **code comments** in Korean, Japanese, or Chinese, **NEVER use awkward literal machine translations or unnatural translationese grammar (번역투 문법, 不自然な直訳調, 生硬的机翻腔)**.
@@ -28,9 +28,9 @@ This repository provides native compatibility with **Anthropic Claude Code CLI**
 4. **🚫 No Emojis in Documentation (Default: Clean Professional Text)**:
    - **Do NOT use emojis in generated documentation, slide decks, setup guides, code comments, or runbooks by default.**
    - Emojis may only be used if the user explicitly requests them in their prompt.
-5. **Natural Language Autonomy**:
-   - **Users communicate using natural language prompts. Do NOT ask users to execute Python CLI commands directly.**
-   - When a user asks a question or makes a request, **Claude Code must autonomously read the corresponding skill file (`skills/*/SKILL.md`) and execute the required Python tool or generate the artifacts on behalf of the user.**
+5. **Natural Language Prompt ➔ Zero-Question Instant Generation**:
+   - **Users communicate using natural language prompts. Do NOT ask users to execute Python CLI commands directly or ask unnecessary flag questions.**
+   - When a user requests a workshop in natural language (e.g. *"Claude 최신 모델로 멀티 에이전트 워크숍 만들어줘"*, *"OpenAI GPT로 구조화 출력 실습 만들어줘"*), **Claude Code must autonomously run a pre-flight web search and immediately execute `python3 harness_cli.py prompt "<user prompt>"` (or `generate-all`) to generate the complete end-to-end workshop package right away.**
 
 ---
 
@@ -38,10 +38,11 @@ This repository provides native compatibility with **Anthropic Claude Code CLI**
 
 | User Natural Language Prompt | Autonomous Claude Action & Triggered Skill | Execution Command / Action |
 |:---|:---|:---|
-| *"Create a 1-hour workshop for Local RAG with Gemma 4"* | Read `skills/workshop-web-researcher/SKILL.md` ➔ `skills/workshop-scaffolder/SKILL.md` | 1. Web search latest Gemma 4 & Ollama APIs<br>2. Run `python3 harness_cli.py generate-all --name "<name>" --topic "<topic>"` |
-| *"Build Google ADK & agents-cli multi-agent lifecycle workshop"* | Read `skills/adk-workshop-builder/SKILL.md` + `skills/agents-cli-workshop-builder/SKILL.md` | Run `python3 harness_cli.py init --name "<name>" --stack "python,adk,agents-cli"` |
-| *"Build Android Jetpack Compose GenAI workshop with android CLI"* | Read `skills/android-workshop-builder/SKILL.md` | Run `python3 harness_cli.py init --name "<name>" --stack "android"` |
-| *"Build Flutter GenUI and A2UI dynamic surface workshop"* | Read `skills/flutter-workshop-builder/SKILL.md` + `skills/a2ui-workshop-builder/SKILL.md` | Run `python3 harness_cli.py init --name "<name>" --stack "flutter,genui,a2ui"` |
+| *"Create a 1-hour workshop for Local RAG with Gemma 4"* | Read `skills/workshop-web-researcher/SKILL.md` ➔ `skills/workshop-scaffolder/SKILL.md` | 1. Web search latest Gemma 4 & Ollama APIs<br>2. Run `python3 harness_cli.py prompt "Create a 1-hour workshop for Local RAG with Gemma 4"` |
+| *"Claude 최신 모델로 멀티 에이전트 워크숍 만들어줘"* / *"OpenAI GPT로 실습 만들어줘"* | Read `skills/workshop-web-researcher/SKILL.md` ➔ `skills/workshop-scaffolder/SKILL.md` | Run `python3 harness_cli.py prompt "<user prompt>"` (auto-infers provider, model & runs full 9-step build) |
+| *"Build Google ADK & agents-cli multi-agent lifecycle workshop"* | Read `skills/adk-workshop-builder/SKILL.md` + `skills/agents-cli-workshop-builder/SKILL.md` | Run `python3 harness_cli.py prompt "Build Google ADK & agents-cli multi-agent lifecycle workshop"` |
+| *"Build Android Jetpack Compose GenAI workshop with android CLI"* | Read `skills/android-workshop-builder/SKILL.md` | Run `python3 harness_cli.py prompt "Build Android Jetpack Compose GenAI workshop"` |
+| *"Build Flutter GenUI and A2UI dynamic surface workshop"* | Read `skills/flutter-workshop-builder/SKILL.md` + `skills/a2ui-workshop-builder/SKILL.md` | Run `python3 harness_cli.py prompt "Build Flutter GenUI and A2UI dynamic surface workshop"` |
 | *"List or audit workshop AI models and upgrade legacy tags"* | Read `skills/workshop-web-researcher/SKILL.md` | Run `python3 harness_cli.py list-models` or `python3 harness_cli.py audit-models --target <dir> --fix` |
 | *"Audit and remove em dashes from markdown docs"* | Read `skills/workshop-tester/SKILL.md` | Run `python3 harness_cli.py audit-typography --target <dir> --fix` |
 | *"Build Google Slides presentation for this workshop"* | Read `skills/workshop-slide-generator/SKILL.md` | Run `python3 harness_cli.py build-slides --target <dir>` |

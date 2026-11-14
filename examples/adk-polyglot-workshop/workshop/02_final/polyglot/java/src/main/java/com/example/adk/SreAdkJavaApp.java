@@ -15,7 +15,7 @@ public final class SreAdkJavaApp {
 
     public static final BaseAgent opsAgent = LlmAgent.builder()
             .name("ops_specialist")
-            .model("gemini-3.8-flash")
+            .model("gemini-4-hydrogen")
             .description("Audits microservice SLO metrics in Java.")
             .instruction("Use lookupServiceSlo and store output in telemetry_result.")
             .tools(FunctionTool.create(SreAdkJavaApp.class, "lookupServiceSlo"))
@@ -24,7 +24,7 @@ public final class SreAdkJavaApp {
 
     public static final BaseAgent reportAgent = LlmAgent.builder()
             .name("report_writer")
-            .model("gemini-3.8-flash")
+            .model("gemini-4-hydrogen")
             .description("Formats SRE deployment gate reports.")
             .instruction("Summarize {telemetry_result} into a release checklist.")
             .build();

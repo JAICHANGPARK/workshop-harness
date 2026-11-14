@@ -4,6 +4,38 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [v2026.11.13] - 2026-11-13
+
+### Added & Upgraded
+
+- **November 2026 Google Gemini 4 & Multimodal Ecosystem Upgrade (`harness_cli.py`, `skills/workshop-web-researcher/SKILL.md`, `templates/script-templates/verify_workshop.py`)**:
+  - Upgraded `MODEL_REGISTRY["google-gemini"]` with Google DeepMind's November 2026 releases:
+    - **`gemini-4-carbon`** (`flagship_reasoning`): GA frontier reasoning model for sustained agentic coding, multi-agent coordination (`root_agent`), scientific discovery, and cybersecurity defense (1M unified context window, configurable `thinking_level`: `low`, `medium`, `high`).
+    - **`gemini-4-hydrogen`** (`default_workhorse`): GA high-efficiency Gemini 4 workhorse for rapid agentic execution, Search AI Mode query fan-out, everyday coding, and parallel sub-agent workers (1M input / up to 1M output context window, flat-priced, configurable `thinking_level`: `low`, `medium`, `high`, `xhigh`).
+    - **`gemini-4-argon`** (`enterprise_reasoning`): Retained as active enterprise frontier reasoning model alongside **`gemini-3.8-flash`** (`fast_multimodal_flash`).
+    - **`gemini-omni-1.2-flash`** (`video_omni`): GA video generation and conversational editing model superseding `gemini-omni-1.1-flash`.
+    - **`gemini-embedding-2`** (`embedding_multimodal`): Promoted to GA and added deprecation auto-upgrade from `gemini-embedding-2-preview`.
+    - **`gemini-3.8-flash-tts`**: Documented Voice Remixing (`POST /v1beta/voices`) alongside Nano Banana 2.1 (`gemini-nano-banana-2.1` / `gemini-3.1-flash-image`) video-to-image context support.
+- **Unified Google GenAI v3 & Multi-Platform SDK Upgrades**:
+  - Upgraded scaffolded Python dependencies to `google-genai>=3.0.0` (default Gemini Developer API `v1` and `httpx2`) and `google-adk>=2.14.0`, plus `google-agents-cli>=1.4.1` in ADLC documentation.
+  - Upgraded TypeScript / Node.js scaffolds to `@google/genai@^3.0.0` (Node.js 22+), Java scaffolds to `com.google.genai:google-genai:2.1.0`, Android Compose scaffolds to `com.google.genai:google-genai-kotlin-android:1.8.0`, and Flutter GenUI / A2UI documentation to include `a2ui_flutter` (`^0.1.0`) and `a2ui_core` (`^0.5.0`) on Flutter 3.38+ / Dart 3.10+.
+- **November 2026 Anthropic Claude & OpenAI Multi-Provider Ecosystem Upgrade (`harness_cli.py`, `templates/`, `scripts/`, `skills/`)**:
+  - Upgraded `MODEL_REGISTRY["anthropic-claude"]` to canonical hyphenated API model IDs (all 1M context, 128K output on API `2026-10-21`): **`claude-fable-5-2`** (`apex_agentic`, GA Nov 9, 2026), **`claude-opus-5-5`** (`flagship_reasoning`), **`claude-sonnet-5-5`** (`default_workhorse`), and **`claude-haiku-5-5`** (`fast_haiku`), paired with `anthropic>=2.8.0`, `claude-agent-sdk>=0.2.181`, and `@anthropic-ai/sdk@^1.7.0`.
+  - Upgraded `MODEL_REGISTRY["openai-gpt"]` to November 2026 Responses API models: **`gpt-6-astra`** (`flagship_reasoning`), **`gpt-6.1-sol`** (`default_workhorse`), **`gpt-6.1-terra`** (`multimodal_computer_use`, superseding `gpt-5.6-terra` and `gpt-5.4`), **`gpt-6-luna`** (`fast_lite`), **`gpt-image-2.6-sunburst`** (`image_default`), and **`gpt-image-2.6-flare`** (`image_fast`), paired with `openai>=3.50.0` (Python), `openai-agents>=0.24.0`, and `openai@^7.55.0` (TypeScript).
+  - Added native multi-provider workshop scaffolding (`--stack "python,claude"`, `--stack "python,openai"`, `--stack "typescript,claude"`, `--stack "typescript,openai"`, and `--stack "python,adk,claude"` / `--stack "python,adk,openai"` via `LiteLlm` with `litellm>=1.84.0`) across `pyproject.toml`, `.env.sample`, `RUNBOOK.md`, `check_env.sh/ps1`, Colab `.ipynb` exporters, and starter/reference code.
+  - Added **Zero-Config Natural Language Prompt Router (`prompt` / `from-prompt` / `--prompt` & bare prompt invocation)** via `parse_natural_prompt()` and `generate_from_prompt()`, enabling users and AI coding agents to pass Korean/English/Japanese/Chinese prompts (e.g. `"Claude 최신 모델로 멀티 에이전트 워크숍 만들어줘"`, `"OpenAI GPT로 구조화 출력 핸즈온 랩 만들어줘"`) and immediately generate the complete 9-step workshop package without manual CLI flag selection.
+- **November 2026 Google Gemma 4, EmbeddingGemma 2 & Specialized Gemma Catalog (`harness_cli.py`, `templates/`, `skills/`)**:
+  - Expanded `MODEL_REGISTRY["google-gemma"]` and `MODEL_REGISTRY["local-ollama"]` with verified November 2026 Gemma open-weight models (Apache 2.0):
+    - **Gemma 4 Core**: Cloud/HF (`gemma-4-31b-it`, `gemma-4-26b-a4b-it`, `gemma-4-12b-it`, `gemma-4-e4b-it`, `gemma-4-e2b-it`) and canonical Ollama tags (`gemma4:e2b`, `gemma4:e4b`, `gemma4:12b`, `gemma4:26b`, `gemma4:31b`).
+    - **EmbeddingGemma 2 (`embeddinggemma-2`, GA Oct 2026)**: Multimodal 768-dimensional Matryoshka Representation Learning (MRL: `768` -> `512`/`256`/`128`, 8K context, 100+ languages) modular variants (`embeddinggemma-2` / `:740m` full multimodal, `:570m` text+code+audio, `:440m` text+code+vision, `:270m` text+code 304 MB lightweight) and `google/embeddinggemma-2`.
+    - **Specialized Gemma Family**: `translategemma` (55-language text/visual translation), `functiongemma` (270M on-device Function Calling), `medgemma1.5` (clinical EHR & CT/MRI/X-ray/histopathology), and `shieldgemma` (ShieldGemma 2 safety policy classifier).
+  - Added `embed_with_embeddinggemma2()` (Ollama `/api/embed` with 256d MRL truncation and offline fallback) in generated Gemma/EmbeddingGemma RAG scaffolds, natural language prompt detection (`"Gemma 4와 EmbeddingGemma 2로 로컬 멀티모달 RAG 워크숍 만들어줘"`, `"TranslateGemma로 다국어 번역 핸즈온 만들어줘"`), and deprecated tag auto-upgrades (`gemma2:*`, `gemma3:*`, `gemma4:e12b` -> `gemma4:12b`, `gemma4:26b-a4b` -> `gemma4:26b`, `embeddinggemma:300m` -> `embeddinggemma-2:270m`, `embeddinggemma:latest` -> `embeddinggemma-2`).
+- **Deprecated Model Auto-Auditor (`audit-models` & `verify_workshop.py`)**:
+  - Added automatic detection and `--fix` migration rules for `gemini-3.7-flash` -> `gemini-4-hydrogen`, `gemini-omni-1.1-flash` -> `gemini-omni-1.2-flash`, `gemini-embedding-2-preview` -> `gemini-embedding-2`, `claude-fable-5.1` / `claude-fable-5-1` -> `claude-fable-5-2`, dot-notation `claude-{opus,sonnet,haiku}-5.5` -> hyphenated `claude-{opus,sonnet,haiku}-5-5`, `gpt-5.6-terra` / `gpt-5.4` -> `gpt-6.1-terra`, `gpt-4.1` -> `gpt-6.1-sol`, and retired `o1-mini` / `o3-mini` / `o4-mini` tags, plus `sk-ant-...` / `sk-proj-...` key leak checks.
+  - Refreshed all 3 reference example workshops (`examples/adk-polyglot-workshop`, `examples/one-click-demo-workshop`, `examples/sample-bwai-workshop`), agent instruction files (`AGENTS.md`, `CLAUDE.md`, `.cursorrules`, `.windsurfrules`), multilingual READMEs, and unit tests (`tests/test_harness.py`).
+
+---
+
 ## [v2026.11.03] - 2026-11-03
 
 ### Fixed & Improved

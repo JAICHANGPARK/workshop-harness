@@ -1,9 +1,9 @@
 # adk-polyglot-workshop
 
-> Topic: Multi-Language Google ADK & Agents CLI ADLC Workshop
-> Tech Stack: python,adk,agents-cli,polyglot
+> Topic: Enterprise Multi-Agent SRE with Polyglot ADK
+> Tech Stack: adk,polyglot,python,go,java,kotlin,typescript
 
-This repository contains pre-event preparation documents and hands-on lab code for the **Multi-Language Google ADK & Agents CLI ADLC Workshop** workshop.
+This repository contains pre-event preparation documents and hands-on lab code for the **Enterprise Multi-Agent SRE with Polyglot ADK** workshop.
 
 ## Quick Start
 

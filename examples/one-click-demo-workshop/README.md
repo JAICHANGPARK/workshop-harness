@@ -1,9 +1,9 @@
 # one-click-demo-workshop
 
-> Topic: Flutter and Gemma 4 AI Agent
-> Tech Stack: python,ollama
+> Topic: Local RAG with Gemma 4
+> Tech Stack: python,ollama,docker
 
-This repository contains pre-event preparation documents and hands-on lab code for the **Flutter and Gemma 4 AI Agent** workshop.
+This repository contains pre-event preparation documents and hands-on lab code for the **Local RAG with Gemma 4** workshop.
 
 ## Quick Start
 

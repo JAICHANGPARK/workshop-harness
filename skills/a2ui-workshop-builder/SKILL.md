@@ -44,9 +44,9 @@ flowchart LR
 
 | Layer | Package | Purpose | File Location |
 |---|---|---|---|
-| **GenUI Core** | `genui` | Orchestration layer & SurfaceController | `pubspec.yaml` |
+| **GenUI & A2UI Core** | `genui`, `a2ui_flutter` (`^0.1.0`), `a2ui_core` (`^0.5.0`) | Orchestration layer, protocol schemas & SurfaceController | `pubspec.yaml` |
 | **Pre-built Widgets** | `genui_catalog` | Ready-to-use Material 3 generative widgets | `pubspec.yaml` |
-| **Agent Connector** | `genui_a2a` or `google_generative_ai` | Connects to Gemini or A2UI agent backend | `pubspec.yaml` |
+| **Agent Connector** | `genui_a2a` or `google_generative_ai` (`gemini-4-hydrogen` / `gemini-3.8-flash`) | Connects to Gemini or A2UI agent backend | `pubspec.yaml` |
 | **Testing / Mocking** | `genui_mock` | Offline mocking of agent sessions for zero-network labs | `pubspec.yaml` |
 
 ---

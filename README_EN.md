@@ -8,7 +8,7 @@
 [![uv Powered](https://img.shields.io/badge/python%20package%20manager-uv-de1f88.svg)](https://astral.sh/uv)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Antigravity Skills](https://img.shields.io/badge/Antigravity-21%20Agent%20Skills-purple.svg)](https://github.com/JAICHANGPARK)
-[![Release](https://img.shields.io/badge/release-v2026.10.31-green.svg)](https://github.com/JAICHANGPARK/workshop-harness/releases)
+[![Release](https://img.shields.io/badge/release-v2026.11.13-green.svg)](https://github.com/JAICHANGPARK/workshop-harness/releases)
 
 Languages: [English](./README.md) | [Korean](./README_KR.md) | [Japanese](./README_JA.md) | [Chinese](./README_ZH.md)
 
@@ -41,7 +41,11 @@ cd workshop-harness
 chmod +x scripts/install_skills.sh
 ./scripts/install_skills.sh
 
-# 3. Generate a complete workshop package with ONE CLICK (Default: gemini-3.8-flash)
+# 3. Generate a complete workshop directly from a natural language prompt (Gemini 4 / Claude / OpenAI auto-detected!)
+uv run harness_cli.py prompt "Create a 1-hour multi-agent RAG workshop with the latest Claude model"
+uv run harness_cli.py prompt "Build an OpenAI GPT structured outputs workshop"
+
+# (Or with explicit flags)
 uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
 ```
 
@@ -97,7 +101,7 @@ With a single CLI command or natural language prompt, Workshop Harness triggers 
 
 ```bash
 # One-Click Full Workshop Generation Across All 21 Skills
-uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker" --model "gemini-3.8-flash"
+uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker" --model "gemini-4-hydrogen"
 ```
 
 ---
@@ -178,7 +182,7 @@ Using Python 3.9+ and `uv`, you can manage workshops via the command-line interf
 
 ```bash
 # 1. One-Click Full Workshop Generation Across All 21 Skills
-uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker" --model "gemini-3.8-flash"
+uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker" --model "gemini-4-hydrogen"
 
 # 2. Inspect Verified 2026 Frontier & Open-Weight Models, Auto-Upgrade Legacy Model Tags, and Sanitize Markdown Typography (No Em Dash)
 uv run harness_cli.py list-models
@@ -192,6 +196,11 @@ uv run harness_cli.py init --name "adk-java-lab" --topic "Java 21 Enterprise Age
 uv run harness_cli.py init --name "adk-kotlin-lab" --topic "Kotlin Multi-Agent Systems with Google ADK" --stack "kotlin,adk"
 uv run harness_cli.py init --name "adk-ts-lab" --topic "TypeScript Multi-Agent Systems with Google ADK" --stack "typescript,adk"
 uv run harness_cli.py init --name "adk-polyglot-lab" --topic "Polyglot Multi-Language Google ADK Workshop" --stack "adk,polyglot,agents-cli"
+
+# 3b. Multi-Provider Anthropic Claude (Sonnet 5.5 / Opus 5.5 / Fable 5.2) & OpenAI (GPT-6.1 Sol / GPT-6 Astra) Workshops
+uv run harness_cli.py init --name "claude-agent-lab" --topic "Agentic Workflows with Claude Sonnet 5.5" --stack "python,claude" --model "claude-sonnet-5-5"
+uv run harness_cli.py init --name "openai-responses-lab" --topic "Structured Agents with OpenAI GPT-6.1 Sol" --stack "python,openai" --model "gpt-6.1-sol"
+uv run harness_cli.py init --name "adk-claude-lab" --topic "Multi-Provider ADK Agents with LiteLlm" --stack "python,adk,claude" --model "claude-sonnet-5-5"
 
 # 4. Android Jetpack Compose GenAI Workshop Initialization
 uv run harness_cli.py init --name "android-gemini-lab" --topic "Android GenAI with Jetpack Compose" --stack "android"

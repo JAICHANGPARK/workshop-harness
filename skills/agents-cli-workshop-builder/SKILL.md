@@ -10,7 +10,7 @@ description: Builds end-to-end Agent Development Lifecycle (ADLC) workshops usin
 Automates the end-to-end creation of technical hands-on workshops centered on **`google-agents-cli` (`google/agents-cli`)** and the complete **Agent Development Lifecycle (ADLC)** on Google Cloud and the Gemini Enterprise Agent Platform. This skill teaches attendees how to combine **`agents-cli` CLI commands** with its **7 built-in AI coding assistant skills** (for Antigravity, Gemini CLI, Claude Code, Codex, and Cursor) to take an ADK agent from initial scaffolding to automated evaluation, cloud deployment, enterprise registry publication, and production telemetry.
 
 > Pre-Flight Web Research Protocol:
-> Before generating workshop materials, execute live web searches to verify the latest `google-agents-cli` release (`uvx google-agents-cli setup`, `npx skills add google/agents-cli`), ADK compatibility (`google-adk`), and current Gemini model tags (`gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.5-flash-lite`).
+> Before generating workshop materials, execute live web searches to verify the latest `google-agents-cli` release (`google-agents-cli>=1.4.1`, `uvx google-agents-cli setup`, `npx skills add google/agents-cli`), ADK compatibility (`google-adk>=2.14.0`), and current Gemini model tags (`gemini-4-carbon`, `gemini-4-hydrogen`, `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.5-flash-lite`).
 
 ---
 
@@ -36,7 +36,7 @@ When attendees run `uvx google-agents-cli setup` or `npx skills add google/agent
 
 | Skill Identifier | Lifecycle Stage | Primary Capability & Workshop Role |
 |---|---|---|
-| **`google-agents-cli-workflow`** | End-to-End ADLC | Guides full agent lifecycle sequencing, code preservation rules, and 2026 Gemini model selection (`gemini-4-argon` vs `gemini-3.8-flash`) |
+| **`google-agents-cli-workflow`** | End-to-End ADLC | Guides full agent lifecycle sequencing, code preservation rules, and 2026 Gemini model selection (`gemini-4-carbon` vs `gemini-4-hydrogen` / `gemini-3.8-flash`) |
 | **`google-agents-cli-scaffold`** | Project Initialization | Executes `agents-cli create <name>`, `enhance`, and `upgrade` from `adk-samples` or custom templates |
 | **`google-agents-cli-adk-code`** | Core Implementation | Enforces idiomatic ADK Python patterns (`root_agent`, `LlmAgent`, `sub_agents`, `FunctionTool`, `MCPToolset`, session state, callbacks) |
 | **`google-agents-cli-eval`** | Quality & Optimization | Automates dataset synthesis (`eval dataset synthesize`), execution (`eval run`), LLM-as-a-Judge grading (`eval grade`), failure analysis (`eval analyze`), and prompt optimization (`eval optimize`) |
@@ -136,14 +136,14 @@ def lookup_service_slo(service_name: str) -> dict:
     )
 
 
-# TODO (Lab 1): Define a specialist LlmAgent named 'slo_auditor' using model 'gemini-3.8-flash'
+# TODO (Lab 1): Define a specialist LlmAgent named 'slo_auditor' using model 'gemini-4-hydrogen'
 # and bind lookup_service_slo in tools=[...].
 
-# TODO (Lab 2): Define 'root_agent' using model 'gemini-4-argon' and delegate SLO checks
+# TODO (Lab 2): Define 'root_agent' using model 'gemini-4-carbon' and delegate SLO checks
 # to 'slo_auditor' so `adk web` and `agents-cli eval run` can evaluate tool trajectories.
 root_agent = LlmAgent(
     name="sre_lifecycle_coordinator",
-    model="gemini-3.8-flash",
+    model="gemini-4-hydrogen",
     description="Starter SRE agent awaiting sub-agent delegation and tool binding.",
     instruction="Answer user questions about service SLOs.",
     tools=[lookup_service_slo],
@@ -206,7 +206,7 @@ def check_deployment_readiness(service_name: str, current_p99_ms: int) -> dict:
 
 slo_auditor = LlmAgent(
     name="slo_auditor",
-    model="gemini-3.8-flash",
+    model="gemini-4-hydrogen",
     description="Audits microservice SLO targets, P99 latency thresholds, and release readiness gates.",
     instruction=(
         "Always call lookup_service_slo first to inspect the service tier and error budget, "
@@ -217,7 +217,7 @@ slo_auditor = LlmAgent(
 
 release_reporter = LlmAgent(
     name="release_reporter",
-    model="gemini-3.8-flash",
+    model="gemini-4-hydrogen",
     description="Formats release gate decisions into structured deployment readiness reports.",
     instruction=(
         "Produce a structured release gate summary containing Service Name, P99 Comparison, "
@@ -227,7 +227,7 @@ release_reporter = LlmAgent(
 
 root_agent = LlmAgent(
     name="sre_lifecycle_coordinator",
-    model="gemini-4-argon",
+    model="gemini-4-carbon",
     description="Root ADLC coordinator that orchestrates SLO auditing and deployment gate reporting.",
     instruction=(
         "You govern production release gates. "

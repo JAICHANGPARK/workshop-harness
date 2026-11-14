@@ -1,9 +1,9 @@
 # sample-bwai-workshop
 
-> Topic: Testing Workshop Harness
-> Tech Stack: python,ollama
+> Topic: Local RAG with Gemma 4
+> Tech Stack: python,ollama,lmstudio
 
-This repository contains pre-event preparation documents and hands-on lab code for the **Testing Workshop Harness** workshop.
+This repository contains pre-event preparation documents and hands-on lab code for the **Local RAG with Gemma 4** workshop.
 
 ## Quick Start
 

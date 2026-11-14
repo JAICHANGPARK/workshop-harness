@@ -30,10 +30,9 @@ When preparing workshop sessions, always verify the tool recommendations and fal
 
 ---
 
-## Stack-Specific Architecture & Risk Audit (`python,adk,agents-cli,polyglot`)
+## Stack-Specific Architecture & Risk Audit (`adk,polyglot,python,go,java,kotlin,typescript`)
 
 | Tool / Component | Target Environment | Identified Risk | Mandatory Fallback Path |
 | :--- | :--- | :--- | :--- |
-| **Google Agent Development Kit (ADK & adk web)** | Port 8000 Conflict & Multi-Agent Delegation Loops | Local port 8000 collisions prevent 'adk web' / 'adk api_server' startup; missing 'root_agent' symbol in agent.py breaks discovery. | Ensure top-level orchestrator is named 'root_agent' in agent.py, use 'adk web --port 8080' on port conflict, and assign gemini-3.8-flash to sub_agents. |
-| **Google Agents CLI (google-agents-cli)** | Python < 3.11 / Missing uvx or GCP Application Default Credentials | 'uvx google-agents-cli setup' requires Python 3.11+ and Astral uv; 'agents-cli deploy' fails without active GCP ADC credentials. | Install uv first, run 'uvx google-agents-cli setup' (or 'npx skills add google/agents-cli'), and run 'gcloud auth application-default login' before Lab 03. |
+| **Google Agent Development Kit (ADK & adk web)** | Port 8000 Conflict & Multi-Agent Delegation Loops | Local port 8000 collisions prevent 'adk web' / 'adk api_server' startup; missing 'root_agent' symbol in agent.py breaks discovery. | Ensure top-level orchestrator is named 'root_agent' in agent.py, use 'adk web --port 8080' on port conflict, and assign gemini-4-hydrogen (or gemini-3.8-flash) to sub_agents. |
 

@@ -68,16 +68,19 @@ When scaffolding a new workshop project:
 
 ---
 
-## CLI Command Integration
+## CLI & Natural Language Prompt Integration
 
-Scaffold a new workshop using `harness_cli.py`:
+When a user sends a natural language prompt (in Korean, English, Japanese, or Chinese) asking to create a workshop, do **not** ask the user to manually specify CLI flags (`--name`, `--stack`, `--model`). Immediately execute the zero-config prompt router so the entire workshop package (Starter/Final code, 3-stage Labs, Runbook, Setup Guide, PDF Handout, Google Colab `.ipynb`, Open Codelabs bundle, and Slide Deck) is generated in one shot:
 
 ```bash
-# Initialize standalone scaffold
-uv run harness_cli.py init --name "my-bwai-workshop" --topic "Local RAG with Gemma 4"
+# Zero-Config Natural Language Prompt -> Full 9-Step Workshop Generation (Gemini 4 / Claude / OpenAI / ADK / Flutter / Android auto-inferred)
+uv run harness_cli.py prompt "Claude 최신 모델로 1시간짜리 멀티 에이전트 RAG 워크숍 만들어줘"
+uv run harness_cli.py prompt "OpenAI GPT로 구조화 출력 핸즈온 랩 만들어줘"
+uv run harness_cli.py prompt "Create a 1-hour Gemini 4 Carbon & Google ADK multi-agent workshop"
 
-# One-Click Full Orchestration across all skills
+# Explicit flag overrides (when needed)
 uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
+uv run harness_cli.py init --name "my-bwai-workshop" --topic "Local RAG with Gemma 4"
 ```
 
 ---

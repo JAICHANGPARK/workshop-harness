@@ -1,6 +1,6 @@
-# Multi-Language Google ADK & Agents CLI ADLC Workshop - Hands-on Lab Session Guide
+# Enterprise Multi-Agent SRE with Polyglot ADK - Hands-on Lab Session Guide
 
-This guide outlines the session schedule and step-by-step objectives for the **Multi-Language Google ADK & Agents CLI ADLC Workshop** workshop.
+This guide outlines the session schedule and step-by-step objectives for the **Enterprise Multi-Agent SRE with Polyglot ADK** workshop.
 Write your code in `workshop/01_starter`. If you get stuck, refer to the completed reference solution in `workshop/02_final`.
 
 ---
