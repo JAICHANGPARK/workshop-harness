@@ -417,6 +417,12 @@ def audit_typography_and_security(target_dir: Path):
                 for bad_lit, good_term in awkward_literals.items():
                     if bad_lit in line:
                         literal_findings.append(f"{rel_path}:{line_no} ('{bad_lit}' -> '{good_term}')")
+                for m_dp in re.finditer(r"([가-힣]{1,10})되어집니다", line):
+                    if f"('{m_dp.group(0)}'" not in " ".join(literal_findings):
+                        literal_findings.append(f"{rel_path}:{line_no} ('{m_dp.group(0)}' -> '{m_dp.group(1)}됩니다')")
+                for m_poss in re.finditer(r"([가-힣]{1,10})하는 것이 가능합니다", line):
+                    if f"('{m_poss.group(0)}'" not in " ".join(literal_findings):
+                        literal_findings.append(f"{rel_path}:{line_no} ('{m_poss.group(0)}' -> '{m_poss.group(1)}할 수 있습니다')")
 
     # Scan for accidental hardcoded Google API keys
     ignore_dirs = {".git", ".venv", "node_modules", "__pycache__", ".dart_tool", "build", "tmp", "site"}

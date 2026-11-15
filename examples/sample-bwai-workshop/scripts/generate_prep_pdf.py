@@ -21,6 +21,37 @@ def format_pdf_text(text: str) -> str:
     escaped = re.sub(r'\*(.*?)\*', r'<i>\1</i>', escaped)
     return escaped
 
+def _select_pdf_font(md_files) -> str:
+    """Detect Korean, Japanese, or Chinese content in docs and register a built-in ReportLab CID font."""
+    from reportlab.lib.fonts import addMapping
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.cidfonts import UnicodeCIDFont
+
+    sample = ""
+    for fp in md_files[:10]:
+        try:
+            with open(fp, "r", encoding="utf-8", errors="ignore") as f:
+                sample += f.read(4096)
+        except Exception:
+            continue
+
+    cid_font = None
+    if re.search(r"[\uac00-\ud7a3]", sample):
+        cid_font = "HYGothic-Medium"
+    elif re.search(r"[\u3040-\u30ff]", sample):
+        cid_font = "HeiseiKakuGo-W5"
+    elif re.search(r"[\u4e00-\u9fff]", sample):
+        cid_font = "STSong-Light"
+
+    if cid_font:
+        pdfmetrics.registerFont(UnicodeCIDFont(cid_font))
+        for bold_flag in (0, 1):
+            for italic_flag in (0, 1):
+                addMapping(cid_font, bold_flag, italic_flag, cid_font)
+        return cid_font
+    return "Helvetica"
+
+
 def generate_pdf(docs_dir: str, output_pdf_path: str, preview_dir: str):
     try:
         from reportlab.lib.pagesizes import letter, A4
@@ -37,11 +68,19 @@ def generate_pdf(docs_dir: str, output_pdf_path: str, preview_dir: str):
     os.makedirs(os.path.dirname(output_pdf_path), exist_ok=True)
     os.makedirs(preview_dir, exist_ok=True)
 
+    md_files = sorted(glob.glob(os.path.join(docs_dir, "*.md")))
+    if not md_files:
+        md_files = sorted(glob.glob("*.md"))
+
+    base_font = _select_pdf_font(md_files)
+    is_ko = base_font == "HYGothic-Medium"
+
     styles = getSampleStyleSheet()
     
     title_style = ParagraphStyle(
         'DocTitle',
         parent=styles['Heading1'],
+        fontName=base_font,
         fontSize=24,
         leading=28,
         textColor=colors.HexColor('#1a73e8'),
@@ -51,6 +90,7 @@ def generate_pdf(docs_dir: str, output_pdf_path: str, preview_dir: str):
     h1_style = ParagraphStyle(
         'CustomH1',
         parent=styles['Heading1'],
+        fontName=base_font,
         fontSize=18,
         leading=22,
         textColor=colors.HexColor('#202124'),
@@ -61,6 +101,7 @@ def generate_pdf(docs_dir: str, output_pdf_path: str, preview_dir: str):
     h2_style = ParagraphStyle(
         'CustomH2',
         parent=styles['Heading2'],
+        fontName=base_font,
         fontSize=14,
         leading=18,
         textColor=colors.HexColor('#3c4043'),
@@ -71,6 +112,7 @@ def generate_pdf(docs_dir: str, output_pdf_path: str, preview_dir: str):
     body_style = ParagraphStyle(
         'CustomBody',
         parent=styles['BodyText'],
+        fontName=base_font,
         fontSize=10,
         leading=14,
         textColor=colors.HexColor('#3c4043'),
@@ -89,15 +131,15 @@ def generate_pdf(docs_dir: str, output_pdf_path: str, preview_dir: str):
     story = []
     
     # Title Page
-    story.append(Paragraph("BWAI Workshop Guide & Handout", title_style))
-    story.append(HRFlowable(width="100%", thickness=2, color=colors.HexColor('#1a73e8'), spaceAfter=20))
-    story.append(Paragraph("This document contains full preparation guides and hands-on session materials.", body_style))
+    if is_ko:
+        story.append(Paragraph("핸즈온 워크숍 사전 준비 및 실습 가이드", title_style))
+        story.append(HRFlowable(width="100%", thickness=2, color=colors.HexColor('#1a73e8'), spaceAfter=20))
+        story.append(Paragraph("사전 개발 환경 세팅, 트러블슈팅 FAQ, 핵심 개념 치트시트를 한 권으로 묶은 핸드아웃입니다.", body_style))
+    else:
+        story.append(Paragraph("BWAI Workshop Guide & Handout", title_style))
+        story.append(HRFlowable(width="100%", thickness=2, color=colors.HexColor('#1a73e8'), spaceAfter=20))
+        story.append(Paragraph("This document contains full preparation guides and hands-on session materials.", body_style))
     story.append(Spacer(1, 20))
-
-    md_files = sorted(glob.glob(os.path.join(docs_dir, "*.md")))
-    if not md_files:
-        # Fallback to main README or root md files
-        md_files = sorted(glob.glob("*.md"))
 
     for filepath in md_files:
         filename = os.path.basename(filepath)

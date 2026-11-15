@@ -325,8 +325,235 @@ package = false
             "tmp/\n"
         )
 
+    if final_lang == "ko":
+        ko_setup_guide = f"""# 사전 개발 환경 및 API 키 세팅 가이드
+
+행사장 와이파이 혼잡으로 패키지 설치나 모델 다운로드가 지연되는 일을 막기 위해 **세션 시작 전에 아래 환경 세팅을 미리 마쳐 주세요.**
+
+---
+
+## 1. 필수 도구 설치 (Python 3.10+ 및 Astral `uv`)
+
+이번 실습은 가상환경과 의존성을 빠르게 맞춰주는 **`uv`** 패키지 매니저를 기준으로 진행합니다.
+
+### macOS / Linux
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv sync
+```
+
+### Windows (PowerShell)
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+uv sync
+```
+
+---
+
+## 2. 클라우드 API 키 설정 (`{primary_api_key_env}`)
+
+루트 디렉터리의 `.env.sample`을 `.env`로 복사한 뒤 발급받은 API 키를 입력합니다.
+- **절대 주의**: `.env` 파일은 `.gitignore`에 등록되어 있으므로 GitHub에 커밋하지 마세요.
+
+```bash
+cp .env.sample .env
+```
+
+- **Google Gemini (`GEMINI_API_KEY`)**: [Google AI Studio](https://aistudio.google.com/app/apikey) (기본 모델: `{default_cloud_model}`)
+- **Anthropic Claude (`ANTHROPIC_API_KEY`)**: [Anthropic Console](https://console.anthropic.com/settings/keys) (`claude-sonnet-5-5` / `claude-opus-5-5` / `claude-fable-5-2`)
+- **OpenAI (`OPENAI_API_KEY`)**: [OpenAI Platform](https://platform.openai.com/api-keys) (`gpt-6.1-sol` / `gpt-6-astra`)
+
+---
+
+## 3. 로컬 LLM 런타임 준비 (Ollama 선택 사항)
+
+오프라인 환경이나 로컬 모델 실습을 함께 진행할 경우 노트북 RAM 용량에 맞는 태그를 미리 받아 둡니다.
+
+```bash
+# 로컬 서버 띄우기 (포트 11434)
+ollama serve
+
+# 8GB RAM 노트북
+ollama pull gemma4:e2b
+ollama pull embeddinggemma-2:270m
+
+# 16GB+ RAM 노트북 (권장)
+ollama pull {default_local_model}
+ollama pull {default_local_embedding_model}
+```
+
+---
+
+## 4. 환경 세팅 자동 점검
+
+아래 스크립트를 실행해 `[PASS]`가 출력되면 모든 준비가 끝난 상태입니다.
+
+```bash
+./scripts/check_env.sh
+```
+"""
+        (project_dir / "SETUP_GUIDE.md").write_text(ko_setup_guide, encoding="utf-8")
+        (project_dir / "docs" / "02-prerequisites.md").write_text(ko_setup_guide, encoding="utf-8")
+
+        (project_dir / "docs" / "00-architecture-compatibility-matrix.md").write_text(
+            f"""# 참가자 노트북 OS·아키텍처 호환성 및 폴백 가이드
+
+> 워크숍 주제: **{topic}**
+
+참가자마다 사용하는 노트북 칩셋(Apple Silicon, Intel Mac, Windows x86/ARM64, Linux)이 다르기 때문에, 환경별 주의사항과 우회 경로(Fallback)를 미리 정리했습니다.
+
+---
+
+## 환경별 권장 도구 및 폴백 매트릭스
+
+| OS / 아키텍처 | 권장 실행 환경 | 자주 발생하는 이슈 | 현장 우회 경로 (Fallback) |
+| :--- | :--- | :--- | :--- |
+| **macOS Apple Silicon (`arm64`)** | `uv` + 클라우드 API / Ollama (`{default_local_model}`) | 8GB 기본형 모델에서 대형 모델 로드 시 스왑 발생 | 8GB 기기는 `gemma4:e2b` 또는 클라우드 API(`{default_cloud_model}`) 사용 |
+| **macOS Intel (`x86_64`)** | Ollama CLI (`ollama serve`) / Google Colab | LM Studio에서 Metal GPU 가속 미지원으로 프리징 발생 | [18-intel-mac-prep.md](./18-intel-mac-prep.md) 가이드에 따라 Ollama CLI 또는 Colab 사용 |
+| **Windows (`x86_64` / `ARM64`)** | PowerShell + `uv` + Ollama | PowerShell 실행 정책(`ExecutionPolicy`) 차단 | `powershell -ExecutionPolicy Bypass -File .\\scripts\\check_env.ps1` 실행 |
+| **저사양 / 사내 보안 노트북** | Google Colab (`output/colab/`) | 사내 방화벽·프록시 또는 로컬 설치 권한 제한 | 브라우저에서 `output/colab/workshop_starter.ipynb` 바로 실행 |
+
+## 참고 문서
+- [Astral uv 공식 문서](https://docs.astral.sh/uv/)
+- [Ollama 공식 문서](https://ollama.com)
+""",
+            encoding="utf-8",
+        )
+
+        (project_dir / "docs" / "01-hardware-and-env.md").write_text(
+            f"""# 하드웨어 사양별 모델 선택 및 로컬 포트 가이드
+
+> 워크숍 주제: **{topic}**
+
+노트북 메모리(RAM) 사양에 맞는 로컬 모델 태그와 로컬 추론 서버 포트 규격 안내입니다.
+
+---
+
+## 1. 로컬 LLM 서버 포트 규격
+
+- **Ollama 기본 포트**: `http://localhost:11434` (OpenAI 호환 엔드포인트: `http://localhost:11434/v1`)
+- **LM Studio 기본 포트**: `http://localhost:1234/v1` (코드에서 포트 번호를 혼동하지 않도록 주의하세요)
+
+---
+
+## 2. 노트북 RAM 용량별 권장 모델 (Gemma 4 & EmbeddingGemma 2)
+
+| 노트북 메모리 | 권장 생성 모델 | 권장 멀티모달 임베딩 모델 | 비고 |
+| :--- | :--- | :--- | :--- |
+| **8GB RAM** | `gemma4:e2b` | `embeddinggemma-2:270m` | 가볍고 빠른 응답, OOM(메모리 부족 에러) 방지 |
+| **16GB RAM** | `{default_local_model}` / `gemma4:12b` | `{default_local_embedding_model}` | 표준 핸즈온 실습 권장 사양 |
+| **32GB+ RAM** | `gemma4:26b` (MoE) / `gemma4:31b` | `embeddinggemma-2` | 고성능 멀티 에이전트·추론 실습 가능 |
+| **클라우드 API** | `{default_cloud_model}` | `gemini-embedding-2` | 로컬 사양과 무관하게 즉시 실행 가능 |
+""",
+            encoding="utf-8",
+        )
+
+        (project_dir / "docs" / "20-faq.md").write_text(
+            f"""# 자주 묻는 질문 및 현장 트러블슈팅 (FAQ)
+
+## Q1. 로컬 서버 연결 에러(`Connection refused`)가 발생합니다.
+- **원인**: Ollama 서버가 떠 있지 않거나 포트 번호(`11434` vs `1234`)가 다를 때 발생합니다.
+- **해결**: 새 터미널 탭에서 `ollama serve`를 먼저 띄운 뒤 `curl http://localhost:11434/api/version` 응답을 확인하세요. 클라우드 모드로 진행하려면 `.env`에 `{primary_api_key_env}`만 설정하면 됩니다.
+
+## Q2. 모델 실행 중 메모리 부족(OOM)이 나거나 노트북이 너무 느려집니다.
+- **해결**: 8GB RAM 환경에서는 경량 모델(`ollama pull gemma4:e2b`)로 바꾸거나, 클라우드 모델(`{default_cloud_model}`) 또는 `output/colab/workshop_starter.ipynb` 노트북을 사용하세요.
+
+## Q3. JSON 파싱 에러가 발생합니다.
+- **해결**: 프롬프트만으로 JSON을 요청하면 마크다운 코드 블록(` ```json `)이 섞일 수 있습니다. `Lab 02` 안내대로 SDK의 Structured Output 스키마 옵션을 활성화하세요.
+
+## Q4. API 호출 한도 초과(`429 Rate Limit`)가 뜹니다.
+- **해결**: 짧은 시간 내 반복 호출을 줄이거나, 로컬 Ollama 폴백 경로로 전환해 실습을 이어갈 수 있습니다.
+""",
+            encoding="utf-8",
+        )
+
+        if not any(k in stack for k in ["flutter", "dart", "genui", "a2ui"]):
+            (project_dir / "prompt-pack" / "README.md").write_text(
+                f"""# 핸즈온 프롬프트 팩 (System Prompt & JSON Schema)
+
+실습 중 바로 복사해 사용할 수 있는 시스템 프롬프트와 Structured Output JSON 스키마 모음입니다.
+
+---
+
+## 1. 기본 시스템 프롬프트
+
+```text
+당신은 프로덕션 서비스를 담당하는 시니어 AI 엔지니어입니다.
+사용자의 요청을 분석해 핵심 요약과 실행 가능한 액션 아이템을 정해진 JSON 스키마(WorkshopTaskResult) 형식에 맞춰 정확히 반환하세요.
+```
+
+---
+
+## 2. Structured Output 타겟 스키마 (`WorkshopTaskResult`)
+
+- 사용 모델: 클라우드 `{default_cloud_model}` (코디네이터 `{default_flagship_model}`) / 로컬 `{default_local_model}`
+
+```json
+{{
+  "status": "ok",
+  "model_used": "{default_cloud_model}",
+  "summary": "핵심 분석 요약",
+  "action_items": [
+    "첫 번째 실행 항목",
+    "두 번째 실행 항목",
+    "세 번째 실행 항목"
+  ]
+}}
+```
+""",
+                encoding="utf-8",
+            )
+
     with open(project_dir / "docs" / "18-intel-mac-prep.md", "w", encoding="utf-8") as f:
-        f.write(f"""# Intel Mac (x86_64) Dedicated Preparation & Fallback Guide
+        if final_lang == "ko":
+            f.write(f"""# Intel Mac (x86_64) 참가자 전용 세팅 및 우회 가이드
+
+> 워크숍 주제: **{topic}**
+
+Intel CPU 기반 Mac(`x86_64`)에서는 LM Studio가 Metal GPU 가속을 지원하지 않아 모델 로딩 중 화면이 멈출 수 있습니다. Intel Mac 사용자는 아래 **Ollama CLI** 또는 **Google Colab** 경로를 이용해 주세요.
+
+---
+
+## 방법 A: Ollama CLI 로컬 서버 사용 (로컬 실행 시 권장)
+
+1. **Ollama 설치**: [https://ollama.com/download/Ollama-darwin.zip](https://ollama.com/download/Ollama-darwin.zip) 다운로드 및 설치
+2. **로컬 서버 띄우기**:
+   ```bash
+   ollama serve
+   ```
+3. **사양에 맞는 경량 모델 및 임베딩 모델 다운로드** (새 터미널 탭):
+   - **8GB RAM Intel Mac**:
+     ```bash
+     ollama pull gemma4:e2b
+     ollama pull embeddinggemma-2:270m
+     ```
+   - **16GB+ RAM Intel Mac**:
+     ```bash
+     ollama pull {default_local_model}
+     ollama pull {default_local_embedding_model}
+     ```
+4. **동작 확인**:
+   ```bash
+   curl http://localhost:11434/api/version
+   ```
+
+---
+
+## 방법 B: 설치 없이 Google Colab 클라우드 GPU 사용
+
+발열이나 CPU 점유율이 부담될 경우 브라우저에서 바로 실습할 수 있습니다.
+1. Google Colab에서 `output/colab/workshop_starter.ipynb` 파일을 엽니다.
+2. 좌측 열쇠 아이콘(Colab Secrets)에 `{primary_api_key_env}` (`{default_cloud_model}`)를 등록합니다.
+3. 로컬 리소스 소모 없이 모든 실습 셀을 그대로 실행합니다.
+
+## 참고 링크
+- [Ollama 공식 사이트](https://ollama.com)
+- [Google AI Studio API 키 발급](https://aistudio.google.com)
+- [Anthropic Console API 키 발급](https://console.anthropic.com)
+- [OpenAI Platform API 키 발급](https://platform.openai.com/api-keys)
+""")
+        else:
+            f.write(f"""# Intel Mac (x86_64) Dedicated Preparation & Fallback Guide
 
 > Workshop Topic: **{topic}**
 

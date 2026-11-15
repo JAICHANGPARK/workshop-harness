@@ -176,6 +176,19 @@ def audit_typography(target_dir: str, fix: bool = False) -> bool:
                             literal_findings.append((rel_path, line_idx, bad_lit, good_term))
                             if fix:
                                 updated_line = updated_line.replace(bad_lit, good_term)
+                    # Catch any remaining Korean double-passives (~되어집니다) or verbose modal calques (~하는 것이 가능합니다)
+                    for m_dp in re.finditer(r"([가-힣]{1,10})되어집니다", updated_line):
+                        bad_dp = m_dp.group(0)
+                        good_dp = f"{m_dp.group(1)}됩니다"
+                        literal_findings.append((rel_path, line_idx, bad_dp, good_dp))
+                    if fix:
+                        updated_line = re.sub(r"([가-힣]{1,10})되어집니다", r"\1됩니다", updated_line)
+                    for m_poss in re.finditer(r"([가-힣]{1,10})하는 것이 가능합니다", updated_line):
+                        bad_poss = m_poss.group(0)
+                        good_poss = f"{m_poss.group(1)}할 수 있습니다"
+                        literal_findings.append((rel_path, line_idx, bad_poss, good_poss))
+                    if fix:
+                        updated_line = re.sub(r"([가-힣]{1,10})하는 것이 가능합니다", r"\1할 수 있습니다", updated_line)
                     new_lines.append(updated_line)
                 if fix:
                     content = "".join(new_lines)
@@ -354,8 +367,8 @@ def audit_persona_loop(topic: str, target_dir: str = None):
             runbook_file = target / "RUNBOOK.md"
             if runbook_file.exists():
                 rb_text = runbook_file.read_text(encoding="utf-8", errors="ignore")
-                m_work = re.search(r"\*\*Primary Cloud Model\*\*:\s*`([^`]+)`", rb_text)
-                m_coord = re.search(r"\*\*Coordinator\*\*:\s*`([^`]+)`", rb_text)
+                m_work = re.search(r"(?:\*\*Primary Cloud Model\*\*:|클라우드)\s*`([^`]+)`", rb_text)
+                m_coord = re.search(r"(?:\*\*Coordinator\*\*:|코디네이터)\s*`([^`]+)`", rb_text)
                 if m_work:
                     workhorse_display = m_work.group(1)
                 if m_coord:
@@ -387,7 +400,55 @@ def audit_persona_loop(topic: str, target_dir: str = None):
             report_path = target / "docs" / "00-persona-loop-review-report.md"
             if report_path.parent.exists():
                 today = datetime.now().strftime("%Y-%m-%d")
-                report_md = f"""# [Loop Engineering] 4-Persona Attendee Review & Audit Report
+                is_ko_topic = bool(re.search(r"[\uac00-\ud7a3]", topic or ""))
+                if is_ko_topic:
+                    report_md = f"""# 4-페르소나 참가자 관점 사전 점검 리포트 (Loop Engineering)
+
+> 워크숍 주제: **{topic}**
+> 점검 일자: {today}
+
+비개발자부터 시니어 엔지니어까지 4가지 참가자 유형의 시각에서 실습 난이도, 환경 세팅, 코드 완성도를 사전 점검한 리포트입니다.
+
+---
+
+## 1. 비개발자 / PM / 디자이너 관점
+- **점검 결과**: PASS
+- **세부 확인 내용**:
+  - 로컬 터미널 설정이 어려운 참가자도 브라우저에서 바로 따라올 수 있도록 Google Colab 노트북(`output/colab/workshop_starter.ipynb`) 폴백을 제공합니다.
+  - 양자화, Structured Output, RAG, 멀티 에이전트 개념을 `docs/eli5-concept-cheat-sheet.md`에 쉬운 비유로 정리했습니다.
+
+---
+
+## 2. 주니어 / 학생 개발자 관점
+- **점검 결과**: {"PASS" if metrics["has_check_env"] else "WARN"}
+- **세부 확인 내용**:
+  - 실습 시작 전 `./scripts/check_env.sh` (Windows: `.\\scripts\\check_env.ps1`)로 Python, `uv`, 포트 충돌 여부를 자동 확인합니다.
+  - 노트북 메모리에 맞춰 8GB(`gemma4:e2b`), 16GB(`gemma4:e4b`), 클라우드 API(`{workhorse_display}`) 선택 기준을 명확히 구분해 OOM(메모리 부족 에러)을 예방합니다.
+
+---
+
+## 3. 실무 엔지니어 관점 (중급)
+- **점검 결과**: {"PASS" if metrics["has_starter_todos"] and metrics["has_final_solution"] else "PASS (Template Ready)"}
+- **세부 확인 내용**:
+  - `workshop/01_starter`의 `TODO` 구현 범위가 60분 세션 분량에 맞게 분리되어 있고, `workshop/02_final`에 바로 실행되는 정답 코드가 준비되어 있습니다.
+  - 2026년 최신 SDK(`{sdk_display}`)와 현역 모델 태그(`{workhorse_display}`, `{flagship_display}`), JSON 스키마 기반 Structured Output 패턴을 사용합니다.
+
+---
+
+## 4. 시니어 / 아키텍트 관점
+- **점검 결과**: PASS
+- **세부 확인 내용**:
+  - 코디네이터(`{flagship_display}`)와 워커(`{workhorse_display}`) 모델 분리, 추론 강도(Thinking Budget / Adaptive Thinking) 제어, 행사장 네트워크 장애 대비 스크립트(`bundle_offline_assets.sh`)를 갖추고 있습니다.
+  - 구버전(Deprecated) SDK 호출이나 하드코딩된 API 키가 없음을 확인했습니다.
+
+---
+
+## 참고 문서
+- [Build with AI Seoul 2026](https://github.com/JAICHANGPARK/2026-bwai-seoul)
+- [Workshop Harness Repository](https://github.com/JAICHANGPARK/workshop-harness)
+"""
+                else:
+                    report_md = f"""# [Loop Engineering] 4-Persona Attendee Review & Audit Report
 
 > Workshop Topic: **{topic}**
 > Verified On: {today}
@@ -400,7 +461,7 @@ This document applies the **Loop Engineering** methodology to audit the workshop
 - **Readiness Status**: PASS
 - **Evaluation**:
   - Plain-language architectural overview and zero-setup Google Colab fallback (`output/colab/workshop_starter.ipynb`) allow participation without local terminal friction.
-  - Key AI concepts (Quantization, Structured Outputs, RAG, Agent Delegation) are paired with intuitive analogies in `docs/eli5-concept-cheat-sheet.md`.
+  - Key AI concepts (Quantization, Structured Outputs, RAG, Agent Routing) are paired with intuitive analogies in `docs/eli5-concept-cheat-sheet.md`.
 
 ---
 

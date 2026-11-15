@@ -37,8 +37,8 @@ class TestWorkshopHarness(unittest.TestCase):
         sample_md = self.temp_dir / "guide.md"
         sample_md.write_text(
             f"# Title{em}Subtitle\n"
-            "KO: 손으로 하는 실험실과 생각 예산, 건전성 검사, API 키 위생, 궤적 평가가 생성되어집니다.\n"
-            "KO2: 본 저장소는 구조화 출력을 테스트하는 것이 가능합니다.\n"
+            "KO: 손으로 하는 실험실과 생각 예산, 건전성 검사, API 키 위생, 궤적 평가가 검출되어집니다.\n"
+            "KO2: 본 저장소는 구조화 출력을 실행하는 것이 가능합니다.\n"
             "JA: 手で触る実験室と走る本を用意します。\n"
             "ZH: 手把手的实验室与骨架代码。\n",
             encoding="utf-8",
@@ -56,8 +56,8 @@ class TestWorkshopHarness(unittest.TestCase):
         self.assertIn("Trajectory Eval (실행 경로 평가)", fixed_text)
         self.assertIn("Structured Output (JSON 스키마 응답)", fixed_text)
         self.assertIn("이 레포지토리는", fixed_text)
-        self.assertIn("할 수 있습니다", fixed_text)
-        self.assertIn("생성됩니다", fixed_text)
+        self.assertIn("실행할 수 있습니다", fixed_text)
+        self.assertIn("검출됩니다", fixed_text)
         self.assertIn("Hands-on Lab (ハンズオンラボ)", fixed_text)
         self.assertIn("Runbook (ランブック)", fixed_text)
         self.assertIn("Hands-on Lab (实战工作坊)", fixed_text)
@@ -288,11 +288,20 @@ class TestWorkshopHarness(unittest.TestCase):
         self.assertIn("anthropic>=2.8.0", (built_dir / "pyproject.toml").read_text(encoding="utf-8"))
         readme_ko = (built_dir / "README.md").read_text(encoding="utf-8")
         runbook_ko = (built_dir / "RUNBOOK.md").read_text(encoding="utf-8")
+        setup_ko = (built_dir / "SETUP_GUIDE.md").read_text(encoding="utf-8")
+        faq_ko = (built_dir / "docs" / "20-faq.md").read_text(encoding="utf-8")
         lab1_ko = (built_dir / "workshop" / "03_labs" / "01_lab_environment_and_client.md").read_text(encoding="utf-8")
         self.assertIn("레포지토리입니다", readme_ko)
         self.assertNotIn("본 저장소는", readme_ko)
         self.assertIn("진행자 및 TA 런북 (Runbook)", runbook_ko)
+        self.assertIn("사전 개발 환경 및 API 키 세팅 가이드", setup_ko)
+        self.assertIn("자주 묻는 질문 및 현장 트러블슈팅", faq_ko)
         self.assertIn("실습 목표", lab1_ko)
+        harness_cli.audit_persona_loop("클로드 최신 모델로 멀티 에이전트 워크숍", str(built_dir))
+        persona_ko = (built_dir / "docs" / "00-persona-loop-review-report.md").read_text(encoding="utf-8")
+        self.assertIn("claude-sonnet-5-5", persona_ko)
+        self.assertIn("4-페르소나 참가자 관점 사전 점검 리포트", persona_ko)
+        self.assertTrue(harness_cli.build_pdf(str(built_dir)))
         self.assertTrue(harness_cli.test_workshop(str(built_dir)))
 
         gemma_dir = harness_cli.generate_from_prompt(
