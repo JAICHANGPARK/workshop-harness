@@ -1,20 +1,20 @@
 # Workshop Harness (한국어)
 
-> **AI 에이전트 하네스, 21개 전문 스킬 모음 및 CLI 자동화 툴킷**
+> **AI 에이전트 하네스, 22개 전문 스킬 모음 및 CLI 자동화 툴킷**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![uv Powered](https://img.shields.io/badge/python%20package%20manager-uv-de1f88.svg)](https://astral.sh/uv)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![Antigravity Skills](https://img.shields.io/badge/Antigravity-21%20Agent%20Skills-purple.svg)](https://github.com/JAICHANGPARK)
-[![Release](https://img.shields.io/badge/release-v2026.11.13-green.svg)](https://github.com/JAICHANGPARK/workshop-harness/releases)
+[![Antigravity Skills](https://img.shields.io/badge/Antigravity-22%20Agent%20Skills-purple.svg)](https://github.com/JAICHANGPARK)
+[![Release](https://img.shields.io/badge/release-v2026.11.14-green.svg)](https://github.com/JAICHANGPARK/workshop-harness/releases)
 
 ---
 
 ## 개요
 
-**Workshop Harness**는 기술 워크숍(Build with AI, DevFest, 커뮤니티 개발자 랩)을 주최하는 오거나이저, 발표자, 퍼실리테이터, 그리고 TA (Teaching Assistant, 실습 코치)를 위한 **원클릭 AI 에이전트 오케스트레이션 (Multi-Agent Orchestration) 툴킷**입니다.
+**Workshop Harness**는 기술 워크숍(Build with AI, DevFest, 커뮤니티 핸즈온 세션)을 준비하는 오거나이저, 발표자, 그리고 TA를 위한 **원클릭 AI 워크숍 자동화 툴킷**입니다.
 
-[AGENTS.md 표준 명세](https://agents.md/)를 준수하여 **Google Antigravity**, **Gemini CLI**, **Anthropic Claude Code**, **OpenAI Codex / ChatGPT**, **Cursor**, **Aider** 등 모든 AI 코딩 에이전트와 네이티브 상호운용성을 제공합니다. 또한 한국어·일본어·중국어 문서 요청 시 어색한 기계 번역식 직역이나 번역투 문법(`~되어집니다`, `~하는 것이 가능합니다` 등)을 배제하고 **기술 용어 영어 원문 우선 표기 + 현업 개발자 용어 병기 (`English Original (개발자 용어)`)** 및 자연스러운 실무 개발자 문법을 강제합니다 ([용어 및 문법 스타일 가이드](agents-spec/terminology-and-style-guide.md)).
+[AGENTS.md 표준 명세](https://agents.md/)를 준수하여 **Google Antigravity**, **Gemini CLI**, **Anthropic Claude Code**, **OpenAI Codex / ChatGPT**, **Cursor**, **Aider** 등 모든 AI 코딩 에이전트와 바로 연동됩니다. 또한 한국어·일본어·중국어 자료를 생성할 때 어색한 영문 직역이나 번역투 문장(`~되어집니다`, `~하는 것이 가능합니다` 등)을 배제하고, 현업 개발자들이 실제로 쓰는 자연스러운 표현과 용어로 작성하도록 검증 게이트를 내장하고 있습니다 ([실무 개발자 언어 및 스타일 가이드](agents-spec/terminology-and-style-guide.md)).
 
 ---
 

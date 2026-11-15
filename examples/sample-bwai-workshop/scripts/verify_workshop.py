@@ -297,45 +297,68 @@ def audit_typography_and_security(target_dir: Path):
     leaked_key_findings = []
 
     awkward_literals = {
-        # Korean (KO) prohibited literal terms & translationese grammar
-        "손으로 하는 실험실": "Hands-on Lab (핸즈온 랩)",
-        "달리는 책": "Runbook (런북)",
-        "발판 설치": "Scaffolding (스캐폴딩)",
-        "뼈대 공사": "Scaffolding (스캐폴딩)",
-        "뼈대 코드": "Starter / Boilerplate Code (스타터 / 보일러플레이트 코드)",
-        "생각 예산": "Thinking Budget (추론 예산)",
-        "사고 예산": "Thinking Budget (추론 예산)",
-        "구조화된 출력물": "Structured Outputs (구조화 출력)",
+        # Korean (KO) prohibited literal calques & translationese -> real-world developer vernacular
+        "손으로 하는 실험실": "핸즈온 실습 (Hands-on Lab)",
+        "달리는 책": "런북 (Runbook)",
+        "발판 설치": "스캐폴딩 (Scaffolding)",
+        "뼈대 공사": "스캐폴딩 (Scaffolding)",
+        "뼈대 코드": "스타터 코드 / 보일러플레이트",
+        "상투적인 판박이 코드": "보일러플레이트 코드",
+        "생각 예산": "Thinking Budget (추론 토큰 한도)",
+        "사고 예산": "Thinking Budget (추론 토큰 한도)",
+        "추론 예산": "Thinking Budget (추론 토큰 한도)",
+        "구조화된 출력물": "Structured Output (JSON 스키마 응답)",
+        "구조화 출력": "Structured Output (JSON 스키마 응답)",
         "도구 부르기": "Tool Calling (툴 콜링)",
         "함수 부르기": "Function Calling (함수 호출)",
-        "검색 증강된 생성": "RAG (Retrieval-Augmented Generation, 검색 증강 생성)",
-        "끼워넣기 벡터": "Embedding (임베딩)",
-        "미세 조정하기": "Fine-tuning (파인튜닝)",
-        "다중 대리인 지휘": "Multi-Agent Orchestration (멀티 에이전트 오케스트레이션)",
-        "하위 대리인 넘기기": "Sub-Agent Delegation (서브 에이전트 위임)",
-        "대리인 개발 키트": "ADK (Agent Development Kit, 에이전트 개발 키트)",
-        "궤도 채점": "Trajectory Evaluation (궤적 평가)",
-        "경로 채점": "Trajectory Evaluation (궤적 평가)",
-        "연기 시험": "Smoke Test (스모크 테스트)",
-        "후퇴 경로": "Fallback (폴백)",
-        "비상 후퇴": "Fallback (폴백)",
-        "상투적인 판박이 코드": "Boilerplate Code (보일러플레이트 코드)",
-        "의존성 주사": "Dependency Injection (의존성 주입)",
-        "차가운 시작": "Cold Start (콜드 스타트)",
-        "기억 장치 넘침": "OOM (Out-Of-Memory, 메모리 부족 에러)",
-        "부서지는 변경": "Breaking Changes (브레이킹 체인지)",
-        "깨지는 변경": "Breaking Changes (브레이킹 체인지)",
-        "속도 제한 걸림": "Rate Limit (레이트 리밋)",
-        "맥락 창문": "Context Window (컨텍스트 윈도우)",
-        "문맥 창문": "Context Window (컨텍스트 윈도우)",
-        "체제 지시문": "System Instruction (시스템 프롬프트)",
-        "인간 고리 안": "Human-in-the-Loop (HITL, 사용자 승인 체크포인트)",
-        "사람을 루프에": "Human-in-the-Loop (HITL, 사용자 승인 체크포인트)",
+        "검색 증강된 생성": "RAG 파이프라인",
+        "끼워넣기 벡터": "임베딩 (Embedding)",
+        "미세 조정하기": "파인튜닝 (Fine-tuning)",
+        "다중 대리인 지휘": "멀티 에이전트 오케스트레이션",
+        "하위 대리인 넘기기": "서브 에이전트 라우팅",
+        "서브 에이전트 위임": "서브 에이전트 라우팅",
+        "대리인 개발 키트": "ADK (Agent Development Kit)",
+        "궤도 채점": "Trajectory Eval (실행 경로 평가)",
+        "경로 채점": "Trajectory Eval (실행 경로 평가)",
+        "궤적 평가": "Trajectory Eval (실행 경로 평가)",
+        "연기 시험": "스모크 테스트 (Smoke Test)",
+        "연기 테스트": "스모크 테스트 (Smoke Test)",
+        "건전성 검사": "동작 확인 (Smoke Test)",
+        "건전성 확인": "동작 확인 (Smoke Test)",
+        "제정신 검사": "동작 확인 (Smoke Test)",
+        "API 키 위생": "API 키 보안 점검",
+        "키 위생": "API 키 보안 점검",
+        "종단 간": "End-to-End (E2E)",
+        "끝에서 끝까지": "End-to-End (E2E)",
+        "후퇴 경로": "폴백 (Fallback)",
+        "비상 후퇴": "폴백 (Fallback)",
+        "대체 작동": "폴백 (Fallback)",
+        "의존성 주사": "의존성 주입 (DI)",
+        "차가운 시작": "콜드 스타트 (Cold Start)",
+        "기억 장치 넘침": "OOM (메모리 부족 에러)",
+        "부서지는 변경": "브레이킹 체인지 (Breaking Changes)",
+        "깨지는 변경": "브레이킹 체인지 (Breaking Changes)",
+        "파괴적 변경": "브레이킹 체인지 (Breaking Changes)",
+        "속도 제한 걸림": "Rate Limit (호출 한도 초과)",
+        "맥락 창문": "컨텍스트 윈도우 (Context Window)",
+        "문맥 창문": "컨텍스트 윈도우 (Context Window)",
+        "체제 지시문": "시스템 프롬프트 (System Prompt)",
+        "인간 고리 안": "Human-in-the-Loop (사용자 승인 단계)",
+        "사람을 루프에": "Human-in-the-Loop (사용자 승인 단계)",
+        "인간 루프": "Human-in-the-Loop (사용자 승인 단계)",
+        "박스를 벗어나자마자": "별도 설정 없이 바로",
+        "일급 시민": "기본 내장 기능",
+        "본 저장소는": "이 레포지토리는",
+        "당신의 API": ".env의 API",
+        "하는 것이 가능합니다": "할 수 있습니다",
         "생성되어집니다": "생성됩니다",
         "실행되어집니다": "실행됩니다",
         "설정되어집니다": "설정됩니다",
         "호출되어집니다": "호출됩니다",
         "전달되어집니다": "전달됩니다",
+        "검증되어집니다": "검증됩니다",
+        "변환되어집니다": "변환됩니다",
+        "처리되어집니다": "처리됩니다",
         # Japanese (JA) prohibited literal terms
         "手で触る実験室": "Hands-on Lab (ハンズオンラボ)",
         "走る本": "Runbook (ランブック)",
@@ -345,6 +368,7 @@ def audit_typography_and_security(target_dir: Path):
         "道具を呼ぶ": "Tool Calling (ツール呼び出し)",
         "代理人開発キット": "ADK (Agent Development Kit)",
         "煙の試験": "Smoke Test (スモークテスト)",
+        "健全性検査": "動作確認 (Smoke Test)",
         "後退経路": "Fallback (フォールバック)",
         "冷たい開始": "Cold Start (コールドスタート)",
         # Chinese (ZH) prohibited literal terms
@@ -357,10 +381,19 @@ def audit_typography_and_security(target_dir: Path):
         "工具呼叫": "Tool Calling (工具调用)",
         "代理人开发套件": "ADK (Agent 开发套件)",
         "烟雾测试": "Smoke Test (冒烟测试)",
+        "健全性检查": "连通性验证 (Smoke Test)",
         "后退路径": "Fallback (回退策略)",
         "冰冷启动": "Cold Start (冷启动)",
     }
-    ignore_literal_files = {"harness_cli.py", "registry.py", "verify_workshop.py", "terminology-and-style-guide.md", "test_harness.py"}
+    ignore_literal_files = {
+        "harness_cli.py",
+        "registry.py",
+        "router.py",
+        "auditors.py",
+        "verify_workshop.py",
+        "terminology-and-style-guide.md",
+        "test_harness.py",
+    }
     api_key_pattern = re.compile(r"(?:AIzaSy[A-Za-z0-9_-]{25,}|sk-ant-[A-Za-z0-9_-]{32,}|sk-proj-[A-Za-z0-9_-]{32,})")
     safe_placeholders = {"AIzaSyYourGeminiApiKeyHere", "AIzaSyYourGeneratedApiKeyHere"}
 
@@ -376,7 +409,10 @@ def audit_typography_and_security(target_dir: Path):
                     em_dash_findings.append(f"{rel_path}:{line_no}")
         if md_file.name not in ignore_literal_files:
             for line_no, line in enumerate(content.splitlines(), 1):
-                if any(m in line.lower() for m in ["❌", "prohibited", "never", "직역 금지", "awkward literal"]):
+                if any(
+                    m in line.lower()
+                    for m in ["❌", "prohibited", "never", "직역 금지", "awkward literal", "번역투", "지양", "avoid"]
+                ):
                     continue
                 for bad_lit, good_term in awkward_literals.items():
                     if bad_lit in line:

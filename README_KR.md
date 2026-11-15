@@ -7,8 +7,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![uv Powered](https://img.shields.io/badge/python%20package%20manager-uv-de1f88.svg)](https://astral.sh/uv)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![Antigravity Skills](https://img.shields.io/badge/Antigravity-21%20Agent%20Skills-purple.svg)](https://github.com/JAICHANGPARK)
-[![Release](https://img.shields.io/badge/release-v2026.11.13-green.svg)](https://github.com/JAICHANGPARK/workshop-harness/releases)
+[![Antigravity Skills](https://img.shields.io/badge/Antigravity-22%20Agent%20Skills-purple.svg)](https://github.com/JAICHANGPARK)
+[![Release](https://img.shields.io/badge/release-v2026.11.14-green.svg)](https://github.com/JAICHANGPARK/workshop-harness/releases)
 
 Languages: [English](./README.md) | [Korean](./README_KR.md) | [Japanese](./README_JA.md) | [Chinese](./README_ZH.md)
 
@@ -41,9 +41,10 @@ cd workshop-harness
 chmod +x scripts/install_skills.sh
 ./scripts/install_skills.sh
 
-# 3. 자연어 프롬프트 한 줄로 전체 워크숍 패키지 즉시 생성 (Gemini 4 / Claude / OpenAI 최신 모델 및 기술 스택 자동 추론!)
+# 3. 자연어 프롬프트 한 줄로 전체 워크숍 패키지 즉시 생성 (Gemini 4 / Gemma 4 / Claude / OpenAI 최신 모델 및 기술 스택 자동 추론!)
 uv run harness_cli.py prompt "Claude 최신 모델로 1시간짜리 멀티 에이전트 RAG 워크숍 만들어줘"
-uv run harness_cli.py prompt "OpenAI GPT로 구조화 출력 핸즈온 랩 만들어줘"
+uv run harness_cli.py prompt "OpenAI GPT로 Structured Output 핸즈온 실습 만들어줘"
+uv run harness_cli.py prompt "Gemma 4와 EmbeddingGemma 2로 로컬 멀티모달 RAG 워크숍 만들어줘"
 
 # (또는 명시적 플래그 지정 방식)
 uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG with Gemma 4" --stack "python,ollama,docker"
@@ -110,7 +111,7 @@ uv run harness_cli.py generate-all --name "my-bwai-workshop" --topic "Local RAG 
 - **Anthropic Claude (Claude Code CLI & Desktop)**: [`CLAUDE.md`](./CLAUDE.md)
 - **Google Antigravity & Gemini CLI**: `.gemini/skills/` 표준 네이티브 스킬 지원
 - **OpenAI Codex, ChatGPT, Aider & Cursor**: [`AGENTS.md`](./AGENTS.md) 지침 지원
-- **다국어 실무 개발자 용어 및 자연스러운 문법 원칙 (`EN` / `KO` / `JA` / `ZH`)**: 영문 문서는 자연스러운 기술 영어로 작성하며, 한국어·일본어·중국어 사용자가 문서를 요청할 때는 어색한 기계 번역식 직역이나 번역투 문법(`~되어집니다`, `~하는 것이 가능합니다` 등)을 배제하고 **기술 용어 영어 원문 우선 표기 + 현업 개발자 용어 병기 (`English Original (개발자 용어)`)** 및 현지 개발자 문법을 강제합니다 (`audit-typography` 및 [`docs/agents-spec/terminology-and-style-guide.md`](./docs/agents-spec/terminology-and-style-guide.md) 참조).
+- **현업 개발자 언어 원칙 및 영문 직역·번역투 차단 (`EN` / `KO` / `JA` / `ZH`)**: 영문 문서는 간결한 기술 영어로 작성하며, 한국어·일본어·중국어 문서 요청 시에는 영문 직역이나 번역투 문장(`~되어집니다`, `~하는 것이 가능합니다`, `구조화 출력`, `추론 예산`, `궤적 평가`, `건전성 검사` 등)을 원천 배제하고 실제 현업 개발자들이 쓰는 표현(`스타터 코드`, `정답 코드`, `스모크 테스트`, `Structured Output`, `Thinking Budget`, `Trajectory Eval`, `폴백`)으로 생성합니다 (`audit-typography` 및 [`docs/agents-spec/terminology-and-style-guide.md`](./docs/agents-spec/terminology-and-style-guide.md) 참조).
 - **전체 통합 가이드**: [`docs/ai-agent-interoperability-guide.md`](./docs/ai-agent-interoperability-guide.md)
 
 ---
@@ -291,7 +292,7 @@ my-workshop-repo/
 
 ## 변경 이력 (Changelog)
 
-전체 릴리스 및 변경 내역은 [CHANGELOG.md](./CHANGELOG.md)에서 확인할 수 있습니다 (최신 버전: `v2026.11.13`).
+전체 릴리스 및 변경 내역은 [CHANGELOG.md](./CHANGELOG.md)에서 확인할 수 있습니다 (최신 버전: `v2026.11.14`).
 
 ---
 

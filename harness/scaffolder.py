@@ -162,37 +162,37 @@ package = false
     (project_dir / "pyproject.toml").write_text(workshop_pyproject, encoding="utf-8")
 
     if final_lang == "ko":
-        runbook_md = f"""# Facilitator & TA Runbook (런북): {name}
+        runbook_md = f"""# 진행자 및 TA 런북 (Runbook): {name}
 
-- **Session Title**: {topic}
-- **Tech Stack**: `{stack_str}`
-- **Primary Cloud Provider**: {provider_label} (`{primary_api_key_env}`)
-- **Primary Cloud Model**: `{default_cloud_model}` | **Coordinator**: `{default_flagship_model}` | **Local Model**: `{default_local_model}` | **Local Multimodal Embedding**: `{default_local_embedding_model}`
-- **Facilitator**: Workshop Lead Facilitator
-- **Teaching Assistants (TA)**: Roaming TA Team
+- **세션 주제**: {topic}
+- **기술 스택**: `{stack_str}`
+- **기본 클라우드 프로바이더**: {provider_label} (`{primary_api_key_env}`)
+- **사용 모델**: 클라우드 `{default_cloud_model}` | 코디네이터 `{default_flagship_model}` | 로컬 `{default_local_model}` | 로컬 멀티모달 임베딩 `{default_local_embedding_model}`
+- **발표자 (Facilitator)**: 리드 진행자
+- **현장 서포트 (TA)**: 실습 지원 TA 팀
 
 ---
 
-## Session Timeline (60분 진행 타임라인)
+## 세션 타임라인 (총 60분)
 
-### 00m - 10m: 오프닝 및 개발 환경 검증
-- **Facilitator**: `SETUP_GUIDE.md` 사전 설정 점검, 아키텍처 개요 소개, `./scripts/check_env.sh` 실행 시연을 진행합니다.
-- **TA**: 환경 점검 스크립트 오류가 발생한 참가자를 1:1로 지원하고, 저사양 노트북 참가자는 `output/colab/workshop_starter.ipynb` **Fallback (폴백)** 경로로 안내합니다.
+### 00m - 10m: 오프닝 및 개발 환경 점검
+- **Facilitator**: `SETUP_GUIDE.md` 사전 준비 사항을 간단히 짚어주고, 전체 아키텍처와 `./scripts/check_env.sh` 실행 화면을 시연합니다.
+- **TA**: 환경 점검 스크립트에서 에러가 난 참가자를 1:1로 도와주고, 저사양 노트북 참가자는 `output/colab/workshop_starter.ipynb` (Google Colab 폴백)으로 바로 안내합니다.
 
-### 10m - 25m: Lab 01 - 환경 설정 및 클라이언트 Smoke Test (스모크 테스트)
-- **Facilitator**: `workshop/01_starter` **Starter Code (스타터 코드)** 구조를 설명하고 `TODO: [Lab 01]` 구현을 시연합니다.
-- **TA**: `.env` 파일의 `{primary_api_key_env}` 설정 또는 로컬 LLM 서버(`ollama serve`, 포트 `11434`) 기동을 지원합니다.
+### 10m - 25m: Lab 01 - 환경 설정 및 클라이언트 연결 확인 (Smoke Test)
+- **Facilitator**: `workshop/01_starter` 스타터 코드 구조를 설명하고 `TODO: [Lab 01]` 연결 코드를 라이브로 작성합니다.
+- **TA**: `.env` 파일의 `{primary_api_key_env}` 입력이나 로컬 LLM 서버(`ollama serve`, 포트 `11434`) 실행을 돕습니다.
 
-### 25m - 45m: Lab 02 - Structured Outputs (구조화 출력) 및 Tool Calling (툴 콜링)
-- **Facilitator**: `prompt-pack/README.md`의 타입 안전 Output Schema 정의와 서브 에이전트·도구 연동을 시연합니다.
-- **TA**: 스키마 검증 오류 또는 포트 충돌 이슈를 해결합니다.
+### 25m - 45m: Lab 02 - Structured Output (JSON 스키마 응답) 및 Tool Calling
+- **Facilitator**: `prompt-pack/README.md`의 JSON 스키마 정의와 툴 콜링·서브 에이전트 라우팅 구현을 시연합니다.
+- **TA**: 스키마 검증 에러나 로컬 포트(`11434` / `1234`) 충돌 이슈를 빠르게 해결합니다.
 
-### 45m - 55m: Lab 03 - End-to-End 파이프라인 완성 및 검증
-- **Facilitator**: `workshop/02_final` 레퍼런스 솔루션을 공유하고 `python3 scripts/verify_workshop.py .` 무결성 검증을 실행합니다.
-- **TA**: 참가자별 실습 완료 체크포인트를 확인합니다.
+### 45m - 55m: Lab 03 - End-to-End 파이프라인 실행 및 동작 검증
+- **Facilitator**: `workshop/02_final` 정답 코드를 함께 살펴보고 `python3 scripts/verify_workshop.py .` 검증 스크립트를 실행합니다.
+- **TA**: 참가자별 최종 실행 결과를 확인합니다.
 
 ### 55m - 60m: Q&A 및 마무리
-- **Facilitator**: 세션 핵심 내용을 정리하고 PDF 핸드아웃(`output/pdf/`)과 피드백 설문을 안내합니다.
+- **Facilitator**: 핵심 내용을 정리하고 PDF 핸드아웃(`output/pdf/`)과 피드백 설문 링크를 공유합니다.
 """
     elif final_lang == "ja":
         runbook_md = f"""# Facilitator & TA Runbook (ランブック): {name}
@@ -374,7 +374,34 @@ If your Intel Mac experiences thermal throttling or high CPU load:
 """)
 
     with open(project_dir / "docs" / "eli5-concept-cheat-sheet.md", "w", encoding="utf-8") as f:
-        f.write(f"""# ELI5 (Explain Like I'm 5) AI Concept Cheat Sheet
+        if final_lang == "ko":
+            f.write(f"""# 핵심 AI 엔지니어링 개념 치트시트 (ELI5)
+
+> 워크숍 주제: **{topic}**
+> 기본 클라우드 모델: `{default_cloud_model}` | 코디네이터 모델: `{default_flagship_model}` | 로컬 모델: `{default_local_model}`
+
+처음 접하는 참가자도 직관적으로 이해할 수 있도록 핵심 개념을 **비유 -> 실제 동작 원리 -> 실습 적용** 3단계로 정리했습니다.
+
+---
+
+## 한눈에 보는 핵심 개념
+
+| 핵심 개념 | 직관적인 비유 | 실제 동작 원리 | 핸즈온 실습 포인트 |
+| :--- | :--- | :--- | :--- |
+| **로컬 LLM (`{default_local_model}`)** | 와이파이를 꺼도 내 노트북 안에서 바로 답해주는 전담 사서 | 양자화된 가중치를 로컬 GPU/CPU 메모리에 올려 `localhost:11434` HTTP API로 서빙 | `ollama serve`로 로컬 서버를 띄우고 네트워크 지연 없이 호출 |
+| **양자화 (Quantization, 4-bit)** | 두꺼운 겨울 패딩을 압축팩에 넣어 기내용 캐리어에 쏙 넣는 것 | 16-bit 부동소수점 가중치를 4-bit 정수로 압축해 메모리 점유율을 약 70% 절감 | 8GB RAM 노트북에서 `gemma4:e2b`를 사용해 OOM(메모리 부족 에러) 방지 |
+| **Structured Output (JSON 스키마 응답)** | 빈 종이 대신 칸이 정해진 신청서 양식을 주고 빈칸만 채우게 하는 것 | Pydantic / Zod 스키마에 맞춰 토큰 생성 결과를 고정된 JSON 구조로 강제 | `Lab 02`에서 정규식 파싱 없이 타입 안전하게 응답 처리 |
+| **RAG 파이프라인** | 시험 문제를 풀 때 관련 교재 페이지를 먼저 펼쳐 확인한 뒤 답을 쓰는 오픈북 시험 | 멀티모달 임베딩(`gemini-embedding-2` / 로컬 `{default_local_embedding_model}` 768차원)으로 관련 문서를 검색해 프롬프트에 주입 | 환각(Hallucination)을 줄이고 검증된 문서를 근거로 응답 생성 |
+| **멀티 에이전트 오케스트레이션** | 총괄 셰프(`{default_flagship_model}`)가 파트별 요리사(`{default_cloud_model}`)에게 업무를 나눠 맡기는 주방 | 루트 에이전트가 하위 전문 에이전트(Sub-agent)와 FunctionTool로 작업을 라우팅 | `Lab 02 & Lab 03`에서 서브 에이전트 라우팅과 Trajectory Eval(실행 경로 평가) 확인 |
+
+## 참고 문서
+- [Google Gemini API 공식 문서](https://ai.google.dev/gemini-api/docs)
+- [Anthropic Claude 공식 문서](https://docs.anthropic.com)
+- [OpenAI Platform 공식 문서](https://platform.openai.com/docs)
+- [Google Agent Development Kit (ADK)](https://adk.dev)
+""")
+        else:
+            f.write(f"""# ELI5 (Explain Like I'm 5) AI Concept Cheat Sheet
 
 > Workshop Topic: **{topic}**
 > Primary Cloud Model: `{default_cloud_model}` | Flagship Reasoning: `{default_flagship_model}` | Local Model: `{default_local_model}`
@@ -409,14 +436,13 @@ This cheat sheet translates core AI engineering concepts into intuitive everyday
     agent_rules_body = """
 ## Mandatory Rules for AI Coding Agents
 
-1. **Original Technical Term First, Real-World Developer Terminology & Natural Developer Grammar (기술 용어 원어 우선 표기, 실무 개발자 용어/문법 사용 & 직역·번역투 금지)**:
+1. **Real-World Developer Language & Anti-Translationese Rule (실무 개발자 용어/문법 사용 & 영문 직역·번역투 절대 금지)**:
    - **English (EN)**: Write in clear, idiomatic, direct technical English.
-   - **Korean (KO), Japanese (JA), and Chinese (ZH) Requests**: Whenever a user requests documentation, `.md` files, slide decks, setup guides, runbooks, or **code comments** in Korean, Japanese, or Chinese, **NEVER perform awkward literal / word-for-word machine translations or unnatural translationese grammar (번역투 문법, 不自然な直訳調, 生硬的机翻腔)**.
-   - **For technical terms, use the original English term first and append the developer-friendly translation in parentheses (`English Original (개발자 친화적 용어)`), and write in natural sentence structures used by local software engineers**:
-     - **Korean (KO)**: **Hands-on Lab (핸즈온 랩)**, **Scaffolding (스캐폴딩)**, **Runbook (런북)**, **Starter / Boilerplate Code (스타터 / 보일러플레이트 코드)**, **Prompt Engineering (프롬프트 엔지니어링)**, **Structured Outputs (구조화 출력 / JSON Schema)**, **Tool Calling / Function Calling (툴 콜링 / 함수 호출)**, **RAG (Retrieval-Augmented Generation, 검색 증강 생성)**, **Embedding (임베딩)**, **Quantization (양자화)**, **Thinking Budget (추론 예산)**, **Multi-Agent Orchestration (멀티 에이전트 오케스트레이션)**, **Sub-Agent Delegation (서브 에이전트 위임)**, **Trajectory Evaluation (궤적 평가)**, **Dependency Injection (의존성 주입)**, **Fallback (폴백)**, **Breaking Changes (브레이킹 체인지)**. Avoid double passives (`~되어집니다` -> `~됩니다`) and awkward literal phrases ("손으로 하는 실험실", "달리는 책", "발판 설치", "뼈대 코드", "생각 예산", "도구 부르기", "대리인 개발 키트").
-     - **Japanese (JA)**: 「Hands-on Lab (ハンズオンラボ)」, 「Scaffolding (スキャフォールディング)」, 「Starter / Boilerplate Code (スターターコード)」, 「Structured Outputs (構造化出力)」, 「Thinking Budget (推論バジェット)」, 「Runbook (ランブック)」, 「Smoke Test (スモークテスト)」.
-     - **Chinese (ZH)**: 「Hands-on Lab (实战工作坊)」, 「Scaffolding (脚手架)」, 「Starter / Boilerplate Code (Starter 初始代码 / 样板代码)」, 「Structured Outputs (结构化输出)」, 「Thinking Budget (推理预算)」, 「Runbook (演练手册)」, 「Smoke Test (冒烟测试)」.
-   - **Code Comments & Identifiers**: Keep all SDK symbols, class/function names, and CLI flags in their exact English form (`root_agent`, `LlmAgent`, `FunctionTool`, `thinking_budget`, `response_schema`), and write comments using original English technical terms paired with developer-friendly explanations.
+   - **Korean (KO), Japanese (JA), and Chinese (ZH) Requests**: Whenever a user requests documentation, `.md` files, slide decks, setup guides, runbooks, or **code comments** in Korean, Japanese, or Chinese, **NEVER generate awkward English-to-local literal calques or translationese grammar (영문 직역 및 번역투 문장 절대 금지)**. Always write the way local software engineers actually speak and write in production:
+     - **Korean (KO) Real-World Developer Language**: Use natural developer vernacular and widely used English/loanword terms as-is (`핸즈온 실습`, `레포지토리`, `스타터 코드`, `정답 코드`, `보일러플레이트`, `스캐폴딩`, `런북`, `스모크 테스트 / 동작 확인`, `폴백`, `Structured Output (JSON 스키마 응답)`, `Tool Calling / Function Calling`, `RAG 파이프라인`, `임베딩`, `양자화`, `Thinking Budget (추론 토큰 한도)`, `멀티 에이전트 오케스트레이션`, `서브 에이전트 라우팅`, `Trajectory Eval (실행 경로 평가)`, `End-to-End (E2E)`, `브레이킹 체인지`, `API 키 보안 점검`). Never output literal English calques or translationese (❌ 직역 금지: "손으로 하는 실험실", "달리는 책", "뼈대 코드", "구조화 출력", "추론 예산", "생각 예산", "궤적 평가", "서브 에이전트 위임", "건전성 검사", "API 키 위생", "종단 간", "파괴적 변경", "본 저장소는 ~를 포함합니다", "당신의 API 키", "~되어집니다", "~하는 것이 가능합니다").
+     - **Japanese (JA)**: Use natural Japanese engineer terminology (`ハンズオンラボ`, `スターターコード`, `リファレンス実装`, `ランブック`, `動作確認 / スモークテスト`, `Structured Outputs (構造化出力)`, `Tool Calling`, `Thinking Budget`, `フォールバック`) and natural sentence endings (`〜を設定します`, `〜を実行できます`).
+     - **Chinese (ZH)**: Use authentic Chinese developer phrasing (`实战工作坊`, `Starter 初始代码`, `参考实现`, `演练手册`, `冒烟测试`, `Structured Outputs (结构化输出)`, `Tool Calling (工具调用)`, `Thinking Budget (推理预算)`, `回退策略`).
+   - **Code Comments & Identifiers**: Keep all SDK symbols, class/function names, and CLI flags in exact English (`root_agent`, `LlmAgent`, `FunctionTool`, `thinking_budget`, `response_schema`), and write comments in concise, natural developer prose without forcing mechanical `(괄호)` glosses on every obvious loanword.
 
 2. **Typography Rule (No Em Dash in Markdown or Documentation)**:
    - **NEVER generate em dash characters (`\\u2014`)** in any generated documentation, markdown (`.md`) files, slide decks, setup guides, code comments, or runbooks.
@@ -447,18 +473,18 @@ This cheat sheet translates core AI engineering concepts into intuitive everyday
 > Topic: {topic}
 > Tech Stack: {stack_str}
 
-본 저장소는 **{topic}** **Hands-on Lab (핸즈온 랩)**을 위한 사전 환경 설정 가이드, **Starter Code (스타터 코드)**, 레퍼런스 솔루션, 진행자 **Runbook (런북)**을 포함합니다.
+**{topic}** 핸즈온 실습(Hands-on Lab)에 필요한 사전 환경 설정 가이드, 스타터 코드(`01_starter`), 정답 코드(`02_final`), 진행자용 런북(`RUNBOOK.md`)을 모아둔 레포지토리입니다.
 
-## Quick Start (빠른 시작)
+## 빠른 시작 (Quick Start)
 
-1. **사전 환경 준비 가이드**: [SETUP_GUIDE.md](./SETUP_GUIDE.md)
-2. **아키텍처 호환성 점검**: `./scripts/check_architecture_compat.sh` (Windows: `.\\scripts\\check_architecture_compat.ps1`)
-3. **개발 환경 자동 검증 스크립트**: `./scripts/check_env.sh` (Windows: `.\\scripts\\check_env.ps1`)
-4. **Hands-on Lab (핸즈온 랩) 실습 자료**:
-   - Lab Guide (실습 가이드): [workshop/03_labs/README.md](./workshop/03_labs/README.md)
-   - Starter Code (스타터 코드): [workshop/01_starter](./workshop/01_starter)
-   - Reference Solution (레퍼런스 솔루션): [workshop/02_final](./workshop/02_final)
-5. **진행자 및 TA Runbook (런북)**: [RUNBOOK.md](./RUNBOOK.md)
+1. **사전 환경 세팅 가이드**: [SETUP_GUIDE.md](./SETUP_GUIDE.md)
+2. **OS/아키텍처 호환성 체크**: `./scripts/check_architecture_compat.sh` (Windows: `.\\scripts\\check_architecture_compat.ps1`)
+3. **개발 환경 자동 점검 스크립트**: `./scripts/check_env.sh` (Windows: `.\\scripts\\check_env.ps1`)
+4. **당일 핸즈온 실습 자료**:
+   - 실습 가이드: [workshop/03_labs/README.md](./workshop/03_labs/README.md)
+   - 스타터 코드: [workshop/01_starter](./workshop/01_starter)
+   - 정답 코드: [workshop/02_final](./workshop/02_final)
+5. **진행자 및 TA 런북 (Runbook)**: [RUNBOOK.md](./RUNBOOK.md)
 """
     elif final_lang == "ja":
         readme_content = f"""# {name}
@@ -2795,8 +2821,94 @@ export const rootAgent = new LlmAgent({{
 }});
 ''')
 
-            with open(labs_dir / "README.md", "w", encoding="utf-8") as f:
-                f.write(f"""# {topic} - Hands-on Lab Session Guide
+            if final_lang == "ko":
+                with open(labs_dir / "README.md", "w", encoding="utf-8") as f:
+                    f.write(f"""# {topic} - 핸즈온 실습 가이드
+
+**{topic}** 세션의 단계별 실습 가이드입니다.
+실습 코드는 `workshop/01_starter` 디렉터리에서 직접 작성하고, 막히는 부분이 있으면 `workshop/02_final`의 정답 코드를 참고하세요.
+
+---
+
+## 세션 진행 순서 (총 60분)
+
+- **00m - 10m**: 세션 소개 및 개발 환경 점검 (`./scripts/check_env.sh`)
+- **10m - 25m**: **Lab 01** - 개발 환경 점검, ADK 스캐폴딩 및 커스텀 Tool 정의 (`01_lab_environment_and_client.md`)
+- **25m - 45m**: **Lab 02** - 멀티 에이전트 계층 구성, 서브 에이전트 라우팅 및 Structured Output (`02_lab_structured_outputs.md`)
+- **45m - 55m**: **Lab 03** - Trajectory Eval (`adk eval`) 실행 경로 평가 및 배포 준비 (`03_lab_end_to_end_pipeline.md`)
+- **55m - 60m**: Q&A 및 마무리
+
+---
+
+## 단계별 실습 문서
+
+1. **[Lab 01: 개발 환경 점검, ADK 스캐폴딩 및 커스텀 Tool 정의](./01_lab_environment_and_client.md)**
+2. **[Lab 02: 멀티 에이전트 계층 구성, 서브 에이전트 라우팅 및 Structured Output](./02_lab_structured_outputs.md)**
+3. **[Lab 03: Trajectory Eval (adk eval) 실행 경로 평가 및 배포 준비](./03_lab_end_to_end_pipeline.md)**
+""")
+                with open(labs_dir / "01_lab_environment_and_client.md", "w", encoding="utf-8") as f:
+                    f.write(f"""# Lab 01: 개발 환경 점검, ADK 스캐폴딩 및 커스텀 Tool 정의
+
+## 실습 목표
+`./scripts/check_env.sh`로 로컬 개발 환경을 점검하고, Google ADK(`google-adk` / `google.golang.org/adk/v2` / `com.google.adk:google-adk` / `@google/adk`)와 `{default_cloud_model}` 모델로 기본 에이전트와 커스텀 툴을 초기화합니다.
+
+## 언어별 ADK 엔트리포인트
+- **Python (`google-adk`)**: `workshop/01_starter/sre_agent/agent.py` (`root_agent = LlmAgent(...)`)
+- **Go (`google.golang.org/adk/v2`)**: `llmagent.New`, `functiontool.New`, `gemini.NewModel`
+- **Java (`com.google.adk:google-adk`)**: `LlmAgent.builder()`, `SequentialAgent.builder()`, `FunctionTool.create()`
+- **Kotlin (`com.google.adk:google-adk-kotlin-core`)**: `LlmAgent(...)`, `Gemini("{default_cloud_model}")`, `FunctionTool.create(::fn)`
+- **TypeScript (`@google/adk`)**: `new LlmAgent({{...}})`, Zod 기반 `new FunctionTool({{...}})`
+
+## 실습 순서
+1. 터미널에서 `./scripts/check_env.sh` (Windows는 `.\\scripts\\check_env.ps1`)를 실행해 환경을 확인합니다.
+2. ADK와 `agents-cli`를 함께 사용할 경우 공식 에이전트 스킬을 설치합니다:
+   ```bash
+   uvx google-agents-cli setup
+   ```
+3. `workshop/01_starter/main.py`와 `workshop/01_starter/agent.py` (또는 `polyglot/`)를 열어 스타터 코드의 Tool 함수를 확인합니다.
+4. 스타터 스크립트가 정상 실행되는지 스모크 테스트를 돌립니다:
+   ```bash
+   python3 workshop/01_starter/main.py
+   ```
+""")
+                with open(labs_dir / "02_lab_structured_outputs.md", "w", encoding="utf-8") as f:
+                    f.write(f"""# Lab 02: 멀티 에이전트 계층 구성, 서브 에이전트 라우팅 및 Structured Output
+
+## 실습 목표
+코디네이터 역할을 맡는 `root_agent`(`{default_flagship_model}`) 아래에 전문 서브 에이전트(`slo_specialist`, `report_specialist`)를 연결하고, JSON 스키마 기반 Structured Output 응답을 구성합니다.
+
+## 실습 순서
+1. `prompt-pack/README.md`에 정의된 출력 JSON 스키마 구조를 확인합니다.
+2. `workshop/01_starter/agent.py`에서 `root_agent`에 `sub_agents=[slo_specialist, report_specialist]`를 연결합니다.
+3. `workshop/02_final/polyglot/` 아래의 Go, Java, Kotlin, TypeScript 구현과 비교하며 언어별 서브 에이전트 라우팅 방식을 확인합니다.
+4. ADK 웹 UI를 띄워 에이전트 간 라우팅 흐름과 툴 호출 로그를 눈으로 확인합니다:
+   ```bash
+   cd workshop/02_final && adk web
+   ```
+""")
+                with open(labs_dir / "03_lab_end_to_end_pipeline.md", "w", encoding="utf-8") as f:
+                    f.write(f"""# Lab 03: Trajectory Eval (adk eval) 실행 경로 평가 및 배포 준비
+
+## 실습 목표
+`evalset.json`을 기준으로 에이전트의 툴 호출 순서와 응답 품질을 검증(`adk eval` / `agents-cli eval`)하고, Cloud Run 및 Vertex AI Agent Engine 배포 구성을 마무리합니다.
+
+## 실습 순서
+1. 완성된 정답 코드를 실행해 전체 파이프라인 동작을 확인합니다:
+   ```bash
+   python3 workshop/02_final/main.py
+   ```
+2. `workshop/02_final/evalset.json` 테스트셋으로 Trajectory Eval(실행 경로 평가)을 수행합니다:
+   ```bash
+   adk eval workshop/02_final/sre_agent workshop/02_final/evalset.json
+   ```
+3. 워크숍 전체 검증 스크립트를 실행해 링크·모델 태그·코드 동작을 최종 확인합니다:
+   ```bash
+   python3 scripts/verify_workshop.py .
+   ```
+""")
+            else:
+                with open(labs_dir / "README.md", "w", encoding="utf-8") as f:
+                    f.write(f"""# {topic} - Hands-on Lab Session Guide
 
 This guide outlines the session schedule and step-by-step objectives for the **{topic}** workshop.
 Write your code in `workshop/01_starter`. If you get stuck, refer to the completed reference solution in `workshop/02_final`.
@@ -2807,7 +2919,7 @@ Write your code in `workshop/01_starter`. If you get stuck, refer to the complet
 
 - **00m - 10m**: Workshop overview & environment verification (`./scripts/check_env.sh`)
 - **10m - 25m**: **Lab 01** - Environment Verification, ADK Scaffolding & Custom Tools (`01_lab_environment_and_client.md`)
-- **25m - 45m**: **Lab 02** - Multi-Agent Hierarchy, Sub-Agent Delegation & Structured Outputs (`02_lab_structured_outputs.md`)
+- **25m - 45m**: **Lab 02** - Multi-Agent Hierarchy, Sub-Agent Routing & Structured Outputs (`02_lab_structured_outputs.md`)
 - **45m - 55m**: **Lab 03** - Trajectory Evaluation (`adk eval`), ADLC Optimization & Deployment (`03_lab_end_to_end_pipeline.md`)
 - **55m - 60m**: Q&A and wrap-up
 
@@ -2816,11 +2928,11 @@ Write your code in `workshop/01_starter`. If you get stuck, refer to the complet
 ## Step-by-Step Labs
 
 1. **[Lab 01: Environment Verification, ADK Scaffolding & Custom Tools](./01_lab_environment_and_client.md)**
-2. **[Lab 02: Multi-Agent Hierarchy, Sub-Agent Delegation & Structured Outputs](./02_lab_structured_outputs.md)**
+2. **[Lab 02: Multi-Agent Hierarchy, Sub-Agent Routing & Structured Outputs](./02_lab_structured_outputs.md)**
 3. **[Lab 03: Trajectory Evaluation (adk eval), ADLC Optimization & Deployment](./03_lab_end_to_end_pipeline.md)**
 """)
-            with open(labs_dir / "01_lab_environment_and_client.md", "w", encoding="utf-8") as f:
-                f.write(f"""# Lab 01: Environment Verification, ADK Scaffolding & Custom Tools
+                with open(labs_dir / "01_lab_environment_and_client.md", "w", encoding="utf-8") as f:
+                    f.write(f"""# Lab 01: Environment Verification, ADK Scaffolding & Custom Tools
 
 ## Objective
 Verify your local environment using `./scripts/check_env.sh` and initialize your ADK agent using Google Agent Development Kit (`google-adk` / `google.golang.org/adk/v2` / `com.google.adk:google-adk` / `@google/adk`) with `{default_cloud_model}`.
@@ -2844,8 +2956,8 @@ Verify your local environment using `./scripts/check_env.sh` and initialize your
    python3 workshop/01_starter/main.py
    ```
 """)
-            with open(labs_dir / "02_lab_structured_outputs.md", "w", encoding="utf-8") as f:
-                f.write(f"""# Lab 02: Multi-Agent Hierarchy, Sub-Agent Delegation & Structured Outputs
+                with open(labs_dir / "02_lab_structured_outputs.md", "w", encoding="utf-8") as f:
+                    f.write(f"""# Lab 02: Multi-Agent Hierarchy, Sub-Agent Routing & Structured Outputs
 
 ## Objective
 Wire specialized sub-agents (`slo_specialist`, `report_specialist`) under a root coordinator (`root_agent` running `{default_flagship_model}`) and enforce deterministic JSON schema outputs.
@@ -2853,14 +2965,14 @@ Wire specialized sub-agents (`slo_specialist`, `report_specialist`) under a root
 ## Instructions
 1. Review `prompt-pack/README.md` for the target JSON Schema.
 2. In Python (`workshop/01_starter/agent.py`), attach `sub_agents=[slo_specialist, report_specialist]` to `root_agent`.
-3. If exploring the Go, Java, Kotlin, or TypeScript tracks under `workshop/02_final/polyglot/`, compare how `SubAgents` / `subAgents` and `SequentialAgent` delegate tasks across languages.
+3. If exploring the Go, Java, Kotlin, or TypeScript tracks under `workshop/02_final/polyglot/`, compare how `SubAgents` / `subAgents` and `SequentialAgent` route tasks across languages.
 4. Launch the interactive ADK Dev UI to inspect sub-agent handoff events visually:
    ```bash
    cd workshop/02_final && adk web
    ```
 """)
-            with open(labs_dir / "03_lab_end_to_end_pipeline.md", "w", encoding="utf-8") as f:
-                f.write(f"""# Lab 03: Trajectory Evaluation (adk eval), ADLC Optimization & Deployment
+                with open(labs_dir / "03_lab_end_to_end_pipeline.md", "w", encoding="utf-8") as f:
+                    f.write(f"""# Lab 03: Trajectory Evaluation (adk eval), ADLC Optimization & Deployment
 
 ## Objective
 Evaluate multi-agent tool trajectories against `evalset.json` (`adk eval` / `agents-cli eval`), run `InMemoryRunner` tests, and prepare for Cloud Run / Vertex AI Agent Engine deployment.
@@ -2880,8 +2992,77 @@ Evaluate multi-agent tool trajectories against `evalset.json` (`adk eval` / `age
    ```
 """)
         else:
-            with open(labs_dir / "README.md", "w", encoding="utf-8") as f:
-                f.write(f"""# {topic} - Hands-on Lab Session Guide
+            if final_lang == "ko":
+                with open(labs_dir / "README.md", "w", encoding="utf-8") as f:
+                    f.write(f"""# {topic} - 핸즈온 실습 가이드
+
+**{topic}** 세션의 단계별 실습 가이드입니다.
+실습 코드는 `workshop/01_starter/main.py`에서 직접 작성하고, 막히는 부분이 있으면 `workshop/02_final/main.py` 정답 코드를 참고하세요.
+
+---
+
+## 세션 진행 순서 (총 60분)
+
+- **00m - 10m**: 세션 소개 및 개발 환경 점검 (`./scripts/check_env.sh`)
+- **10m - 25m**: **Lab 01** - 개발 환경 점검 및 AI 클라이언트 연결 확인 (`01_lab_environment_and_client.md`)
+- **25m - 45m**: **Lab 02** - Structured Output 및 JSON 스키마 검증 (`02_lab_structured_outputs.md`)
+- **45m - 55m**: **Lab 03** - End-to-End 파이프라인 실행 및 자동 검증 (`03_lab_end_to_end_pipeline.md`)
+- **55m - 60m**: Q&A 및 마무리
+
+---
+
+## 단계별 실습 문서
+
+1. **[Lab 01: 개발 환경 점검 및 AI 클라이언트 연결 확인](./01_lab_environment_and_client.md)**
+2. **[Lab 02: Structured Output 및 JSON 스키마 검증](./02_lab_structured_outputs.md)**
+3. **[Lab 03: End-to-End 파이프라인 실행 및 자동 검증](./03_lab_end_to_end_pipeline.md)**
+""")
+                with open(labs_dir / "01_lab_environment_and_client.md", "w", encoding="utf-8") as f:
+                    f.write(f"""# Lab 01: 개발 환경 점검 및 AI 클라이언트 연결 확인
+
+## 실습 목표
+`./scripts/check_env.sh`로 로컬 및 클라우드 개발 환경을 점검하고, `workshop/01_starter/main.py`에서 {provider_label}(`{default_cloud_model}`) 또는 로컬 Ollama(`{default_local_model}`) 서버와 정상적으로 통신하는지 스모크 테스트를 진행합니다.
+
+## 실습 순서
+1. `./scripts/check_env.sh` (Windows는 `.\\scripts\\check_env.ps1`)를 실행해 Python, `uv`, 로컬 포트 상태를 확인합니다.
+2. `workshop/01_starter/main.py`를 열고 `lab1_sanity_check()` 함수 안의 `TODO: [Lab 01 - Exercise]` 주석을 확인합니다.
+3. `.env` 파일에 `{primary_api_key_env}`를 입력하거나, 로컬 Ollama 서버(`ollama serve`, 모델 `{default_local_model}`)를 띄웁니다.
+4. 스타터 스크립트를 실행해 모델 응답이 정상적으로 돌아오는지 확인합니다:
+   ```bash
+   python3 workshop/01_starter/main.py
+   ```
+""")
+                with open(labs_dir / "02_lab_structured_outputs.md", "w", encoding="utf-8") as f:
+                    f.write(f"""# Lab 02: Structured Output 및 JSON 스키마 검증
+
+## 실습 목표
+Pydantic `WorkshopTaskResult` 스키마(`status`, `model_used`, `summary`, `action_items`)에 맞춰 항상 파싱 가능한 JSON 응답(Structured Output)을 받도록 구성합니다.
+
+## 실습 순서
+1. `prompt-pack/README.md`에서 시스템 프롬프트와 출력 JSON 스키마 정의를 확인합니다.
+2. `workshop/01_starter/main.py`의 `lab2_structured_output()` 함수에서 `TODO: [Lab 02 - Exercise]` 부분을 완성합니다.
+3. 마크다운 코드 블록(` ```json `)이 섞이지 않고 스키마에 맞는 순수 JSON으로 직렬화되는지 확인합니다.
+""")
+                with open(labs_dir / "03_lab_end_to_end_pipeline.md", "w", encoding="utf-8") as f:
+                    f.write(f"""# Lab 03: End-to-End 파이프라인 실행 및 자동 검증
+
+## 실습 목표
+클라우드·로컬 폴백(Fallback)이 적용된 `workshop/02_final/main.py` 전체 파이프라인을 실행하고, 자동 검증 스크립트로 워크숍 산출물 상태를 점검합니다.
+
+## 실습 순서
+1. 완성된 정답 코드를 실행합니다:
+   ```bash
+   python3 workshop/02_final/main.py
+   ```
+2. 직접 작성한 `workshop/01_starter/main.py` 코드와 `workshop/02_final/main.py` 정답 코드를 비교해 봅니다.
+3. 워크숍 검증 스크립트를 돌려 마크다운 링크, 모델 버전, 보안 항목을 한 번에 점검합니다:
+   ```bash
+   python3 scripts/verify_workshop.py .
+   ```
+""")
+            else:
+                with open(labs_dir / "README.md", "w", encoding="utf-8") as f:
+                    f.write(f"""# {topic} - Hands-on Lab Session Guide
 
 This guide outlines the session schedule and step-by-step objectives for the **{topic}** workshop.
 Write your code in `workshop/01_starter/main.py`. If you get stuck, refer to the completed reference solution in `workshop/02_final/main.py`.
@@ -2891,7 +3072,7 @@ Write your code in `workshop/01_starter/main.py`. If you get stuck, refer to the
 ## Session Schedule (60 minutes total)
 
 - **00m - 10m**: Workshop overview & environment verification (`./scripts/check_env.sh`)
-- **10m - 25m**: **Lab 01** - Environment Verification & AI Client Sanity Check (`01_lab_environment_and_client.md`)
+- **10m - 25m**: **Lab 01** - Environment Verification & AI Client Smoke Test (`01_lab_environment_and_client.md`)
 - **25m - 45m**: **Lab 02** - Structured Outputs & JSON Schema Validation (`02_lab_structured_outputs.md`)
 - **45m - 55m**: **Lab 03** - End-to-End Pipeline & Automated Verification (`03_lab_end_to_end_pipeline.md`)
 - **55m - 60m**: Q&A and wrap-up
@@ -2900,12 +3081,12 @@ Write your code in `workshop/01_starter/main.py`. If you get stuck, refer to the
 
 ## Step-by-Step Labs
 
-1. **[Lab 01: Environment Verification & AI Client Sanity Check](./01_lab_environment_and_client.md)**
+1. **[Lab 01: Environment Verification & AI Client Smoke Test](./01_lab_environment_and_client.md)**
 2. **[Lab 02: Structured Outputs & JSON Schema Validation](./02_lab_structured_outputs.md)**
 3. **[Lab 03: End-to-End Pipeline & Automated Verification](./03_lab_end_to_end_pipeline.md)**
 """)
-            with open(labs_dir / "01_lab_environment_and_client.md", "w", encoding="utf-8") as f:
-                f.write(f"""# Lab 01: Environment Verification & AI Client Sanity Check
+                with open(labs_dir / "01_lab_environment_and_client.md", "w", encoding="utf-8") as f:
+                    f.write(f"""# Lab 01: Environment Verification & AI Client Smoke Test
 
 ## Objective
 Verify your local and cloud development environment using `./scripts/check_env.sh` and connect `workshop/01_starter/main.py` to {provider_label} (`{default_cloud_model}`) or Local Ollama (`{default_local_model}`).
@@ -2919,8 +3100,8 @@ Verify your local and cloud development environment using `./scripts/check_env.s
    python3 workshop/01_starter/main.py
    ```
 """)
-            with open(labs_dir / "02_lab_structured_outputs.md", "w", encoding="utf-8") as f:
-                f.write(f"""# Lab 02: Structured Outputs & JSON Schema Validation
+                with open(labs_dir / "02_lab_structured_outputs.md", "w", encoding="utf-8") as f:
+                    f.write(f"""# Lab 02: Structured Outputs & JSON Schema Validation
 
 ## Objective
 Enforce deterministic, type-safe JSON responses matching the `WorkshopTaskResult` schema (`status`, `model_used`, `summary`, `action_items`).
@@ -2930,8 +3111,8 @@ Enforce deterministic, type-safe JSON responses matching the `WorkshopTaskResult
 2. Open `workshop/01_starter/main.py` and complete `TODO: [Lab 02 - Exercise]` inside `lab2_structured_output()`.
 3. Verify that the output serializes cleanly to JSON without markdown code-fence artifacts.
 """)
-            with open(labs_dir / "03_lab_end_to_end_pipeline.md", "w", encoding="utf-8") as f:
-                f.write(f"""# Lab 03: End-to-End Pipeline & Automated Verification
+                with open(labs_dir / "03_lab_end_to_end_pipeline.md", "w", encoding="utf-8") as f:
+                    f.write(f"""# Lab 03: End-to-End Pipeline & Automated Verification
 
 ## Objective
 Run the complete reference pipeline in `workshop/02_final/main.py` with automatic local/cloud fallback and verify all workshop quality gates.

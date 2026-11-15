@@ -126,7 +126,15 @@ def audit_typography(target_dir: str, fix: bool = False) -> bool:
     scan_extensions = {".md", ".txt", ".yaml", ".yml", ".ipynb", ".py", ".ts", ".js", ".go", ".kt", ".dart", ".java"}
     doc_extensions = {".md", ".txt", ".yaml", ".yml", ".ipynb"}
     ignore_dirs = {".git", ".venv", "node_modules", "__pycache__", ".dart_tool", "build", "tmp"}
-    ignore_files = {"harness_cli.py", "registry.py", "verify_workshop.py", "terminology-and-style-guide.md", "test_harness.py"}
+    ignore_files = {
+        "harness_cli.py",
+        "registry.py",
+        "router.py",
+        "auditors.py",
+        "verify_workshop.py",
+        "terminology-and-style-guide.md",
+        "test_harness.py",
+    }
 
     findings = []
     literal_findings = []
@@ -156,7 +164,10 @@ def audit_typography(target_dir: str, fix: bool = False) -> bool:
             if fname not in ignore_files:
                 new_lines = []
                 for line_idx, line in enumerate(content.splitlines(keepends=True), 1):
-                    if any(m in line.lower() for m in ["❌", "prohibited", "never", "직역 금지", "awkward literal"]):
+                    if any(
+                        m in line.lower()
+                        for m in ["❌", "prohibited", "never", "직역 금지", "awkward literal", "번역투", "지양", "avoid"]
+                    ):
                         new_lines.append(line)
                         continue
                     updated_line = line

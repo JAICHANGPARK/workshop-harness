@@ -1,40 +1,37 @@
-# Developer Terminology, Original Technical Term & Natural Grammar Guide (EN / KO / JA / ZH)
+# Real-World Developer Language & Anti-Translationese Guide (EN / KO / JA / ZH)
 
-> Official Documentation, Slide Deck, and Code Comment Authoring Standard for `workshop-harness`
+> Official Documentation, Lab Guide, Slide Deck, and Code Comment Authoring Standard for `workshop-harness`
 
 When AI coding agents (**Google Antigravity**, **Gemini CLI**, **Anthropic Claude Code**, **OpenAI Codex**, **Cursor**, **Windsurf**) generate workshop documentation, hands-on lab guides, slide decks, runbooks, or code comments:
-- **English (`EN`)**: Write in clear, idiomatic English technical prose.
-- **Korean (`KO`), Japanese (`JA`), Chinese (`ZH`)**: When requested by a Korean, Japanese, or Chinese user, **never translate English word-for-word (no literal translation or awkward translationese grammar)**. Always use **the original English technical term paired with the actual terminology, expressions, and natural sentence structures used by real-world local software engineers**.
+- **English (`EN`)**: Write in clear, idiomatic, direct technical English.
+- **Korean (`KO`), Japanese (`JA`), Chinese (`ZH`)**: **Never generate awkward literal translations from English (영문 직역 절대 금지) or stiff translationese grammar (번역투 문장 금지).** Write in the exact everyday vernacular, vocabulary, and sentence rhythm that real software engineers actually use in Slack, GitHub PRs, tech blogs, and developer conferences (Build with AI, DevFest, Google I/O, KotlinConf).
 
 ---
 
 ## 1. Core Principles (핵심 작성 원칙)
 
-### A. No Awkward Literal Translations (영문 직역 절대 금지)
-- Never translate software engineering or AI/ML terminology word-for-word into unnatural phrases that real-world developers do not use.
-  - **KO Prohibited**: "손으로 하는 실험실", "달리는 책", "발판 설치", "뼈대 코드", "생각 예산", "도구 부르기", "대리인 개발 키트", "문맥 창문", "부서지는 변경"
-  - **JA Prohibited**: 「手で触る実験室」, 「走る本」, 「足場の設置」, 「骨組みコード」, 「思考の予算」, 「道具を呼ぶ」, 「代理人開発キット」, 「煙の試験」, 「後退経路」
-  - **ZH Prohibited**: “手把手的实验室”, “奔跑的书”, “骨架代码”, “思考预算”, “工具呼叫”, “代理人开发套件”, “烟雾测试”, “后退路径”, “冰冷启动”
-- Always write in the natural vernacular used by production software engineers in tech blogs, GitHub repositories, and developer conferences (Build with AI, DevFest, Google I/O, KotlinConf).
+### A. Never Generate Awkward English-to-Local Calques (영문 직역 절대 금지)
+LLMs frequently translate idiomatic English engineering expressions into stiff Sino-Korean/Kanji calques that **no real developer says in practice**. Both exaggerated word-for-word literals and subtle calques are strictly prohibited:
+- **KO Prohibited (직역 금지)**:
+  - Exaggerated literals: ❌ `"손으로 하는 실험실"`, ❌ `"달리는 책"`, ❌ `"발판 설치"`, ❌ `"뼈대 코드"`, ❌ `"생각 예산"`, ❌ `"도구 부르기"`, ❌ `"대리인 개발 키트"`, ❌ `"연기 테스트"`
+  - Subtle English calques LLMs often emit: ❌ `"구조화 출력"` / `"구조화된 출력물"`, ❌ `"추론 예산"`, ❌ `"궤적 평가"`, ❌ `"서브 에이전트 위임"`, ❌ `"건전성 검사"` (literal of *sanity check*), ❌ `"API 키 위생"` (literal of *API key hygiene*), ❌ `"종단 간"` (literal of *end-to-end*), ❌ `"파괴적 변경"` / `"부서지는 변경"` (literal of *breaking changes*), ❌ `"인간 루프"` (literal of *human-in-the-loop*), ❌ `"박스를 벗어나자마자"` (*out-of-the-box*), ❌ `"일급 시민"` (*first-class citizen*), ❌ `"본 저장소는 ~를 포함합니다"` (*This repository contains...*)
+- **JA Prohibited (직역 금지)**: ❌ 「手で触る実験室」, ❌ 「走る本」, ❌ 「骨組みコード」, ❌ 「思考の予算」, ❌ 「健全性検査」, ❌ 「煙の試験」, ❌ 「後退経路」
+- **ZH Prohibited (직역 금지)**: ❌ “手把手的实验室”, ❌ “奔跑的书”, ❌ “骨架代码”, ❌ “思考预算”, ❌ “健全性检查”, ❌ “烟雾测试”, ❌ “后退路径”
 
-### B. Original Technical Term First + Developer-Friendly Term Notation (기술 용어 원어 우선 표기 및 개발자 용어 병기)
-- For technical terms, **use the original English technical term first and append the developer-friendly translation/explanation in parentheses (`English Original Term (개발자 친화적 용어)`)**, or pair natural loanwords used by developers with the original English term:
-  - **Korean (KO)**: `Hands-on Lab (핸즈온 랩)`, `Scaffolding (스캐폴딩)`, `Runbook (런북)`, `Starter / Reference Solution (스타터 / 레퍼런스 솔루션 코드)`, `Structured Outputs (구조화 출력)`, `Tool Calling (툴 콜링)`, `Thinking Budget (추론 예산)`, `Trajectory Evaluation (궤적 평가)`, `Fallback (폴백)`
-  - **Japanese (JA)**: `Hands-on Lab (ハンズオンラボ)`, `Scaffolding (スキャフォールディング)`, `Runbook (ランブック)`, `Starter / Reference Solution (スターターコード / リファレンス実装)`, `Structured Outputs (構造化出力)`, `Tool Calling (ツール呼び出し)`, `Thinking Budget (推論バジェット)`, `Trajectory Evaluation (トラジェクトリ評価)`, `Fallback (フォールバック)`
-  - **Chinese (ZH)**: `Hands-on Lab (实战工作坊 / 动手实验)`, `Scaffolding (脚手架)`, `Runbook (演练手册)`, `Starter / Reference Solution (Starter 初始代码 / 参考实现)`, `Structured Outputs (结构化输出)`, `Tool Calling (工具调用)`, `Thinking Budget (推理预算)`, `Trajectory Evaluation (轨迹评估)`, `Fallback (回退方案)`
-  - **Code Identifiers & SDK Symbols**: Never translate code symbols, CLI flags, environment variable names, or class/method names (`root_agent`, `LlmAgent`, `FunctionTool`, `thinking_budget`, `response_schema`, `GEMINI_API_KEY`). Keep them in backticks in their exact original English form.
+### B. Use Terms That Real Developers Actually Speak & Write (실무 개발자가 실제로 쓰는 표현 사용)
+1. **Do NOT force mechanical `English (한국어)` parenthetical echoes on every obvious loanword**:
+   - Repeating `Starter Code (스타터 코드)`, `Lab Guide (실습 가이드)`, `Quick Start (빠른 시작)` on every line feels robotic and translated.
+   - Instead, write loanwords and developer terms naturally (`핸즈온 실습`, `레포지토리`, `스타터 코드`, `정답 코드`, `보일러플레이트`, `스캐폴딩`, `런북`, `스모크 테스트`, `폴백`), and keep English terms in English where Korean developers naturally use English (`Structured Output`, `Tool Calling`, `Function Calling`, `RAG`, `End-to-End (E2E)`), adding a concise developer explanation in parentheses **only when introducing a concept** (e.g., `Structured Output (JSON 스키마 응답)`, `Thinking Budget (추론 토큰 한도)`, `Trajectory Eval (실행 경로 평가)`).
+2. **Code Identifiers & SDK Symbols**:
+   - Never translate code symbols, CLI flags, environment variable names, or class/method names (`root_agent`, `LlmAgent`, `FunctionTool`, `thinking_budget`, `response_schema`, `GEMINI_API_KEY`). Keep them in backticks in exact English.
 
-### C. Natural Developer Grammar & Anti-Translationese (실무 개발자 문법 및 번역투 문장 금지)
-- When generating Korean, Japanese, or Chinese documentation, follow the natural grammar and sentence style of native software engineers rather than English syntactic calques:
-  1. **Korean (KO) Developer Grammar**:
-     - Avoid awkward double passives (`~되어지다`, `~에 의해 생성되어집니다`), unnatural pronouns (`당신의 API 키`, `그것은 ~를 가집니다`), and verbose translationese (`~하는 것이 가능합니다`).
-     - Use concise, active developer prose (`~를 생성합니다`, `~할 수 있습니다`, `환경 변수에 API 키를 설정합니다`) and clean noun-ending (`~생성`, `~검증`) in tables and bullet lists.
-  2. **Japanese (JA) Developer Grammar**:
-     - Avoid literal English passive/modal calques (`〜によって生成されることができます`, `あなたのAPIキーを設定してください`, `それは〜を持っています`).
-     - Use natural Japanese engineering documentation style (`〜を生成します`, `〜が可能です`, `環境変数にAPIキーを設定します`, and concise `体言止め` in tables and summary items).
-  3. **Chinese (ZH) Developer Grammar**:
-     - Avoid clunky Europeanized translationese (`被通过...所生成`, `去进行一个...的操作`, `你的 API 密钥`).
-     - Use crisp, active Chinese technical phrasing (`通过...自动生成`, `配置 API Key`, `执行冒烟测试`).
+### C. Natural Developer Sentence Grammar (번역투 문장 금지)
+1. **Korean (KO) Developer Prose**:
+   - Avoid double passives (❌ `~되어집니다` -> ✅ `~됩니다`), verbose nominalizations (❌ `~하는 것이 가능합니다` -> ✅ `~할 수 있습니다`), unnatural second-person pronouns (❌ `당신의 API 키` -> ✅ `.env 파일의 API 키`), inanimate `가지다` calques (❌ `에이전트는 2개의 도구를 가집니다` -> ✅ `에이전트에 툴 2개를 연결합니다`), and stiff bureaucratic verbs (❌ `본 저장소는 ~를 포함합니다`, `서버 기동을 지원합니다` -> ✅ `~를 모아둔 레포지토리입니다`, `로컬 서버를 띄웁니다`).
+2. **Japanese (JA) Developer Prose**:
+   - Avoid literal passive/modal calques (❌ `〜によって生成されることができます`, `あなたのAPIキー`). Use natural Japanese engineer phrasing (`〜を生成します`, `環境変数にAPIキーを設定します`).
+3. **Chinese (ZH) Developer Prose**:
+   - Avoid Europeanized translationese (❌ `被通过...所生成`, `你的 API 密钥`). Use concise active phrasing (`配置 API Key`, `启动本地服务`, `运行冒烟测试`).
 
 ### D. Clean Typography Rule (No Em Dash `\u2014`)
 - Never generate em dash characters (`\u2014`) in any markdown (`.md`) file, slide deck, setup guide, or code comment.
@@ -42,68 +39,55 @@ When AI coding agents (**Google Antigravity**, **Gemini CLI**, **Anthropic Claud
 
 ---
 
-## 2. Standard Technical Term & Developer Terminology Reference Table (KO / EN / JA / ZH)
+## 2. Real-World Developer Terminology Mapping (KO / EN / JA / ZH)
 
-| Prohibited Literal Translation (직역 금지 예시) | Approved Korean (KO) + English | Approved Japanese (JA) + English | Approved Chinese (ZH) + English |
-| :--- | :--- | :--- | :--- |
-| 손으로 하는 실험실 / 手で触る実験室 / 手把手的实验室 | **Hands-on Lab (핸즈온 랩)** | **Hands-on Lab (ハンズオンラボ)** | **Hands-on Lab (实战工作坊 / 动手实验)** |
-| 달리는 책 / 走る本 / 奔跑的书 | **Runbook (런북 / 진행 가이드)** | **Runbook (ランブック)** | **Runbook (演练手册)** |
-| 발판 설치 / 足場の設置 / 脚手架安装 | **Scaffolding (스캐폴딩 / 초기 구조 생성)** | **Scaffolding (スキャフォールディング)** | **Scaffolding (脚手架)** |
-| 뼈대 코드 / 骨組みコード / 骨架代码 | **Starter / Boilerplate Code (스타터 / 보일러플레이트 코드)** | **Starter / Boilerplate Code (スターターコード / ボイラープレート)** | **Starter / Boilerplate Code (Starter 初始代码 / 样板代码)** |
-| 생각 예산 / 思考の予算 / 思考预算 | **Thinking Budget (추론 예산)** | **Thinking Budget (推論バジェット)** | **Thinking Budget (推理预算)** |
-| 구조화된 출력물 / 構造化された出力物 / 被结构化的输出物 | **Structured Outputs (구조화 출력 / JSON Schema)** | **Structured Outputs (構造化出力)** | **Structured Outputs (结构化输出)** |
-| 도구 부르기 / 道具を呼ぶ / 工具呼叫 | **Tool Calling / Function Calling (툴 콜링 / 함수 호출)** | **Tool Calling (ツール呼び出し)** | **Tool Calling (工具调用 / 函数调用)** |
-| 검색 증강된 생성 / 検索増強された生成 / 被检索增强的生成 | **RAG (Retrieval-Augmented Generation, 검색 증강 생성)** | **RAG (検索拡張生成)** | **RAG (检索增强生成)** |
-| 끼워넣기 벡터 / 埋め込みベクトル / 嵌入进去的向量 | **Embedding (임베딩)** | **Embedding (エンベディング)** | **Embedding (向量嵌入)** |
-| 정량화 / 양자 축소 | **Quantization (양자화, 4-bit / GGUF)** | **Quantization (量子化)** | **Quantization (量化)** |
-| 미세 조정하기 / 微調整する / 进行微调操作 | **Fine-tuning (파인튜닝)** | **Fine-tuning (ファインチューニング)** | **Fine-tuning (微调)** |
-| 다중 대리인 지휘 / 多重代理人指揮 / 多代理人指挥 | **Multi-Agent Orchestration (멀티 에이전트 오케스트레이션)** | **Multi-Agent Orchestration (マルチエージェント・オーケストレーション)** | **Multi-Agent Orchestration (多智能体编排 / 多 Agent 编排)** |
-| 하위 대리인 넘기기 / 下位代理人引き渡し / 下级代理人移交 | **Sub-Agent Delegation (서브 에이전트 위임 / 핸드오프)** | **Sub-Agent Delegation (サブエージェント委譲)** | **Sub-Agent Delegation (子 Agent 委派)** |
-| 대리인 개발 키트 / 代理人開発キット / 代理人开发套件 | **ADK (Agent Development Kit, 에이전트 개발 키트)** | **ADK (Agent Development Kit)** | **ADK (Agent 开发套件)** |
-| 궤도 채점 / 軌道採点 / 轨道打分 | **Trajectory Evaluation (궤적 평가)** | **Trajectory Evaluation (トラジェクトリ評価)** | **Trajectory Evaluation (轨迹评估)** |
-| 연기 시험 / 煙の試験 / 烟雾测试 | **Smoke Test (스모크 테스트)** | **Smoke Test (スモークテスト)** | **Smoke Test (冒烟测试)** |
-| 후퇴 경로 / 後退経路 / 后退路径 | **Fallback (폴백 / 우회 경로)** | **Fallback (フォールバック)** | **Fallback (回退方案)** |
-| 의존성 주사 / 依存性注射 / 依赖注射 | **Dependency Injection (의존성 주입)** | **Dependency Injection (依存性の注入)** | **Dependency Injection (依赖注入)** |
-| 차가운 시작 / 冷たい開始 / 冰冷启动 | **Cold Start (콜드 스타트)** | **Cold Start (コールドスタート)** | **Cold Start (冷启动)** |
-| 기억 장치 넘침 / 記憶装置あふれ / 内存满溢 | **OOM (Out-Of-Memory, 메모리 부족 에러)** | **OOM (メモリ不足エラー)** | **OOM (内存溢出错误)** |
-| 부서지는 변경 / 壊れる変更 / 破碎性变更 | **Breaking Changes (브레이킹 체인지 / 호환성 변경)** | **Breaking Changes (破壊的変更)** | **Breaking Changes (破坏性变更)** |
-| 속도 제한 걸림 / 速度制限 / 速度限制 | **Rate Limit (레이트 리밋 / 호출 할당량 제한)** | **Rate Limit (レート制限)** | **Rate Limit (速率限制)** |
-| 맥락 창문 / 文脈の窓 / 语境窗户 | **Context Window (컨텍스트 윈도우)** | **Context Window (コンテキストウィンドウ)** | **Context Window (上下文窗口)** |
-| 체제 지시문 / 体制指示文 / 体制指示文 | **System Instruction (시스템 프롬프트)** | **System Instruction (システムプロンプト)** | **System Instruction (系统提示词)** |
-| 인간 고리 안 / 人間を輪の中に / 人在环路里 | **Human-in-the-Loop (HITL, 사용자 승인 체크포인트)** | **Human-in-the-Loop (HITL)** | **Human-in-the-Loop (人机协同审批)** |
+| English Source Term | Awkward Literal Calque (직역 금지 ❌) | Real-World Korean Developer Term (실무 권장 ✅) | Japanese (JA) | Chinese (ZH) |
+| :--- | :--- | :--- | :--- | :--- |
+| Hands-on Lab | 손으로 하는 실험실 | **핸즈온 실습** / **핸즈온 랩** | **ハンズオンラボ** | **实战工作坊 / 动手实验** |
+| Repository | 본 저장소 | **레포지토리** | **リポジトリ** | **代码仓库** |
+| Starter / Solution Code | 뼈대 코드 / 레퍼런스 해답 | **스타터 코드 (`01_starter`)** / **정답 코드 (`02_final`)** | **スターターコード / リファレンス実装** | **Starter 初始代码 / 参考实现** |
+| Scaffolding | 발판 설치 / 뼈대 공사 | **스캐폴딩 (초기 프로젝트 세팅)** | **スキャフォールディング** | **脚手架** |
+| Runbook | 달리는 책 | **런북 (`RUNBOOK.md`)** | **ランブック (進行ガイド)** | **演练手册** |
+| Sanity Check / Smoke Test | 건전성 검사 / 연기 시험 | **동작 확인** / **연결 확인** / **스모크 테스트** | **動作確認 / スモークテスト** | **连通性验证 / 冒烟测试** |
+| API Key Hygiene | API 키 위생 | **API 키 보안 점검** / **시크릿 유출 점검** | **APIキーのセキュリティ管理** | **API Key 安全检查** |
+| Structured Outputs | 구조화 출력 / 구조화된 출력물 | **Structured Output (JSON 스키마 응답)** | **Structured Outputs (構造化出力)** | **Structured Outputs (结构化输出)** |
+| Tool / Function Calling | 도구 부르기 / 함수 부르기 | **Tool Calling** / **Function Calling** / **툴 콜링** | **Tool Calling (ツール呼び出し)** | **Tool Calling (工具调用)** |
+| RAG | 검색 증강된 생성 | **RAG** / **RAG 파이프라인** | **RAG パイプライン** | **RAG 检索增强流水线** |
+| Thinking Budget | 생각 예산 / 추론 예산 | **Thinking Budget (추론 토큰 한도)** | **Thinking Budget (推論トークン上限)** | **Thinking Budget (推理 Token 上限)** |
+| Sub-Agent Delegation | 하위 대리인 넘기기 / 서브 에이전트 위임 | **서브 에이전트 라우팅** / **Sub-agent 호출** | **サブエージェントへのルーティング** | **子 Agent 路由分发** |
+| Trajectory Evaluation | 궤적 평가 / 궤도 채점 | **Trajectory Eval (실행 경로 평가)** | **Trajectory Eval (実行経路評価)** | **Trajectory Eval (执行轨迹评估)** |
+| End-to-End (E2E) | 종단 간 / 끝에서 끝까지 | **End-to-End (E2E)** / **전체 파이프라인** | **End-to-End (E2E)** | **端到端 (E2E)** |
+| Fallback | 후퇴 경로 / 대체 작동 | **폴백 (Fallback)** / **우회 경로** | **フォールバック** | **Fallback (回退方案)** |
+| Breaking Changes | 파괴적 변경 / 부서지는 변경 | **브레이킹 체인지 (하위 호환성 변경)** | **破壊的変更 (Breaking Changes)** | **破坏性变更 (Breaking Changes)** |
+| Human-in-the-Loop | 인간 고리 안 / 인간 루프 | **Human-in-the-Loop (사용자 승인 단계)** | **Human-in-the-Loop (承認ステップ)** | **Human-in-the-Loop (人工审批节点)** |
+| Out-of-the-box | 박스를 벗어나자마자 | **별도 설정 없이 바로** | **追加設定なしですぐに** | **开箱即用** |
 
 ---
 
-## 3. Grammar & Sentence Style Comparison (번역투 문법 vs 실무 개발자 문법 예시)
+## 3. Translationese vs Real Developer Prose (번역투 vs 현업 개발자 문장 비교)
 
-| Language | Awkward Translationese Grammar (지양: 번역투 문장) | Natural Developer Grammar (권장: 실무 개발자 문장) |
+| Language | Awkward Translationese (지양 ❌) | Natural Developer Prose (권장 ✅) |
 | :--- | :--- | :--- |
-| **Korean (KO)** | "당신의 `GEMINI_API_KEY`가 설정되어져 있는지 확인하는 것이 가능합니다." | "`.env` 파일에 `GEMINI_API_KEY` 환경 변수가 정상적으로 설정되었는지 확인합니다." |
-| **Korean (KO)** | "이 도구는 손으로 하는 실험실을 위한 뼈대 코드를 생성해 줍니다." | "이 CLI는 Hands-on Lab (핸즈온 랩)을 위한 Starter Code (스타터 코드)를 자동 생성합니다." |
-| **Japanese (JA)** | "あなたのAPIキーによってモデルが呼び出されることができます。" | "`GEMINI_API_KEY` を設定してモデル API を呼び出します。" |
-| **Japanese (JA)** | "このスクリプトは骨組みコードと走る本を作ります。" | "このスクリプトは Starter Code (スターターコード) と Runbook (ランブック) を自動生成します。" |
-| **Chinese (ZH)** | "你的 API 密钥可以被用来去进行一个模型的呼叫操作。" | "配置 `GEMINI_API_KEY` 环境变量以调用模型 API。" |
-| **Chinese (ZH)** | "自动生成手把手的实验室的骨架代码与奔跑的书。" | "自动生成 Hands-on Lab (实战工作坊) 的 Starter 初始代码与 Runbook (演练手册)。" |
+| **Korean (KO)** | "본 저장소는 구조화 출력과 궤적 평가를 위한 스타터 코드를 포함합니다." | "Pydantic 기반 Structured Output과 `adk eval` 실행 경로 평가 예제를 담은 핸즈온 레포지토리입니다." |
+| **Korean (KO)** | "당신의 `GEMINI_API_KEY`가 설정되어져 있는지 건전성 검사를 수행하는 것이 가능합니다." | "`.env` 파일에 `GEMINI_API_KEY`가 제대로 들어갔는지 스모크 테스트로 바로 확인합니다." |
+| **Korean (KO)** | "로컬 서버 기동을 지원하며 추론 예산을 가집니다." | "`ollama serve`로 로컬 서버를 띄우고 `thinking_budget`(추론 토큰 한도)을 설정합니다." |
+| **Japanese (JA)** | "あなたのAPIキーによって健全性検査が実行されることができます。" | "`.env` に `GEMINI_API_KEY` を設定し、動作確認スクリプトを実行します。" |
+| **Chinese (ZH)** | "你的 API 密钥可以被用来进行健全性检查。" | "在 `.env` 中配置 `GEMINI_API_KEY`，运行冒烟测试确认连通性。" |
 
 ---
 
-## 4. Code Comment & Docstring Guidelines (코드 주석 작성 지침)
+## 4. Code Comment Guidelines (코드 주석 작성 지침)
 
-When writing comments or docstrings in starter (`01_starter`) and reference solution (`02_final`) code:
+```python
+# TODO [Lab 02]: Pydantic 스키마 기반 Structured Output과 thinking_budget(추론 토큰 한도)을 설정합니다.
+config = types.GenerateContentConfig(
+    response_mime_type="application/json",
+    response_schema=WorkshopTaskResult,
+    thinking_config=types.ThinkingConfig(thinking_budget=1024),
+)
+```
 
-1. **Use Original English Technical Terms + Developer-Friendly Explanation**:
-   ```python
-   # TODO [Lab 02]: Structured Outputs (구조화 출력)을 위해 Pydantic JSON Schema와 Thinking Budget (추론 예산)을 설정합니다.
-   config = types.GenerateContentConfig(
-       response_mime_type="application/json",
-       response_schema=WorkshopSummary,
-       thinking_config=types.ThinkingConfig(thinking_budget=1024),
-   )
-   ```
-2. **Never Translate Code Symbols or API Parameters**:
-   - Refer to `root_agent`, `sub_agents`, `FunctionTool`, `InMemoryRunner`, and `GenerateContentConfig` using their exact English identifiers.
-3. **Automated Verification**:
-   - Run `python3 harness_cli.py audit-typography --target <dir> --fix` or `python3 harness_cli.py test --target <dir>` to automatically scan for forbidden em dashes (`\u2014`), prohibited literal translations, and awkward translationese expressions across KO, JA, and ZH.
+- Run `python3 harness_cli.py audit-typography --target <dir> --fix` or `python3 harness_cli.py test --target <dir>` to automatically catch and fix forbidden em dashes (`\u2014`), literal English calques, and translationese patterns.
 
 ---
 
