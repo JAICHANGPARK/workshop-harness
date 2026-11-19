@@ -121,6 +121,8 @@ def init_workshop(
     shutil.copy(pdf_templates / "generate_prep_pdf.py", project_dir / "scripts" / "generate_prep_pdf.py")
 
     has_adk_stack = any(k in stack for k in ["adk", "agents-cli", "google-adk", "google-agents-cli"])
+    has_agents_cli = any(k in stack for k in ["agents-cli", "google-agents-cli"])
+    requires_python = ">=3.11" if has_agents_cli else ">=3.10"
     py_deps = []
     if wants_gemini:
         py_deps.append('    "google-genai>=3.0.0",')
@@ -144,7 +146,7 @@ name = "{name}"
 version = "0.1.0"
 description = "Hands-on Workshop: {topic}"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = "{requires_python}"
 dependencies = [
 {py_deps_block}]
 
@@ -160,6 +162,41 @@ docs = [
 package = false
 """
     (project_dir / "pyproject.toml").write_text(workshop_pyproject, encoding="utf-8")
+
+    # Write canonical workshop.json manifest (Single Source of Truth for auditors, exporters, and day-of scripts)
+    workshop_manifest = {
+        "schema_version": "1.0",
+        "name": name,
+        "topic": topic,
+        "lang": final_lang,
+        "stack": stack,
+        "duration_minutes": 60,
+        "primary_provider": primary_provider,
+        "provider_label": provider_label,
+        "primary_api_key_env": primary_api_key_env,
+        "requires_python": requires_python,
+        "models": {
+            "cloud": default_cloud_model,
+            "flagship": default_flagship_model,
+            "local": default_local_model,
+            "local_embedding": default_local_embedding_model,
+        },
+        "artifacts": {
+            "setup_guide": "SETUP_GUIDE.md",
+            "runbook": "RUNBOOK.md",
+            "starter_dir": "workshop/01_starter",
+            "final_dir": "workshop/02_final",
+            "labs_dir": "workshop/03_labs",
+            "pdf": f"output/pdf/{name}-prep-guide.pdf",
+            "colab_dir": "output/colab",
+            "codelab_dir": "output/open-codelabs",
+            "slides_dir": "output/slides",
+        },
+    }
+    (project_dir / "workshop.json").write_text(
+        json.dumps(workshop_manifest, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
 
     if final_lang == "ko":
         runbook_md = f"""# 진행자 및 TA 런북 (Runbook): {name}
@@ -780,6 +817,7 @@ This repository contains pre-event preparation documents and hands-on lab code f
 ├── CLAUDE.md                     # Claude Code instructions
 ├── RUNBOOK.md                    # Facilitator & TA execution runbook
 ├── SETUP_GUIDE.md                # Unified attendee preparation guide
+├── workshop.json                 # Canonical workshop manifest (stack, models, lang, artifacts)
 ├── pyproject.toml                # Astral uv dependency file
 ├── docs/                        # Detailed topic docs, architecture compatibility & persona review reports
 │   ├── 00-architecture-compatibility-matrix.md

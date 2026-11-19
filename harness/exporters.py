@@ -166,28 +166,28 @@ def generate_all(
     audit_models(str(proj_dir), fix=True)
     audit_typography(str(proj_dir), fix=True)
 
-    # 4. Loop Engineering Multi-Persona Evaluation
-    print("\n[Step 4/9] Running Loop Engineering 4-Persona Review...")
-    audit_persona_loop(topic, str(proj_dir))
-
-    # 5. Build PDF Handout & Previews
-    print("\n[Step 5/9] Building Publication PDF Handouts & Previews...")
-    if not build_pdf(str(proj_dir)):
-        sys.exit(1)
-
-    # 6. Export Open Codelabs Bundle & Manifest
-    print("\n[Step 6/9] Exporting Open Codelabs Interactive Bundle & Manifest...")
+    # 4. Export Open Codelabs Bundle & Manifest
+    print("\n[Step 4/9] Exporting Open Codelabs Interactive Bundle & Manifest...")
     if not export_codelab(str(proj_dir)):
         sys.exit(1)
 
-    # 7. Export Google Colab Notebooks (.ipynb) & Badges
-    print("\n[Step 7/9] Exporting Google Colab Interactive Notebooks & Badges...")
+    # 5. Export Google Colab Notebooks (.ipynb) & Badges
+    print("\n[Step 5/9] Exporting Google Colab Interactive Notebooks & Badges...")
     if not export_colab(str(proj_dir)):
         sys.exit(1)
 
-    # 8. Build Presentation Slide Deck (Marp, PPTX & Web HTML)
-    print("\n[Step 8/9] Building Presentation Slide Decks (Marp, PPTX & Web HTML)...")
+    # 6. Build Presentation Slide Deck (Marp, PPTX & Web HTML)
+    print("\n[Step 6/9] Building Presentation Slide Decks (Marp, PPTX & Web HTML)...")
     if not build_slides(str(proj_dir)):
+        sys.exit(1)
+
+    # 7. Loop Engineering Multi-Persona Evaluation (after bundles are generated so checks verify real outputs)
+    print("\n[Step 7/9] Running Loop Engineering 4-Persona Review...")
+    audit_persona_loop(topic, str(proj_dir))
+
+    # 8. Build Publication PDF Handout & Previews (includes finalized 4-persona report)
+    print("\n[Step 8/9] Building Publication PDF Handouts & Previews...")
+    if not build_pdf(str(proj_dir)):
         sys.exit(1)
 
     # 9. Final Integrity, Artifact, Link & Smoke Code Execution Gate
@@ -209,6 +209,7 @@ def generate_from_prompt(
     name_override: str = None,
     stack_override: str = None,
     model_override: str = None,
+    lang_override: str = None,
 ) -> Path:
     """Zero-config natural language prompt entrypoint: infers name, topic, stack, lang, and 2026 model, then builds immediately."""
     parsed = parse_natural_prompt(prompt)
@@ -216,7 +217,7 @@ def generate_from_prompt(
     final_topic = parsed["topic"]
     final_stack = stack_override or parsed["stack"]
     final_model = model_override or parsed["model"]
-    final_lang = parsed["lang"]
+    final_lang = lang_override or parsed["lang"]
 
     print("=" * 70)
     print("🗣️  [NATURAL LANGUAGE PROMPT ROUTER] Resolved Workshop Spec:")

@@ -24,6 +24,7 @@ from harness import (
     build_pdf,
     build_slides,
     detect_prompt_language,
+    doctor_workshop,
     ensure_uv_dependencies,
     export_codelab,
     export_colab,
@@ -40,7 +41,7 @@ from harness import (
 
 def main():
     known_commands = {
-        "prompt", "from-prompt", "init", "generate-all", "list-models",
+        "prompt", "from-prompt", "init", "generate-all", "list-models", "doctor",
         "audit-models", "audit-typography", "audit-compat", "audit-loop",
         "test", "build-pdf", "export-codelab", "export-colab", "test-colab", "build-slides",
     }
@@ -64,6 +65,7 @@ def main():
     prompt_parser.add_argument("--name", default=None, help="Optional project slug override")
     prompt_parser.add_argument("--stack", default=None, help="Optional comma-separated stack override")
     prompt_parser.add_argument("--model", default=None, help="Optional AI model override")
+    prompt_parser.add_argument("--lang", default=None, help="Optional documentation language override (en, ko, ja, zh)")
     prompt_parser.add_argument("--init-only", action="store_true", help="Only scaffold repository without PDF/Colab/Slides build")
 
     # init command
@@ -89,6 +91,13 @@ def main():
     # list-models command
     models_parser = subparsers.add_parser("list-models", help="Display verified 2026 Frontier & Open-Weight Model Catalog")
     models_parser.add_argument("--provider", default=None, help="Filter by provider (e.g. gemini, gemma, claude, openai, ollama)")
+
+    # doctor command (Harness Self-Check & Facilitator Stage-Readiness Go/No-Go Check)
+    doctor_parser = subparsers.add_parser(
+        "doctor",
+        help="Run a pre-flight readiness check on the harness environment or a specific workshop directory",
+    )
+    doctor_parser.add_argument("--target", default=None, help="Optional workshop directory to audit for stage readiness")
 
     # audit-models command
     audit_models_parser = subparsers.add_parser("audit-models", help="Audit and auto-upgrade deprecated model tags and legacy SDK imports")
@@ -152,6 +161,7 @@ def main():
             name_override=args.name,
             stack_override=args.stack,
             model_override=args.model,
+            lang_override=args.lang,
         )
     elif args.command == "init":
         if args.prompt:
@@ -162,6 +172,7 @@ def main():
                 name_override=args.name,
                 stack_override=args.stack,
                 model_override=args.model,
+                lang_override=args.lang,
             )
         else:
             if not args.name and args.topic:
@@ -182,6 +193,7 @@ def main():
                 name_override=args.name,
                 stack_override=args.stack,
                 model_override=args.model,
+                lang_override=args.lang,
             )
         else:
             if not args.name and args.topic:
@@ -195,6 +207,9 @@ def main():
             generate_all(args.name, args.topic or "BWAI Hands-on Workshop", args.stack, args.dir, args.model, lang=args.lang)
     elif args.command == "list-models":
         list_models(args.provider)
+    elif args.command == "doctor":
+        if not doctor_workshop(args.target):
+            sys.exit(1)
     elif args.command == "audit-models":
         if not audit_models(args.target, args.fix):
             sys.exit(1)

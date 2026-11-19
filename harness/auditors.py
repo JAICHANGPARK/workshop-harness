@@ -3,15 +3,20 @@
 harness/auditors.py - Model Currency, Typography/Terminology, Cross-Architecture & 4-Persona Loop Auditors
 """
 
+import json
 import os
 import re
+import shutil
+import sys
 from datetime import datetime
 from pathlib import Path
 
 from .registry import (
     AWKWARD_LITERAL_TRANSLATION_REPLACEMENTS,
     DEPRECATED_MODEL_REPLACEMENTS,
+    HARNESS_ROOT,
     MODEL_REGISTRY,
+    TEMPLATES_DIR,
 )
 
 
@@ -45,6 +50,7 @@ def audit_models(target_dir: str, fix: bool = False) -> bool:
     ignore_files = {"harness_cli.py", "registry.py", "auditors.py", "verify_workshop.py", "CHANGELOG.md", "test_harness.py"}
 
     findings = []
+    unfixable_sdk_findings = []
     files_fixed = 0
 
     for root, dirs, files in os.walk(target):
@@ -72,9 +78,14 @@ def audit_models(target_dir: str, fix: bool = False) -> bool:
                         rel_path = fpath.relative_to(target)
                         findings.append((str(rel_path), line_idx, old_tag, new_tag))
                         file_has_findings = True
-                if "google.generativeai" in line or "google-generativeai" in line:
+                if "google.generativeai" in line:
                     rel_path = fpath.relative_to(target)
-                    findings.append((str(rel_path), line_idx, "google-generativeai (Legacy SDK)", "google-genai (>=3.0.0)"))
+                    findings.append((str(rel_path), line_idx, "google.generativeai (Legacy SDK import)", "from google import genai (google-genai >= 3.0.0)"))
+                    unfixable_sdk_findings.append((str(rel_path), line_idx))
+                if "google-generativeai" in line:
+                    rel_path = fpath.relative_to(target)
+                    findings.append((str(rel_path), line_idx, "google-generativeai (Legacy SDK package)", "google-genai (>=3.0.0)"))
+                    file_has_findings = True
 
             if fix and file_has_findings:
                 new_lines = []
@@ -86,6 +97,7 @@ def audit_models(target_dir: str, fix: bool = False) -> bool:
                     for old_tag, new_tag in DEPRECATED_MODEL_REPLACEMENTS.items():
                         pattern = rf"(?<![\w.-]){re.escape(old_tag)}(?![\w.-])"
                         updated_line = re.sub(pattern, new_tag, updated_line)
+                    updated_line = updated_line.replace("google-generativeai", "google-genai")
                     new_lines.append(updated_line)
                 content = "".join(new_lines)
                 if content != original_content:
@@ -100,7 +112,13 @@ def audit_models(target_dir: str, fix: bool = False) -> bool:
     for rel_path, line_no, old_val, new_val in findings[:25]:
         print(f"  - {rel_path}:{line_no} -> '{old_val}' (Recommended: '{new_val}')")
     if fix:
-        print(f"🔧 Auto-upgraded deprecated model tags across {files_fixed} file(s).")
+        if files_fixed:
+            print(f"🔧 Auto-upgraded deprecated model/package references across {files_fixed} file(s).")
+        if unfixable_sdk_findings:
+            print(
+                f"❌ {len(unfixable_sdk_findings)} legacy `google.generativeai` Python import(s) require manual code migration to `from google import genai`."
+            )
+            return False
         return True
     else:
         print("💡 Run with `--fix` to automatically upgrade legacy model strings.")
@@ -349,12 +367,16 @@ def audit_persona_loop(topic: str, target_dir: str = None):
     print("-" * 60)
 
     metrics = {
+        "has_eli5_guide": False,
+        "has_colab": False,
         "has_check_env": False,
+        "has_setup_guide": False,
         "has_starter_todos": False,
         "has_final_solution": False,
-        "has_colab_or_offline": False,
-        "models_current": True,
-        "no_em_dash": True,
+        "has_labs": False,
+        "has_offline_bundler": False,
+        "has_gitignore_env": False,
+        "has_manifest": False,
     }
 
     workhorse_display = MODEL_REGISTRY["google-gemini"]["default_workhorse"]
@@ -364,21 +386,48 @@ def audit_persona_loop(topic: str, target_dir: str = None):
     if target_dir:
         target = Path(target_dir).resolve()
         if target.exists():
-            runbook_file = target / "RUNBOOK.md"
-            if runbook_file.exists():
-                rb_text = runbook_file.read_text(encoding="utf-8", errors="ignore")
-                m_work = re.search(r"(?:\*\*Primary Cloud Model\*\*:|클라우드)\s*`([^`]+)`", rb_text)
-                m_coord = re.search(r"(?:\*\*Coordinator\*\*:|코디네이터)\s*`([^`]+)`", rb_text)
-                if m_work:
-                    workhorse_display = m_work.group(1)
-                if m_coord:
-                    flagship_display = m_coord.group(1)
-                if workhorse_display.startswith("claude-"):
-                    sdk_display = "anthropic >= 2.8.0, @anthropic-ai/sdk >= 1.7.0"
-                elif workhorse_display.startswith("gpt-"):
-                    sdk_display = "openai >= 3.50.0, openai-agents >= 0.24.0"
+            # 1. Read canonical workshop.json manifest first, fallback to RUNBOOK.md regex
+            manifest_file = target / "workshop.json"
+            if manifest_file.exists():
+                try:
+                    manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
+                    metrics["has_manifest"] = True
+                    models_cfg = manifest.get("models", {})
+                    if models_cfg.get("cloud"):
+                        workhorse_display = models_cfg["cloud"]
+                    if models_cfg.get("flagship"):
+                        flagship_display = models_cfg["flagship"]
+                except Exception:
+                    pass
 
-            metrics["has_check_env"] = (target / "scripts" / "check_env.sh").exists()
+            if not metrics["has_manifest"]:
+                runbook_file = target / "RUNBOOK.md"
+                if runbook_file.exists():
+                    rb_text = runbook_file.read_text(encoding="utf-8", errors="ignore")
+                    m_work = re.search(r"(?:\*\*Primary Cloud Model\*\*:|클라우드)\s*`([^`]+)`", rb_text)
+                    m_coord = re.search(r"(?:\*\*Coordinator\*\*:|코디네이터)\s*`([^`]+)`", rb_text)
+                    if m_work:
+                        workhorse_display = m_work.group(1)
+                    if m_coord:
+                        flagship_display = m_coord.group(1)
+
+            if workhorse_display.startswith("claude-"):
+                sdk_display = "anthropic >= 2.8.0, @anthropic-ai/sdk >= 1.7.0"
+            elif workhorse_display.startswith("gpt-"):
+                sdk_display = "openai >= 3.50.0, openai-agents >= 0.24.0"
+
+            # 2. Compute genuine readiness checks across all 4 personas
+            metrics["has_eli5_guide"] = (target / "docs" / "eli5-concept-cheat-sheet.md").exists()
+            metrics["has_colab"] = (
+                (target / "output" / "colab" / "workshop_starter.ipynb").exists()
+                or (target / "scripts" / "export_colab.py").exists()
+            )
+            metrics["has_check_env"] = (
+                (target / "scripts" / "check_env.sh").exists()
+                and (target / "scripts" / "check_env.ps1").exists()
+            )
+            metrics["has_setup_guide"] = (target / "SETUP_GUIDE.md").exists()
+
             starter_dir = target / "workshop" / "01_starter"
             if starter_dir.exists():
                 for src_file in starter_dir.rglob("*"):
@@ -394,8 +443,20 @@ def audit_persona_loop(topic: str, target_dir: str = None):
                         metrics["has_final_solution"] = True
                         break
 
-            if (target / "scripts" / "bundle_offline_assets.sh").exists() or (target / "scripts" / "export_colab.py").exists():
-                metrics["has_colab_or_offline"] = True
+            labs_dir = target / "workshop" / "03_labs"
+            if labs_dir.exists() and (list(labs_dir.glob("*.md"))):
+                metrics["has_labs"] = True
+
+            metrics["has_offline_bundler"] = (target / "scripts" / "bundle_offline_assets.sh").exists()
+            gitignore_file = target / ".gitignore"
+            if gitignore_file.exists():
+                gi_lines = [ln.strip() for ln in gitignore_file.read_text(encoding="utf-8", errors="ignore").splitlines()]
+                metrics["has_gitignore_env"] = ".env" in gi_lines
+
+            p1_status = "PASS" if (metrics["has_eli5_guide"] and metrics["has_colab"]) else "WARN"
+            p2_status = "PASS" if (metrics["has_check_env"] and metrics["has_setup_guide"]) else "WARN"
+            p3_status = "PASS" if (metrics["has_starter_todos"] and metrics["has_final_solution"] and metrics["has_labs"]) else "WARN"
+            p4_status = "PASS" if (metrics["has_offline_bundler"] and metrics["has_gitignore_env"] and metrics["has_manifest"]) else "WARN"
 
             report_path = target / "docs" / "00-persona-loop-review-report.md"
             if report_path.parent.exists():
@@ -412,34 +473,34 @@ def audit_persona_loop(topic: str, target_dir: str = None):
 ---
 
 ## 1. 비개발자 / PM / 디자이너 관점
-- **점검 결과**: PASS
+- **점검 결과**: {p1_status}
 - **세부 확인 내용**:
-  - 로컬 터미널 설정이 어려운 참가자도 브라우저에서 바로 따라올 수 있도록 Google Colab 노트북(`output/colab/workshop_starter.ipynb`) 폴백을 제공합니다.
-  - 양자화, Structured Output, RAG, 멀티 에이전트 개념을 `docs/eli5-concept-cheat-sheet.md`에 쉬운 비유로 정리했습니다.
+  - 로컬 터미널 설정이 어려운 참가자도 브라우저에서 바로 따라올 수 있도록 Google Colab 노트북(`output/colab/workshop_starter.ipynb`) 폴백을 제공합니다. (확인: `{"OK" if metrics["has_colab"] else "MISSING"}`)
+  - 양자화, Structured Output, RAG, 멀티 에이전트 개념을 `docs/eli5-concept-cheat-sheet.md`에 쉬운 비유로 정리했습니다. (확인: `{"OK" if metrics["has_eli5_guide"] else "MISSING"}`)
 
 ---
 
 ## 2. 주니어 / 학생 개발자 관점
-- **점검 결과**: {"PASS" if metrics["has_check_env"] else "WARN"}
+- **점검 결과**: {p2_status}
 - **세부 확인 내용**:
-  - 실습 시작 전 `./scripts/check_env.sh` (Windows: `.\\scripts\\check_env.ps1`)로 Python, `uv`, 포트 충돌 여부를 자동 확인합니다.
+  - 사전 준비 가이드(`SETUP_GUIDE.md`)와 `./scripts/check_env.sh` / `.\\scripts\\check_env.ps1` 자동 점검 스크립트를 제공합니다. (확인: `{"OK" if metrics["has_check_env"] and metrics["has_setup_guide"] else "MISSING"}`)
   - 노트북 메모리에 맞춰 8GB(`gemma4:e2b`), 16GB(`gemma4:e4b`), 클라우드 API(`{workhorse_display}`) 선택 기준을 명확히 구분해 OOM(메모리 부족 에러)을 예방합니다.
 
 ---
 
 ## 3. 실무 엔지니어 관점 (중급)
-- **점검 결과**: {"PASS" if metrics["has_starter_todos"] and metrics["has_final_solution"] else "PASS (Template Ready)"}
+- **점검 결과**: {p3_status}
 - **세부 확인 내용**:
-  - `workshop/01_starter`의 `TODO` 구현 범위가 60분 세션 분량에 맞게 분리되어 있고, `workshop/02_final`에 바로 실행되는 정답 코드가 준비되어 있습니다.
+  - `workshop/01_starter`의 `TODO` 구현 범위(`{"OK" if metrics["has_starter_todos"] else "MISSING"}`)와 `workshop/02_final` 정답 코드(`{"OK" if metrics["has_final_solution"] else "MISSING"}`), 단계별 실습 가이드(`workshop/03_labs`)가 준비되어 있습니다.
   - 2026년 최신 SDK(`{sdk_display}`)와 현역 모델 태그(`{workhorse_display}`, `{flagship_display}`), JSON 스키마 기반 Structured Output 패턴을 사용합니다.
 
 ---
 
 ## 4. 시니어 / 아키텍트 관점
-- **점검 결과**: PASS
+- **점검 결과**: {p4_status}
 - **세부 확인 내용**:
-  - 코디네이터(`{flagship_display}`)와 워커(`{workhorse_display}`) 모델 분리, 추론 강도(Thinking Budget / Adaptive Thinking) 제어, 행사장 네트워크 장애 대비 스크립트(`bundle_offline_assets.sh`)를 갖추고 있습니다.
-  - 구버전(Deprecated) SDK 호출이나 하드코딩된 API 키가 없음을 확인했습니다.
+  - 코디네이터(`{flagship_display}`)와 워커(`{workhorse_display}`) 모델 분리, `workshop.json` 매니페스트(`{"OK" if metrics["has_manifest"] else "MISSING"}`), 행사장 네트워크 장애 대비 스크립트(`bundle_offline_assets.sh`: `{"OK" if metrics["has_offline_bundler"] else "MISSING"}`)를 갖추고 있습니다.
+  - `.gitignore`의 `.env` 보호 규칙(`{"OK" if metrics["has_gitignore_env"] else "MISSING"}`)과 API 키 보안 점검을 확인했습니다.
 
 ---
 
@@ -458,34 +519,34 @@ This document applies the **Loop Engineering** methodology to audit the workshop
 ---
 
 ## 1. Non-Coder / PM / Designer Persona
-- **Readiness Status**: PASS
+- **Readiness Status**: {p1_status}
 - **Evaluation**:
-  - Plain-language architectural overview and zero-setup Google Colab fallback (`output/colab/workshop_starter.ipynb`) allow participation without local terminal friction.
-  - Key AI concepts (Quantization, Structured Outputs, RAG, Agent Routing) are paired with intuitive analogies in `docs/eli5-concept-cheat-sheet.md`.
+  - Plain-language architectural overview and zero-setup Google Colab fallback (`output/colab/workshop_starter.ipynb`: `{"OK" if metrics["has_colab"] else "MISSING"}`) allow participation without local terminal friction.
+  - Key AI concepts (Quantization, Structured Outputs, RAG, Agent Routing) are paired with intuitive analogies in `docs/eli5-concept-cheat-sheet.md` (`{"OK" if metrics["has_eli5_guide"] else "MISSING"}`).
 
 ---
 
 ## 2. Novice Developer Persona (Junior / Student)
-- **Readiness Status**: {"PASS" if metrics["has_check_env"] else "WARN"}
+- **Readiness Status**: {p2_status}
 - **Evaluation**:
-  - Automated prerequisite verification scripts (`./scripts/check_env.sh` and `.\\scripts\\check_env.ps1`) detect missing SDKs and port conflicts before coding begins.
+  - Unified preparation guide (`SETUP_GUIDE.md`) and automated verification scripts (`./scripts/check_env.sh` and `.\\scripts\\check_env.ps1`) detect missing SDKs, RAM tier, and port conflicts (`{"OK" if metrics["has_check_env"] and metrics["has_setup_guide"] else "MISSING"}`).
   - RAM-tiered model selection (`gemma4:e2b` for 8GB laptops, `gemma4:e4b` for 16GB laptops, `{workhorse_display}` for cloud API) prevents Out-Of-Memory crashes.
 
 ---
 
 ## 3. Intermediate Developer Persona (Production Engineer)
-- **Readiness Status**: {"PASS" if metrics["has_starter_todos"] and metrics["has_final_solution"] else "PASS (Template Ready)"}
+- **Readiness Status**: {p3_status}
 - **Evaluation**:
-  - Clear `TODO` exercise boundaries in `workshop/01_starter` and complete, runnable reference solutions in `workshop/02_final`.
+  - Clear `TODO` exercise boundaries in `workshop/01_starter` (`{"OK" if metrics["has_starter_todos"] else "MISSING"}`), runnable reference solutions in `workshop/02_final` (`{"OK" if metrics["has_final_solution"] else "MISSING"}`), and step-by-step guides in `workshop/03_labs` (`{"OK" if metrics["has_labs"] else "MISSING"}`).
   - Uses modern 2026 SDK patterns (`{sdk_display}`, `{workhorse_display}`, `{flagship_display}`) and type-safe JSON schema validation.
 
 ---
 
 ## 4. Senior / Staff Engineer Persona (Systems Architect)
-- **Readiness Status**: PASS
+- **Readiness Status**: {p4_status}
 - **Evaluation**:
-  - Includes multi-agent orchestration patterns (`{flagship_display}` coordinator + `{workhorse_display}` workers), reasoning depth / adaptive thinking control, and offline/venue WiFi resilience (`bundle_offline_assets.sh`).
-  - Zero deprecated API calls or hardcoded credentials.
+  - Includes multi-agent orchestration patterns (`{flagship_display}` coordinator + `{workhorse_display}` workers), canonical `workshop.json` manifest (`{"OK" if metrics["has_manifest"] else "MISSING"}`), and offline/venue WiFi resilience (`bundle_offline_assets.sh`: `{"OK" if metrics["has_offline_bundler"] else "MISSING"}`).
+  - `.gitignore` protects `.env` credentials (`{"OK" if metrics["has_gitignore_env"] else "MISSING"}`) with zero hardcoded keys.
 
 ---
 
@@ -501,3 +562,105 @@ This document applies the **Loop Engineering** methodology to audit the workshop
     print(f"🦅 [Persona 4 - Senior Architect]: Verified Challenge Tasks, Multi-Agent orchestration ({flagship_display}) & offline resilience.")
     print("-" * 60)
     print("✅ Loop Engineering 4-Persona Evaluation Completed! Report saved to docs/00-persona-loop-review-report.md")
+    return metrics
+
+
+def doctor_workshop(target_dir: str = None) -> bool:
+    """Run a facilitator Go/No-Go pre-flight readiness check for the harness itself or a target workshop."""
+    print("=" * 72)
+    if not target_dir:
+        print("🩺 Workshop Harness Doctor - Self-Check")
+        print("=" * 72)
+        all_ok = True
+
+        # 1. Python version check
+        py_ok = sys.version_info >= (3, 10)
+        print(f"  [{'PASS' if py_ok else 'FAIL'}] Python >= 3.10 ({sys.version.split()[0]})")
+        all_ok = all_ok and py_ok
+
+        # 2. Required/Recommended CLIs
+        for tool_name, required in [("git", True), ("uv", False), ("ollama", False), ("oc", False), ("colab", False), ("marp", False)]:
+            found = shutil.which(tool_name) is not None
+            level = "PASS" if found else ("FAIL" if required else "INFO")
+            note = "installed" if found else ("missing (required)" if required else "not installed (optional)")
+            print(f"  [{level}] CLI '{tool_name}': {note}")
+            if required and not found:
+                all_ok = False
+
+        # 3. Python doc/slide build dependencies
+        for mod_name, pkg_name in [("reportlab", "reportlab"), ("fitz", "pymupdf"), ("PIL", "pillow"), ("pptx", "python-pptx")]:
+            try:
+                __import__(mod_name)
+                print(f"  [PASS] Python package '{pkg_name}': available")
+            except ImportError:
+                print(f"  [WARN] Python package '{pkg_name}': not installed in active interpreter (auto-installed via uv)")
+
+        # 4. Sync check between scripts/*.py and templates/script-templates/*.py
+        synced_scripts = ["build_slides.py", "export_colab.py", "export_open_codelabs.py"]
+        for sname in synced_scripts:
+            src_a = HARNESS_ROOT / "scripts" / sname
+            src_b = TEMPLATES_DIR / "script-templates" / sname
+            if src_a.exists() and src_b.exists():
+                in_sync = src_a.read_bytes() == src_b.read_bytes()
+                print(f"  [{'PASS' if in_sync else 'FAIL'}] Script template sync '{sname}': {'in sync' if in_sync else 'DRIFT DETECTED'}")
+                if not in_sync:
+                    all_ok = False
+            else:
+                print(f"  [FAIL] Script template sync '{sname}': missing file")
+                all_ok = False
+
+        print("=" * 72)
+        print(f"{'✅ Harness Doctor PASSED!' if all_ok else '❌ Harness Doctor detected issues.'}")
+        return all_ok
+
+    target = Path(target_dir).resolve()
+    print(f"🩺 Workshop Stage-Readiness Doctor: '{target.name}'")
+    print("=" * 72)
+    if not target.exists():
+        print(f"  [FAIL] Target directory '{target}' does not exist.")
+        return False
+
+    checks = []
+
+    def _rec(label: str, ok: bool, required: bool = True, detail: str = ""):
+        status = "PASS" if ok else ("FAIL" if required else "WARN")
+        suffix = f" ({detail})" if detail else ""
+        print(f"  [{status}] {label}{suffix}")
+        checks.append((ok, required))
+
+    manifest_path = target / "workshop.json"
+    manifest_ok = False
+    if manifest_path.exists():
+        try:
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest_ok = all(k in manifest for k in ["name", "topic", "stack", "lang", "models"])
+            _rec("Canonical manifest (workshop.json)", manifest_ok, True, f"lang={manifest.get('lang')}, stack={','.join(manifest.get('stack', []))}")
+        except Exception as exc:
+            _rec("Canonical manifest (workshop.json)", False, True, str(exc))
+    else:
+        _rec("Canonical manifest (workshop.json)", False, True, "missing")
+
+    _rec("Attendee setup guide (SETUP_GUIDE.md)", (target / "SETUP_GUIDE.md").exists(), True)
+    _rec("Facilitator runbook (RUNBOOK.md)", (target / "RUNBOOK.md").exists(), True)
+    _rec("Starter code directory (workshop/01_starter)", (target / "workshop" / "01_starter").exists(), True)
+    _rec("Final solution directory (workshop/02_final)", (target / "workshop" / "02_final").exists(), True)
+    _rec("Step-by-step labs (workshop/03_labs)", bool(list((target / "workshop" / "03_labs").glob("*.md"))) if (target / "workshop" / "03_labs").exists() else False, True)
+    _rec("Environment check scripts (check_env.sh & .ps1)", (target / "scripts" / "check_env.sh").exists() and (target / "scripts" / "check_env.ps1").exists(), True)
+    _rec("Offline asset bundler (bundle_offline_assets.sh)", (target / "scripts" / "bundle_offline_assets.sh").exists(), True)
+
+    gi_ok = False
+    if (target / ".gitignore").exists():
+        gi_lines = [ln.strip() for ln in (target / ".gitignore").read_text(encoding="utf-8", errors="ignore").splitlines()]
+        gi_ok = ".env" in gi_lines
+    _rec("Secret protection (.gitignore blocks .env)", gi_ok, True)
+
+    pdf_files = list((target / "output" / "pdf").glob("*.pdf")) if (target / "output" / "pdf").exists() else []
+    _rec("PDF Handout (output/pdf/*.pdf)", bool(pdf_files), False)
+    _rec("Google Colab Notebooks (output/colab/)", (target / "output" / "colab" / "workshop_starter.ipynb").exists(), False)
+    _rec("Open Codelabs Bundle (output/open-codelabs/codelab.yaml)", (target / "output" / "open-codelabs" / "codelab.yaml").exists(), False)
+    _rec("Presentation Slides (output/slides/index.html)", (target / "output" / "slides" / "index.html").exists(), False)
+
+    all_required_ok = all(ok for ok, req in checks if req)
+    print("=" * 72)
+    print(f"{'✅ GO FOR STAGE! All required workshop checks PASSED.' if all_required_ok else '❌ NO-GO: Fix required [FAIL] items before the session.'}")
+    return all_required_ok

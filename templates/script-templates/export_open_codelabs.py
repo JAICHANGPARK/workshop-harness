@@ -6,6 +6,7 @@ export_open_codelabs.py - Converts a Workshop Harness project into an Open Codel
 import sys
 import os
 import re
+import json
 import argparse
 import shutil
 import subprocess
@@ -37,13 +38,21 @@ def export_to_open_codelabs(target_dir: str, output_dir: str = None, push: bool 
     steps_path = out_path / "steps"
     steps_path.mkdir(parents=True, exist_ok=True)
 
-    # Read workshop title / topic from README.md
+    # Read workshop title / topic (workshop.json manifest first, fallback to README.md)
+    manifest_path = target / "workshop.json"
     readme_path = target / "README.md"
     title = target.name
     description = f"Hands-on Workshop generated from {target.name}"
     author = "Workshop Facilitator"
 
-    if readme_path.exists():
+    if manifest_path.exists():
+        try:
+            manifest_data = json.loads(manifest_path.read_text(encoding="utf-8"))
+            title = manifest_data.get("name") or title
+            description = manifest_data.get("topic") or description
+        except Exception:
+            pass
+    elif readme_path.exists():
         content = readme_path.read_text(encoding="utf-8")
         title_match = re.search(r"^#\s+(.+)$", content, re.MULTILINE)
         if title_match:

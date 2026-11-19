@@ -86,12 +86,20 @@ def export_to_colab(target_dir: str, output_dir: str = None, repo_name: str = No
     out_path = Path(output_dir).resolve() if output_dir else target / "output" / "colab"
     out_path.mkdir(parents=True, exist_ok=True)
 
-    # Read workshop title and topic
+    # Read workshop title and topic (workshop.json manifest first, fallback to README.md)
+    manifest_path = target / "workshop.json"
     readme_path = target / "README.md"
     title = target.name
     topic = "Hands-on AI Workshop"
 
-    if readme_path.exists():
+    if manifest_path.exists():
+        try:
+            manifest_data = json.loads(manifest_path.read_text(encoding="utf-8"))
+            title = manifest_data.get("name") or title
+            topic = manifest_data.get("topic") or topic
+        except Exception:
+            pass
+    elif readme_path.exists():
         content = readme_path.read_text(encoding="utf-8")
         title_match = re.search(r"^#\s+(.+)$", content, re.MULTILINE)
         if title_match:

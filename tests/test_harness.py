@@ -330,6 +330,53 @@ class TestWorkshopHarness(unittest.TestCase):
         self.assertEqual(router.detect_prompt_language("用Claude创建工作坊"), "zh")
         self.assertEqual(router.detect_prompt_language("Build a Claude agent workshop"), "en")
 
+    def test_11_workshop_manifest_doctor_and_resilience(self):
+        """Verify workshop.json manifest, doctor checks, script sync, offline bundler, and strict auditors."""
+        # 1. Harness self-check doctor & script template sync
+        self.assertTrue(harness_cli.doctor_workshop())
+        for sname in ["build_slides.py", "export_colab.py", "export_open_codelabs.py"]:
+            a = harness_cli.HARNESS_ROOT / "scripts" / sname
+            b = harness_cli.TEMPLATES_DIR / "script-templates" / sname
+            self.assertEqual(a.read_bytes(), b.read_bytes(), f"{sname} drifted between scripts/ and templates/")
+
+        # 2. Offline bundler must not call non-existent `uv pip download`
+        bundler_src = (harness_cli.TEMPLATES_DIR / "script-templates" / "bundle_offline_assets.sh").read_text(encoding="utf-8")
+        self.assertNotIn("uv pip download", bundler_src)
+        self.assertIn("pip download", bundler_src)
+
+        # 3. Canonical workshop.json + requires-python >=3.11 for agents-cli
+        proj_dir = harness_cli.init_workshop(
+            name="adlc-ready-lab",
+            topic="ADLC Workshop with Google ADK and agents-cli",
+            target_dir=str(self.temp_dir),
+            stack_str="python,adk,agents-cli",
+        )
+        manifest_path = proj_dir / "workshop.json"
+        self.assertTrue(manifest_path.exists())
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        self.assertEqual(manifest["name"], "adlc-ready-lab")
+        self.assertIn("agents-cli", manifest["stack"])
+        self.assertEqual(manifest["requires_python"], ">=3.11")
+        self.assertIn('requires-python = ">=3.11"', (proj_dir / "pyproject.toml").read_text(encoding="utf-8"))
+
+        # 4. Workshop stage-readiness doctor passes on scaffolded workshop
+        self.assertTrue(harness_cli.doctor_workshop(str(proj_dir)))
+
+        # 5. audit_models returns False even with fix=True when unfixable google.generativeai import remains
+        legacy_dir = self.temp_dir / "legacy_sdk_check"
+        legacy_dir.mkdir(parents=True, exist_ok=True)
+        (legacy_dir / "legacy.py").write_text("import google.generativeai as genai\n", encoding="utf-8")
+        self.assertFalse(harness_cli.audit_models(str(legacy_dir), fix=True))
+
+        # 6. audit_persona_loop reports real WARN when required artifacts are missing
+        incomplete_dir = self.temp_dir / "incomplete_ws"
+        (incomplete_dir / "docs").mkdir(parents=True, exist_ok=True)
+        metrics = harness_cli.audit_persona_loop("Incomplete Workshop", str(incomplete_dir))
+        self.assertFalse(metrics["has_manifest"])
+        self.assertFalse(metrics["has_check_env"])
+        report_txt = (incomplete_dir / "docs" / "00-persona-loop-review-report.md").read_text(encoding="utf-8")
+        self.assertIn("WARN", report_txt)
+
 
 if __name__ == "__main__":
     unittest.main()

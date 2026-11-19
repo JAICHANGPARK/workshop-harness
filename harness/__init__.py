@@ -10,6 +10,7 @@ from .auditors import (
     audit_models,
     audit_persona_loop,
     audit_typography,
+    doctor_workshop,
     list_models,
     sanitize_no_em_dash,
 )
@@ -51,6 +52,7 @@ __all__ = [
     "audit_typography",
     "audit_compatibility",
     "audit_persona_loop",
+    "doctor_workshop",
     "init_workshop",
     "test_workshop",
     "build_pdf",

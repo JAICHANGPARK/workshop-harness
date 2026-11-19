@@ -83,6 +83,37 @@ def test_code_execution(target_dir: Path):
     final = target_dir / "workshop" / "02_final" / "main.py"
 
     passed = True
+
+    # Validate canonical workshop.json manifest if present
+    manifest_file = target_dir / "workshop.json"
+    if manifest_file.exists():
+        try:
+            manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
+            required_keys = ["name", "topic", "stack", "lang", "models"]
+            missing_keys = [k for k in required_keys if k not in manifest]
+            if not missing_keys and isinstance(manifest.get("stack"), list):
+                print(f"✅ workshop.json manifest check: PASSED (lang={manifest.get('lang')}, stack={','.join(manifest.get('stack', []))})")
+            else:
+                print(f"❌ workshop.json manifest check: FAILED (missing/invalid keys: {missing_keys})")
+                passed = False
+        except Exception as exc:
+            print(f"❌ workshop.json manifest check: FAILED ({exc})")
+            passed = False
+
+    # Validate .gitignore protects .env in scaffolded workshops
+    if (target_dir / ".env.sample").exists() or manifest_file.exists():
+        gi_path = target_dir / ".gitignore"
+        if gi_path.exists():
+            gi_lines = [ln.strip() for ln in gi_path.read_text(encoding="utf-8", errors="ignore").splitlines()]
+            if ".env" in gi_lines:
+                print("✅ .gitignore secret protection (.env): PASSED")
+            else:
+                print("❌ .gitignore secret protection (.env): FAILED (.env not listed in .gitignore)")
+                passed = False
+        else:
+            print("❌ .gitignore secret protection (.env): FAILED (.gitignore file missing)")
+            passed = False
+
     if starter.exists():
         res = subprocess.run([sys.executable, str(starter)], capture_output=True, text=True)
         if res.returncode == 0:
@@ -98,6 +129,52 @@ def test_code_execution(target_dir: Path):
         else:
             print(f"❌ workshop/02_final execution test: FAILED ({res.stderr.strip()})")
             passed = False
+
+    # Verify non-Python stacks (TypeScript, Go, Flutter, Android)
+    for stage in ["01_starter", "02_final"]:
+        stage_dir = target_dir / "workshop" / stage
+        if not stage_dir.exists():
+            continue
+        # TypeScript / Node.js
+        pkg_json = stage_dir / "package.json"
+        if pkg_json.exists():
+            try:
+                pkg_data = json.loads(pkg_json.read_text(encoding="utf-8"))
+                ts_entry = (stage_dir / "src" / "index.ts").exists() or (stage_dir / "src" / "agent.ts").exists()
+                if isinstance(pkg_data, dict) and pkg_data.get("name") and ts_entry:
+                    print(f"✅ workshop/{stage} TypeScript package check: PASSED")
+                else:
+                    print(f"❌ workshop/{stage} TypeScript package check: FAILED (missing package name or src entrypoint)")
+                    passed = False
+            except Exception as exc:
+                print(f"❌ workshop/{stage} package.json parse check: FAILED ({exc})")
+                passed = False
+        # Go
+        go_mod = stage_dir / "go.mod"
+        if go_mod.exists():
+            go_main = stage_dir / "main.go"
+            if go_main.exists() and go_main.stat().st_size > 0:
+                print(f"✅ workshop/{stage} Go module check: PASSED")
+            else:
+                print(f"❌ workshop/{stage} Go module check: FAILED (missing or empty main.go)")
+                passed = False
+        # Flutter
+        pubspec = stage_dir / "pubspec.yaml"
+        if pubspec.exists():
+            dart_main = stage_dir / "lib" / "main.dart"
+            if dart_main.exists() and dart_main.stat().st_size > 0:
+                print(f"✅ workshop/{stage} Flutter project check: PASSED")
+            else:
+                print(f"❌ workshop/{stage} Flutter project check: FAILED (missing or empty lib/main.dart)")
+                passed = False
+        # Android
+        gradle_kts = stage_dir / "app" / "build.gradle.kts"
+        if gradle_kts.exists():
+            if gradle_kts.stat().st_size > 0:
+                print(f"✅ workshop/{stage} Android Gradle check: PASSED")
+            else:
+                print(f"❌ workshop/{stage} Android Gradle check: FAILED (empty app/build.gradle.kts)")
+                passed = False
 
     # Verify ADK agent.py modules if present
     for stage in ["01_starter", "02_final"]:
