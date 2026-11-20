@@ -15,6 +15,7 @@ TEMPLATES_DIR = HARNESS_ROOT / "templates"
 MODEL_REGISTRY = {
     "google-gemini": {
         "flagship_reasoning": "gemini-4-carbon",
+        "mid_tier_reasoning": "gemini-4-neon",
         "default_workhorse": "gemini-4-hydrogen",
         "enterprise_reasoning": "gemini-4-argon",
         "fast_multimodal_flash": "gemini-3.8-flash",
@@ -30,6 +31,7 @@ MODEL_REGISTRY = {
         "image_pro": "gemini-3-pro-image",
         "video_omni": "gemini-omni-1.2-flash",
         "embedding_multimodal": "gemini-embedding-2",
+        "decision_classifier": "gemini-decision-1",
         "managed_agent": "antigravity-preview-09-2026",
     },
     "google-gemma": {

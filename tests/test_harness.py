@@ -276,6 +276,15 @@ class TestWorkshopHarness(unittest.TestCase):
         self.assertEqual(p_translate["model"], "translategemma")
         self.assertIn("gemma", p_translate["stack"].split(","))
 
+        p_neon_ko = harness_cli.parse_natural_prompt("Gemini 4 Neon으로 에이전트 코딩 워크숍 만들어줘")
+        self.assertEqual(p_neon_ko["model"], "gemini-4-neon")
+        self.assertIn("gemini", p_neon_ko["stack"].split(","))
+
+        p_neon_kr_alias = harness_cli.parse_natural_prompt("네온 모델로 핸즈온 실습 만들어줘")
+        self.assertEqual(p_neon_kr_alias["model"], "gemini-4-neon")
+        self.assertEqual(harness_cli.MODEL_REGISTRY["google-gemini"]["mid_tier_reasoning"], "gemini-4-neon")
+        self.assertEqual(harness_cli.MODEL_REGISTRY["google-gemini"]["decision_classifier"], "gemini-decision-1")
+
         # End-to-end prompt generation check (Claude + natural Korean developer prose)
         built_dir = harness_cli.generate_from_prompt(
             "클로드 최신 모델로 멀티 에이전트 워크숍 만들어줘",

@@ -10,7 +10,7 @@ description: Builds end-to-end Agent Development Lifecycle (ADLC) workshops usin
 Automates the end-to-end creation of technical hands-on workshops centered on **`google-agents-cli` (`google/agents-cli`)** and the complete **Agent Development Lifecycle (ADLC)** on Google Cloud and the Gemini Enterprise Agent Platform. This skill teaches attendees how to combine **`agents-cli` CLI commands** with its **7 built-in AI coding assistant skills** (for Antigravity, Gemini CLI, Claude Code, Codex, and Cursor) to take an ADK agent from initial scaffolding to automated evaluation, cloud deployment, enterprise registry publication, and production telemetry.
 
 > Pre-Flight Web Research Protocol:
-> Before generating workshop materials, execute live web searches to verify the latest `google-agents-cli` release (`google-agents-cli>=1.4.1`, `uvx google-agents-cli setup`, `npx skills add google/agents-cli`), ADK compatibility (`google-adk>=2.14.0`), and current Gemini model tags (`gemini-4-carbon`, `gemini-4-hydrogen`, `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.5-flash-lite`).
+> Before generating workshop materials, execute live web searches to verify the latest `google-agents-cli` release (`google-agents-cli>=1.4.1`, `uvx google-agents-cli setup`, `npx skills add google/agents-cli`), ADK compatibility (`google-adk>=2.14.0`), and current Gemini model tags (`gemini-4-carbon`, `gemini-4-neon`, `gemini-4-hydrogen`, `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.5-flash-lite`).
 
 ---
 

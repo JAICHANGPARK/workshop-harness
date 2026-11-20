@@ -176,8 +176,8 @@ def parse_natural_prompt(prompt: str) -> dict:
     has_gemini = (
         explicit_provider == "google-gemini"
         or (detected_model or "").startswith("gemini-")
-        or _has_ascii_kw("gemini|carbon|hydrogen|argon")
-        or any(k in lower for k in ["제미나이", "카본", "하이드로젠", "아르곤", "나노 바나나", "nano banana"])
+        or _has_ascii_kw("gemini|carbon|neon|hydrogen|argon")
+        or any(k in lower for k in ["제미나이", "카본", "네온", "하이드로젠", "아르곤", "나노 바나나", "nano banana", "ネオン"])
     )
     has_embedding_gemma = (
         (detected_model or "").startswith("embeddinggemma-2")
@@ -260,6 +260,8 @@ def parse_natural_prompt(prompt: str) -> dict:
         else:
             if _has_ascii_kw("carbon") or "카본" in lower:
                 detected_model = MODEL_REGISTRY["google-gemini"]["flagship_reasoning"]
+            elif _has_ascii_kw("neon") or "네온" in lower or "ネオン" in lower:
+                detected_model = MODEL_REGISTRY["google-gemini"]["mid_tier_reasoning"]
             elif _has_ascii_kw("argon") or "아르곤" in lower:
                 detected_model = MODEL_REGISTRY["google-gemini"]["enterprise_reasoning"]
             elif "live" in lower or "라이브" in lower or "음성" in lower:
@@ -417,7 +419,7 @@ def parse_natural_prompt(prompt: str) -> dict:
         "latest", "new", "model", "models", "python", "claude", "anthropic", "openai", "gpt",
         "chatgpt", "gemini", "gemma", "gemma4", "embeddinggemma", "translategemma", "functiongemma",
         "medgemma", "shieldgemma", "google", "adk", "flutter", "android", "genui", "a2ui",
-        "sonnet", "opus", "fable", "haiku", "sol", "astra", "terra", "luna", "carbon", "hydrogen", "argon",
+        "sonnet", "opus", "fable", "haiku", "sol", "astra", "terra", "luna", "carbon", "neon", "hydrogen", "argon",
     }
     ascii_tokens = re.findall(r"[a-zA-Z][a-zA-Z0-9]{2,}", lower)
     extra_added = 0
